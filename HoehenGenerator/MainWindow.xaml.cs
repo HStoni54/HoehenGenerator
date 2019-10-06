@@ -25,30 +25,29 @@ namespace HoehenGenerator
     /// </summary>
     public partial class MainWindow : Window
     {
-        XmlDocument ge = new XmlDocument();
+        private readonly XmlDocument ge = new XmlDocument();
         String coordinaten;
 
         public MainWindow()
         {
             InitializeComponent();
+            Title = "Höhengenerator";
         }
 
-        private void ladeDatei_Click(object sender, RoutedEventArgs e)
+        private void LadeDatei_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-
-            ofd.Title = "Bitte GoogleEarth Datei auswählen";
-            ofd.Filter = "GoogleEarth Dateien|*.kml;*.kmz;";
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Title = "Bitte GoogleEarth Datei auswählen",
+                Filter = "GoogleEarth Dateien|*.kml;*.kmz;"
+            };
             if (ofd.ShowDialog() == true)
             {
-
+                coordinaten = "";
                 string vName = ofd.FileName;
-                string name = ofd.SafeFileName;
-                String xmlName = vName + ".xml";
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
-                    Title = "Kmz-Datei";
-                    ZipArchive archive = ZipFile.OpenRead(vName);
+                   ZipArchive archive = ZipFile.OpenRead(vName);
                     StreamReader p = new StreamReader(archive.Entries[0].Open());
                     ge.Load(p);
                     p.Close();
@@ -59,30 +58,32 @@ namespace HoehenGenerator
                 }
                 else
                 {
-                    Title = "Kml-Datei";
-
+ 
                     ge.Load(vName);
                 }
-                //MessageBox.Show(name);
             }
-            //XmlNode root = ge.LastChild;
-
-            //Display the contents of the child nodes.
-            suchenNode(ge);
+            SuchenNode(ge);
+            if(coordinaten != "")
+            {
+                MessageBox.Show(coordinaten);
+            }
+            // TODO Koordinaten separieren und anzeigen
         }
 
-        private void suchenNode(XmlNode ge)
+        private void SuchenNode(XmlNode ge)
         {
-            if (ge.HasChildNodes)
+            // TODO verfeinern, dass wirklich nur die Koordinaten Linie oder Fläche
+            if (!ge.HasChildNodes)
             {
-                for (int i = 0; i < ge.ChildNodes.Count; i++)
+                return;
+            }
+            for (int i = 0; i < ge.ChildNodes.Count; i++)
+            {
+                if (ge.ChildNodes[i].Name == "coordinates")
                 {
-                    if (ge.ChildNodes[i].Name == "coordinates")
-                    {
-                        coordinaten += ge.ChildNodes[i].InnerText;
-                    }
-                    suchenNode(ge.ChildNodes[i]);
+                    coordinaten += ge.ChildNodes[i].InnerText;
                 }
+                SuchenNode(ge.ChildNodes[i]);
             }
         }
     }
