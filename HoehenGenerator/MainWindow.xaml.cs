@@ -26,6 +26,7 @@ namespace HoehenGenerator
     public partial class MainWindow : Window
     {
         XmlDocument ge = new XmlDocument();
+        String coordinaten;
 
         public MainWindow()
         {
@@ -34,17 +35,17 @@ namespace HoehenGenerator
 
         private void ladeDatei_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog(); 
- 
+            OpenFileDialog ofd = new OpenFileDialog();
+
             ofd.Title = "Bitte GoogleEarth Datei auswählen";
             ofd.Filter = "GoogleEarth Dateien|*.kml;*.kmz;";
             if (ofd.ShowDialog() == true)
             {
-                
+
                 string vName = ofd.FileName;
                 string name = ofd.SafeFileName;
                 String xmlName = vName + ".xml";
-                if(vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
+                if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
                     Title = "Kmz-Datei";
                     ZipArchive archive = ZipFile.OpenRead(vName);
@@ -60,11 +61,29 @@ namespace HoehenGenerator
                 {
                     Title = "Kml-Datei";
 
-                    ge.Load(vName);  
+                    ge.Load(vName);
                 }
-                MessageBox.Show(name);
+                //MessageBox.Show(name);
             }
+            //XmlNode root = ge.LastChild;
 
+            //Display the contents of the child nodes.
+            suchenNode(ge);
+        }
+
+        private void suchenNode(XmlNode ge)
+        {
+            if (ge.HasChildNodes)
+            {
+                for (int i = 0; i < ge.ChildNodes.Count; i++)
+                {
+                    if (ge.ChildNodes[i].Name == "coordinates")
+                    {
+                        coordinaten += ge.ChildNodes[i].InnerText;
+                    }
+                    suchenNode(ge.ChildNodes[i]);
+                }
+            }
         }
     }
 }
