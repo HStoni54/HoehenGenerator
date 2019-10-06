@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoehenGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="450" Width="800" MinHeight="180" MinWidth="115">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="115"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Canvas Grid.Column="1" Grid.RowSpan="2">
+
+        </Canvas>
+        <Button x:Name="ladeDatei" Content="Datei Laden" HorizontalAlignment="Left" Margin="18,16,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="ladeDatei_Click"/>
+        <Button x:Name="button1" Content="Drehen rechts" HorizontalAlignment="Left" Margin="18,47,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
+        <Button x:Name="button2" Content="Drehen links" HorizontalAlignment="Left" Margin="18,80,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
+        <Button x:Name="button3" Content="Weiter" HorizontalAlignment="Left" Margin="18,114,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
+
+
     </Grid>
 </Window>
