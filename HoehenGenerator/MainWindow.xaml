@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <Canvas x:Name="Zeichenfläche" Grid.Column="1" Grid.RowSpan="2" Margin="10" SizeChanged="Zeichenfläche_SizeChanged"/>
         <Button x:Name="ladeDatei" Content="Datei Laden" HorizontalAlignment="Left" Margin="18,16,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="LadeDatei_Click"/>
-        <Button x:Name="button1" Content="Drehen rechts" HorizontalAlignment="Left" Margin="18,47,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
+        <Button x:Name="button1" Content="Optimieren" HorizontalAlignment="Left" Margin="18,47,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
         <Button x:Name="button2" Content="Drehen links" HorizontalAlignment="Left" Margin="18,80,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
         <Button x:Name="button3" Content="Weiter" HorizontalAlignment="Left" Margin="18,114,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
 

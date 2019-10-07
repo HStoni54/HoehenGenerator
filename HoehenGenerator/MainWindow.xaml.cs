@@ -30,6 +30,8 @@ namespace HoehenGenerator
         private readonly XmlDocument ge = new XmlDocument();
         String coordinaten;
         String[] sepcoordinaten;
+        GeoPunkt[] geoPunkts;
+        PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
         public MainWindow()
         {
@@ -69,12 +71,72 @@ namespace HoehenGenerator
             SuchenNode(ge);
             if(coordinaten != "")
             {
-                MessageBox.Show(coordinaten);
+                //MessageBox.Show(coordinaten);
                 SepariereKoordinaten(coordinaten);
+                Optimiere(orgpunkte);
                 ZeichnePunkte(punkte);
+                ZeichneRechteck(punkte);
+                ZeichnePolygon(punkte);
             }
             // TODO Koordinaten separieren und anzeigen
-           
+
+        }
+
+        private void Optimiere(PointCollection orgpunkte)
+        {
+            punkte = orgpunkte;
+            
+        }
+
+        private void ZeichneRechteck(PointCollection punkte)
+        {
+            Polyline rechteckpunkte = new Polyline();
+            Double Größe = Zeichenfläche.ActualHeight;
+            if (Zeichenfläche.ActualWidth < Zeichenfläche.ActualHeight)
+            {
+                Größe = Zeichenfläche.ActualWidth;
+            }
+            double minLänge = punkte.Min(x => x.X);
+            double minBreite = punkte.Min(x => x.Y);
+            double maxLänge = punkte.Max(x => x.X);
+            double maxBreite = punkte.Max(x => x.Y);
+            PointCollection canvasrechteckpunkte = new PointCollection();
+            canvasrechteckpunkte.Add(new Point(Größe, -1 * Größe));
+            canvasrechteckpunkte.Add(new Point(0, -1 * Größe));
+            canvasrechteckpunkte.Add(new Point(0, -1 * 0));
+            canvasrechteckpunkte.Add(new Point(Größe, -1 * 0));
+            canvasrechteckpunkte.Add(new Point(Größe, -1 * Größe));
+            rechteckpunkte.Points = canvasrechteckpunkte;
+            rechteckpunkte.Fill = Brushes.Blue;
+            Zeichenfläche.Children.Add(rechteckpunkte);
+            Canvas.SetLeft(rechteckpunkte, 0);
+            Canvas.SetBottom(rechteckpunkte, 0);
+
+        }
+
+        private void ZeichnePolygon(PointCollection punkte)
+        {
+            Polyline polypunkte = new Polyline();
+            Double Größe = Zeichenfläche.ActualHeight;
+            if (Zeichenfläche.ActualWidth < Zeichenfläche.ActualHeight)
+            {
+                Größe = Zeichenfläche.ActualWidth;
+            }
+            double minLänge = punkte.Min(x => x.X);
+            double minBreite = punkte.Min(x => x.Y);
+            double maxLänge = punkte.Max(x => x.X);
+            double maxBreite = punkte.Max(x => x.Y);
+            PointCollection canvaspunkte = new PointCollection();
+            //Zeichenfläche.Children.Clear();
+            for (int i = 0; i < punkte.Count; i++)
+            {
+                canvaspunkte.Add(new Point(Größe / (maxLänge - minLänge) * (punkte[i].X - minLänge), -1 * Größe / (maxBreite - minBreite) * (punkte[i].Y - minBreite)));
+            }
+            polypunkte.Points = canvaspunkte;
+            polypunkte.Fill = Brushes.Green;
+            Zeichenfläche.Children.Add(polypunkte);
+            Canvas.SetLeft(polypunkte, 0);
+            Canvas.SetBottom(polypunkte, 0);
         }
 
         private void ZeichnePunkte(PointCollection punkte)
@@ -100,21 +162,25 @@ namespace HoehenGenerator
                 elli.Fill = Brushes.Red;
                 Zeichenfläche.Children.Add(elli);
                 
-                Canvas.SetLeft(elli, Größe / (maxLänge - minLänge) *  (punkte[i].X - minLänge) );
-                Canvas.SetBottom(elli, Größe / (maxBreite -minBreite) *  (punkte[i].Y -minBreite) );
+                Canvas.SetLeft(elli, Größe / (maxLänge - minLänge) *  (punkte[i].X - minLänge) - 2.5);
+                Canvas.SetBottom(elli, Größe / (maxBreite -minBreite) *  (punkte[i].Y -minBreite) - 2.5);
             }
         }
 
         private void SepariereKoordinaten(string coordinaten)
         {
+            //GeoPunkt[] geoPunkts = new GeoPunkt();
+
             sepcoordinaten = coordinaten.Split(' ');
+            geoPunkts = new GeoPunkt[sepcoordinaten.Length];
             for (int i = 0; i < sepcoordinaten.Length; i++)
             {
                 string[] einekoordinate = sepcoordinaten[i].Split(',');
                 //CultureInfo culture = new CultureInfo("en-US");
                 
                 //Point einpunkt = new Point(Double.Parse(einekoordinate[0], culture), Double.Parse(einekoordinate[1], culture));
-                punkte.Add( new Point(Double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), Double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
+                orgpunkte.Add( new Point(Double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), Double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
+                geoPunkts[i] = new GeoPunkt(Double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), Double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
             }
         }
 
@@ -143,9 +209,12 @@ namespace HoehenGenerator
             if (punkte.Count > 0)
             {
                 ZeichnePunkte(punkte);
+                ZeichneRechteck(punkte);
+                ZeichnePolygon(punkte);
             }
 
         }
+
     }
 }
 
