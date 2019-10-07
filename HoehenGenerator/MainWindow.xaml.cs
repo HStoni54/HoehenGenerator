@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using System.IO.Compression;
 using System.IO;
 using System.Xml;
+using System.Globalization;
+
 
 namespace HoehenGenerator
 {
@@ -27,11 +29,13 @@ namespace HoehenGenerator
     {
         private readonly XmlDocument ge = new XmlDocument();
         String coordinaten;
-
+        String[] sepcoordinaten;
+        PointCollection punkte = new PointCollection();
         public MainWindow()
         {
             InitializeComponent();
-            Title = "Höhengenerator";
+            Title = "Höhengenerator für EEP";
+           
         }
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
@@ -66,8 +70,22 @@ namespace HoehenGenerator
             if(coordinaten != "")
             {
                 MessageBox.Show(coordinaten);
+                SepariereKoordinaten(coordinaten);
             }
             // TODO Koordinaten separieren und anzeigen
+           
+        }
+
+        private void SepariereKoordinaten(string coordinaten)
+        {
+            sepcoordinaten = coordinaten.Split(' ');
+            for (int i = 0; i < sepcoordinaten.Length; i++)
+            {
+                string[] einekoordinate = sepcoordinaten[i].Split(',');
+                CultureInfo culture = new CultureInfo("en-US");
+                //Point einpunkt = new Point(Double.Parse(einekoordinate[0], culture), Double.Parse(einekoordinate[1], culture));
+                punkte.Insert(i, new Point(Double.Parse(einekoordinate[0], culture), Double.Parse(einekoordinate[1], culture)));
+            }
         }
 
         private void SuchenNode(XmlNode ge)
@@ -84,6 +102,8 @@ namespace HoehenGenerator
                     coordinaten += ge.ChildNodes[i].InnerText;
                 }
                 SuchenNode(ge.ChildNodes[i]);
+                char[] charsToTrim = { '\n', ' ', '\t' };
+                coordinaten = coordinaten.Trim(charsToTrim);
             }
         }
     }
