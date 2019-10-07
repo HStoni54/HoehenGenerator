@@ -181,6 +181,13 @@ namespace HoehenGenerator
                 //Point einpunkt = new Point(Double.Parse(einekoordinate[0], culture), Double.Parse(einekoordinate[1], culture));
                 orgpunkte.Add( new Point(Double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), Double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
                 geoPunkts[i] = new GeoPunkt(Double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), Double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
+                if (i > 0)
+                {
+                    double dX = geoPunkts[i].Xgeo - geoPunkts[i - 1].Xgeo;
+                    double dY = geoPunkts[i].Ygeo - geoPunkts[i - 1].Ygeo;
+                    double dZ = geoPunkts[i].Zgeo - geoPunkts[i - 1].Zgeo;
+                    geoPunkts[i].Entfernung = Math.Sqrt(dX * dX + dY * dY + dZ *dZ);
+                }
             }
         }
 

@@ -15,23 +15,32 @@ namespace HoehenGenerator
         double lat;
         double Lat
         { get { return lat; } }
-
-        public GeoPunkt(double lon, double lat)
+        double entfernung;
+ 
+        public GeoPunkt(double lon, double lat, double entfernung = 0)
         {
             this.lat = lat;
             this.lon = lon;
+            this.entfernung = entfernung;
+
 
         }
 
         const double radius = 6371.0; //km
+
+        double bogen(double winkelInGrad)
+        {
+            return winkelInGrad / 180.0 * Math.PI;
+        }
         public double Xgeo
-        { get { return radius * Math.Cos(Lat) * Math.Cos(Lon); } }
+        { get { return radius * Math.Cos(bogen(Lat)) * Math.Cos(bogen(Lon)); } }
 
         public double Ygeo
-        { get { return radius * Math.Cos(Lat) * Math.Sin(Lon); } }
+        { get { return radius * Math.Cos(bogen(Lat)) * Math.Sin(bogen(Lon)); } }
 
         public double Zgeo
-        { get { return radius * Math.Sin(Lat); } }
+        { get { return radius * Math.Sin(bogen(Lat)); } }
 
+        public double Entfernung { get => entfernung; set => entfernung = value; }
     }
 }
