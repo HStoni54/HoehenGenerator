@@ -71,9 +71,38 @@ namespace HoehenGenerator
             {
                 MessageBox.Show(coordinaten);
                 SepariereKoordinaten(coordinaten);
+                ZeichnePunkte(punkte);
             }
             // TODO Koordinaten separieren und anzeigen
            
+        }
+
+        private void ZeichnePunkte(PointCollection punkte)
+        {
+            //Zeichenfläche.ActualHeight;
+
+            //Zeichenfläche.ActualWidth;
+            Double Größe = Zeichenfläche.ActualHeight;
+            if (Zeichenfläche.ActualWidth < Zeichenfläche.ActualHeight)
+            {
+                Größe = Zeichenfläche.ActualWidth;
+            }
+            double minLänge = punkte.Min(x => x.X);
+            double minBreite = punkte.Min(x => x.Y);
+            double maxLänge = punkte.Max(x => x.X);
+            double maxBreite = punkte.Max(x => x.Y);
+            Zeichenfläche.Children.Clear();
+            for (int i = 0; i < punkte.Count; i++)
+            {
+                Ellipse elli = new Ellipse();
+                elli.Width = 5.0;
+                elli.Height = 5.0;
+                elli.Fill = Brushes.Red;
+                Zeichenfläche.Children.Add(elli);
+                
+                Canvas.SetLeft(elli, Größe / (maxLänge - minLänge) *  (punkte[i].X - minLänge) );
+                Canvas.SetBottom(elli, Größe / (maxBreite -minBreite) *  (punkte[i].Y -minBreite) );
+            }
         }
 
         private void SepariereKoordinaten(string coordinaten)
@@ -82,9 +111,10 @@ namespace HoehenGenerator
             for (int i = 0; i < sepcoordinaten.Length; i++)
             {
                 string[] einekoordinate = sepcoordinaten[i].Split(',');
-                CultureInfo culture = new CultureInfo("en-US");
+                //CultureInfo culture = new CultureInfo("en-US");
+                
                 //Point einpunkt = new Point(Double.Parse(einekoordinate[0], culture), Double.Parse(einekoordinate[1], culture));
-                punkte.Insert(i, new Point(Double.Parse(einekoordinate[0], culture), Double.Parse(einekoordinate[1], culture)));
+                punkte.Add( new Point(Double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), Double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
             }
         }
 
@@ -105,6 +135,16 @@ namespace HoehenGenerator
                 char[] charsToTrim = { '\n', ' ', '\t' };
                 coordinaten = coordinaten.Trim(charsToTrim);
             }
+        }
+
+
+        private void Zeichenfläche_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (punkte.Count > 0)
+            {
+                ZeichnePunkte(punkte);
+            }
+
         }
     }
 }
