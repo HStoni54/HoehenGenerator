@@ -28,7 +28,7 @@ namespace HoehenGenerator
 
         const double radius = 6371.0; //km
 
-        double bogen(double winkelInGrad)
+        static double bogen(double winkelInGrad)
         {
             return winkelInGrad / 180.0 * Math.PI;
         }
@@ -42,5 +42,11 @@ namespace HoehenGenerator
         { get { return radius * Math.Sin(bogen(Lat)); } }
 
         public double Entfernung { get => entfernung; set => entfernung = value; }
+
+        static public double BestimmeAbstand(GeoPunkt p1, GeoPunkt p2)
+        {
+            double skalarprodukt = p1.Xgeo * p2.Xgeo + p1.Ygeo * p2.Ygeo + p1.Zgeo * p2.Zgeo;
+            return radius * Math.Acos(skalarprodukt / (radius * radius));
+        }
     }
 }
