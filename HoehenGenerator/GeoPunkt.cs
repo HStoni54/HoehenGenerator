@@ -13,7 +13,7 @@ namespace HoehenGenerator
         { get { return lon; } }
         
         double lat;
-        double Lat
+        public double Lat
         { get { return lat; } }
         double entfernung;
  

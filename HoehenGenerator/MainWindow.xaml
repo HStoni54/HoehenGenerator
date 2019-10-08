@@ -17,8 +17,8 @@
         </Grid.ColumnDefinitions>
         <Canvas x:Name="Zeichenfläche" Grid.Column="1" Grid.RowSpan="2" Margin="10" SizeChanged="Zeichenfläche_SizeChanged"/>
         <Button x:Name="ladeDatei" Content="Datei Laden" HorizontalAlignment="Left" Margin="18,10,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="LadeDatei_Click"/>
-        <Button x:Name="Optimieren" Content="Optimieren" HorizontalAlignment="Left" Margin="18,165,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False"/>
-        <Button x:Name="Drehen" Content="Drehen" HorizontalAlignment="Left" Margin="18,190,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False"/>
+        <Button x:Name="Optimieren" Content="Optimieren" HorizontalAlignment="Left" Margin="18,165,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False" Click="Optimieren_Click"/>
+        <Button x:Name="Drehen" Content="Drehen" HorizontalAlignment="Left" Margin="18,190,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False" Click="Drehen_Click"/>
         <Button x:Name="Weiter" Content="Weiter" HorizontalAlignment="Left" Margin="18,215,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False"/>
         <Label x:Name="Breite" Content="Breite:" HorizontalAlignment="Left" Margin="18,30,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
         <TextBox x:Name="breite" HorizontalAlignment="Left" Height="20" Margin="18,55,0,0" TextWrapping="Wrap" Text="Breite" VerticalAlignment="Top" Width="75"/>
