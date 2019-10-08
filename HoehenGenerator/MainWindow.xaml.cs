@@ -32,6 +32,7 @@ namespace HoehenGenerator
         String[] sepcoordinaten;
         GeoPunkt[] geoPunkts;
         GeoPunkt mittelpunkt;
+        GeoPunkt verschiebung;
         PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
         int winkel = 0;
@@ -78,6 +79,7 @@ namespace HoehenGenerator
             {
                 //MessageBox.Show(coordinaten);
                 SepariereKoordinaten(coordinaten);
+                BildeSchattenpunkte(orgpunkte);
                 punkte = orgpunkte;
                // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
@@ -87,7 +89,13 @@ namespace HoehenGenerator
             }
  
         }
-    
+
+        private PointCollection BildeSchattenpunkte(PointCollection orgpunkte)
+        {
+
+            return orgpunkte;
+
+        }
 
         private void Optimiere(PointCollection orgpunkte)
         {
