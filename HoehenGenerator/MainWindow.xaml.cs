@@ -45,6 +45,7 @@ namespace HoehenGenerator
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
         {
+            Optimieren.IsEnabled = false;
             OpenFileDialog ofd = new OpenFileDialog
             {
                 Title = "Bitte GoogleEarth Datei auswählen",
@@ -271,6 +272,7 @@ namespace HoehenGenerator
             GeoPunkt rechtsoben = new GeoPunkt(maxLänge, maxBreite);
             GeoPunkt linksunten = new GeoPunkt(minLänge, minBreite);
             GeoPunkt rechtsunten = new GeoPunkt(maxLänge, minBreite);
+
             hoehe2 = GeoPunkt.BestimmeAbstand(linksoben, linksunten);
             breite2 = GeoPunkt.BestimmeAbstand(linksunten, rechtsunten);
             if (hoehe2 / breite2 > GrößeH / GrößeB)
@@ -283,7 +285,68 @@ namespace HoehenGenerator
                
                 GrößeH = GrößeH * GrößeB / GrößeH * hoehe2 / breite2;
             }
+            if (Optimieren.IsEnabled == false)
+            GibHGTFileaus(linksoben, rechtsoben, linksunten, rechtsunten);
         }
+
+        private void GibHGTFileaus(GeoPunkt linksoben, GeoPunkt rechtsoben, GeoPunkt linksunten, GeoPunkt rechtsunten)
+        {
+            double winkel2 = -winkel;
+            string hgt;
+            PointCollection points = new PointCollection();
+            PointCollection points1 = new PointCollection();
+            points.Clear();
+            points1.Clear();
+            points.Add(new Point(linksoben.Lat, linksoben.Lon));
+            points.Add(new Point(rechtsoben.Lat, rechtsoben.Lon));
+            points.Add(new Point(linksunten.Lat, linksunten.Lon));
+            points.Add(new Point(rechtsunten.Lat, rechtsunten.Lon));
+            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel2);
+            for (int i = 0; i < points.Count; i++)
+            {
+                points1.Add( DrehePunkt(points[i], drehung));
+            }
+
+            double maxlat = Math.Round(points1.Max(x => x.X) - 0.5);
+            double minlat = Math.Round(points1.Min(x => x.X) - 0.5);
+            double maxlon = Math.Round(points1.Max(x => x.Y) - 0.5);
+            double minlon = Math.Round(points1.Min(x => x.Y) - 0.5);
+            HGTFiles.Text = "";
+            for (int i = (int)minlat; i < (int)maxlat + 1; i++)
+            {
+                for (int j = (int)minlon; j < (int)maxlon + 1; j++)
+                {
+                    if (i >= 0)
+                    {
+                         hgt = "N" + i.ToString("D2");
+                    } else
+                    {
+                         hgt = "S" + (-i).ToString("D2");
+                    }
+                    if (j >= 0)
+                    {
+                        hgt = hgt + "E" + j.ToString("D3");
+                    } else
+                    {
+                        hgt = hgt + "W" + (-j).ToString("D3");
+                    }
+                    hgt = hgt + "\n";
+                   HGTFiles.Text = HGTFiles.Text + hgt;
+                }
+            }
+ 
+            // throw new NotImplementedException();
+        }
+
+        //private Matrix Rückrechnung(double winkel2, GeoPunkt linksoben2, Matrix G)
+        //{
+        //    G.SetColumn(0, new double[4] { linksoben2.Ygeo, linksoben2.Zgeo, linksoben2.Xgeo, 0 });
+
+        //    Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel2);
+        //    GeoPunkt geoPunkt = new GeoPunkt();
+        //    geoPunkt.FügeGeopunktEin();
+        //    return drehung * G;
+        //}
 
         private void ZeichnePolygon(PointCollection punkte)
         {
