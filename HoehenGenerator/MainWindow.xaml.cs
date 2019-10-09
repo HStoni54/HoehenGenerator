@@ -86,6 +86,9 @@ namespace HoehenGenerator
                 //ZeichneRechteck(punkte);
                 //ZeichnePolygon(punkte);
                 //ZeichnePunkte(punkte);
+                Optimieren.IsEnabled = true;
+                Weiter.IsEnabled = false;
+                Drehen.IsEnabled = false;
             }
  
         }
@@ -143,7 +146,7 @@ namespace HoehenGenerator
             GeoPunkt linksoben = new GeoPunkt(minLänge, maxBreite);
             GeoPunkt rechtsoben = new GeoPunkt(maxLänge, maxBreite);
             GeoPunkt linksunten = new GeoPunkt(minLänge, minBreite);
-            GeoPunkt rechtsunten = new GeoPunkt(maxLänge, maxBreite);
+            GeoPunkt rechtsunten = new GeoPunkt(maxLänge, minBreite);
             double hoehe2 = GeoPunkt.BestimmeAbstand(linksoben, linksunten);
             double breite2 = GeoPunkt.BestimmeAbstand(linksunten, rechtsunten);
 
@@ -199,7 +202,7 @@ namespace HoehenGenerator
             R5.SetColumn(3, new double[4] { 0, 0, 0, 1 });
 
             //Matrix E = R5 * R4 * R3 * R2 * R1;
-            Matrix E = R2 * R1;
+            Matrix E = R1 * R2 * R3 * R4 * R5;
             return E;
             //throw new NotImplementedException();
         }
@@ -212,11 +215,12 @@ namespace HoehenGenerator
 
 
 
-            P1.SetColumn(0, new double[4] { geoPunkt.Xgeo, geoPunkt.Zgeo, geoPunkt.Ygeo, 1.0 });
+            P1.SetColumn(0, new double[4] { geoPunkt.Ygeo, geoPunkt.Zgeo, geoPunkt.Xgeo, 1.0 });
             //R1.SetColumn(0,[Math.Cos(gradrad),0, Math.Sin(gradrad), 0]);
             Matrix E =  drehung * P1;
-
-            Point point1 = new Point();
+            double[] point2 = E.GetColumn(0);
+            geoPunkt.FügeGeopunktEin(point2[2], point2[0], point2[1]);
+            Point point1 = new Point(geoPunkt.Lon,geoPunkt.Lat);
 
             //point1.X = (Math.Cos(vrad) * (point.X - mittelpunkt.Lon)) - (Math.Sin(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lon;
             //point1.Y = (Math.Sin(vrad) * (point.X - mittelpunkt.Lon)) + (Math.Cos(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lat;
@@ -245,7 +249,7 @@ namespace HoehenGenerator
             Zeichenfläche.Children.Add(rechteckpunkte);
             Canvas.SetLeft(rechteckpunkte, 0);
             Canvas.SetBottom(rechteckpunkte, 0);
-            Optimieren.IsEnabled = true;
+            
 
         }
 
@@ -266,7 +270,7 @@ namespace HoehenGenerator
             GeoPunkt linksoben = new GeoPunkt(minLänge, maxBreite);
             GeoPunkt rechtsoben = new GeoPunkt(maxLänge, maxBreite);
             GeoPunkt linksunten = new GeoPunkt(minLänge, minBreite);
-            GeoPunkt rechtsunten = new GeoPunkt(maxLänge, maxBreite);
+            GeoPunkt rechtsunten = new GeoPunkt(maxLänge, minBreite);
             hoehe2 = GeoPunkt.BestimmeAbstand(linksoben, linksunten);
             breite2 = GeoPunkt.BestimmeAbstand(linksunten, rechtsunten);
             if (hoehe2 / breite2 > GrößeH / GrößeB)
@@ -403,7 +407,7 @@ namespace HoehenGenerator
 
         private void Drehen_Click(object sender, RoutedEventArgs e)
         {
-            winkel = winkel + 900;
+            winkel = winkel + 90;
             NeuPunkte neuPunkte = DrehePolygon(orgpunkte, winkel);
             punkte = neuPunkte.Punkte;
             ZeichneAlles(punkte);
