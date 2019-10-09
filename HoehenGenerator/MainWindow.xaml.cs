@@ -100,7 +100,7 @@ namespace HoehenGenerator
         private void Optimiere(PointCollection orgpunkte)
         {
             NeuPunkte neuPunkte;
-            int anzahl = 1800;
+            int anzahl = 180;
             double fläche = 0;
            // int winkel = 0;
  
@@ -125,12 +125,16 @@ namespace HoehenGenerator
 
         }
 
-        private NeuPunkte DrehePolygon(PointCollection orgpunkte, int v)
+        private NeuPunkte DrehePolygon(PointCollection orgpunkte, double v)
         {
             PointCollection points = new PointCollection();
+           
+
             for (int i = 0; i < orgpunkte.Count; i++)
             {
-                points.Add(DrehePunkt(orgpunkte[i],v));
+
+                Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, v);
+                points.Add(DrehePunkt(orgpunkte[i],drehung));
             }
             double minLänge = points.Min(x => x.X);
             double minBreite = points.Min(x => x.Y);
@@ -148,12 +152,75 @@ namespace HoehenGenerator
             return neuPunkte;
         }
 
-        private Point DrehePunkt(Point point, int vgrad)
+        private Matrix BildeDrehungsMatrix(double alpha, double beta, double phi)
         {
-            double vrad = vgrad / 1800.0 * Math.PI;
+            // alph = Lat
+            // beta = Lon
+            //double[] Ri1 = new double[4] { 1, 0, 0, 0 };
+            //double[] Ri2 = new double[4] { 0, 1, 0, 0 };
+            //double[] Ri3 = new double[4] { 0, 0, 1, 0 };
+            //double[] Ri4 = new double[4] { 0, 0, 0, 1 };
+
+            double cosalpha =  Math.Cos(GeoPunkt.bogen(alpha));
+            double sinalpha = Math.Sin(GeoPunkt.bogen(alpha));
+            double cosbeta = Math.Cos(GeoPunkt.bogen(beta));
+            double sinbeta = Math.Sin(GeoPunkt.bogen(beta));
+            double cosphi = Math.Cos(GeoPunkt.bogen(phi));
+            double sinphi = Math.Sin(GeoPunkt.bogen(phi));
+
+            Matrix R1 = new Matrix(4, 4);
+            Matrix R2 = new Matrix(4, 4);
+            Matrix R3 = new Matrix(4, 4);
+            Matrix R4 = new Matrix(4, 4);
+            Matrix R5 = new Matrix(4, 4);
+            R1.SetColumn(0, new double[4] { cosalpha, 0, -sinalpha, 0 });
+            R1.SetColumn(1, new double[4] { 0, 1, 0, 0 });
+            R1.SetColumn(2, new double[4] { sinalpha, 0, cosalpha, 0 });
+            R1.SetColumn(3, new double[4] { 0, 0, 0, 1 });
+
+            R2.SetColumn(0, new double[4] { 1, 0, 0, 0 });
+            R2.SetColumn(1, new double[4] { 0, cosbeta, -sinbeta, 0 });
+            R2.SetColumn(2, new double[4] { 0, sinbeta, cosbeta, 0 });
+            R2.SetColumn(3, new double[4] { 0, 0, 0, 1 });
+
+            R3.SetColumn(0, new double[4] { cosphi, -sinphi, 0, 0 });
+            R3.SetColumn(1, new double[4] { sinphi, cosphi, 0, 0 });
+            R3.SetColumn(2, new double[4] { 0, 0, 1, 0 });
+            R3.SetColumn(3, new double[4] { 0, 0, 0, 1 });
+
+            R4.SetColumn(0, new double[4] { 1, 0, 0, 0 });
+            R4.SetColumn(1, new double[4] { 0, cosbeta, sinbeta, 0 });
+            R4.SetColumn(2, new double[4] { 0, -sinbeta, cosbeta, 0 });
+            R4.SetColumn(3, new double[4] { 0, 0, 0, 1 });
+
+            R5.SetColumn(0, new double[4] { cosalpha, 0, sinalpha, 0 });
+            R5.SetColumn(1, new double[4] { 0, 1, 0, 0 });
+            R5.SetColumn(2, new double[4] { -sinalpha, 0, cosalpha, 0 });
+            R5.SetColumn(3, new double[4] { 0, 0, 0, 1 });
+
+            //Matrix E = R5 * R4 * R3 * R2 * R1;
+            Matrix E = R2 * R1;
+            return E;
+            //throw new NotImplementedException();
+        }
+
+        private Point DrehePunkt(Point point, Matrix drehung)
+        {
+
+            GeoPunkt geoPunkt = new GeoPunkt(point.X, point.Y);
+            Matrix P1 = new Matrix(4, 1);
+
+
+
+            P1.SetColumn(0, new double[4] { geoPunkt.Xgeo, geoPunkt.Zgeo, geoPunkt.Ygeo, 1.0 });
+            //R1.SetColumn(0,[Math.Cos(gradrad),0, Math.Sin(gradrad), 0]);
+            Matrix E =  drehung * P1;
+
             Point point1 = new Point();
-            point1.X = (Math.Cos(vrad) * (point.X - mittelpunkt.Lon)) - (Math.Sin(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lon;
-            point1.Y = (Math.Sin(vrad) * (point.X - mittelpunkt.Lon)) + (Math.Cos(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lat;
+
+            //point1.X = (Math.Cos(vrad) * (point.X - mittelpunkt.Lon)) - (Math.Sin(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lon;
+            //point1.Y = (Math.Sin(vrad) * (point.X - mittelpunkt.Lon)) + (Math.Cos(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lat;
+
             return point1;
         }
 
