@@ -140,7 +140,7 @@ namespace HoehenGenerator
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, v);
                 points.Add(DrehePunkt(orgpunkte[i],drehung));
             }
-            double minLänge = points.Min(x => x.X);
+            double minLänge  = points.Min(x => x.X);
             double minBreite = points.Min(x => x.Y);
             double maxLänge = points.Max(x => x.X);
             double maxBreite = points.Max(x => x.Y);
@@ -206,7 +206,6 @@ namespace HoehenGenerator
             return  R1 * R2 * R3 * R4 * R5;
 
   
-            //throw new NotImplementedException();
         }
 
         private static Point DrehePunkt(Point point, Matrix drehung)
@@ -429,9 +428,17 @@ namespace HoehenGenerator
                 string[] einekoordinate = sepcoordinaten[i].Split(',');
                 //CultureInfo culture = new CultureInfo("en-US");
                 
-                //Point einpunkt = new Point(double.Parse(einekoordinate[0], culture), double.Parse(einekoordinate[1], culture));
-                orgpunkte.Add( new Point(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
-                geoPunkts[i] = new GeoPunkt(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
+                Point einpunkt = new Point(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
+                if (einpunkt.X > 180) 
+                {
+                    einpunkt.X -= 360;
+                }
+                if (einpunkt.X < -180)
+                {
+                    einpunkt.X += 360;
+                }
+                orgpunkte.Add(einpunkt);
+                 geoPunkts[i] = new GeoPunkt(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
                 if (i > 0)
                 {
                     geoPunkts[i].Entfernung = GeoPunkt.BestimmeAbstand(geoPunkts[i], geoPunkts[i - 1]);
@@ -490,11 +497,12 @@ namespace HoehenGenerator
 
         private void Drehen_Click(object sender, RoutedEventArgs e)
         {
-            winkel = winkel + 90;
+            winkel += 90;
             NeuPunkte neuPunkte = DrehePolygon(orgpunkte, winkel);
             punkte = neuPunkte.Punkte;
             ZeichneAlles(punkte);
         }
+
     }
 }
 
