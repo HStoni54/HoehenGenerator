@@ -156,7 +156,7 @@ namespace HoehenGenerator
             return neuPunkte;
         }
 
-        private Matrix BildeDrehungsMatrix(double alpha, double beta, double phi)
+        private static Matrix BildeDrehungsMatrix(double alpha, double beta, double phi)
         {
             // alph = Lat
             // beta = Lon
@@ -208,7 +208,7 @@ namespace HoehenGenerator
             //throw new NotImplementedException();
         }
 
-        private Point DrehePunkt(Point point, Matrix drehung)
+        private static Point DrehePunkt(Point point, Matrix drehung)
         {
 
             GeoPunkt geoPunkt = new GeoPunkt(point.X, point.Y);
