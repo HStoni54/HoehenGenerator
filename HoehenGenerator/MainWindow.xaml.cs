@@ -88,8 +88,8 @@ namespace HoehenGenerator
                 //ZeichnePolygon(punkte);
                 //ZeichnePunkte(punkte);
                 Optimieren.IsEnabled = true;
-                Weiter.IsEnabled = false;
-                Drehen.IsEnabled = false;
+                Weiter.IsEnabled = true;
+                Drehen.IsEnabled = true;
             }
  
         }
@@ -203,8 +203,9 @@ namespace HoehenGenerator
             R5.SetColumn(3, new double[4] { 0, 0, 0, 1 });
 
             //Matrix E = R5 * R4 * R3 * R2 * R1;
-            Matrix E = R1 * R2 * R3 * R4 * R5;
-            return E;
+            return  R1 * R2 * R3 * R4 * R5;
+
+  
             //throw new NotImplementedException();
         }
 
@@ -213,15 +214,15 @@ namespace HoehenGenerator
 
             GeoPunkt geoPunkt = new GeoPunkt(point.X, point.Y);
             Matrix P1 = new Matrix(4, 1);
-
+            GeoPunkt geoPunkt1 = new GeoPunkt();
 
 
             P1.SetColumn(0, new double[4] { geoPunkt.Ygeo, geoPunkt.Zgeo, geoPunkt.Xgeo, 1.0 });
             //R1.SetColumn(0,[Math.Cos(gradrad),0, Math.Sin(gradrad), 0]);
             Matrix E =  drehung * P1;
             double[] point2 = E.GetColumn(0);
-            geoPunkt.FügeGeopunktEin(point2[2], point2[0], point2[1]);
-            Point point1 = new Point(geoPunkt.Lon,geoPunkt.Lat);
+            geoPunkt1.FügeGeopunktEin(point2[2], point2[0], point2[1]);
+            Point point1 = new Point(geoPunkt1.Lon,geoPunkt1.Lat);
 
             //point1.X = (Math.Cos(vrad) * (point.X - mittelpunkt.Lon)) - (Math.Sin(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lon;
             //point1.Y = (Math.Sin(vrad) * (point.X - mittelpunkt.Lon)) + (Math.Cos(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lat;
@@ -292,50 +293,69 @@ namespace HoehenGenerator
         private void GibHGTFileaus(GeoPunkt linksoben, GeoPunkt rechtsoben, GeoPunkt linksunten, GeoPunkt rechtsunten)
         {
             double winkel2 = -winkel;
-            string hgt;
             PointCollection points = new PointCollection();
             PointCollection points1 = new PointCollection();
             points.Clear();
             points1.Clear();
-            points.Add(new Point(linksoben.Lat, linksoben.Lon));
-            points.Add(new Point(rechtsoben.Lat, rechtsoben.Lon));
-            points.Add(new Point(linksunten.Lat, linksunten.Lon));
-            points.Add(new Point(rechtsunten.Lat, rechtsunten.Lon));
+            points.Add(new Point(linksoben.Lon, linksoben.Lat));
+            points.Add(new Point(rechtsoben.Lon, rechtsoben.Lat));
+            points.Add(new Point(linksunten.Lon, linksunten.Lat));
+            points.Add(new Point(rechtsunten.Lon, rechtsunten.Lat));
             Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel2);
             for (int i = 0; i < points.Count; i++)
             {
-                points1.Add( DrehePunkt(points[i], drehung));
+                points1.Add(DrehePunkt(points[i], drehung));
             }
 
-            double maxlat = Math.Round(points1.Max(x => x.X) - 0.5);
-            double minlat = Math.Round(points1.Min(x => x.X) - 0.5);
-            double maxlon = Math.Round(points1.Max(x => x.Y) - 0.5);
-            double minlon = Math.Round(points1.Min(x => x.Y) - 0.5);
+            double maxlat = Math.Round(points1.Max(x => x.Y) - 0.5);
+            double minlat = Math.Round(points1.Min(x => x.Y) - 0.5);
+            double maxlon = Math.Round(points1.Max(x => x.X) - 0.5);
+            double minlon = Math.Round(points1.Min(x => x.X) - 0.5);
             HGTFiles.Text = "";
+            if (maxlon - minlon > 180)
+            {
+                BildeHGTString(maxlat, minlat, 180, maxlon);
+                BildeHGTString(maxlat, minlat, minlon, -180);
+            }
+            else
+            {
+                BildeHGTString(maxlat, minlat, maxlon, minlon);
+
+            }
+ 
+            // throw new NotImplementedException();
+        }
+
+        private void BildeHGTString(double maxlat, double minlat, double maxlon, double minlon)
+        {
+            string hgt;
             for (int i = (int)minlat; i < (int)maxlat + 1; i++)
             {
                 for (int j = (int)minlon; j < (int)maxlon + 1; j++)
                 {
+                    
                     if (i >= 0)
                     {
-                         hgt = "N" + i.ToString("D2");
-                    } else
+                        hgt = "N" + i.ToString("D2");
+                    }
+                    else
                     {
-                         hgt = "S" + (-i).ToString("D2");
+                        hgt = "S" + (-i).ToString("D2");
                     }
                     if (j >= 0)
                     {
                         hgt = hgt + "E" + j.ToString("D3");
-                    } else
+                    }
+                    else
                     {
                         hgt = hgt + "W" + (-j).ToString("D3");
                     }
                     hgt = hgt + "\n";
-                   HGTFiles.Text = HGTFiles.Text + hgt;
+                    HGTFiles.Text = HGTFiles.Text + hgt;
                 }
             }
- 
-            // throw new NotImplementedException();
+
+            return;
         }
 
         //private Matrix Rückrechnung(double winkel2, GeoPunkt linksoben2, Matrix G)

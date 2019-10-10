@@ -52,7 +52,7 @@ namespace HoehenGenerator
             double skalarprodukt = p1.Xgeo * p2.Xgeo + p1.Ygeo * p2.Ygeo + p1.Zgeo * p2.Zgeo;
             return radius * Math.Acos(skalarprodukt / (radius * radius));
         }
-        public void FügeGeopunktEin(double X ,double Y,double Z)
+        public void FügeGeopunktEin(double X ,double Y, double Z)
         {
             if (Math.Abs(Z) <= radius)
             {
