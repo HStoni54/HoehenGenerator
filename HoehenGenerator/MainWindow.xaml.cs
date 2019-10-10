@@ -76,7 +76,7 @@ namespace HoehenGenerator
                 return;
             }
             SuchenNode(ge);
-            if(coordinaten != "")
+            if (coordinaten.Length > 0)
             {
                 //MessageBox.Show(coordinaten);
                 SepariereKoordinaten(coordinaten);
@@ -286,7 +286,7 @@ namespace HoehenGenerator
                
                 GrößeH = GrößeH * GrößeB / GrößeH * hoehe2 / breite2;
             }
-            if (Optimieren.IsEnabled == false)
+            //if (Optimieren.IsEnabled == false)
             GibHGTFileaus(linksoben, rechtsoben, linksunten, rechtsunten);
         }
 
