@@ -35,6 +35,8 @@ namespace HoehenGenerator
         PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
         Canvas Zeichenfläche = new Canvas();
+        TextBox HGTFiles = new TextBox();
+        string hgtPfad;
         bool datumgrenze = false;
         int winkel = 0;
 
@@ -88,6 +90,7 @@ namespace HoehenGenerator
                 BildeSchattenpunkte(orgpunkte);
                 punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
+                HGTFiles = HGTFiles1;
                // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
                 //ZeichneRechteck(punkte);
@@ -96,6 +99,7 @@ namespace HoehenGenerator
                 Optimieren.IsEnabled = true;
                 Weiter.IsEnabled = true;
                 Drehen.IsEnabled = true;
+                
             }
  
         }
@@ -502,6 +506,7 @@ namespace HoehenGenerator
             ladeHGTFiles.IsEnabled = true;
             ladeHGTFiles.IsSelected = true;
             Zeichenfläche = Zeichenfläche2;
+            HGTFiles = HGTFiles2;
             ZeichneAlles(punkte);
         }
 
@@ -517,17 +522,49 @@ namespace HoehenGenerator
 
         private void buttonDirectory_Click(object sender, RoutedEventArgs e)
         {
-            //OpenFileDialog ofd = new OpenFileDialog();
-            //ofd.ShowDialog();
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
             fbd.Description = "Bitte Verzeichnis für Hgt-Dateien auswählen";
+
             //fbd.RootFolder = Environment.SpecialFolder.Personal;
             string path = Environment.CurrentDirectory;
+            fbd.SelectedPath = path;
             System.Windows.Forms.DialogResult result = fbd.ShowDialog();
-            ////if (result == DialogResult.OK)
-            //{
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                hgtPfad = fbd.SelectedPath;
+                LadeHGTFiles.IsEnabled = true;
+            } else
+            {
+                LadeHGTFiles.IsEnabled = false;
+          
+            }
+        }
 
-            //}
+        private void LadeHGTFiles_Click(object sender, RoutedEventArgs e)
+        {
+
+            GeneriereIndices();
+
+        }
+
+        private void GeneriereIndices()
+        {
+            for (int i = 1; i < 4; i+=2)
+            {
+                GeneriereViewIndex(i,hgtPfad);
+                GeneriereSRTMIndex(i,hgtPfad);
+ 
+            }
+        }
+
+        private void GeneriereSRTMIndex(int i, string hgtPfad)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void GeneriereViewIndex(int i, string hgtPfad)
+        {
+            //throw new NotImplementedException();
         }
     }
 }
