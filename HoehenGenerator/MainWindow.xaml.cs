@@ -18,6 +18,8 @@ using System.IO.Compression;
 using System.IO;
 using System.Xml;
 using System.Globalization;
+using System.Net;
+using System.Threading;
 
 namespace HoehenGenerator
 {
@@ -527,7 +529,8 @@ namespace HoehenGenerator
 
             //fbd.RootFolder = Environment.SpecialFolder.Personal;
             string path = Environment.CurrentDirectory;
-            fbd.SelectedPath = path;
+            fbd.SelectedPath = @"X:\Trend\HöhenGenerator\HGT";
+           
             System.Windows.Forms.DialogResult result = fbd.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -542,9 +545,14 @@ namespace HoehenGenerator
 
         private void LadeHGTFiles_Click(object sender, RoutedEventArgs e)
         {
-
+            LadeHGTFiles.IsEnabled = false;
+            LblAusgabe.Content = "Lade Index";
+            Thread.Sleep(10);
+  
             GeneriereIndices();
-
+            LadeHGTFiles.IsEnabled = true;
+            LblAusgabe.Content = "";
+  
         }
 
         private void GeneriereIndices()
@@ -559,11 +567,25 @@ namespace HoehenGenerator
 
         private void GeneriereSRTMIndex(int i, string hgtPfad)
         {
-            //throw new NotImplementedException();
+            WebClient w = new WebClient();
+            w.Encoding = Encoding.UTF8;
+            string s1 = w.DownloadString("https://dds.cr.usgs.gov/srtm/version2_1/SRTM" + i);
+            Byte[] s = new UTF8Encoding(true).GetBytes(s1); ;
+            FileStream fileStream = File.OpenWrite(hgtPfad + @"\srtmindex" + i + ".txt");
+            fileStream.Write(s, 0, s.Length);
+            fileStream.Close();
         }
 
         private void GeneriereViewIndex(int i, string hgtPfad)
         {
+            WebClient w = new WebClient();
+            w.Encoding = Encoding.UTF8;
+            string s1 = w.DownloadString("http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org" + i + ".htm");
+            Byte[] s = new UTF8Encoding(true).GetBytes(s1 );
+            FileStream fileStream = File.OpenWrite(hgtPfad + @"\viewfinder" + i + ".txt");
+ 
+            fileStream.Write(s, 0, s.Length);
+            fileStream.Close();
             //throw new NotImplementedException();
         }
     }
