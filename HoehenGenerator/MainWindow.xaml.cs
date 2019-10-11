@@ -35,7 +35,11 @@ namespace HoehenGenerator
         GeoPunkt verschiebung;
         PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
+        bool datumgrenze = false;
         int winkel = 0;
+
+        public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -132,13 +136,16 @@ namespace HoehenGenerator
         private NeuPunkte DrehePolygon(PointCollection orgpunkte, double v)
         {
             PointCollection points = new PointCollection();
-           
+            Point point = new Point();
 
             for (int i = 0; i < orgpunkte.Count; i++)
             {
 
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, v);
-                points.Add(DrehePunkt(orgpunkte[i],drehung));
+                point = DrehePunkt(orgpunkte[i], drehung);
+                if (Datumgrenze && point.X < 0)
+                    point.X = point.X + 360;
+                points.Add(point);
             }
             double minLänge = points.Min(x => x.X);
             double minBreite = points.Min(x => x.Y);
@@ -424,6 +431,7 @@ namespace HoehenGenerator
             sepcoordinaten = coordinaten.Split(' ');
             geoPunkts = new GeoPunkt[sepcoordinaten.Length];
             orgpunkte.Clear();
+            Datumgrenze = false;
             for (int i = 0; i < sepcoordinaten.Length; i++)
             {
                 string[] einekoordinate = sepcoordinaten[i].Split(',');
@@ -432,6 +440,9 @@ namespace HoehenGenerator
                 //Point einpunkt = new Point(double.Parse(einekoordinate[0], culture), double.Parse(einekoordinate[1], culture));
                 orgpunkte.Add( new Point(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
                 geoPunkts[i] = new GeoPunkt(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
+                if (geoPunkts[i].Lon > 180 || geoPunkts[i].Lon < -180)
+                    Datumgrenze = true;
+
                 if (i > 0)
                 {
                     geoPunkts[i].Entfernung = GeoPunkt.BestimmeAbstand(geoPunkts[i], geoPunkts[i - 1]);

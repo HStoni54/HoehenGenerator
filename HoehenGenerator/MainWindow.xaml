@@ -26,7 +26,7 @@
         <TextBox x:Name="höhe" HorizontalAlignment="Left" Height="20" Margin="18,100,0,0" TextWrapping="Wrap" Text="Höhe" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="Fläche" Content="Fläche:" HorizontalAlignment="Left" Margin="18,120,0,0" VerticalAlignment="Top" Width="75" Height="27"/>
         <TextBox x:Name="fläche" HorizontalAlignment="Left" Height="20" Margin="18,140,0,0" TextWrapping="Wrap" Text="Fläche" VerticalAlignment="Top" Width="75"/>
-        <TextBox x:Name="HGTFiles" HorizontalAlignment="Left" Height="95" Margin="18,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" AllowDrop="False" Focusable="False" IsTabStop="False" IsEnabled="False"/>
+        <TextBox x:Name="HGTFiles" HorizontalAlignment="Left" Height="95" Margin="18,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" AllowDrop="False" Focusable="False" IsTabStop="False"/>
 
 
     </Grid>
