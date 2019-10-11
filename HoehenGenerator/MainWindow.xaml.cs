@@ -577,8 +577,11 @@ namespace HoehenGenerator
                 };
                 string s1 = w.DownloadString("https://dds.cr.usgs.gov/srtm/version2_1/SRTM" + i);
 
-            File.WriteAllText(hgtPfad + @"\srtmindex" + i + ".txt",s1); 
-            }
+            File.WriteAllText(hgtPfad + @"\srtmindex" + i + ".txt",s1);
+            }   
+            if (!Directory.Exists("SRTM" + i))
+                Directory.CreateDirectory("SRTM" + i);
+
         }
 
         private void GeneriereViewIndex(int i, string hgtPfad)
@@ -594,6 +597,8 @@ namespace HoehenGenerator
 
                 File.WriteAllText(hgtPfad + @"\viewfinder" + i + ".txt", s1);
             }
+            if (!Directory.Exists("VIEW" + i))
+                Directory.CreateDirectory("VIEW" + i);
         }
     }
 }
