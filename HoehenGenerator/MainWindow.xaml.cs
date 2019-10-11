@@ -19,7 +19,6 @@ using System.IO;
 using System.Xml;
 using System.Globalization;
 
-
 namespace HoehenGenerator
 {
     /// <summary>
@@ -35,6 +34,7 @@ namespace HoehenGenerator
         GeoPunkt verschiebung;
         PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
+        Canvas Zeichenfläche = new Canvas();
         bool datumgrenze = false;
         int winkel = 0;
 
@@ -44,6 +44,7 @@ namespace HoehenGenerator
         {
             InitializeComponent();
             Title = "Höhengenerator für EEP";
+            
            
         }
 
@@ -86,6 +87,7 @@ namespace HoehenGenerator
                 SepariereKoordinaten(coordinaten);
                 BildeSchattenpunkte(orgpunkte);
                 punkte = orgpunkte;
+                Zeichenfläche = Zeichenfläche1;
                // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
                 //ZeichneRechteck(punkte);
@@ -365,16 +367,7 @@ namespace HoehenGenerator
             return;
         }
 
-        //private Matrix Rückrechnung(double winkel2, GeoPunkt linksoben2, Matrix G)
-        //{
-        //    G.SetColumn(0, new double[4] { linksoben2.Ygeo, linksoben2.Zgeo, linksoben2.Xgeo, 0 });
-
-        //    Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel2);
-        //    GeoPunkt geoPunkt = new GeoPunkt();
-        //    geoPunkt.FügeGeopunktEin();
-        //    return drehung * G;
-        //}
-
+ 
         private void ZeichnePolygon(PointCollection punkte)
         {
             Polyline polypunkte = new Polyline();
@@ -396,12 +389,9 @@ namespace HoehenGenerator
 
         private void ZeichnePunkte(PointCollection punkte)
         {
-            //Zeichenfläche.ActualHeight;
 
-            //Zeichenfläche.ActualWidth;
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
-            //Zeichenfläche.Children.Clear();
             for (int i = 0; i < punkte.Count; i++)
             {
                 Ellipse elli = new Ellipse();
@@ -511,6 +501,33 @@ namespace HoehenGenerator
         {
             ladeHGTFiles.IsEnabled = true;
             ladeHGTFiles.IsSelected = true;
+            Zeichenfläche = Zeichenfläche2;
+            ZeichneAlles(punkte);
+        }
+
+        private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Zeichenfläche = Zeichenfläche1;
+        }
+
+        private void ladeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Zeichenfläche = Zeichenfläche2;
+        }
+
+        private void buttonDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            //OpenFileDialog ofd = new OpenFileDialog();
+            //ofd.ShowDialog();
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            fbd.Description = "Bitte Verzeichnis für Hgt-Dateien auswählen";
+            //fbd.RootFolder = Environment.SpecialFolder.Personal;
+            string path = Environment.CurrentDirectory;
+            System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+            ////if (result == DialogResult.OK)
+            //{
+
+            //}
         }
     }
 }
