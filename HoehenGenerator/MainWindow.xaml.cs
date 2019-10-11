@@ -545,13 +545,10 @@ namespace HoehenGenerator
 
         private void LadeHGTFiles_Click(object sender, RoutedEventArgs e)
         {
-            LadeHGTFiles.IsEnabled = false;
-            LblAusgabe.Content = "Lade Index";
-            Thread.Sleep(10);
+          
   
             GeneriereIndices();
-            LadeHGTFiles.IsEnabled = true;
-            LblAusgabe.Content = "";
+            LadeHGTFiles.Content = "Indiziere";
   
         }
 
@@ -559,34 +556,44 @@ namespace HoehenGenerator
         {
             for (int i = 1; i < 4; i+=2)
             {
-                GeneriereViewIndex(i,hgtPfad);
-                GeneriereSRTMIndex(i,hgtPfad);
- 
+                GeneriereViewIndex(i, hgtPfad);
+                GeneriereSRTMIndex(i, hgtPfad);
+
             }
         }
 
+
+ 
         private void GeneriereSRTMIndex(int i, string hgtPfad)
         {
-            WebClient w = new WebClient();
-            w.Encoding = Encoding.UTF8;
-            string s1 = w.DownloadString("https://dds.cr.usgs.gov/srtm/version2_1/SRTM" + i);
-            Byte[] s = new UTF8Encoding(true).GetBytes(s1); ;
-            FileStream fileStream = File.OpenWrite(hgtPfad + @"\srtmindex" + i + ".txt");
-            fileStream.Write(s, 0, s.Length);
-            fileStream.Close();
+            FileInfo b = new FileInfo(hgtPfad + @"\srtmindex" + i + ".txt");
+            if (!b.Exists)
+            {
+
+
+                WebClient w = new WebClient
+                {
+                    Encoding = Encoding.UTF8
+                };
+                string s1 = w.DownloadString("https://dds.cr.usgs.gov/srtm/version2_1/SRTM" + i);
+
+            File.WriteAllText(hgtPfad + @"\srtmindex" + i + ".txt",s1); 
+            }
         }
 
         private void GeneriereViewIndex(int i, string hgtPfad)
         {
-            WebClient w = new WebClient();
-            w.Encoding = Encoding.UTF8;
-            string s1 = w.DownloadString("http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org" + i + ".htm");
-            Byte[] s = new UTF8Encoding(true).GetBytes(s1 );
-            FileStream fileStream = File.OpenWrite(hgtPfad + @"\viewfinder" + i + ".txt");
- 
-            fileStream.Write(s, 0, s.Length);
-            fileStream.Close();
-            //throw new NotImplementedException();
+            FileInfo b = new FileInfo(hgtPfad + @"\srtmindex" + i + ".txt");
+            if (!b.Exists)
+            {
+                WebClient w = new WebClient
+                {
+                    Encoding = Encoding.UTF8
+                };
+                string s1 = w.DownloadString("http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org" + i + ".htm");
+
+                File.WriteAllText(hgtPfad + @"\viewfinder" + i + ".txt", s1);
+            }
         }
     }
 }
