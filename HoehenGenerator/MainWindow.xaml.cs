@@ -506,6 +506,12 @@ namespace HoehenGenerator
             punkte = neuPunkte.Punkte;
             ZeichneAlles(punkte);
         }
+
+        private void Weiter_Click(object sender, RoutedEventArgs e)
+        {
+            ladeHGTFiles.IsEnabled = true;
+            ladeHGTFiles.IsSelected = true;
+        }
     }
 }
 

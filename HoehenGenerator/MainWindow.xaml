@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:HoehenGenerator"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" MinHeight="300" MinWidth="400">
-    <Grid >
+    <TabControl x:Name="tabControl" >
+        <TabItem x:Name="ladenTab" Header="Datei Laden" >
+            <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="240"/>
             <RowDefinition/>
@@ -19,7 +21,7 @@
         <Button x:Name="ladeDatei" Content="Datei Laden" HorizontalAlignment="Left" Margin="18,10,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="LadeDatei_Click"/>
         <Button x:Name="Optimieren" Content="Optimieren" HorizontalAlignment="Left" Margin="18,165,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False" Click="Optimieren_Click"/>
         <Button x:Name="Drehen" Content="Drehen" HorizontalAlignment="Left" Margin="18,190,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False" Click="Drehen_Click"/>
-        <Button x:Name="Weiter" Content="Weiter" HorizontalAlignment="Left" Margin="18,215,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False"/>
+        <Button x:Name="Weiter" Content="Weiter" HorizontalAlignment="Left" Margin="18,215,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False" Click="Weiter_Click"/>
         <Label x:Name="Breite" Content="Breite:" HorizontalAlignment="Left" Margin="18,30,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
         <TextBox x:Name="breite" HorizontalAlignment="Left" Height="20" Margin="18,55,0,0" TextWrapping="Wrap" Text="Breite" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="Höhe" Content="Höhe:" HorizontalAlignment="Left" Margin="18,75,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
@@ -27,7 +29,22 @@
         <Label x:Name="Fläche" Content="Fläche:" HorizontalAlignment="Left" Margin="18,120,0,0" VerticalAlignment="Top" Width="75" Height="27"/>
         <TextBox x:Name="fläche" HorizontalAlignment="Left" Height="20" Margin="18,140,0,0" TextWrapping="Wrap" Text="Fläche" VerticalAlignment="Top" Width="75"/>
         <TextBox x:Name="HGTFiles" HorizontalAlignment="Left" Height="95" Margin="18,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" AllowDrop="False" Focusable="False" IsTabStop="False"/>
-
-
-    </Grid>
+            </Grid>
+        </TabItem>
+            <TabItem x:Name="ladeHGTFiles" Header="HGT-Files" IsEnabled="False">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        <TabItem  IsEnabled="False">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+        <TabItem   IsEnabled="False">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+        <TabItem  IsEnabled="False">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+        <TabItem   IsEnabled="False">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+    </TabControl>
 </Window>
