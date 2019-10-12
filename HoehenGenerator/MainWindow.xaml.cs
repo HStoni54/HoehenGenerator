@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Net;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace HoehenGenerator
 {
@@ -569,9 +570,9 @@ namespace HoehenGenerator
 
         private void GeneriereSRTMIndex(int i, string hgtPfad)
         {
+            //List<ListenListe> vs4 = new List<ListenListe>();
             List<string> vs1 = new List<string>();
-
-            if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".txt"))
+            if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".xml"))
             {
 
                 string baseurl = "https://dds.cr.usgs.gov/";
@@ -583,22 +584,35 @@ namespace HoehenGenerator
                 {
                     if (!vs[j].StartsWith("/") && vs[j].EndsWith("/"))
                     {
+                        
                         string[] vs2 = SammleUrls(url + "/" + vs[j]);
                         for (int k = 0; k < vs2.Length; k++)
                         {
                             if (!vs2[k].StartsWith("/"))
                                 vs1.Add(vs2[k]);
                         }
-
+                       
+                        //ListenListe listenListe = new ListenListe();
+                        //listenListe.Name = vs[j];
+                        //listenListe.Vs = vs1;
+                        //vs4.Add(listenListe);
                     }
                 }
-                string[] vs3 = new string[vs1.Count];
-                for (int k = 0; k < vs1.Count; k++)
-                {
-                    vs3[k] = vs1[k];
+                FileStream f = new FileStream(hgtPfad + @"\srtmindex" + i + ".xml",FileMode.Create);
+                XmlSerializer x = new XmlSerializer(typeof(List<string>));
+                //foreach (var item in vs1)
+                //{
+                x.Serialize(f, vs1);
 
-                }
-                File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
+                //}
+                //f.Close();
+                //string[] vs3 = new string[vs1.Count];
+                //for (int k = 0; k < vs1.Count; k++)
+                //{
+                //    vs3[k] = vs1[k];
+
+                //}
+                //File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
 
             }
             if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
