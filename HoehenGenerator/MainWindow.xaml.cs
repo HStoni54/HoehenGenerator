@@ -20,6 +20,7 @@ using System.Xml;
 using System.Globalization;
 using System.Net;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace HoehenGenerator
 {
@@ -48,8 +49,8 @@ namespace HoehenGenerator
         {
             InitializeComponent();
             Title = "Höhengenerator für EEP";
-            
-           
+
+
         }
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
@@ -66,7 +67,7 @@ namespace HoehenGenerator
                 string vName = ofd.FileName;
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
-                   ZipArchive archive = ZipFile.OpenRead(vName);
+                    ZipArchive archive = ZipFile.OpenRead(vName);
                     StreamReader p = new StreamReader(archive.Entries[0].Open());
                     ge.Load(p);
                     p.Close();
@@ -77,10 +78,11 @@ namespace HoehenGenerator
                 }
                 else
                 {
- 
+
                     ge.Load(vName);
                 }
-            } else
+            }
+            else
             {
                 return;
             }
@@ -93,7 +95,7 @@ namespace HoehenGenerator
                 punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
                 HGTFiles = HGTFiles1;
-               // Optimiere(orgpunkte);
+                // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
                 //ZeichneRechteck(punkte);
                 //ZeichnePolygon(punkte);
@@ -101,9 +103,9 @@ namespace HoehenGenerator
                 Optimieren.IsEnabled = true;
                 Weiter.IsEnabled = true;
                 Drehen.IsEnabled = true;
-                
+
             }
- 
+
         }
 
         private PointCollection BildeSchattenpunkte(PointCollection orgpunkte)
@@ -118,19 +120,19 @@ namespace HoehenGenerator
             NeuPunkte neuPunkte;
             int anzahl = 180;
             double fläche = 0;
-           // int winkel = 0;
- 
+            // int winkel = 0;
+
 
             for (int i = 0; i < anzahl; i++)
             {
-                neuPunkte = DrehePolygon(orgpunkte, i - (anzahl / 2) );
+                neuPunkte = DrehePolygon(orgpunkte, i - (anzahl / 2));
                 //ZeichneAlles(neuPunkte.Punkte);
                 if (fläche == 0 || fläche > neuPunkte.Fläche)
                 {
                     winkel = i - (anzahl / 2);
                     fläche = neuPunkte.Fläche;
                 }
-                    
+
 
             }
 
@@ -167,7 +169,7 @@ namespace HoehenGenerator
             double breite2 = GeoPunkt.BestimmeAbstand(linksunten, rechtsunten);
 
             double fläche = hoehe2 * breite2;
-            NeuPunkte neuPunkte = new NeuPunkte(points,fläche);
+            NeuPunkte neuPunkte = new NeuPunkte(points, fläche);
             return neuPunkte;
         }
 
@@ -180,7 +182,7 @@ namespace HoehenGenerator
             //double[] Ri3 = new double[4] { 0, 0, 1, 0 };
             //double[] Ri4 = new double[4] { 0, 0, 0, 1 };
 
-            double cosalpha =  Math.Cos(GeoPunkt.bogen(alpha));
+            double cosalpha = Math.Cos(GeoPunkt.bogen(alpha));
             double sinalpha = Math.Sin(GeoPunkt.bogen(alpha));
             double cosbeta = Math.Cos(GeoPunkt.bogen(beta));
             double sinbeta = Math.Sin(GeoPunkt.bogen(beta));
@@ -218,9 +220,9 @@ namespace HoehenGenerator
             R5.SetColumn(3, new double[4] { 0, 0, 0, 1 });
 
             //Matrix E = R5 * R4 * R3 * R2 * R1;
-            return  R1 * R2 * R3 * R4 * R5;
+            return R1 * R2 * R3 * R4 * R5;
 
-  
+
             //throw new NotImplementedException();
         }
 
@@ -234,10 +236,10 @@ namespace HoehenGenerator
 
             P1.SetColumn(0, new double[4] { geoPunkt.Ygeo, geoPunkt.Zgeo, geoPunkt.Xgeo, 1.0 });
             //R1.SetColumn(0,[Math.Cos(gradrad),0, Math.Sin(gradrad), 0]);
-            Matrix E =  drehung * P1;
+            Matrix E = drehung * P1;
             double[] point2 = E.GetColumn(0);
             geoPunkt1.FügeGeopunktEin(point2[2], point2[0], point2[1]);
-            Point point1 = new Point(geoPunkt1.Lon,geoPunkt1.Lat);
+            Point point1 = new Point(geoPunkt1.Lon, geoPunkt1.Lat);
 
             //point1.X = (Math.Cos(vrad) * (point.X - mittelpunkt.Lon)) - (Math.Sin(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lon;
             //point1.Y = (Math.Sin(vrad) * (point.X - mittelpunkt.Lon)) + (Math.Cos(vrad) * (point.Y - mittelpunkt.Lat)) + mittelpunkt.Lat;
@@ -266,7 +268,7 @@ namespace HoehenGenerator
             Zeichenfläche.Children.Add(rechteckpunkte);
             Canvas.SetLeft(rechteckpunkte, 0);
             Canvas.SetBottom(rechteckpunkte, 0);
-            
+
 
         }
 
@@ -293,12 +295,12 @@ namespace HoehenGenerator
             breite2 = GeoPunkt.BestimmeAbstand(linksunten, rechtsunten);
             if (hoehe2 / breite2 > GrößeH / GrößeB)
             {
-                
+
                 GrößeB = GrößeB * GrößeH / GrößeB * breite2 / hoehe2;
             }
             else
             {
-               
+
                 GrößeH = GrößeH * GrößeB / GrößeH * hoehe2 / breite2;
             }
             //if (Optimieren.IsEnabled == false)
@@ -337,7 +339,7 @@ namespace HoehenGenerator
                 BildeHGTString(maxlat, minlat, maxlon, minlon);
 
             }
- 
+
             // throw new NotImplementedException();
         }
 
@@ -348,7 +350,7 @@ namespace HoehenGenerator
             {
                 for (int j = (int)minlon; j < (int)maxlon + 1; j++)
                 {
-                    
+
                     if (i >= 0)
                     {
                         hgt = "N" + i.ToString("D2");
@@ -373,12 +375,12 @@ namespace HoehenGenerator
             return;
         }
 
- 
+
         private void ZeichnePolygon(PointCollection punkte)
         {
             Polyline polypunkte = new Polyline();
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
-            AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge,  out minBreite, out maxLänge,out maxBreite,out Größe);
+            AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
             double flaeche2 = hoehe2 * breite2;
             PointCollection canvaspunkte = new PointCollection();
             //Zeichenfläche.Children.Clear();
@@ -405,9 +407,9 @@ namespace HoehenGenerator
                 elli.Height = 5.0;
                 elli.Fill = Brushes.Red;
                 Zeichenfläche.Children.Add(elli);
-                
-                Canvas.SetLeft(elli, GrößeB / (maxLänge - minLänge) *  (punkte[i].X - minLänge) - 2.5);
-                Canvas.SetBottom(elli, GrößeH / (maxBreite -minBreite) *  (punkte[i].Y -minBreite) - 2.5);
+
+                Canvas.SetLeft(elli, GrößeB / (maxLänge - minLänge) * (punkte[i].X - minLänge) - 2.5);
+                Canvas.SetBottom(elli, GrößeH / (maxBreite - minBreite) * (punkte[i].Y - minBreite) - 2.5);
             }
             Ellipse elli2 = new Ellipse();
             elli2.Width = 5.0;
@@ -416,7 +418,7 @@ namespace HoehenGenerator
             Zeichenfläche.Children.Add(elli2);
 
             Canvas.SetLeft(elli2, GrößeB / (maxLänge - minLänge) * ((maxLänge - minLänge) / 2) - 2.5);
-            Canvas.SetBottom(elli2, GrößeH / (maxBreite - minBreite) * ((maxBreite -  minBreite) / 2) - 2.5);
+            Canvas.SetBottom(elli2, GrößeH / (maxBreite - minBreite) * ((maxBreite - minBreite) / 2) - 2.5);
 
         }
 
@@ -432,9 +434,9 @@ namespace HoehenGenerator
             {
                 string[] einekoordinate = sepcoordinaten[i].Split(',');
                 //CultureInfo culture = new CultureInfo("en-US");
-                
+
                 //Point einpunkt = new Point(double.Parse(einekoordinate[0], culture), double.Parse(einekoordinate[1], culture));
-                orgpunkte.Add( new Point(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
+                orgpunkte.Add(new Point(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
                 geoPunkts[i] = new GeoPunkt(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
                 if (geoPunkts[i].Lon > 180 || geoPunkts[i].Lon < -180)
                     Datumgrenze = true;
@@ -445,7 +447,7 @@ namespace HoehenGenerator
                 }
             }
             mittelpunkt = new GeoPunkt(((orgpunkte.Max(x => x.X) - orgpunkte.Min(x => x.X)) / 2.0 + orgpunkte.Min(x => x.X)), ((orgpunkte.Max(x => x.Y) - orgpunkte.Min(x => x.Y)) / 2.0 + orgpunkte.Min(x => x.Y)));
-       }
+        }
 
         private void SuchenNode(XmlNode ge)
         {
@@ -489,9 +491,9 @@ namespace HoehenGenerator
 
         private void Optimieren_Click(object sender, RoutedEventArgs e)
         {
-                Optimiere(orgpunkte);
-                ZeichneAlles(punkte);
-                
+            Optimiere(orgpunkte);
+            ZeichneAlles(punkte);
+
 
         }
 
@@ -524,37 +526,38 @@ namespace HoehenGenerator
 
         private void buttonDirectory_Click(object sender, RoutedEventArgs e)
         {
-             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
             fbd.Description = "Bitte Verzeichnis für Hgt-Dateien auswählen";
 
             //fbd.RootFolder = Environment.SpecialFolder.Personal;
             string path = Environment.CurrentDirectory;
             fbd.SelectedPath = @"X:\Trend\HöhenGenerator\HGT";
-           
+
             System.Windows.Forms.DialogResult result = fbd.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 hgtPfad = fbd.SelectedPath;
                 LadeHGTFiles.IsEnabled = true;
-            } else
+            }
+            else
             {
                 LadeHGTFiles.IsEnabled = false;
-          
+
             }
         }
 
         private void LadeHGTFiles_Click(object sender, RoutedEventArgs e)
         {
-          
-  
+
+
             GeneriereIndices();
             LadeHGTFiles.Content = "Indiziere";
-  
+
         }
 
         private void GeneriereIndices()
         {
-            for (int i = 1; i < 4; i+=2)
+            for (int i = 1; i < 4; i += 2)
             {
                 GeneriereViewIndex(i, hgtPfad);
                 GeneriereSRTMIndex(i, hgtPfad);
@@ -563,42 +566,104 @@ namespace HoehenGenerator
         }
 
 
- 
+
         private void GeneriereSRTMIndex(int i, string hgtPfad)
         {
-            FileInfo b = new FileInfo(hgtPfad + @"\srtmindex" + i + ".txt");
-            if (!b.Exists)
+            List<string> vs1 = new List<string>();
+
+            if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".txt"))
             {
 
+                string baseurl = "https://dds.cr.usgs.gov/";
+                string url = baseurl + "srtm/version2_1/SRTM" + i;
 
-                WebClient w = new WebClient
+                string[] vs = SammleUrls(url);
+
+                for (int j = 0; j < vs.Length; j++)
                 {
-                    Encoding = Encoding.UTF8
-                };
-                string s1 = w.DownloadString("https://dds.cr.usgs.gov/srtm/version2_1/SRTM" + i);
+                    if (!vs[j].StartsWith("/") && vs[j].EndsWith("/"))
+                    {
+                        string[] vs2 = SammleUrls(url + "/" + vs[j]);
+                        for (int k = 0; k < vs2.Length; k++)
+                        {
+                            if (!vs2[k].StartsWith("/"))
+                                vs1.Add(vs2[k]);
+                        }
 
-            File.WriteAllText(hgtPfad + @"\srtmindex" + i + ".txt",s1);
-            }   
-            if (!Directory.Exists("SRTM" + i))
-                Directory.CreateDirectory("SRTM" + i);
+                    }
+                }
+                string[] vs3 = new string[vs1.Count];
+                for (int k = 0; k < vs1.Count; k++)
+                {
+                    vs3[k] = vs1[k];
 
+                }
+                File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
+
+            }
+            if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
+                Directory.CreateDirectory(hgtPfad + @"\SRTM" + i);
+
+        }
+
+        private static string[] SammleUrls(string url)
+        {
+            WebClient w = new WebClient
+            {
+                Encoding = Encoding.UTF8
+            };
+            string s = w.DownloadString(url);
+
+            MatchCollection m = Regex.Matches(s, "<a href=\"([^\"]*)\">");
+            string[] vs = new string[m.Count];
+            for (int i2 = 0; i2 < m.Count; i2++)
+            {
+                vs[i2] = m[i2].Groups[1].Value;
+            }
+
+            return vs;
         }
 
         private void GeneriereViewIndex(int i, string hgtPfad)
         {
-            FileInfo b = new FileInfo(hgtPfad + @"\srtmindex" + i + ".txt");
-            if (!b.Exists)
-            {
-                WebClient w = new WebClient
-                {
-                    Encoding = Encoding.UTF8
-                };
-                string s1 = w.DownloadString("http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org" + i + ".htm");
 
-                File.WriteAllText(hgtPfad + @"\viewfinder" + i + ".txt", s1);
+            if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".txt"))
+            {
+                string url = "http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org" + i + ".htm";
+
+                string[] vs = SammleAreas(url);
+                File.WriteAllLines(hgtPfad + @"\viewfinder" + i + ".txt", vs);
+
             }
-            if (!Directory.Exists("VIEW" + i))
-                Directory.CreateDirectory("VIEW" + i);
+            if (!Directory.Exists(hgtPfad + @"\VIEW" + i))
+                Directory.CreateDirectory(hgtPfad + @"\VIEW" + i);
+        }
+
+        private static string[] SammleAreas(string url)
+        {
+            WebClient w = new WebClient
+            {
+                Encoding = Encoding.UTF8
+            };
+            string s = "";
+            try
+            {
+                s = w.DownloadString(url);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Fehler" + e.Message + "\nURL: " + url);
+            }
+
+
+            MatchCollection m = Regex.Matches(s, "<area .*>");
+            string[] vs = new string[m.Count];
+            for (int i2 = 0; i2 < m.Count; i2++)
+            {
+                vs[i2] = m[i2].Value;
+            }
+
+            return vs;
         }
     }
 }

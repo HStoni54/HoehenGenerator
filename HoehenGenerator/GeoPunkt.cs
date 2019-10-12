@@ -11,12 +11,12 @@ namespace HoehenGenerator
         double lon;
         public double Lon
         { get { return lon; } }
-        
+
         double lat;
         public double Lat
         { get { return lat; } }
         double entfernung;
- 
+
         public GeoPunkt(double lon = 0, double lat = 0, double entfernung = 0)
         {
             this.lat = lat;
@@ -52,7 +52,7 @@ namespace HoehenGenerator
             double skalarprodukt = p1.Xgeo * p2.Xgeo + p1.Ygeo * p2.Ygeo + p1.Zgeo * p2.Zgeo;
             return radius * Math.Acos(skalarprodukt / (radius * radius));
         }
-        public void FügeGeopunktEin(double X ,double Y, double Z)
+        public void FügeGeopunktEin(double X, double Y, double Z)
         {
             if (Math.Abs(Z) <= radius)
             {
@@ -68,7 +68,7 @@ namespace HoehenGenerator
 
             if (Math.Abs(lat) != 90)
             {
-               lon = grad(Math.Acos(X / radius / Math.Cos(bogen(lat))));
+                lon = grad(Math.Acos(X / radius / Math.Cos(bogen(lat))));
                 if (Math.Asin(Y / radius / Math.Cos(bogen(lat))) < 0)
                 {
                     lon = -lon;
@@ -77,7 +77,7 @@ namespace HoehenGenerator
 
 
             }
-            else 
+            else
             {
                 lon = 0;
             }

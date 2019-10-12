@@ -13,8 +13,8 @@ namespace HoehenGenerator
         double fläche;
 
         public PointCollection Punkte { get => punkte; }
-        public double Fläche { get => fläche;  }
- 
+        public double Fläche { get => fläche; }
+
 
         public NeuPunkte(PointCollection points, double fläche)
         {
