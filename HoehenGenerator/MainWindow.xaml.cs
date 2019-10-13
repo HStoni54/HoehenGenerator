@@ -665,6 +665,11 @@ namespace HoehenGenerator
                     MatchCollection m2 = Regex.Matches(vs[j], "href=\"([^\"]*)\"");
                     xmlWriter.WriteStartElement("ZipDatei", m2[0].Groups[1].Value);
                     xmlWriter.WriteElementString("Koordinaten", m1[0].Groups[1].Value);
+                    string[] zf =findeZipFiles(m1[0].Groups[1].Value);
+                    for (int k = 0; k < zf.Length; k++)
+                    {
+                        xmlWriter.WriteElementString("Datei", zf[k]);
+                    }
                     xmlWriter.WriteEndElement();
                 }
                 //File.WriteAllLines(hgtPfad + @"\viewfinder" + i + ".txt", vs);
@@ -677,6 +682,56 @@ namespace HoehenGenerator
             }
             if (!Directory.Exists(hgtPfad + @"\VIEW" + i))
                 Directory.CreateDirectory(hgtPfad + @"\VIEW" + i);
+        }
+
+        private string[] findeZipFiles(string value)
+        {
+            double viewDimension = 1800.0 / 360.0;
+            string lonName = "";
+            string latName = "";
+            string[] vs = value.Split(',');
+            
+            int l = int.Parse(vs[0]);
+            int t = int.Parse(vs[1]);
+            int r = int.Parse(vs[2]);
+            int b = int.Parse(vs[3]);
+            int w = (int)(l / viewDimension + 0.5) - 180;
+            int e = (int)(r / viewDimension + 0.5) - 180;
+            int s = 90 - (int)(b / viewDimension + 0.5);
+            int n = 90 - (int)(t / viewDimension + 0.5);
+            List<string> vs1 = new List<string>();
+            for (int lon = w; lon < e; lon++)
+            {
+                for (int lat = s; lat < n; lat++)
+                {
+                    if (lon < 0)
+                    {
+                        lonName = "W" + (-lon).ToString("D3");
+                    }
+                    else
+                    {
+                        lonName = "E" + (lon).ToString("D3");
+                    }
+                    if (lat < 0)
+                    {
+                        latName = "S" + (-lat).ToString("D2");
+                    }
+                    else
+                    {
+                        latName = "N" + (lat).ToString("D2");
+                    }
+                    string name = latName + lonName;
+                    vs1.Add(name);
+                }
+             
+            }
+            string[] ergebnis = new string[vs1.Count];
+
+            for (int i = 0; i < vs1.Count; i++)
+            {
+                ergebnis[i] = vs1[i];
+            }
+            return ergebnis;
         }
 
         private static string[] SammleAreas(string url)
