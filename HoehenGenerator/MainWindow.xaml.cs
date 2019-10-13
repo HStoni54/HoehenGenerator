@@ -552,8 +552,180 @@ namespace HoehenGenerator
 
 
             GeneriereIndices();
-            LadeHGTFiles.Content = "Indiziere";
+            downloadeHgtFiles();
 
+
+        }
+
+        private void downloadeHgtFiles()
+        {
+            List<string> vs1 = new List<string>();
+            List<string> srtm1 = new List<string>();
+            List<string> srtm3 = new List<string>();
+            List<string> view1 = new List<string>();
+            List<string> view3 = new List<string>();
+            string[] vs = HGTFiles.Text.Split('\n');
+            for (int i = 0; i < vs.Length; i++)
+            {
+                if (vs[i] != "")
+                {
+                    string[] url = findeUrl(vs[i]);
+                    for (int j = 0; j < url.Length; j++)
+                    {
+                        vs1.Add(url[j]);
+                    }
+
+                }
+
+            }
+            for (int i = 0; i < vs1.Count; i++)
+            {
+                if (vs1[i].Contains("SRTM1"))
+                    srtm1.Add(vs1[i]);
+                if (vs1[i].Contains("SRTM3"))
+                    srtm3.Add(vs1[i]);
+                if (vs1[i].Contains("dem1"))
+                    view1.Add(vs1[i]);
+                if (vs1[i].Contains("dem3"))
+                    view3.Add(vs1[i]);
+
+            }
+            WebClient webClient = new WebClient()
+            {
+                Encoding = Encoding.UTF8
+            };
+            for (int i = 0; i < srtm1.Count; i++)
+            {
+                string dateiname = System.IO.Path.GetFileName(srtm1[i]);
+                String Zielname = hgtPfad + "\\SRTM1\\" + dateiname;
+                if (!File.Exists(Zielname))
+                webClient.DownloadFile(srtm1[i], Zielname);
+            }
+            for (int i = 0; i < srtm3.Count; i++)
+            {
+                string dateiname = System.IO.Path.GetFileName(srtm3[i]);
+                String Zielname = hgtPfad + "\\SRTM3\\" + dateiname;
+                if (!File.Exists(Zielname))
+                    webClient.DownloadFile(srtm3[i], Zielname);
+            }
+            for (int i = 0; i < view1.Count; i++)
+            {
+                string dateiname = System.IO.Path.GetFileName(view1[i]);
+                String Zielname = hgtPfad + "\\VIEW1\\" + dateiname;
+                if (!File.Exists(Zielname))
+                    webClient.DownloadFile(view1[i], Zielname);
+            }
+            for (int i = 0; i < view3.Count; i++)
+            {
+                string dateiname = System.IO.Path.GetFileName(view3[i]);
+                String Zielname = hgtPfad + "\\VIEW3\\" + dateiname;
+                if (!File.Exists(Zielname))
+                    webClient.DownloadFile(view3[i], Zielname);
+            }
+
+
+           
+        }
+
+        private string[] findeUrl(string item)
+        {
+            List<string> vs = new List<string>();
+            for (int i = 1; i < 4; i += 2)
+            {
+                string view = DurchsucheIndex(i, hgtPfad, item, "view");
+                string srtm = DurchsucheIndex(i, hgtPfad, item, "srtm");
+                for (int j = 0; j < view.Length; j++)
+                {
+                    vs.Add(view);
+                }
+                for (int j = 0; j < srtm.Length; j++)
+                {
+                    vs.Add(srtm);
+                }
+            }
+            List<string> vs1 = new List<string>();
+            for (int i = 0; i < vs.Count; i++)
+            {
+                if (!vs1.Contains<string>(vs[i]))
+                    vs1.Add(vs[i]);
+            }
+            string[] vs2 = new string[vs1.Count];
+            for (int i = 0; i < vs1.Count; i++)
+            {
+                vs2[i] = vs1[i];
+            }
+            return vs2;
+        }
+
+        private string DurchsucheIndex(int i, string hgtPfad, string item, string v)
+        {
+            string ergebnis = "";
+            string ersterTeil = "";
+            string zweiterTeil = "";
+            string knoten = "";
+            if (File.Exists(hgtPfad + "\\" + v + "index" + i + ".xml"))
+            {
+                XmlReader xmlReader = XmlReader.Create(hgtPfad + "\\" + v + "index" + i + ".xml");
+                while (xmlReader.Read())
+                {
+                    switch (xmlReader.NodeType)
+                    {
+                        //case XmlNodeType.XmlDeclaration:
+                            //    Console.WriteLine("{0,-20}<{1}>", "DEKLARATION", xmlReader.Value);
+                            //break;
+                        //case XmlNodeType.CDATA:
+                            //    Console.WriteLine("{0,-20}{1}", "CDATA", xmlReader.Value);
+                            //break;
+                        //case XmlNodeType.Whitespace:
+                            //Console.WriteLine("{0,-20}", "WHITESPACE");
+                            //break;
+                        //case XmlNodeType.Comment:
+                            //    Console.WriteLine("{0,-20}<!--{1}-->", "COMMENT", xmlReader.Value);
+                            //break;
+                        case XmlNodeType.Element:
+                            if (xmlReader.IsEmptyElement) { }
+                                //Console.WriteLine("{0,-20}<{1} />", "EMPTY_ELEMENT", xmlReader.Name);
+                            else
+                            {
+                                //Console.WriteLine("{0,-20}<{1}>", "ELEMENT", xmlReader.Name);
+                                // prüfen, ob der Knoten Attribute hat
+                                if (xmlReader.Name == "Abschnitt")
+                                    knoten = xmlReader.Name;
+                                if (xmlReader.Name == "ZipDatei")
+                                    knoten = xmlReader.Name;
+
+                                if (xmlReader.HasAttributes)
+                                {
+                                    // Durch die Attribute navigieren
+                                    while (xmlReader.MoveToNextAttribute())
+                                    {
+                                        //Console.WriteLine("{0,-20}{1}",
+                                        //       "ATTRIBUT", xmlReader.Name + "=" + xmlReader.Value);
+                                        if (knoten == "Abschnitt" && xmlReader.Name == "Url")
+                                            ersterTeil = xmlReader.Value;
+                                        if (knoten == "ZipDatei" && (xmlReader.Name == "Dateiname" || xmlReader.Name == "Url"))
+                                            zweiterTeil = xmlReader.Value;
+
+
+                                    }
+                                }
+                            }
+                            break;
+                        //case XmlNodeType.EndElement:
+                            //    Console.WriteLine("{0,-20}</{1}>", "END_ELEMENT", xmlReader.Name);
+                            //break;
+                        case XmlNodeType.Text:
+                            if (xmlReader.Value == item)
+                                ergebnis = ersterTeil + zweiterTeil;
+                            //Console.WriteLine("{0,-20}{1}", "TEXT", xmlReader.Value);
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+            }
+            return ergebnis;
         }
 
         private void GeneriereIndices()
@@ -601,7 +773,7 @@ namespace HoehenGenerator
                         {
                             if (!vs2[k].StartsWith("/"))
                             {
-                                xmlWriter.WriteStartElement("Zipdatei");
+                                xmlWriter.WriteStartElement("ZipDatei");
                                 xmlWriter.WriteAttributeString("Dateiname", vs2[k]);
                                 xmlWriter.WriteElementString("Datei", vs2[k].Substring(0, 7));
                                 xmlWriter.WriteEndElement();
@@ -620,7 +792,7 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
-           }
+            }
             if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
                 Directory.CreateDirectory(hgtPfad + @"\SRTM" + i);
 
@@ -647,12 +819,12 @@ namespace HoehenGenerator
         private void GeneriereViewIndex(int i, string hgtPfad)
         {
 
-            if (!File.Exists(hgtPfad + @"\viewfinder" + i + ".xml"))
+            if (!File.Exists(hgtPfad + @"\viewindex" + i + ".xml"))
             {
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.IndentChars = "  ";
-                XmlWriter xmlWriter = XmlWriter.Create(hgtPfad + @"\viewfinder" + i + ".xml", settings);
+                XmlWriter xmlWriter = XmlWriter.Create(hgtPfad + @"\viewindex" + i + ".xml", settings);
                 xmlWriter.WriteStartDocument();
                 xmlWriter.WriteStartElement("HgtDateien");
                 xmlWriter.WriteAttributeString("Quelle", "VIEW" + i);
@@ -661,11 +833,13 @@ namespace HoehenGenerator
                 string[] vs = SammleAreas(url);
                 for (int j = 0; j < vs.Length; j++)
                 {
-                    MatchCollection m1 = Regex.Matches(vs[j],"coords=\"([^\"]*)\"");
+                    MatchCollection m1 = Regex.Matches(vs[j], "coords=\"([^\"]*)\"");
                     MatchCollection m2 = Regex.Matches(vs[j], "href=\"([^\"]*)\"");
-                    xmlWriter.WriteStartElement("ZipDatei", m2[0].Groups[1].Value);
+                    xmlWriter.WriteStartElement("ZipDatei");
+                    xmlWriter.WriteAttributeString("Url", m2[0].Groups[1].Value);
+
                     xmlWriter.WriteElementString("Koordinaten", m1[0].Groups[1].Value);
-                    string[] zf =findeZipFiles(m1[0].Groups[1].Value);
+                    string[] zf = findeZipFiles(m1[0].Groups[1].Value);
                     for (int k = 0; k < zf.Length; k++)
                     {
                         xmlWriter.WriteElementString("Datei", zf[k]);
@@ -678,7 +852,7 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
 
-                
+
             }
             if (!Directory.Exists(hgtPfad + @"\VIEW" + i))
                 Directory.CreateDirectory(hgtPfad + @"\VIEW" + i);
@@ -690,7 +864,7 @@ namespace HoehenGenerator
             string lonName = "";
             string latName = "";
             string[] vs = value.Split(',');
-            
+
             int l = int.Parse(vs[0]);
             int t = int.Parse(vs[1]);
             int r = int.Parse(vs[2]);
@@ -723,7 +897,7 @@ namespace HoehenGenerator
                     string name = latName + lonName;
                     vs1.Add(name);
                 }
-             
+
             }
             string[] ergebnis = new string[vs1.Count];
 
