@@ -570,10 +570,11 @@ namespace HoehenGenerator
 
         private void GeneriereSRTMIndex(int i, string hgtPfad)
         {
-            //List<ListenListe> vs4 = new List<ListenListe>();
-            List<string> vs1 = new List<string>();
+           
             if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".xml"))
             {
+                List<string> vs1 = new List<string>();
+
 
                 string baseurl = "https://dds.cr.usgs.gov/";
                 string url = baseurl + "srtm/version2_1/SRTM" + i;
@@ -582,38 +583,30 @@ namespace HoehenGenerator
 
                 for (int j = 0; j < vs.Length; j++)
                 {
+
                     if (!vs[j].StartsWith("/") && vs[j].EndsWith("/"))
                     {
-                        
                         string[] vs2 = SammleUrls(url + "/" + vs[j]);
                         for (int k = 0; k < vs2.Length; k++)
                         {
                             if (!vs2[k].StartsWith("/"))
                                 vs1.Add(vs2[k]);
                         }
-                       
-                        //ListenListe listenListe = new ListenListe();
-                        //listenListe.Name = vs[j];
-                        //listenListe.Vs = vs1;
-                        //vs4.Add(listenListe);
+
+ 
+  
                     }
+
+
                 }
+ 
                 FileStream f = new FileStream(hgtPfad + @"\srtmindex" + i + ".xml",FileMode.Create);
                 XmlSerializer x = new XmlSerializer(typeof(List<string>));
-                //foreach (var item in vs1)
-                //{
-                x.Serialize(f, vs1);
+                    x.Serialize(f, vs1);
 
-                //}
-                //f.Close();
-                //string[] vs3 = new string[vs1.Count];
-                //for (int k = 0; k < vs1.Count; k++)
-                //{
-                //    vs3[k] = vs1[k];
-
-                //}
-                //File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
-
+                f.Close();
+               //File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
+                // TODO:  XmlSerializer(Type, Type[]) ?????
             }
             if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
                 Directory.CreateDirectory(hgtPfad + @"\SRTM" + i);
