@@ -62,6 +62,7 @@ namespace XmlTest
             XmlWriter xmlWriter = XmlWriter.Create("test2.xml",settings);
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("TestDaten");
+            xmlWriter.WriteAttributeString("Daten", testDaten1.Test2);
             for (int i = 0; i < testDaten1.Test1.Length; i++)
             {
                 xmlWriter.WriteElementString("Datensatz",testDaten1.Test1[i]);
