@@ -570,9 +570,17 @@ namespace HoehenGenerator
 
         private void GeneriereSRTMIndex(int i, string hgtPfad)
         {
-           
+
             if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".xml"))
             {
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.IndentChars = "  ";
+                XmlWriter xmlWriter = XmlWriter.Create(hgtPfad + @"\srtmindex" + i + ".xml", settings);
+                xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartElement("HgtDateien");
+                xmlWriter.WriteAttributeString("Quelle", "SRTM" + i);
+
                 List<string> vs1 = new List<string>();
 
 
@@ -586,26 +594,38 @@ namespace HoehenGenerator
 
                     if (!vs[j].StartsWith("/") && vs[j].EndsWith("/"))
                     {
+                        xmlWriter.WriteStartElement("Abschnitt");
+                        xmlWriter.WriteAttributeString("Url", url + "/" + vs[j]);
                         string[] vs2 = SammleUrls(url + "/" + vs[j]);
                         for (int k = 0; k < vs2.Length; k++)
                         {
                             if (!vs2[k].StartsWith("/"))
+                            {
+                                xmlWriter.WriteStartElement("Zipdatei");
+                                xmlWriter.WriteAttributeString("Dateiname", vs2[k]);
+                                xmlWriter.WriteElementString("Datei", vs2[k].Substring(0, 7));
+                                xmlWriter.WriteEndElement();
                                 vs1.Add(vs2[k]);
+                            }
+
                         }
 
- 
-  
+
+                        xmlWriter.WriteEndElement();
                     }
 
 
                 }
- 
-                FileStream f = new FileStream(hgtPfad + @"\srtmindex" + i + ".xml",FileMode.Create);
-                XmlSerializer x = new XmlSerializer(typeof(List<string>));
-                    x.Serialize(f, vs1);
 
-                f.Close();
-               //File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndDocument();
+                xmlWriter.Close();
+                //FileStream f = new FileStream(hgtPfad + @"\srtmindex" + i + ".xml",FileMode.Create);
+                //XmlSerializer x = new XmlSerializer(typeof(List<string>));
+                //    x.Serialize(f, vs1);
+
+                //f.Close();
+                //File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
                 // TODO:  XmlSerializer(Type, Type[]) ?????
             }
             if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
