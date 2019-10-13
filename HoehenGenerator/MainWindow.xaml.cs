@@ -620,14 +620,7 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
-                //FileStream f = new FileStream(hgtPfad + @"\srtmindex" + i + ".xml",FileMode.Create);
-                //XmlSerializer x = new XmlSerializer(typeof(List<string>));
-                //    x.Serialize(f, vs1);
-
-                //f.Close();
-                //File.WriteAllLines(hgtPfad + @"\srtmindex" + i + ".txt", vs3);
-                // TODO:  XmlSerializer(Type, Type[]) ?????
-            }
+           }
             if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
                 Directory.CreateDirectory(hgtPfad + @"\SRTM" + i);
 
@@ -654,13 +647,33 @@ namespace HoehenGenerator
         private void GeneriereViewIndex(int i, string hgtPfad)
         {
 
-            if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".txt"))
+            if (!File.Exists(hgtPfad + @"\viewfinder" + i + ".xml"))
             {
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.IndentChars = "  ";
+                XmlWriter xmlWriter = XmlWriter.Create(hgtPfad + @"\viewfinder" + i + ".xml", settings);
+                xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartElement("HgtDateien");
+                xmlWriter.WriteAttributeString("Quelle", "VIEW" + i);
                 string url = "http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org" + i + ".htm";
 
                 string[] vs = SammleAreas(url);
-                File.WriteAllLines(hgtPfad + @"\viewfinder" + i + ".txt", vs);
+                for (int j = 0; j < vs.Length; j++)
+                {
+                    MatchCollection m1 = Regex.Matches(vs[j],"coords=\"([^\"]*)\"");
+                    MatchCollection m2 = Regex.Matches(vs[j], "href=\"([^\"]*)\"");
+                    xmlWriter.WriteStartElement("ZipDatei", m2[0].Groups[1].Value);
+                    xmlWriter.WriteElementString("Koordinaten", m1[0].Groups[1].Value);
+                    xmlWriter.WriteEndElement();
+                }
+                //File.WriteAllLines(hgtPfad + @"\viewfinder" + i + ".txt", vs);
 
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndDocument();
+                xmlWriter.Close();
+
+                
             }
             if (!Directory.Exists(hgtPfad + @"\VIEW" + i))
                 Directory.CreateDirectory(hgtPfad + @"\VIEW" + i);
