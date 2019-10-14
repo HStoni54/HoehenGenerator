@@ -553,6 +553,43 @@ namespace HoehenGenerator
 
             GeneriereIndices();
             downloadeHgtFiles();
+            unZipHgtFiles();
+
+
+        }
+
+        private void unZipHgtFiles()
+        {
+            string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" };
+            foreach (var item in directorys)
+            {
+                if (Directory.Exists(hgtPfad + "\\" + item))
+                {
+                    string[] zipfiles = Directory.GetFiles(hgtPfad + "\\" + item,"*.zip");
+                    foreach (var file in zipfiles)
+                    {
+                        ZipArchive zipfile = ZipFile.OpenRead(file);
+                        foreach (ZipArchiveEntry entry in zipfile.Entries)
+                        {
+                            if (entry.Name.Length > 0)
+                                entry.ExtractToFile(hgtPfad + "\\" + item + "\\" + entry.Name, overwrite: true);
+                                //MessageBox.Show("ZipFile:" + file + " gefunden!\n" + "Datei: " + entry.Name);
+
+
+                        }
+                        zipfile.Dispose();
+
+                        File.Delete(file);
+
+                           
+                    }
+
+
+                }
+                   
+                
+
+            }
 
 
         }
