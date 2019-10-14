@@ -12,11 +12,14 @@ namespace HoehenGenerator
     {
         readonly int[,] hgtDaten;
         int auflösung;
+        string name;
         string dateiname;
 
         public HGTFile(int auflösung, string dateiname)
         {
             this.auflösung = auflösung;
+
+
             this.dateiname = dateiname;
             hgtDaten = new int[auflösung * 1201, auflösung * 1201];
         }
@@ -44,5 +47,7 @@ namespace HoehenGenerator
         }
         public int[,] HgtDaten => hgtDaten;
         public int Auflösung => auflösung;
+
+        public string Name { get => name; set => name = value; }
     }
 }

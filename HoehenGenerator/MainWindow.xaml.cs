@@ -40,6 +40,7 @@ namespace HoehenGenerator
         PointCollection punkte = new PointCollection();
         Canvas Zeichenfläche = new Canvas();
         TextBox HGTFiles = new TextBox();
+        List<HGTFile> listHGTFiles = new List<HGTFile>();
         bool usesrtm = false;
 
         bool useview = true;
@@ -1214,6 +1215,60 @@ namespace HoehenGenerator
         private void Verarbeitung_GotFocus(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Einlesen_Click(object sender, RoutedEventArgs e)
+        {
+            listHGTFiles.Clear();
+            string[] vs = HGTFiles.Text.Split('\n');
+            foreach (string item in vs)
+            {
+               Filemitauflösung fma = new Filemitauflösung("",0);
+                if (item != "")
+                    fma = findeErsteDatei(item);
+                if (fma.Auflösung > 0)
+                {
+                    fma.Auflösung = 4 - fma.Auflösung;
+                    HGTFile hGTFile = new HGTFile(fma.Auflösung, fma.Dateiname);
+                    hGTFile.LeseDaten();
+                    hGTFile.Name = item;
+                    listHGTFiles.Add(hGTFile);
+                }
+                //listHGTFiles.Find(x => x.Name == item);
+            }
+            {
+ 
+            }
+           
+        }
+
+        private Filemitauflösung findeErsteDatei(string item)
+        {
+            int i = 0;
+            Filemitauflösung fma = new Filemitauflösung("", 0);
+            foreach (string verzeichnis in directorys)
+
+            {
+                string a = verzeichnis.Substring(verzeichnis.Length-1);
+                try
+                {
+                    i = int.Parse(a);
+                }
+                catch (Exception)
+                {
+                    return fma;
+                }
+
+                
+                if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
+                {
+                    fma.Dateiname = hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt";
+                    fma.Auflösung = i;
+                    return fma;
+                }
+                    
+            }
+            return fma;
         }
     }
 }

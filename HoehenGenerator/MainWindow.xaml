@@ -8,7 +8,7 @@
         Title="MainWindow" Height="427" Width="800" MinHeight="450" MinWidth="450">
     <TabControl x:Name="tabControl" >
         <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="ladenTab_GotFocus" >
-            <Grid Background="#FFE5E5E5" ShowGridLines="True">
+            <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -32,7 +32,7 @@
             </Grid>
         </TabItem>
         <TabItem x:Name="ladeHGTFiles" Header="HGT-Dateien" IsEnabled="False" GotFocus="ladeHGTFiles_GotFocus">
-            <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,-1,0,1">
+            <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -54,7 +54,7 @@
             </Grid>
         </TabItem>
         <TabItem x:Name="Verarbeitung" Header="Verarbeitung" GotFocus="Verarbeitung_GotFocus" IsEnabled="False">
-            <Grid Background="#FFE5E5E5">
+            <Grid Background="#FFE5E5E5" ShowGridLines="True" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
                 </Grid.RowDefinitions>
@@ -62,6 +62,7 @@
                     <ColumnDefinition Width="115"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Button x:Name="Einlesen" Content="Einlesen" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Click="Einlesen_Click"/>
             </Grid>
         </TabItem>
         <TabItem   IsEnabled="False">
