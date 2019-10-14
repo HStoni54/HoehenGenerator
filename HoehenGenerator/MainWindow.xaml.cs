@@ -610,23 +610,31 @@ namespace HoehenGenerator
                     for (int j = 0; j < url.Length; j++)
                     {
                         vs1.Add(url[j]);
+                        if (url[j].Contains("SRTM1") && !File.Exists(hgtPfad + "\\SRTM1\\" + vs[i] + ".hgt"))
+                            srtm1.Add(vs1[j]);
+                        if (url[j].Contains("SRTM3") && !File.Exists(hgtPfad + "\\SRTM3\\" + vs[i] + ".hgt"))
+                            srtm3.Add(vs1[j]);
+                        if (url[j].Contains("dem1") && !File.Exists(hgtPfad + "\\VIEW1\\" + vs[i] + ".hgt"))
+                            view1.Add(vs1[j]);
+                        if (url[j].Contains("dem3") && !File.Exists(hgtPfad + "\\VIEW3\\" + vs[i] + ".hgt"))
+                            view3.Add(vs1[j]);
                     }
 
                 }
 
             }
-            for (int i = 0; i < vs1.Count; i++)
-            {
-                if (vs1[i].Contains("SRTM1"))
-                    srtm1.Add(vs1[i]);
-                if (vs1[i].Contains("SRTM3"))
-                    srtm3.Add(vs1[i]);
-                if (vs1[i].Contains("dem1"))
-                    view1.Add(vs1[i]);
-                if (vs1[i].Contains("dem3"))
-                    view3.Add(vs1[i]);
+            //for (int i = 0; i < vs1.Count; i++)
+            //{
+            //    if (vs1[i].Contains("SRTM1"))
+            //        srtm1.Add(vs1[i]);
+            //    if (vs1[i].Contains("SRTM3"))
+            //        srtm3.Add(vs1[i]);
+            //    if (vs1[i].Contains("dem1"))
+            //        view1.Add(vs1[i]);
+            //    if (vs1[i].Contains("dem3"))
+            //        view3.Add(vs1[i]);
 
-            }
+            //}
             WebClient webClient = new WebClient()
             {
                 Encoding = Encoding.UTF8
