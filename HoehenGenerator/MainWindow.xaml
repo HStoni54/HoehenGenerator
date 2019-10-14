@@ -46,6 +46,7 @@
                 <Button x:Name="buttonDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="18,141,0,0" VerticalAlignment="Top" Width="80" ToolTip="Vewrzeichnis für Hgt-Dateien festlegen" Click="buttonDirectory_Click"/>
                 <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="18,197,0,0" VerticalAlignment="Top" Width="80" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
                 <Label x:Name="LblAusgabe" Content="" HorizontalAlignment="Left" Margin="18,166,0,0" VerticalAlignment="Top" Width="80"/>
+                <CheckBox x:Name="checkBox" Content="SRTM" HorizontalAlignment="Left" Margin="18,230,0,0" VerticalAlignment="Top" Checked="checkBox_Checked"/>
             </Grid>
         </TabItem>
         <TabItem  IsEnabled="False">

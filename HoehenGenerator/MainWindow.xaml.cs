@@ -40,6 +40,8 @@ namespace HoehenGenerator
         PointCollection punkte = new PointCollection();
         Canvas Zeichenfläche = new Canvas();
         TextBox HGTFiles = new TextBox();
+        bool usesrtm = false;
+        
         string hgtPfad;
         bool datumgrenze = false;
         int winkel = 0;
@@ -349,16 +351,16 @@ namespace HoehenGenerator
                 vs1[i] = vs[i];
                 vs2[i] = false;
             }
-           
-            string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" };
+
+            string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" ,"noHgt"};
             for (int i = 0; i < vs1.Length; i++)
             {
 
                 foreach (var directory in directorys)
-                    {
+                {
 
                     if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
-                          vs2[i] = true  ;
+                        vs2[i] = true;
                 }
             }
             bool janein = true;
@@ -538,7 +540,11 @@ namespace HoehenGenerator
             ladeHGTFiles.IsSelected = true;
             Zeichenfläche = Zeichenfläche2;
             HGTFiles = HGTFiles2;
-            ZeichneAlles(punkte);
+            if (checkBox.IsChecked == true)
+                usesrtm = true;
+            else
+                usesrtm = false;
+                ZeichneAlles(punkte);
         }
 
         private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
@@ -581,6 +587,7 @@ namespace HoehenGenerator
             GeneriereIndices();
             downloadeHgtFiles();
             unZipHgtFiles();
+            ZeichneAlles(punkte);
 
 
         }
@@ -592,7 +599,7 @@ namespace HoehenGenerator
             {
                 if (Directory.Exists(hgtPfad + "\\" + item))
                 {
-                    string[] zipfiles = Directory.GetFiles(hgtPfad + "\\" + item,"*.zip");
+                    string[] zipfiles = Directory.GetFiles(hgtPfad + "\\" + item, "*.zip");
                     foreach (var file in zipfiles)
                     {
                         ZipArchive zipfile = ZipFile.OpenRead(file);
@@ -600,7 +607,7 @@ namespace HoehenGenerator
                         {
                             if (entry.Name.Length > 0)
                                 entry.ExtractToFile(hgtPfad + "\\" + item + "\\" + entry.Name, overwrite: true);
-                                //MessageBox.Show("ZipFile:" + file + " gefunden!\n" + "Datei: " + entry.Name);
+                            //MessageBox.Show("ZipFile:" + file + " gefunden!\n" + "Datei: " + entry.Name);
 
 
                         }
@@ -608,13 +615,13 @@ namespace HoehenGenerator
 
                         File.Delete(file);
 
-                           
+
                     }
 
 
                 }
-                   
-                
+
+
 
             }
 
@@ -634,17 +641,32 @@ namespace HoehenGenerator
                 if (vs[i] != "")
                 {
                     string[] url = findeUrl(vs[i]);
-                    for (int j = 0; j < url.Length; j++)
+                    if (url.Length == 0)
                     {
-                        vs1.Add(url[j]);
-                        if (url[j].Contains("SRTM1") && !File.Exists(hgtPfad + "\\SRTM1\\" + vs[i] + ".hgt"))
-                            srtm1.Add(vs1[j]);
-                        if (url[j].Contains("SRTM3") && !File.Exists(hgtPfad + "\\SRTM3\\" + vs[i] + ".hgt"))
-                            srtm3.Add(vs1[j]);
-                        if (url[j].Contains("dem1") && !File.Exists(hgtPfad + "\\VIEW1\\" + vs[i] + ".hgt"))
-                            view1.Add(vs1[j]);
-                        if (url[j].Contains("dem3") && !File.Exists(hgtPfad + "\\VIEW3\\" + vs[i] + ".hgt"))
-                            view3.Add(vs1[j]);
+                        //MessageBox.Show("Datei: " + vs[i] + "nicht existent!");
+                        if (!Directory.Exists(hgtPfad + "\\noHgt"))
+                            Directory.CreateDirectory(hgtPfad + "\\noHgt");
+                        StreamWriter sw = File.CreateText(hgtPfad + "\\noHgt\\" + vs[i] + ".hgt");
+                        sw.Close();
+                      
+                        
+                        
+                    }
+                    else
+                    {
+                        for (int j = 0; j < url.Length; j++)
+                        {
+                            vs1.Add(url[j]);
+                            if (url[j].Contains("SRTM1") && !File.Exists(hgtPfad + "\\SRTM1\\" + vs[i] + ".hgt"))
+                                srtm1.Add(vs1[j]);
+                            if (url[j].Contains("SRTM3") && !File.Exists(hgtPfad + "\\SRTM3\\" + vs[i] + ".hgt"))
+                                srtm3.Add(vs1[j]);
+                            if (url[j].Contains("dem1") && !File.Exists(hgtPfad + "\\VIEW1\\" + vs[i] + ".hgt"))
+                                view1.Add(vs1[j]);
+                            if (url[j].Contains("dem3") && !File.Exists(hgtPfad + "\\VIEW3\\" + vs[i] + ".hgt"))
+                                view3.Add(vs1[j]);
+                        }
+
                     }
 
                 }
@@ -671,7 +693,7 @@ namespace HoehenGenerator
                 string dateiname = System.IO.Path.GetFileName(srtm1[i]);
                 String Zielname = hgtPfad + "\\SRTM1\\" + dateiname;
                 if (!File.Exists(Zielname))
-                webClient.DownloadFile(srtm1[i], Zielname);
+                    webClient.DownloadFile(srtm1[i], Zielname);
             }
             for (int i = 0; i < srtm3.Count; i++)
             {
@@ -696,7 +718,7 @@ namespace HoehenGenerator
             }
 
 
-           
+
         }
 
         private string[] findeUrl(string item)
@@ -743,20 +765,20 @@ namespace HoehenGenerator
                     switch (xmlReader.NodeType)
                     {
                         //case XmlNodeType.XmlDeclaration:
-                            //    Console.WriteLine("{0,-20}<{1}>", "DEKLARATION", xmlReader.Value);
-                            //break;
+                        //    Console.WriteLine("{0,-20}<{1}>", "DEKLARATION", xmlReader.Value);
+                        //break;
                         //case XmlNodeType.CDATA:
-                            //    Console.WriteLine("{0,-20}{1}", "CDATA", xmlReader.Value);
-                            //break;
+                        //    Console.WriteLine("{0,-20}{1}", "CDATA", xmlReader.Value);
+                        //break;
                         //case XmlNodeType.Whitespace:
-                            //Console.WriteLine("{0,-20}", "WHITESPACE");
-                            //break;
+                        //Console.WriteLine("{0,-20}", "WHITESPACE");
+                        //break;
                         //case XmlNodeType.Comment:
-                            //    Console.WriteLine("{0,-20}<!--{1}-->", "COMMENT", xmlReader.Value);
-                            //break;
+                        //    Console.WriteLine("{0,-20}<!--{1}-->", "COMMENT", xmlReader.Value);
+                        //break;
                         case XmlNodeType.Element:
                             if (xmlReader.IsEmptyElement) { }
-                                //Console.WriteLine("{0,-20}<{1} />", "EMPTY_ELEMENT", xmlReader.Name);
+                            //Console.WriteLine("{0,-20}<{1} />", "EMPTY_ELEMENT", xmlReader.Name);
                             else
                             {
                                 //Console.WriteLine("{0,-20}<{1}>", "ELEMENT", xmlReader.Name);
@@ -784,8 +806,8 @@ namespace HoehenGenerator
                             }
                             break;
                         //case XmlNodeType.EndElement:
-                            //    Console.WriteLine("{0,-20}</{1}>", "END_ELEMENT", xmlReader.Name);
-                            //break;
+                        //    Console.WriteLine("{0,-20}</{1}>", "END_ELEMENT", xmlReader.Name);
+                        //break;
                         case XmlNodeType.Text:
                             if (xmlReader.Value == item)
                                 ergebnis = ersterTeil + zweiterTeil;
@@ -1005,6 +1027,14 @@ namespace HoehenGenerator
             }
 
             return vs;
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (checkBox.IsChecked == true)
+                usesrtm = true;
+            else
+                usesrtm = false;
         }
     }
 }
