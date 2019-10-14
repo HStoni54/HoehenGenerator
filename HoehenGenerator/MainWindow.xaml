@@ -50,9 +50,10 @@
                 <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="10,186,0,0" VerticalAlignment="Top" Click="VIEW_Checked"/>
                 <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="10,206,0,0" VerticalAlignment="Top" Click="einZoll_Checked"/>
                 <CheckBox x:Name="dreiZoll" Content="3&quot;" HorizontalAlignment="Left" Margin="10,226,0,0" VerticalAlignment="Top" Click="dreiZoll_Checked"/>
+                <Button x:Name="Weiter2" Content="Weiter" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top" Width="80" IsEnabled="False" Click="Weiter2_Click"/>
             </Grid>
         </TabItem>
-        <TabItem  IsEnabled="False">
+        <TabItem x:Name="Verarbeitung" Header="Verarbeitung" GotFocus="Verarbeitung_GotFocus" IsEnabled="False">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>

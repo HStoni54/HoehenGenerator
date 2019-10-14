@@ -43,5 +43,6 @@ namespace HoehenGenerator
             return hgtDaten;
         }
         public int[,] HgtDaten => hgtDaten;
+        public int Auflösung => auflösung;
     }
 }

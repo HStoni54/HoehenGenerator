@@ -376,7 +376,13 @@ namespace HoehenGenerator
                 if (vs2[i] == false)
                     janein = false;
             }
-            if (janein) HGTFiles.Background = Brushes.LightGreen;
+            if (janein)
+            {
+                HGTFiles.Background = Brushes.LightGreen;
+                Weiter2.IsEnabled = true;
+            }
+               
+
         }
 
         private void BildeHGTString(double maxlat, double minlat, double maxlon, double minlon)
@@ -1197,6 +1203,17 @@ namespace HoehenGenerator
 
             }
             generiereDirString();
+        }
+
+        private void Weiter2_Click(object sender, RoutedEventArgs e)
+        {
+            Verarbeitung.IsEnabled = true;
+            Verarbeitung.IsSelected = true;
+        }
+
+        private void Verarbeitung_GotFocus(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
