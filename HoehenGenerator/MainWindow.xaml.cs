@@ -340,8 +340,34 @@ namespace HoehenGenerator
                 BildeHGTString(maxlat, minlat, maxlon, minlon);
 
             }
+            HGTFiles.Background = Brushes.Red;
+            string[] vs = HGTFiles.Text.Split('\n');
+            string[] vs1 = new string[vs.Length - 1];
+            bool[] vs2 = new bool[vs.Length - 1];
+            for (int i = 0; i < vs.Length - 1; i++)
+            {
+                vs1[i] = vs[i];
+                vs2[i] = false;
+            }
+           
+            string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" };
+            for (int i = 0; i < vs1.Length; i++)
+            {
 
-            // throw new NotImplementedException();
+                foreach (var directory in directorys)
+                    {
+
+                    if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
+                          vs2[i] = true  ;
+                }
+            }
+            bool janein = true;
+            for (int i = 0; i < vs2.Length; i++)
+            {
+                if (vs2[i] == false)
+                    janein = false;
+            }
+            if (janein) HGTFiles.Background = Brushes.LightGreen;
         }
 
         private void BildeHGTString(double maxlat, double minlat, double maxlon, double minlon)
@@ -539,6 +565,7 @@ namespace HoehenGenerator
             {
                 hgtPfad = fbd.SelectedPath;
                 LadeHGTFiles.IsEnabled = true;
+                ZeichneAlles(punkte);
             }
             else
             {
