@@ -1,11 +1,11 @@
-﻿<Window x:Class="HoehenGenerator.MainWindow"
+﻿<Window x:Name="Hauptfenster" x:Class="HoehenGenerator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoehenGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="427" Width="800" MinHeight="450" MinWidth="450">
+        Title="MainWindow" Height="427" Width="800" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
     <TabControl x:Name="tabControl" >
         <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="ladenTab_GotFocus" >
             <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
@@ -63,6 +63,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="Einlesen" Content="Einlesen" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Click="Einlesen_Click"/>
+                <Canvas x:Name="Zeichenfläche3" Grid.Column="1" Margin="10" SizeChanged="Zeichenfläche_SizeChanged" ToolTip="Lage des ausgewählten Polygons in der rechteckigen Anlage"/>
             </Grid>
         </TabItem>
         <TabItem   IsEnabled="False">

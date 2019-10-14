@@ -419,8 +419,10 @@ namespace HoehenGenerator
         }
 
 
-        private void ZeichnePolygon(PointCollection punkte)
+        private void ZeichnePolygon(PointCollection punkte,  bool ishgtwert = false)
         {
+            
+            
             Polyline polypunkte = new Polyline();
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
@@ -433,11 +435,14 @@ namespace HoehenGenerator
             }
             polypunkte.Points = canvaspunkte;
             polypunkte.Fill = Brushes.Green;
+            if (ishgtwert)
+                polypunkte.Fill = Brushes.Yellow;
             Zeichenfläche.Children.Add(polypunkte);
             Canvas.SetLeft(polypunkte, 0);
             Canvas.SetBottom(polypunkte, 0);
+            
         }
-
+        
         private void ZeichnePunkte(PointCollection punkte)
         {
 
@@ -579,11 +584,13 @@ namespace HoehenGenerator
         private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
         {
             Zeichenfläche = Zeichenfläche1;
+            Hauptfenster.ResizeMode = ResizeMode.CanResize;
         }
 
         private void ladeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
         {
             Zeichenfläche = Zeichenfläche2;
+            Hauptfenster.ResizeMode = ResizeMode.CanResize;
         }
 
         private void buttonDirectory_Click(object sender, RoutedEventArgs e)
@@ -1214,7 +1221,42 @@ namespace HoehenGenerator
 
         private void Verarbeitung_GotFocus(object sender, RoutedEventArgs e)
         {
+            Zeichenfläche = Zeichenfläche3;
+            Hauptfenster.ResizeMode = ResizeMode.NoResize;
+            ZeichneAlles(punkte);
+            
+        }
 
+        private void ZeichneMatrix()
+        {
+            PointCollection points = new PointCollection();
+            foreach (HGTFile item in listHGTFiles)
+            {
+                int auflösung = item.Auflösung;
+                int[,] daten = item.HgtDaten;
+                string dateiname = item.Name;
+                int anzahl = (int)Math.Sqrt(daten.Length);
+                for (int i = 0; i < anzahl; i++)
+                {
+                    for (int j = 0; j < anzahl; j++)
+                    {
+                        GeoPunkt geoPunkt = hgttolatlon(dateiname, auflösung, i, j);
+                        Point point = new Point();
+                        point.X = geoPunkt.Lat;
+                        point.Y = geoPunkt.Lon;
+                        points.Add(point);
+
+                    }
+                }
+            }
+            NeuPunkte gedreht = DrehePolygon(points, winkel);
+            PointCollection points1gedreht = gedreht.Punkte;
+            ZeichnePolygon(points1gedreht, true);
+        }
+
+        private void ZeichnePunkt(GeoPunkt geoPunkt, int v)
+        {
+           
         }
 
         private void Einlesen_Click(object sender, RoutedEventArgs e)
@@ -1236,9 +1278,8 @@ namespace HoehenGenerator
                 }
                 //listHGTFiles.Find(x => x.Name == item);
             }
-            {
- 
-            }
+            ZeichneMatrix();
+           
            
         }
 
@@ -1270,6 +1311,27 @@ namespace HoehenGenerator
             }
             return fma;
         }
+
+        private GeoPunkt hgttolatlon(string filename, int auflösung, int breit, int hoch)
+        {
+            GeoPunkt geoPunkt = new GeoPunkt();
+            string ostwest;
+            string nordsüd;
+            int lat;
+            int lon;
+            ostwest = filename.Substring(0, 1);
+            nordsüd = filename.Substring(3, 1);
+            lat = int.Parse(filename.Substring(1, 2));
+            lon = int.Parse(filename.Substring(4));
+            if (ostwest == "W")
+                lat = -lat;
+            if (nordsüd == "S")
+                lon = -lon;
+            geoPunkt.Lat = lat + breit / 1200 / auflösung;
+            geoPunkt.Lon = lon + hoch / 1200 / auflösung;
+            return geoPunkt;
+        }
+
     }
 }
 

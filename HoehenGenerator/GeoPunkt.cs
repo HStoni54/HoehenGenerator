@@ -10,11 +10,11 @@ namespace HoehenGenerator
     {
         double lon;
         public double Lon
-        { get { return lon; } }
+        { get { return lon; } set { lon = value; } }
 
         double lat;
         public double Lat
-        { get { return lat; } }
+        { get { return lat; } set { lat = value; } }
         double entfernung;
 
         public GeoPunkt(double lon = 0, double lat = 0, double entfernung = 0)
