@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoehenGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="432" Width="800" MinHeight="450" MinWidth="450">
+        Title="MainWindow" Height="427" Width="800" MinHeight="450" MinWidth="450">
     <TabControl x:Name="tabControl" >
         <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="ladenTab_GotFocus" >
             <Grid Background="#FFE5E5E5" ShowGridLines="True">
@@ -28,11 +28,11 @@
                 <Label x:Name="Fläche" Content="Fläche:" HorizontalAlignment="Left" Margin="18,118,0,0" VerticalAlignment="Top" Width="80" />
                 <TextBox x:Name="fläche" HorizontalAlignment="Left"  Margin="18,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" ToolTip="Fläche der Anlage"/>
                 <TextBox x:Name="HGTFiles1" HorizontalAlignment="Left" Height="95" Margin="18,188,0,0" VerticalAlignment="Top" Width="80" AllowDrop="False" Focusable="False" IsTabStop="False" ToolTip="Benötigte HGT-Dateien" VerticalScrollBarVisibility="Auto"/>
-                 <Label x:Name="hgtFiles" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="18,162,0,0" VerticalAlignment="Top" Width="80" />
+                <Label x:Name="hgtFiles" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="18,162,0,0" VerticalAlignment="Top" Width="80" />
             </Grid>
         </TabItem>
         <TabItem x:Name="ladeHGTFiles" Header="HGT-Dateien" IsEnabled="False" GotFocus="ladeHGTFiles_GotFocus">
-            <Grid Background="#FFE5E5E5" ShowGridLines="True">
+            <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,-1,0,1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -41,12 +41,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Canvas x:Name="Zeichenfläche2" Grid.Column="1" Margin="10" SizeChanged="Zeichenfläche_SizeChanged" ToolTip="Lage des ausgewählten Polygons in der rechteckigen Anlage"/>
-                <TextBox x:Name="HGTFiles2" HorizontalAlignment="Left" Height="95" Margin="18,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" AllowDrop="False" Focusable="False" IsTabStop="False" ToolTip="Benötigte HGT-Dateien"/>
-                 <Label x:Name="hgtFiles2" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="18,10,0,0" VerticalAlignment="Top" Width="80" />
-                <Button x:Name="buttonDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="18,141,0,0" VerticalAlignment="Top" Width="80" ToolTip="Vewrzeichnis für Hgt-Dateien festlegen" Click="buttonDirectory_Click"/>
-                <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="18,197,0,0" VerticalAlignment="Top" Width="80" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
-                <Label x:Name="LblAusgabe" Content="" HorizontalAlignment="Left" Margin="18,166,0,0" VerticalAlignment="Top" Width="80"/>
-                <CheckBox x:Name="checkBox" Content="SRTM" HorizontalAlignment="Left" Margin="18,230,0,0" VerticalAlignment="Top" Checked="checkBox_Checked"/>
+                <TextBox x:Name="HGTFiles2" HorizontalAlignment="Left" Height="95" Margin="10,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" AllowDrop="False" Focusable="False" IsTabStop="False" ToolTip="Benötigte HGT-Dateien"/>
+                <Label x:Name="hgtFiles2" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" />
+                <Button x:Name="buttonDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,141,0,0" VerticalAlignment="Top" Width="80" ToolTip="Vewrzeichnis für Hgt-Dateien festlegen" Click="buttonDirectory_Click"/>
+                <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="10,246,0,0" VerticalAlignment="Top" Width="80" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
+                <Label x:Name="LblAusgabe" Content="" HorizontalAlignment="Left" Margin="18,340,0,0" VerticalAlignment="Top" Width="80"/>
+                <CheckBox x:Name="SRTM" Content="SRTM" HorizontalAlignment="Left" Margin="10,166,0,0" VerticalAlignment="Top" Click="SRTM_Checked"/>
+                <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="10,186,0,0" VerticalAlignment="Top" Click="VIEW_Checked"/>
+                <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="10,206,0,0" VerticalAlignment="Top" Click="einZoll_Checked"/>
+                <CheckBox x:Name="dreiZoll" Content="3&quot;" HorizontalAlignment="Left" Margin="10,226,0,0" VerticalAlignment="Top" Click="dreiZoll_Checked"/>
             </Grid>
         </TabItem>
         <TabItem  IsEnabled="False">

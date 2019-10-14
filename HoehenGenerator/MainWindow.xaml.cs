@@ -41,6 +41,10 @@ namespace HoehenGenerator
         Canvas Zeichenfläche = new Canvas();
         TextBox HGTFiles = new TextBox();
         bool usesrtm = false;
+
+        bool useview = true;
+        bool use3zoll = true;
+        bool use1zoll = true;
         
         string hgtPfad;
         bool datumgrenze = false;
@@ -540,11 +544,26 @@ namespace HoehenGenerator
             ladeHGTFiles.IsSelected = true;
             Zeichenfläche = Zeichenfläche2;
             HGTFiles = HGTFiles2;
-            if (checkBox.IsChecked == true)
-                usesrtm = true;
+            if (usesrtm == true)
+                SRTM.IsChecked = true;
             else
-                usesrtm = false;
-                ZeichneAlles(punkte);
+                SRTM.IsChecked = false;
+            if (useview == true)
+                VIEW.IsChecked = true;
+            else
+                VIEW.IsChecked = false;
+            if (use1zoll == true)
+                einZoll.IsChecked = true;
+            else
+                einZoll.IsChecked = false;
+            if (use3zoll == true)
+                dreiZoll.IsChecked = true;
+            else
+                dreiZoll.IsChecked = false;
+           
+               
+
+            ZeichneAlles(punkte);
         }
 
         private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
@@ -1031,10 +1050,82 @@ namespace HoehenGenerator
 
         private void checkBox_Checked(object sender, RoutedEventArgs e)
         {
-            if (checkBox.IsChecked == true)
+
+        }
+
+        private void SRTM_Checked(object sender, RoutedEventArgs e)
+        {
+            if (SRTM.IsChecked == true)
                 usesrtm = true;
             else
+            {
                 usesrtm = false;
+
+                if (VIEW.IsChecked == false)
+                {
+                    useview = true;
+                    VIEW.IsChecked = true;
+                }
+
+
+            }
+        }
+
+        private void VIEW_Checked(object sender, RoutedEventArgs e)
+        {
+            if (VIEW.IsChecked == true)
+                useview = true;
+            else
+            {
+                useview = false;
+
+                if (SRTM.IsChecked == false)
+                {
+                    usesrtm = true;
+                    SRTM.IsChecked = true;
+                }
+                   
+
+            }
+
+        }
+
+        private void einZoll_Checked(object sender, RoutedEventArgs e)
+        {
+            if (einZoll.IsChecked == true)
+                use1zoll = true;
+            else
+            {
+                use1zoll = false;
+
+                if (dreiZoll.IsChecked == false)
+                {
+                    use3zoll = true;
+                    dreiZoll.IsChecked = true;
+                }
+
+
+            }
+
+        }
+
+        private void dreiZoll_Checked(object sender, RoutedEventArgs e)
+        {
+            if (dreiZoll.IsChecked == true)
+                use3zoll = true;
+            else
+            {
+                use3zoll = false;
+
+                if (einZoll.IsChecked == false)
+                {
+                    use1zoll = true;
+                    einZoll.IsChecked = true;
+                }
+
+
+            }
+
         }
     }
 }
