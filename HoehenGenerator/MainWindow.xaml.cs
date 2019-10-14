@@ -35,7 +35,7 @@ namespace HoehenGenerator
         String[] sepcoordinaten;
         GeoPunkt[] geoPunkts;
         GeoPunkt mittelpunkt;
-        GeoPunkt verschiebung;
+        //GeoPunkt verschiebung;
         PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
         Canvas Zeichenfläche = new Canvas();
@@ -49,6 +49,9 @@ namespace HoehenGenerator
         string hgtPfad;
         bool datumgrenze = false;
         int winkel = 0;
+        string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
+
+
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -110,7 +113,7 @@ namespace HoehenGenerator
                 Optimieren.IsEnabled = true;
                 Weiter.IsEnabled = true;
                 Drehen.IsEnabled = true;
-
+                generiereDirString();
             }
 
         }
@@ -356,7 +359,7 @@ namespace HoehenGenerator
                 vs2[i] = false;
             }
 
-            string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" ,"noHgt"};
+            
             for (int i = 0; i < vs1.Length; i++)
             {
 
@@ -613,7 +616,7 @@ namespace HoehenGenerator
 
         private void unZipHgtFiles()
         {
-            string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" };
+            
             foreach (var item in directorys)
             {
                 if (Directory.Exists(hgtPfad + "\\" + item))
@@ -1069,6 +1072,7 @@ namespace HoehenGenerator
 
 
             }
+            generiereDirString();
         }
 
         private void VIEW_Checked(object sender, RoutedEventArgs e)
@@ -1087,6 +1091,65 @@ namespace HoehenGenerator
                    
 
             }
+            generiereDirString();
+        }
+
+        private void generiereDirString()
+        {
+            if (!useview)
+            {
+                directorys[0] = "";
+                directorys[1] = "";
+            } else
+            {
+                directorys[0] = "VIEW1";
+                directorys[1] = "VIEW3";
+
+            }
+
+
+            if (!usesrtm)
+            {
+                directorys[2] = "";
+                directorys[3] = "";
+            }
+            else
+            {
+                directorys[2] = "SRTM1";
+                directorys[3] = "SRTM3";
+
+            }
+
+            if (!use1zoll)
+            {
+                directorys[0] = "";
+                directorys[2] = "";
+            }
+            else
+            {
+                if (useview)
+                    directorys[0] = "VIEW1";
+                if (usesrtm)
+                    directorys[2] = "SRTM1";
+               
+            }
+
+
+            if (!use3zoll)
+            {
+                directorys[1] = "";
+                directorys[3] = "";
+            } 
+            else
+            {
+                if (useview)
+                    directorys[1] = "VIEW3";
+                if (usesrtm)
+                    directorys[3] = "SRTM3";
+
+            }
+
+
 
         }
 
@@ -1106,7 +1169,7 @@ namespace HoehenGenerator
 
 
             }
-
+            generiereDirString();
         }
 
         private void dreiZoll_Checked(object sender, RoutedEventArgs e)
@@ -1125,7 +1188,7 @@ namespace HoehenGenerator
 
 
             }
-
+            generiereDirString();
         }
     }
 }
