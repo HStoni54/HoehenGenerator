@@ -365,7 +365,7 @@ namespace HoehenGenerator
 
                 foreach (var directory in directorys)
                 {
-
+                    if (directory.Length > 0)
                     if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
                         vs2[i] = true;
                 }
@@ -619,6 +619,7 @@ namespace HoehenGenerator
             
             foreach (var item in directorys)
             {
+                if (item.Length > 0)
                 if (Directory.Exists(hgtPfad + "\\" + item))
                 {
                     string[] zipfiles = Directory.GetFiles(hgtPfad + "\\" + item, "*.zip");
@@ -658,6 +659,14 @@ namespace HoehenGenerator
             List<string> view1 = new List<string>();
             List<string> view3 = new List<string>();
             string[] vs = HGTFiles.Text.Split('\n');
+            if (Directory.Exists(hgtPfad + "\\noHgt"))
+            {
+                string[] zulöschen = Directory.GetFiles(hgtPfad + "\\noHgt");
+                foreach (var item in zulöschen)
+                {
+                    File.Delete(item);
+                }
+            }
             for (int i = 0; i < vs.Length; i++)
             {
                 if (vs[i] != "")
@@ -694,19 +703,7 @@ namespace HoehenGenerator
                 }
 
             }
-            //for (int i = 0; i < vs1.Count; i++)
-            //{
-            //    if (vs1[i].Contains("SRTM1"))
-            //        srtm1.Add(vs1[i]);
-            //    if (vs1[i].Contains("SRTM3"))
-            //        srtm3.Add(vs1[i]);
-            //    if (vs1[i].Contains("dem1"))
-            //        view1.Add(vs1[i]);
-            //    if (vs1[i].Contains("dem3"))
-            //        view3.Add(vs1[i]);
-
-            //}
-            WebClient webClient = new WebClient()
+             WebClient webClient = new WebClient()
             {
                 Encoding = Encoding.UTF8
             };
@@ -846,10 +843,21 @@ namespace HoehenGenerator
 
         private void GeneriereIndices()
         {
-            for (int i = 1; i < 4; i += 2)
+
+            if (use1zoll)
             {
-                GeneriereViewIndex(i, hgtPfad);
-                GeneriereSRTMIndex(i, hgtPfad);
+                if (useview)
+                GeneriereViewIndex(1, hgtPfad);
+                if (usesrtm)
+                GeneriereSRTMIndex(1, hgtPfad);
+
+            }
+            if (use3zoll)
+            {
+                if (useview)
+                    GeneriereViewIndex(3, hgtPfad);
+                if (usesrtm)
+                    GeneriereSRTMIndex(3, hgtPfad);
 
             }
         }
