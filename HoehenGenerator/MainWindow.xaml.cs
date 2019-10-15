@@ -45,6 +45,8 @@ namespace HoehenGenerator
         bool use1zoll = true;
 
         string hgtPfad;
+        double maximaleHöhe = -10000.0;
+        double minimaleHöhe = 10000.0;
         bool datumgrenze = false;
         int winkel = 0;
         string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
@@ -488,28 +490,40 @@ namespace HoehenGenerator
         }
         private void ZeichnePunkte(List<GeoPunkt> punkte)
         {
-
+            
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
+            double punktgröße = 2 * GrößeH * GrößeB / punkte.Count;
+            //double punktgröße = 5;
             for (int i = 0; i < punkte.Count; i++)
             {
-                Ellipse elli = new Ellipse();
-                SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-                int höhe = punkte[i].Höhe;
-                int r1 = höhe % 256;
-                int g1 = (höhe / 256) % 256;
-                int b1 = (höhe / 256 / 256) % 256;
-                byte r = (byte)r1;
-                byte g = (byte)g1; ;
-                byte b = (byte)b1; ;
-                mySolidColorBrush.Color = Color.FromRgb(r, g, b);
-                elli.Width = 5.0;
-                elli.Height = 5.0;
-                elli.Fill = mySolidColorBrush;
-                Zeichenfläche.Children.Add(elli);
+                double Lon = GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge);
+                double Lat = GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite);
+                if (Lat > 0 && Lat< GrößeH && Lon > 0 && Lon < GrößeB )
+                {
+                    Ellipse elli = new Ellipse();
+                    SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+                    int höhe = punkte[i].Höhe * 100 + 1000;
+                    if (punkte[i].Höhe > maximaleHöhe)
+                        maximaleHöhe = punkte[i].Höhe;
+                    if (punkte[i].Höhe < minimaleHöhe)
+                        minimaleHöhe = punkte[i].Höhe;
+                    int r1 = höhe % 256;
+                    int g1 = (höhe / 256) % 256;
+                    int b1 = (höhe / 256 / 256) % 256;
+                    byte r = (byte)r1;
+                    byte g = (byte)g1; ;
+                    byte b = (byte)b1; ;
+                    mySolidColorBrush.Color = Color.FromRgb(r, g, b);
+                    elli.Width = punktgröße;
+                    elli.Height = punktgröße;
+                    elli.Fill = mySolidColorBrush;
+                    Zeichenfläche.Children.Add(elli);
 
-                Canvas.SetLeft(elli, GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge) - 2.5);
-                Canvas.SetBottom(elli, GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite) - 2.5);
+                    Canvas.SetLeft(elli, Lon - punktgröße / 2);
+                    Canvas.SetTop(elli, Lat - punktgröße / 2);
+
+                }
             }
 
 
@@ -758,6 +772,7 @@ namespace HoehenGenerator
                 if (vs[i] != "")
                 {
                     string[] url = findeUrl(vs[i]);
+                    vs1.Clear();
                     if (url.Length == 0)
                     {
                         //MessageBox.Show("Datei: " + vs[i] + "nicht existent!");
@@ -1261,14 +1276,17 @@ namespace HoehenGenerator
         private void ZeichneMatrix()
         {
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
-            PointCollection points = new PointCollection();
+            maximaleHöhe = -10000.0;
+            minimaleHöhe = 10000.0;
+            List<GeoPunkt> geos = new List<GeoPunkt>();
             Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
             foreach (HGTFile item in listHGTFiles)
             {
                 int auflösung = item.Auflösung;
-                int[,] daten = item.HgtDaten;
+                int[,] daten = item.LeseDaten();
                 string dateiname = item.Name;
                 int anzahl = (int)Math.Sqrt(daten.Length);
+               
                 for (int i = 0; i < anzahl; i++)
                 {
                     for (int j = 0; j < anzahl; j++)
@@ -1277,13 +1295,18 @@ namespace HoehenGenerator
                         geoPunkt.Höhe = daten[i, j];
                         GeoPunkt geoPunkt1 = DrehePunkt(geoPunkt, drehung);
                         Point point = new Point();
-                        geoPunkt1.Höhe = geoPunkt.Höhe;
+                        geoPunkt1.Höhe = daten[i, j];
+
+                        //if (maximaleHöhe < geoPunkt1.Höhe)
+                        //    maximaleHöhe = geoPunkt1.Höhe;
+                        //if (minimaleHöhe > geoPunkt1.Höhe)
+                        //    minimaleHöhe = geoPunkt1.Höhe;
 
                         point.X = geoPunkt1.Lat;
                         point.Y = geoPunkt1.Lon;
                         //TODO: Andere Globusteile einbeziehen
-                        if (geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat)
-                            && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon))
+                        if (geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) + 0.01 && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat) - 0.01
+                            && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) + 0.01 && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon) - 0.01)
                         {
 
                             geoPunkts.Add(geoPunkt1);
@@ -1292,27 +1315,13 @@ namespace HoehenGenerator
                     }
                 }
             }
-            //List<GeoPunkt> geoPunkts1 = new List<GeoPunkt>();
-            //// TODO: Berechnung und Auflistung vor Prüfung auf Notwendigkeit
-            //foreach (GeoPunkt item in geoPunkts)
-            //{
-            //    GeoPunkt geo = DrehePunkt(item, drehung);
-            //    geo.Höhe = item.Höhe;
-            //    geoPunkts1.Add(geo);
-            //}
-
+ 
             ZeichnePunkte(geoPunkts);
-            //  NeuPunkte gedreht = DrehePolygon(points, winkel);
-            //  PointCollection points1gedreht = gedreht.Punkte;
-            //  ZeichnePolygon(points1gedreht, true);
-            //geoPunkts1.Clear();
+            tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
+            tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();
         }
 
-        private void ZeichnePunkt(GeoPunkt geoPunkt, int v)
-        {
-
-        }
 
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
@@ -1398,7 +1407,6 @@ namespace HoehenGenerator
                 lon = -lon;
             geoPunkt.Lat = lat + breit / 1200.0 / auflösung;
             geoPunkt.Lon = lon + hoch / 1200.0 / auflösung;
-
             return geoPunkt;
         }
 

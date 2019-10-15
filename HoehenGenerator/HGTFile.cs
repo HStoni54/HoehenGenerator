@@ -16,7 +16,7 @@ namespace HoehenGenerator
 
 
             this.dateiname = dateiname;
-            hgtDaten = new int[auflösung * 1201, auflösung * 1201];
+            hgtDaten = new int[auflösung * 1200 + 1, auflösung * 1200 + 1];
         }
         public int[,] LeseDaten()
         {
@@ -24,9 +24,9 @@ namespace HoehenGenerator
             if (File.Exists(dateiname))
             {
                 FileStream fs = File.OpenRead(dateiname);
-                for (int i = 0; i < auflösung * 1201; i++)
+                for (int i = 0; i < auflösung * 1200 + 1; i++)
                 {
-                    for (int j = 0; j < auflösung * 1201; j++)
+                    for (int j = 0; j < auflösung * 1200 + 1; j++)
                     {
                         int vs1 = fs.Read(vs, 0, 2);
                         if (vs1 == 2)

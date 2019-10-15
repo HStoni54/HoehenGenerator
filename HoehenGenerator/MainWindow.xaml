@@ -63,6 +63,10 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="Einlesen" Content="Einlesen" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Click="Einlesen_Click"/>
                 <Canvas x:Name="Zeichenfläche3" Grid.Column="1" Margin="10" SizeChanged="Zeichenfläche_SizeChanged" ToolTip="Lage des ausgewählten Polygons in der rechteckigen Anlage"/>
+                <Label x:Name="label" Content="Max. Höhe:" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="80" />
+                <Label x:Name="label1" Content="Min.Höhe:" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" Width="80"/>
+                <TextBox x:Name="tbMaxhöhe" HorizontalAlignment="Left" Height="23" Margin="10,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsEnabled="False"/>
+                <TextBox x:Name="tbMinHöhe" HorizontalAlignment="Left" Height="23" Margin="10,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsEnabled="False"/>
             </Grid>
         </TabItem>
         <TabItem   IsEnabled="False">
