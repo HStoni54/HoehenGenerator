@@ -23,6 +23,8 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
+
+
 namespace HoehenGenerator
 {
     /// <summary>
@@ -1269,6 +1271,7 @@ namespace HoehenGenerator
         {
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             PointCollection points = new PointCollection();
+            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
             foreach (HGTFile item in listHGTFiles)
             {
                 int auflösung = item.Auflösung;
@@ -1281,34 +1284,38 @@ namespace HoehenGenerator
                     {
                         GeoPunkt geoPunkt = hgttolatlon(dateiname, auflösung, i, j);
                         geoPunkt.Höhe = daten[i, j];
+                        GeoPunkt geoPunkt1 = DrehePunkt(geoPunkt, drehung);
                         Point point = new Point();
+                        geoPunkt1.Höhe = geoPunkt.Höhe;
 
-                        point.X = geoPunkt.Lat;
-                        point.Y = geoPunkt.Lon;
+                        point.X = geoPunkt1.Lat;
+                        point.Y = geoPunkt1.Lon;
                         //TODO: Andere Globusteile einbeziehen
-                        if (geoPunkt.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) && geoPunkt.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat)
-                            && geoPunkt.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) && geoPunkt.Lon >= Math.Min(linksunten.Lon, linksoben.Lon))
+                        if (geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat)
+                            && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon))
                         {
-                            points.Add(point);
-                            geoPunkts.Add(geoPunkt);
+                           
+                            geoPunkts.Add(geoPunkt1);
 
                         }
                     }
                 }
             }
-            List<GeoPunkt> geoPunkts1 = new List<GeoPunkt>();
-            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
-            foreach (GeoPunkt item in geoPunkts)
-            {
-                GeoPunkt geo = DrehePunkt(item, drehung);
-                geo.Höhe = item.Höhe;
-                geoPunkts1.Add(geo);
-            }
+            //List<GeoPunkt> geoPunkts1 = new List<GeoPunkt>();
+            //// TODO: Berechnung und Auflistung vor Prüfung auf Notwendigkeit
+            //foreach (GeoPunkt item in geoPunkts)
+            //{
+            //    GeoPunkt geo = DrehePunkt(item, drehung);
+            //    geo.Höhe = item.Höhe;
+            //    geoPunkts1.Add(geo);
+            //}
 
             ZeichnePunkte(geoPunkts);
             //  NeuPunkte gedreht = DrehePolygon(points, winkel);
             //  PointCollection points1gedreht = gedreht.Punkte;
             //  ZeichnePolygon(points1gedreht, true);
+            //geoPunkts1.Clear();
+            geoPunkts.Clear();
         }
 
         private void ZeichnePunkt(GeoPunkt geoPunkt, int v)
