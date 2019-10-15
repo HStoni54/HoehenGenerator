@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 
 namespace HoehenGenerator
@@ -33,7 +28,7 @@ namespace HoehenGenerator
                 {
                     for (int j = 0; j < auflösung * 1201; j++)
                     {
-                       int vs1 =  fs.Read(vs,0,2);
+                        int vs1 = fs.Read(vs, 0, 2);
                         if (vs1 == 2)
                             hgtDaten[i, j] = 256 * vs[0] + vs[1];
                         else

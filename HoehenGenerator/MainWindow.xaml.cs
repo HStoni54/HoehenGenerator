@@ -1,27 +1,18 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO.Packaging;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO.Compression;
-using System.IO;
 using System.Xml;
-using System.Globalization;
-using System.Net;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 
 
 
@@ -520,9 +511,9 @@ namespace HoehenGenerator
                 Canvas.SetLeft(elli, GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge) - 2.5);
                 Canvas.SetBottom(elli, GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite) - 2.5);
             }
- 
 
-           
+
+
 
         }
 
@@ -535,11 +526,11 @@ namespace HoehenGenerator
             }
             GrößeH = Zeichenfläche.ActualHeight;
             GrößeB = Zeichenfläche.ActualWidth;
-            minLänge = Math.Min(linksoben.Lon,linksunten.Lon);
-            minBreite = Math.Min(linksunten.Lat,rechtsunten.Lat);
-            maxLänge = Math.Max(rechtsoben.Lon,rechtsunten.Lon);
-            maxBreite = Math.Max(linksoben.Lat,rechtsoben.Lat);
- 
+            minLänge = Math.Min(linksoben.Lon, linksunten.Lon);
+            minBreite = Math.Min(linksunten.Lat, rechtsunten.Lat);
+            maxLänge = Math.Max(rechtsoben.Lon, rechtsunten.Lon);
+            maxBreite = Math.Max(linksoben.Lat, rechtsoben.Lat);
+
             hoehe2 = GeoPunkt.BestimmeAbstand(linksoben, linksunten);
             breite2 = GeoPunkt.BestimmeAbstand(linksunten, rechtsunten);
             if (hoehe2 / breite2 > GrößeH / GrößeB)
@@ -1294,7 +1285,7 @@ namespace HoehenGenerator
                         if (geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat)
                             && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon))
                         {
-                           
+
                             geoPunkts.Add(geoPunkt1);
 
                         }
