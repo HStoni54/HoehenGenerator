@@ -35,7 +35,7 @@ namespace HoehenGenerator
                     {
                        int vs1 =  fs.Read(vs,0,2);
                         if (vs1 == 2)
-                            hgtDaten[i, j] = 256 * vs[1] + vs[0];
+                            hgtDaten[i, j] = 256 * vs[0] + vs[1];
                         else
                             MessageBox.Show("HGT-File zu klein");
                     }

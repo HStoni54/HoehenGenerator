@@ -44,9 +44,9 @@ namespace HoehenGenerator
         bool usesrtm = false;
 
         bool useview = true;
-        bool use3zoll = true;
+       
         bool use1zoll = true;
-        
+
         string hgtPfad;
         bool datumgrenze = false;
         int winkel = 0;
@@ -360,15 +360,15 @@ namespace HoehenGenerator
                 vs2[i] = false;
             }
 
-            
+
             for (int i = 0; i < vs1.Length; i++)
             {
 
                 foreach (var directory in directorys)
                 {
                     if (directory.Length > 0)
-                    if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
-                        vs2[i] = true;
+                        if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
+                            vs2[i] = true;
                 }
             }
             bool janein = true;
@@ -382,7 +382,7 @@ namespace HoehenGenerator
                 HGTFiles.Background = Brushes.LightGreen;
                 Weiter2.IsEnabled = true;
             }
-               
+
 
         }
 
@@ -419,10 +419,10 @@ namespace HoehenGenerator
         }
 
 
-        private void ZeichnePolygon(PointCollection punkte,  bool ishgtwert = false)
+        private void ZeichnePolygon(PointCollection punkte, bool ishgtwert = false)
         {
-            
-            
+
+
             Polyline polypunkte = new Polyline();
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
@@ -440,9 +440,9 @@ namespace HoehenGenerator
             Zeichenfläche.Children.Add(polypunkte);
             Canvas.SetLeft(polypunkte, 0);
             Canvas.SetBottom(polypunkte, 0);
-            
+
         }
-        
+
         private void ZeichnePunkte(PointCollection punkte)
         {
 
@@ -571,12 +571,8 @@ namespace HoehenGenerator
                 einZoll.IsChecked = true;
             else
                 einZoll.IsChecked = false;
-            if (use3zoll == true)
-                dreiZoll.IsChecked = true;
-            else
-                dreiZoll.IsChecked = false;
-           
-               
+
+
 
             ZeichneAlles(punkte);
         }
@@ -630,33 +626,33 @@ namespace HoehenGenerator
 
         private void unZipHgtFiles()
         {
-            
+
             foreach (var item in directorys)
             {
                 if (item.Length > 0)
-                if (Directory.Exists(hgtPfad + "\\" + item))
-                {
-                    string[] zipfiles = Directory.GetFiles(hgtPfad + "\\" + item, "*.zip");
-                    foreach (var file in zipfiles)
+                    if (Directory.Exists(hgtPfad + "\\" + item))
                     {
-                        ZipArchive zipfile = ZipFile.OpenRead(file);
-                        foreach (ZipArchiveEntry entry in zipfile.Entries)
+                        string[] zipfiles = Directory.GetFiles(hgtPfad + "\\" + item, "*.zip");
+                        foreach (var file in zipfiles)
                         {
-                            if (entry.Name.Length > 0)
-                                entry.ExtractToFile(hgtPfad + "\\" + item + "\\" + entry.Name, overwrite: true);
-                            //MessageBox.Show("ZipFile:" + file + " gefunden!\n" + "Datei: " + entry.Name);
+                            ZipArchive zipfile = ZipFile.OpenRead(file);
+                            foreach (ZipArchiveEntry entry in zipfile.Entries)
+                            {
+                                if (entry.Name.Length > 0)
+                                    entry.ExtractToFile(hgtPfad + "\\" + item + "\\" + entry.Name, overwrite: true);
+                                //MessageBox.Show("ZipFile:" + file + " gefunden!\n" + "Datei: " + entry.Name);
+
+
+                            }
+                            zipfile.Dispose();
+
+                            File.Delete(file);
 
 
                         }
-                        zipfile.Dispose();
-
-                        File.Delete(file);
 
 
                     }
-
-
-                }
 
 
 
@@ -693,9 +689,9 @@ namespace HoehenGenerator
                             Directory.CreateDirectory(hgtPfad + "\\noHgt");
                         StreamWriter sw = File.CreateText(hgtPfad + "\\noHgt\\" + vs[i] + ".hgt");
                         sw.Close();
-                      
-                        
-                        
+
+
+
                     }
                     else
                     {
@@ -717,7 +713,7 @@ namespace HoehenGenerator
                 }
 
             }
-             WebClient webClient = new WebClient()
+            WebClient webClient = new WebClient()
             {
                 Encoding = Encoding.UTF8
             };
@@ -861,19 +857,18 @@ namespace HoehenGenerator
             if (use1zoll)
             {
                 if (useview)
-                GeneriereViewIndex(1, hgtPfad);
+                    GeneriereViewIndex(1, hgtPfad);
                 if (usesrtm)
-                GeneriereSRTMIndex(1, hgtPfad);
+                    GeneriereSRTMIndex(1, hgtPfad);
 
             }
-            if (use3zoll)
-            {
-                if (useview)
-                    GeneriereViewIndex(3, hgtPfad);
-                if (usesrtm)
-                    GeneriereSRTMIndex(3, hgtPfad);
 
-            }
+            if (useview)
+                GeneriereViewIndex(3, hgtPfad);
+            if (usesrtm)
+                GeneriereSRTMIndex(3, hgtPfad);
+
+
         }
 
 
@@ -1110,7 +1105,7 @@ namespace HoehenGenerator
                     usesrtm = true;
                     SRTM.IsChecked = true;
                 }
-                   
+
 
             }
             generiereDirString();
@@ -1122,7 +1117,8 @@ namespace HoehenGenerator
             {
                 directorys[0] = "";
                 directorys[1] = "";
-            } else
+            }
+            else
             {
                 directorys[0] = "VIEW1";
                 directorys[1] = "VIEW3";
@@ -1153,25 +1149,8 @@ namespace HoehenGenerator
                     directorys[0] = "VIEW1";
                 if (usesrtm)
                     directorys[2] = "SRTM1";
-               
-            }
-
-
-            if (!use3zoll)
-            {
-                directorys[1] = "";
-                directorys[3] = "";
-            } 
-            else
-            {
-                if (useview)
-                    directorys[1] = "VIEW3";
-                if (usesrtm)
-                    directorys[3] = "SRTM3";
 
             }
-
-
 
         }
 
@@ -1183,35 +1162,11 @@ namespace HoehenGenerator
             {
                 use1zoll = false;
 
-                if (dreiZoll.IsChecked == false)
-                {
-                    use3zoll = true;
-                    dreiZoll.IsChecked = true;
-                }
-
-
             }
             generiereDirString();
         }
 
-        private void dreiZoll_Checked(object sender, RoutedEventArgs e)
-        {
-            if (dreiZoll.IsChecked == true)
-                use3zoll = true;
-            else
-            {
-                use3zoll = false;
 
-                if (einZoll.IsChecked == false)
-                {
-                    use1zoll = true;
-                    einZoll.IsChecked = true;
-                }
-
-
-            }
-            generiereDirString();
-        }
 
         private void Weiter2_Click(object sender, RoutedEventArgs e)
         {
@@ -1224,7 +1179,7 @@ namespace HoehenGenerator
             Zeichenfläche = Zeichenfläche3;
             Hauptfenster.ResizeMode = ResizeMode.NoResize;
             ZeichneAlles(punkte);
-            
+
         }
 
         private void ZeichneMatrix()
@@ -1256,18 +1211,31 @@ namespace HoehenGenerator
 
         private void ZeichnePunkt(GeoPunkt geoPunkt, int v)
         {
-           
+
         }
 
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
             listHGTFiles.Clear();
             string[] vs = HGTFiles.Text.Split('\n');
+            List<int> aufl = new List<int>();
+            bool nurdreiZoll = false;
             foreach (string item in vs)
             {
-               Filemitauflösung fma = new Filemitauflösung("",0);
+                Filemitauflösung fma = new Filemitauflösung("", 0);
                 if (item != "")
                     fma = findeErsteDatei(item);
+                aufl.Add(fma.Auflösung);
+            }
+            int aufl1 = aufl.Max();
+            if (aufl1 == 3)
+                nurdreiZoll = true;
+
+            foreach (string item in vs)
+            {
+                Filemitauflösung fma = new Filemitauflösung("", 0);
+                if (item != "")
+                    fma = findeErsteDatei(item, nurdreiZoll);
                 if (fma.Auflösung > 0)
                 {
                     fma.Auflösung = 4 - fma.Auflösung;
@@ -1279,18 +1247,18 @@ namespace HoehenGenerator
                 //listHGTFiles.Find(x => x.Name == item);
             }
             ZeichneMatrix();
-           
-           
+
+
         }
 
-        private Filemitauflösung findeErsteDatei(string item)
+        private Filemitauflösung findeErsteDatei(string item, bool nurdreizoll = false)
         {
             int i = 0;
             Filemitauflösung fma = new Filemitauflösung("", 0);
             foreach (string verzeichnis in directorys)
 
             {
-                string a = verzeichnis.Substring(verzeichnis.Length-1);
+                string a = verzeichnis.Substring(verzeichnis.Length - 1);
                 try
                 {
                     i = int.Parse(a);
@@ -1299,15 +1267,16 @@ namespace HoehenGenerator
                 {
                     return fma;
                 }
-
-                
-                if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
+                if (!(nurdreizoll && i == 1))
                 {
-                    fma.Dateiname = hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt";
-                    fma.Auflösung = i;
-                    return fma;
+
+                    if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
+                    {
+                        fma.Dateiname = hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt";
+                        fma.Auflösung = i;
+                        return fma;
+                    }
                 }
-                    
             }
             return fma;
         }
