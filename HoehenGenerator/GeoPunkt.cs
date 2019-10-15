@@ -17,11 +17,15 @@ namespace HoehenGenerator
         { get { return lat; } set { lat = value; } }
         double entfernung;
 
-        public GeoPunkt(double lon = 0, double lat = 0, double entfernung = 0)
+        int höhe;
+        public int Höhe
+        { get { return höhe; } set { höhe = value; } }
+        public GeoPunkt(double lon = 0, double lat = 0, double entfernung = 0, int höhe = 0)
         {
             this.lat = lat;
             this.lon = lon;
             this.entfernung = entfernung;
+            this.höhe = höhe;
 
 
         }
