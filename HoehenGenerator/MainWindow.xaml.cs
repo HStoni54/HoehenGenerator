@@ -382,13 +382,16 @@ namespace HoehenGenerator
 
             for (int i = 0; i < vs1.Length; i++)
             {
-
-                foreach (var directory in directorys)
-                {
-                    if (directory.Length > 0)
-                        if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
-                            vs2[i] = true;
-                }
+                IEnumerable<string> vs3 = null;
+                if (hgtPfad != null)
+                    vs3 = Directory.EnumerateFiles(hgtPfad, vs1[i] + "*.hgt", SearchOption.AllDirectories);
+                //    foreach (var directory in directorys)
+                //    {
+                //        if (directory.Length > 0)
+                //            if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
+                //                vs2[i] = true;
+                //    }
+                if (vs3 != null) vs2[i] = true;
             }
             bool janein = true;
             for (int i = 0; i < vs2.Length; i++)
