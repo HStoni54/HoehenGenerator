@@ -889,25 +889,11 @@ namespace HoehenGenerator
                 {
                     switch (xmlReader.NodeType)
                     {
-                        //case XmlNodeType.XmlDeclaration:
-                        //    Console.WriteLine("{0,-20}<{1}>", "DEKLARATION", xmlReader.Value);
-                        //break;
-                        //case XmlNodeType.CDATA:
-                        //    Console.WriteLine("{0,-20}{1}", "CDATA", xmlReader.Value);
-                        //break;
-                        //case XmlNodeType.Whitespace:
-                        //Console.WriteLine("{0,-20}", "WHITESPACE");
-                        //break;
-                        //case XmlNodeType.Comment:
-                        //    Console.WriteLine("{0,-20}<!--{1}-->", "COMMENT", xmlReader.Value);
-                        //break;
+                        
                         case XmlNodeType.Element:
-                            if (xmlReader.IsEmptyElement) { }
-                            //Console.WriteLine("{0,-20}<{1} />", "EMPTY_ELEMENT", xmlReader.Name);
-                            else
+                            if (!xmlReader.IsEmptyElement)
                             {
-                                //Console.WriteLine("{0,-20}<{1}>", "ELEMENT", xmlReader.Name);
-                                // prüfen, ob der Knoten Attribute hat
+                                
                                 if (xmlReader.Name == "Abschnitt")
                                     knoten = xmlReader.Name;
                                 if (xmlReader.Name == "ZipDatei")
@@ -918,8 +904,7 @@ namespace HoehenGenerator
                                     // Durch die Attribute navigieren
                                     while (xmlReader.MoveToNextAttribute())
                                     {
-                                        //Console.WriteLine("{0,-20}{1}",
-                                        //       "ATTRIBUT", xmlReader.Name + "=" + xmlReader.Value);
+                                        
                                         if (knoten == "Abschnitt" && xmlReader.Name == "Url")
                                             ersterTeil = xmlReader.Value;
                                         if (knoten == "ZipDatei" && (xmlReader.Name == "Dateiname" || xmlReader.Name == "Url"))
@@ -929,14 +914,15 @@ namespace HoehenGenerator
                                     }
                                 }
                             }
+
+                            else
+                            { }
                             break;
-                        //case XmlNodeType.EndElement:
-                        //    Console.WriteLine("{0,-20}</{1}>", "END_ELEMENT", xmlReader.Name);
-                        //break;
+                       
                         case XmlNodeType.Text:
                             if (xmlReader.Value == item)
                                 ergebnis = ersterTeil + zweiterTeil;
-                            //Console.WriteLine("{0,-20}{1}", "TEXT", xmlReader.Value);
+                          
                             break;
                         default:
                             break;
@@ -1449,8 +1435,8 @@ namespace HoehenGenerator
         private void btnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
-            int höhe = 150;
-            int breite = 90;
+            int höhe = 90;
+            int breite = 150;
             System.Drawing.Color[] colors = { System.Drawing.Color.FromArgb(255,0, 100, 0) ,
                 System.Drawing.Color.FromArgb(255, 200, 200, 200),
                 System.Drawing.Color.FromArgb(255, 16, 39, 0),
@@ -1467,17 +1453,22 @@ namespace HoehenGenerator
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite,höhe,pixelFormat);
                 
                 
-                ZeichneBitMap zeichneBitMap = new ZeichneBitMap();
+                ZeichneBitMap zeichneBitMap = new ZeichneBitMap(bitmap,colors[i]);
 
-                zeichneBitMap.Bitmap = bitmap;
-                zeichneBitMap.Color1 = colors[i];
-                System.Drawing.Bitmap gefülltebitmap = zeichneBitMap.FülleBitmap();
+                zeichneBitMap.FülleBitmap();
+               
                 
-                SpeicherBild speicherBild = new SpeicherBild(gefülltebitmap, anlagenpfad + "\\" + bitmapnamen[i]);
+                SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen[i]);
                 
-                speicherBild.Speichern(gefülltebitmap, anlagenpfad + "\\" + bitmapnamen[i]);
+                speicherBild.Speichern(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen[i]);
                 
             }
+
+            SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, 150);
+            if (af.SchreibeFile())
+                MessageBox.Show("Anlagendatei geschrieben");
+            else
+                MessageBox.Show("Fehler beim Anlagenscheiben");
             
         }
 

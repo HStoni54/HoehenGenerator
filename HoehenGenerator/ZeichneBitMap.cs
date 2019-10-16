@@ -15,40 +15,46 @@ namespace HoehenGenerator
         Color[,] color;
         Color color1;
 
-        public Bitmap Bitmap { get => bitmap; set => bitmap = value; }
-        public int Höhe1 { get => Höhe; set => Höhe = value; }
-        public int Breite1 { get => Breite; set => Breite = value; }
-        public Color[,] Color { get => color; set => color = value; }
-        public Color Color1 { get => color1; set => color1 = value; }
+        public Bitmap Bitmap { get => bitmap; }
+        public int Höhe1 { get => Höhe; }
+        public int Breite1 { get => Breite;  }
+        public Color[,] Color { get => color;}
+        public Color Color1 { get => color1;  }
 
-        public ZeichneBitMap(Bitmap bitmap, int höhe, int breite, Color color1)
+        public ZeichneBitMap(Bitmap bitmap,  Color color1)
         {
             this.bitmap = bitmap;
-            Höhe = höhe;
-            Breite = breite;
+            Höhe = bitmap.Height;
+            Breite = bitmap.Width;
             this.color1 = color1;
-            this.color = colors(höhe,breite);
+            this.color = new Color[bitmap.Height, bitmap.Width];
+            for (int i = 0; i < bitmap.Width; i++)
+                for (int j = 0; j < bitmap.Height; j++)
+                {
+                    color[j, i] = color1;
+                }
+            {
+
+            }
             
 
         }
 
-        public ZeichneBitMap(Bitmap bitmap, int höhe, int breite, Color[,] color)
+        public ZeichneBitMap(Bitmap bitmap, Color[,] color)
         {
             this.bitmap = bitmap;
-            Höhe = höhe;
-            Breite = breite;
+            Höhe = bitmap.Height;
+            Breite = bitmap.Width;
             this.color = color;
             
         }
 
-       
 
-        public ZeichneBitMap(Bitmap bitmap)
+        public void SetzeBitmapPixel(int höhe, int breite, Color color)
         {
-            Bitmap = bitmap;
-            
+            bitmap.SetPixel(höhe, breite, color);
         }
-
+      
         private Color[,] colors(int höhe, int breite)
         {
             Color[,] color = new Color[höhe, breite];
@@ -56,16 +62,16 @@ namespace HoehenGenerator
             
         }
 
-        public Bitmap FülleBitmap()
+        public void FülleBitmap()
         {
-            for (int i = 0; i < Höhe; i++)
+            for (int i = 0; i < bitmap.Height; i++)
             {
-                for (int j = 0; j < Breite; j++)
+                for (int j = 0; j < bitmap.Width; j++)
                 {
-                    bitmap.SetPixel(i, j, color[i, j]);
+                    bitmap.SetPixel(j, i, color[i, j]);
                 }
             }
-            return bitmap;
+            
         }
 
     }

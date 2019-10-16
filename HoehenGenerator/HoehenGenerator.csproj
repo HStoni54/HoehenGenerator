@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
     <Compile Include="ZeichneBitMap.cs" />
     <Page Include="MainWindow.xaml">
