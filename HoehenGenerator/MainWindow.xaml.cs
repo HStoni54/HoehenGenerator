@@ -38,6 +38,8 @@ namespace HoehenGenerator
         Canvas Zeichenfläche = new Canvas();
         TextBox HGTFiles = new TextBox();
         List<HGTFile> listHGTFiles = new List<HGTFile>();
+        string anlagenname = "neueAnlage";
+        string anlagenpfad;
         bool usesrtm = false;
 
         bool useview = true;
@@ -382,16 +384,17 @@ namespace HoehenGenerator
 
             for (int i = 0; i < vs1.Length; i++)
             {
-                IEnumerable<string> vs3 = null;
+
                 if (hgtPfad != null)
-                    vs3 = Directory.EnumerateFiles(hgtPfad, vs1[i] + "*.hgt", SearchOption.AllDirectories);
-                //    foreach (var directory in directorys)
-                //    {
-                //        if (directory.Length > 0)
-                //            if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
-                //                vs2[i] = true;
-                //    }
-                if (vs3 != null) vs2[i] = true;
+                {
+                    foreach (var directory in directorys)
+                    {
+                        if (directory.Length > 0)
+                            if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
+                                vs2[i] = true;
+                    }
+                }
+
             }
             bool janein = true;
             for (int i = 0; i < vs2.Length; i++)
@@ -493,24 +496,23 @@ namespace HoehenGenerator
         }
         private void ZeichnePunkte(List<GeoPunkt> punkte)
         {
-            
+
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
             double punktgröße = 2 * GrößeH * GrößeB / punkte.Count;
+            minimaleHöhe = punkte.Min(x => x.Höhe);
+            maximaleHöhe = punkte.Max(x => x.Höhe);
             //double punktgröße = 5;
             for (int i = 0; i < punkte.Count; i++)
             {
                 double Lon = GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge);
                 double Lat = GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite);
-                if (Lat > 0 && Lat< GrößeH && Lon > 0 && Lon < GrößeB )
+                if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
                 {
                     Ellipse elli = new Ellipse();
                     SolidColorBrush mySolidColorBrush = new SolidColorBrush();
                     int höhe = punkte[i].Höhe * 100 + 1000;
-                    if (punkte[i].Höhe > maximaleHöhe)
-                        maximaleHöhe = punkte[i].Höhe;
-                    if (punkte[i].Höhe < minimaleHöhe)
-                        minimaleHöhe = punkte[i].Höhe;
+
                     int r1 = höhe % 256;
                     int g1 = (höhe / 256) % 256;
                     int b1 = (höhe / 256 / 256) % 256;
@@ -1286,10 +1288,10 @@ namespace HoehenGenerator
             foreach (HGTFile item in listHGTFiles)
             {
                 int auflösung = item.Auflösung;
-                int[,] daten = item.LeseDaten();
+                short[,] daten = item.LeseDaten();
                 string dateiname = item.Name;
                 int anzahl = (int)Math.Sqrt(daten.Length);
-               
+
                 for (int i = 0; i < anzahl; i++)
                 {
                     for (int j = 0; j < anzahl; j++)
@@ -1318,7 +1320,7 @@ namespace HoehenGenerator
                     }
                 }
             }
- 
+
             ZeichnePunkte(geoPunkts);
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
@@ -1413,6 +1415,78 @@ namespace HoehenGenerator
             return geoPunkt;
         }
 
+        private void btnAnlagenDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            fbd.Description = "Bitte Verzeichnis für Anlagen-Dateien auswählen";
+
+            //fbd.RootFolder = Environment.SpecialFolder.Personal;
+            string path = Environment.CurrentDirectory;
+            fbd.SelectedPath = @"X:\Trend\HöhenGenerator\Anlagen";
+
+            System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                anlagenpfad = fbd.SelectedPath;
+                btnGeneriereAnlage.IsEnabled = true;
+
+            }
+
+
+        }
+
+
+
+        private void tbAnlagenname_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            anlagenname = tbAnlagenname.Text;
+            if (anlagenname.Length == 0)
+                btnAnlagenDirectory.IsEnabled = false;
+            else
+                btnAnlagenDirectory.IsEnabled = true;
+        }
+
+        private void btnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
+        {
+            string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
+            int höhe = 150;
+            int breite = 90;
+            System.Drawing.Color[] colors = { System.Drawing.Color.FromArgb(255,0, 100, 0) ,
+                System.Drawing.Color.FromArgb(255, 200, 200, 200),
+                System.Drawing.Color.FromArgb(255, 16, 39, 0),
+                System.Drawing.Color.FromArgb(255,0,0,1),
+                System.Drawing.Color.FromArgb(255, 0, 0, 100) };
+
+            System.Drawing.Imaging.PixelFormat pixelFormat = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
+            
+            
+           
+           
+            for (int i = 0; i < bitmapnamen.Length; i++)
+            {
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite,höhe,pixelFormat);
+                
+                
+                ZeichneBitMap zeichneBitMap = new ZeichneBitMap();
+
+                zeichneBitMap.Bitmap = bitmap;
+                zeichneBitMap.Color1 = colors[i];
+                System.Drawing.Bitmap gefülltebitmap = zeichneBitMap.FülleBitmap();
+                
+                SpeicherBild speicherBild = new SpeicherBild(gefülltebitmap, anlagenpfad + "\\" + bitmapnamen[i]);
+                
+                speicherBild.Speichern(gefülltebitmap, anlagenpfad + "\\" + bitmapnamen[i]);
+                
+            }
+            
+        }
+
+
+
+        private void generiereAnlage_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbAnlagenname.Text = anlagenname;
+        }
     }
 }
 

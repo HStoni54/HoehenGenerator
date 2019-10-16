@@ -69,7 +69,7 @@
                 <TextBox x:Name="tbMinHöhe" HorizontalAlignment="Left" Height="23" Margin="10,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsEnabled="False"/>
             </Grid>
         </TabItem>
-        <TabItem   IsEnabled="False">
+        <TabItem x:Name="generiereAnlage"   IsEnabled="True" HorizontalAlignment="Right" Header="EEP-Anlage" GotFocus="generiereAnlage_GotFocus">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
@@ -78,6 +78,10 @@
                     <ColumnDefinition Width="115"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Button x:Name="btnAnlagenDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="80" Click="btnAnlagenDirectory_Click"/>
+                <Label x:Name="label2" Content="Anlagenname" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" FontSize="11"/>
+                <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="neueAnlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="tbAnlagenname_TextChanged"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="btnGeneriereAnlage_Click" IsEnabled="False"/>
             </Grid>
         </TabItem>
         <TabItem  IsEnabled="False">

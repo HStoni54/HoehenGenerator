@@ -5,7 +5,7 @@ namespace HoehenGenerator
 {
     class HGTFile
     {
-        readonly int[,] hgtDaten;
+        readonly short[,] hgtDaten;
         int auflösung;
         string name;
         string dateiname;
@@ -16,9 +16,9 @@ namespace HoehenGenerator
 
 
             this.dateiname = dateiname;
-            hgtDaten = new int[auflösung * 1200 + 1, auflösung * 1200 + 1];
+            hgtDaten = new short[auflösung * 1200 + 1, auflösung * 1200 + 1];
         }
-        public int[,] LeseDaten()
+        public short[,] LeseDaten()
         {
             byte[] vs = new byte[2];
             if (File.Exists(dateiname))
@@ -28,11 +28,14 @@ namespace HoehenGenerator
                 {
                     for (int j = 0; j < auflösung * 1200 + 1; j++)
                     {
-                        int vs1 = fs.Read(vs, 0, 2);
-                        if (vs1 == 2)
-                            hgtDaten[i, j] = 256 * vs[0] + vs[1];
-                        else
-                            MessageBox.Show("HGT-File zu klein");
+                        //int vs1 = fs.Read(vs, 0, 2);
+                        //if (vs1 == 2)
+                        //    hgtDaten[i, j] = 256 * vs[0] + vs[1];
+                        //else
+                        //    MessageBox.Show("HGT-File zu klein");
+                        vs[1] = (byte)fs.ReadByte();
+                        vs[0] = (byte)fs.ReadByte();
+                        hgtDaten[i, j] = (short)(256 * vs[1] + vs[0]);
                     }
                 }
                 fs.Close();
@@ -40,7 +43,7 @@ namespace HoehenGenerator
 
             return hgtDaten;
         }
-        public int[,] HgtDaten => hgtDaten;
+        public short[,] HgtDaten => hgtDaten;
         public int Auflösung => auflösung;
 
         public string Name { get => name; set => name = value; }
