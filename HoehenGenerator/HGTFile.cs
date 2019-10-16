@@ -16,7 +16,31 @@ namespace HoehenGenerator
 
 
             this.dateiname = dateiname;
+            byte[] vs = new byte[2];
             hgtDaten = new short[auflösung * 1200 + 1, auflösung * 1200 + 1];
+            FileStream fs = File.OpenRead(dateiname);
+            for (int i = 0; i < auflösung * 1200 + 1; i++)
+            {
+                for (int j = 0; j < auflösung * 1200 + 1; j++)
+                {
+
+                    vs[1] = (byte)fs.ReadByte();
+                    vs[0] = (byte)fs.ReadByte();
+                    hgtDaten[i, j] = (short)(256 * vs[1] + vs[0]);
+                }
+            }
+            fs.Close();
+        }
+       public void Clear()
+        {
+            for (int i = 0; i < auflösung * 1200 + 1; i++)
+            {
+                for (int j = 0; j < auflösung * 1200 + 1; j++)
+                {
+                    hgtDaten[i, j] = 0;
+                }
+
+            }
         }
         public short[,] LeseDaten()
         {
@@ -28,11 +52,7 @@ namespace HoehenGenerator
                 {
                     for (int j = 0; j < auflösung * 1200 + 1; j++)
                     {
-                        //int vs1 = fs.Read(vs, 0, 2);
-                        //if (vs1 == 2)
-                        //    hgtDaten[i, j] = 256 * vs[0] + vs[1];
-                        //else
-                        //    MessageBox.Show("HGT-File zu klein");
+                        
                         vs[1] = (byte)fs.ReadByte();
                         vs[0] = (byte)fs.ReadByte();
                         hgtDaten[i, j] = (short)(256 * vs[1] + vs[0]);
@@ -42,6 +62,13 @@ namespace HoehenGenerator
             }
 
             return hgtDaten;
+        }
+        public short LeseHöhe(int i, int j)
+
+        {
+            
+           
+            return  hgtDaten[i, j] ;
         }
         public short[,] HgtDaten => hgtDaten;
         public int Auflösung => auflösung;

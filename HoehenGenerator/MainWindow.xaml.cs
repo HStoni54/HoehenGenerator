@@ -500,9 +500,9 @@ namespace HoehenGenerator
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
             double punktgröße = 2 * GrößeH * GrößeB / punkte.Count;
-            minimaleHöhe = punkte.Min(x => x.Höhe);
-            maximaleHöhe = punkte.Max(x => x.Höhe);
-            //double punktgröße = 5;
+            //minimaleHöhe = punkte.Min(x => x.Höhe);
+            //maximaleHöhe = punkte.Max(x => x.Höhe);
+            ////double punktgröße = 5;
             for (int i = 0; i < punkte.Count; i++)
             {
                 double Lon = GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge);
@@ -1264,18 +1264,20 @@ namespace HoehenGenerator
 
         }
 
-        private void ZeichneMatrix()
+        private void ZeichneMatrix(List<Filemitauflösung> lfma)
         {
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             maximaleHöhe = -10000.0;
             minimaleHöhe = 10000.0;
             List<GeoPunkt> geos = new List<GeoPunkt>();
             Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
-            foreach (HGTFile item in listHGTFiles)
+            foreach (Filemitauflösung item in lfma)
             {
                 int auflösung = item.Auflösung;
-                short[,] daten = item.LeseDaten();
-                string dateiname = item.Name;
+                HGTFile hGTFile = new HGTFile(item.Auflösung, item.Dateiname);
+                short[,] daten = hGTFile.LeseDaten();
+                string dateiname = System.IO.Path.GetFileName(item.Dateiname);
+                
                 int anzahl = (int)Math.Sqrt(daten.Length);
 
                 for (int i = 0; i < anzahl; i++)
@@ -1288,23 +1290,24 @@ namespace HoehenGenerator
                         Point point = new Point();
                         geoPunkt1.Höhe = daten[i, j];
 
-                        //if (maximaleHöhe < geoPunkt1.Höhe)
-                        //    maximaleHöhe = geoPunkt1.Höhe;
-                        //if (minimaleHöhe > geoPunkt1.Höhe)
-                        //    minimaleHöhe = geoPunkt1.Höhe;
-
+                        
                         point.X = geoPunkt1.Lat;
                         point.Y = geoPunkt1.Lon;
                         //TODO: Andere Globusteile einbeziehen
                         if (geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) + 0.01 && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat) - 0.01
                             && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) + 0.01 && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon) - 0.01)
                         {
+                            if (maximaleHöhe < geoPunkt1.Höhe)
+                                maximaleHöhe = geoPunkt1.Höhe;
+                            if (minimaleHöhe > geoPunkt1.Höhe)
+                                minimaleHöhe = geoPunkt1.Höhe;
 
                             geoPunkts.Add(geoPunkt1);
 
                         }
                     }
                 }
+                hGTFile.Clear();
             }
 
             ZeichnePunkte(geoPunkts);
@@ -1316,37 +1319,48 @@ namespace HoehenGenerator
 
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
-            listHGTFiles.Clear();
+            Filemitauflösung fma = new Filemitauflösung("", 0);
+            List<Filemitauflösung> lfma = new List<Filemitauflösung>(); 
+           lfma.Clear();
             string[] vs = HGTFiles.Text.Split('\n');
             List<int> aufl = new List<int>();
             bool nurdreiZoll = false;
             foreach (string item in vs)
             {
-                Filemitauflösung fma = new Filemitauflösung("", 0);
-                if (item != "")
-                    fma = findeErsteDatei(item);
+                
+                if (item.Length > 0)
+                {
+                   fma = findeErsteDatei(item);
                 aufl.Add(fma.Auflösung);
-            }
+  
+                }
+           }
             int aufl1 = aufl.Max();
             if (aufl1 == 3)
                 nurdreiZoll = true;
 
+            lfma.Clear();
             foreach (string item in vs)
             {
-                Filemitauflösung fma = new Filemitauflösung("", 0);
-                if (item != "")
-                    fma = findeErsteDatei(item, nurdreiZoll);
+
+                if (item.Length > 0)
+                {
+                fma = findeErsteDatei(item, nurdreiZoll);
                 if (fma.Auflösung > 0)
                 {
                     fma.Auflösung = 4 - fma.Auflösung;
-                    HGTFile hGTFile = new HGTFile(fma.Auflösung, fma.Dateiname);
-                    hGTFile.LeseDaten();
-                    hGTFile.Name = item;
-                    listHGTFiles.Add(hGTFile);
+                    lfma.Add(fma);
+                    //HGTFile hGTFile = new HGTFile(fma.Auflösung, fma.Dateiname);
+                    //hGTFile.LeseDaten();
+                    //hGTFile.Name = item;
+                    //listHGTFiles.Add(hGTFile);
                 }
-                //listHGTFiles.Find(x => x.Name == item);
+       
+                }
+             //listHGTFiles.Find(x => x.Name == item);
+
             }
-            ZeichneMatrix();
+            ZeichneMatrix(lfma);
 
 
         }
@@ -1358,6 +1372,8 @@ namespace HoehenGenerator
             foreach (string verzeichnis in directorys)
 
             {
+                if (verzeichnis.Length > 0)
+                { 
                 string a = verzeichnis.Substring(verzeichnis.Length - 1);
                 try
                 {
@@ -1377,6 +1393,7 @@ namespace HoehenGenerator
                         return fma;
                     }
                 }
+                }
             }
             return fma;
         }
@@ -1391,7 +1408,7 @@ namespace HoehenGenerator
             ostwest = filename.Substring(0, 1);
             nordsüd = filename.Substring(3, 1);
             lat = int.Parse(filename.Substring(1, 2));
-            lon = int.Parse(filename.Substring(4));
+            lon = int.Parse(filename.Substring(4,3));
             if (ostwest == "W")
                 lat = -lat;
             if (nordsüd == "S")
