@@ -36,13 +36,13 @@ namespace HoehenGenerator
         {
             return BogenInGrad * 180.0 / Math.PI;
         }
-        public double Xgeo
+        public double Xgeo // nach Greanwitch
         { get { return radius * Math.Cos(bogen(Lat)) * Math.Cos(bogen(Lon)); } }
 
-        public double Ygeo
+        public double Ygeo  // zur Seite
         { get { return radius * Math.Cos(bogen(Lat)) * Math.Sin(bogen(Lon)); } }
 
-        public double Zgeo
+        public double Zgeo // zum Nordpol
         { get { return radius * Math.Sin(bogen(Lat)); } }
 
         public double Entfernung { get => entfernung; set => entfernung = value; }

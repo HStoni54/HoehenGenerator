@@ -499,14 +499,17 @@ namespace HoehenGenerator
 
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
-            double punktgröße = 2 * GrößeH * GrößeB / punkte.Count;
+            //double punktgröße = 4 * GrößeH * GrößeB / punkte.Count;
+
             //minimaleHöhe = punkte.Min(x => x.Höhe);
             //maximaleHöhe = punkte.Max(x => x.Höhe);
-            ////double punktgröße = 5;
+            double punktgröße = 5;
             for (int i = 0; i < punkte.Count; i++)
             {
                 double Lon = GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge);
                 double Lat = GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite);
+
+
                 if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
                 {
                     Ellipse elli = new Ellipse();
@@ -889,11 +892,11 @@ namespace HoehenGenerator
                 {
                     switch (xmlReader.NodeType)
                     {
-                        
+
                         case XmlNodeType.Element:
                             if (!xmlReader.IsEmptyElement)
                             {
-                                
+
                                 if (xmlReader.Name == "Abschnitt")
                                     knoten = xmlReader.Name;
                                 if (xmlReader.Name == "ZipDatei")
@@ -904,7 +907,7 @@ namespace HoehenGenerator
                                     // Durch die Attribute navigieren
                                     while (xmlReader.MoveToNextAttribute())
                                     {
-                                        
+
                                         if (knoten == "Abschnitt" && xmlReader.Name == "Url")
                                             ersterTeil = xmlReader.Value;
                                         if (knoten == "ZipDatei" && (xmlReader.Name == "Dateiname" || xmlReader.Name == "Url"))
@@ -918,11 +921,11 @@ namespace HoehenGenerator
                             else
                             { }
                             break;
-                       
+
                         case XmlNodeType.Text:
                             if (xmlReader.Value == item)
                                 ergebnis = ersterTeil + zweiterTeil;
-                          
+
                             break;
                         default:
                             break;
@@ -1269,72 +1272,92 @@ namespace HoehenGenerator
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             maximaleHöhe = -10000.0;
             minimaleHöhe = 10000.0;
+            GeoPunkt geoPunkt = new GeoPunkt();
+            GeoPunkt geoPunkt1 = new GeoPunkt();
             List<GeoPunkt> geos = new List<GeoPunkt>();
-            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
+            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (-1 * winkel));
             foreach (Filemitauflösung item in lfma)
             {
                 int auflösung = item.Auflösung;
                 HGTFile hGTFile = new HGTFile(item.Auflösung, item.Dateiname);
                 short[,] daten = hGTFile.LeseDaten();
                 string dateiname = System.IO.Path.GetFileName(item.Dateiname);
-                
+
                 int anzahl = (int)Math.Sqrt(daten.Length);
 
                 for (int i = 0; i < anzahl; i++)
                 {
                     for (int j = 0; j < anzahl; j++)
                     {
-                        GeoPunkt geoPunkt = hgttolatlon(dateiname, auflösung, i, j);
+                        geoPunkt = hgttolatlon(dateiname, auflösung, i, j); // TODO: Berechnung überprüfen
                         geoPunkt.Höhe = daten[i, j];
-                        GeoPunkt geoPunkt1 = DrehePunkt(geoPunkt, drehung);
-                        Point point = new Point();
-                        geoPunkt1.Höhe = daten[i, j];
 
-                        
-                        point.X = geoPunkt1.Lat;
-                        point.Y = geoPunkt1.Lon;
-                        //TODO: Andere Globusteile einbeziehen
-                        if (geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) + 0.01 && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat) - 0.01
-                            && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) + 0.01 && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon) - 0.01)
+                        if (IstPunktImRechteck(ref geoPunkt, 0.2))
                         {
-                            if (maximaleHöhe < geoPunkt1.Höhe)
-                                maximaleHöhe = geoPunkt1.Höhe;
-                            if (minimaleHöhe > geoPunkt1.Höhe)
-                                minimaleHöhe = geoPunkt1.Höhe;
+                            if (winkel == 0)
+                                geoPunkt1 = geoPunkt;
+                            else
+                            {
+                                geoPunkt1 = DrehePunkt(geoPunkt, drehung);
+                                //Point point = new Point();
+                                geoPunkt1.Höhe = daten[i, j];
 
-                            geoPunkts.Add(geoPunkt1);
+                            }
 
+                            //point.X = geoPunkt1.Lat;
+                            //point.Y = geoPunkt1.Lon;
+                            //TODO: Anzahl der zu lesender Punkte vorher einschränken
+                            //TODO: Andere Globusteile einbeziehen Fläche überprüfen Methode Punkt innerhalb Polygon hier und oben
+                            if (IstPunktImRechteck(ref geoPunkt1))
+                            {
+                                if (maximaleHöhe < geoPunkt1.Höhe)
+                                    maximaleHöhe = geoPunkt1.Höhe;
+                                if (minimaleHöhe > geoPunkt1.Höhe && geoPunkt1.Höhe != -32768)
+                                    minimaleHöhe = geoPunkt1.Höhe;
+
+                                if (geoPunkt1.Höhe != -32768)
+                                    geoPunkts.Add(geoPunkt1);
+
+                            }
                         }
                     }
                 }
+                //MessageBox.Show("Anzahl der Punkte: " + geoPunkts.Count);
                 hGTFile.Clear();
             }
 
-            ZeichnePunkte(geoPunkts);
+            ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();
         }
 
+        private bool IstPunktImRechteck(ref GeoPunkt geoPunkt1, double diff = 0.0)
+        { // TODO: In allen Erdteilen? Datumgrenze?
+            return geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) + diff
+                && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat) - diff
+                && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) + diff
+                && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon) - diff;
+        }
 
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
             Filemitauflösung fma = new Filemitauflösung("", 0);
-            List<Filemitauflösung> lfma = new List<Filemitauflösung>(); 
-           lfma.Clear();
+            List<Filemitauflösung> lfma = new List<Filemitauflösung>();
+            lfma.Clear();
             string[] vs = HGTFiles.Text.Split('\n');
             List<int> aufl = new List<int>();
             bool nurdreiZoll = false;
             foreach (string item in vs)
             {
-                
+
                 if (item.Length > 0)
                 {
-                   fma = findeErsteDatei(item);
-                aufl.Add(fma.Auflösung);
-  
+                    fma = findeErsteDatei(item);
+                    aufl.Add(fma.Auflösung);
+
                 }
-           }
+            }
             int aufl1 = aufl.Max();
             if (aufl1 == 3)
                 nurdreiZoll = true;
@@ -1345,19 +1368,19 @@ namespace HoehenGenerator
 
                 if (item.Length > 0)
                 {
-                fma = findeErsteDatei(item, nurdreiZoll);
-                if (fma.Auflösung > 0)
-                {
-                    fma.Auflösung = 4 - fma.Auflösung;
-                    lfma.Add(fma);
-                    //HGTFile hGTFile = new HGTFile(fma.Auflösung, fma.Dateiname);
-                    //hGTFile.LeseDaten();
-                    //hGTFile.Name = item;
-                    //listHGTFiles.Add(hGTFile);
+                    fma = findeErsteDatei(item, nurdreiZoll);
+                    if (fma.Auflösung > 0)
+                    {
+                        fma.Auflösung = 4 - fma.Auflösung;
+                        lfma.Add(fma);
+                        //HGTFile hGTFile = new HGTFile(fma.Auflösung, fma.Dateiname);
+                        //hGTFile.LeseDaten();
+                        //hGTFile.Name = item;
+                        //listHGTFiles.Add(hGTFile);
+                    }
+
                 }
-       
-                }
-             //listHGTFiles.Find(x => x.Name == item);
+                //listHGTFiles.Find(x => x.Name == item);
 
             }
             ZeichneMatrix(lfma);
@@ -1373,26 +1396,26 @@ namespace HoehenGenerator
 
             {
                 if (verzeichnis.Length > 0)
-                { 
-                string a = verzeichnis.Substring(verzeichnis.Length - 1);
-                try
                 {
-                    i = int.Parse(a);
-                }
-                catch (Exception)
-                {
-                    return fma;
-                }
-                if (!(nurdreizoll && i == 1))
-                {
-
-                    if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
+                    string a = verzeichnis.Substring(verzeichnis.Length - 1);
+                    try
                     {
-                        fma.Dateiname = hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt";
-                        fma.Auflösung = i;
+                        i = int.Parse(a);
+                    }
+                    catch (Exception)
+                    {
                         return fma;
                     }
-                }
+                    if (!(nurdreizoll && i == 1))
+                    {
+
+                        if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
+                        {
+                            fma.Dateiname = hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt";
+                            fma.Auflösung = i;
+                            return fma;
+                        }
+                    }
                 }
             }
             return fma;
@@ -1408,7 +1431,7 @@ namespace HoehenGenerator
             ostwest = filename.Substring(0, 1);
             nordsüd = filename.Substring(3, 1);
             lat = int.Parse(filename.Substring(1, 2));
-            lon = int.Parse(filename.Substring(4,3));
+            lon = int.Parse(filename.Substring(4, 3));
             if (ostwest == "W")
                 lat = -lat;
             if (nordsüd == "S")
@@ -1461,24 +1484,24 @@ namespace HoehenGenerator
                 System.Drawing.Color.FromArgb(255, 0, 0, 100) };
 
             System.Drawing.Imaging.PixelFormat pixelFormat = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
-            
-            
-           
-           
+
+
+
+
             for (int i = 0; i < bitmapnamen.Length; i++)
             {
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite,höhe,pixelFormat);
-                
-                
-                ZeichneBitMap zeichneBitMap = new ZeichneBitMap(bitmap,colors[i]);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite, höhe, pixelFormat);
+
+
+                ZeichneBitMap zeichneBitMap = new ZeichneBitMap(bitmap, colors[i]);
 
                 zeichneBitMap.FülleBitmap();
-               
-                
+
+
                 SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen[i]);
-                
+
                 speicherBild.Speichern(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen[i]);
-                
+
             }
 
             SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, 150);
@@ -1486,7 +1509,7 @@ namespace HoehenGenerator
                 MessageBox.Show("Anlagendatei geschrieben");
             else
                 MessageBox.Show("Fehler beim Anlagenscheiben");
-            
+
         }
 
 
