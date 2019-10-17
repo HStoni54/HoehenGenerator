@@ -99,6 +99,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AufgabeIndices.cs" />
+    <Compile Include="LadeDateien.cs" />
     <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
     <Compile Include="ZeichneBitMap.cs" />

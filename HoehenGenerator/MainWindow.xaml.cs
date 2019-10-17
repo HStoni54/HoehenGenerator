@@ -58,6 +58,7 @@ namespace HoehenGenerator
         int winkel = 0;
         string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
         ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
+        ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
 
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
@@ -85,8 +86,7 @@ namespace HoehenGenerator
                 while (aufgabeIndices.Count > 0)
                 {
 
-                    AufgabeIndices aufgabe;
-                    bool istArbeitDa = aufgabeIndices.TryDequeue(out aufgabe);
+                    bool istArbeitDa = aufgabeIndices.TryDequeue(out AufgabeIndices aufgabe);
                     if (istArbeitDa)
                     {
                         System.Diagnostics.Debug.Print(aufgabe.Hgtart + " " + aufgabe.Auflösung + " " + aufgabe.Pfad);
@@ -94,19 +94,37 @@ namespace HoehenGenerator
 
                     }
                     if (aufgabeIndices.Count == 0)
+                    {
                         if (ÜberprüfeIndices())
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
 
                         else
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = false));
-
+                    }
                 }
 
+                while (ladeDateiens.Count > 0)
+                {
+                    bool istArbeitDa = ladeDateiens.TryDequeue(out LadeDateien datei);
+                    if (istArbeitDa)
+                    {
 
+                        LadeHGTDateien(datei.Url, datei.Zieldatei);
+                        unZipHgtFiles(datei.Zieldatei);
+                        Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
+                        //ZeichneAlles(punkte);
+                    }
+                    if (ladeDateiens.Count == 0)
+                    {
+                        
+                       
+                    }
+                }
 
 
             }
         }
+
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
         {
@@ -855,14 +873,31 @@ namespace HoehenGenerator
 
 
             downloadeHgtFiles();
-            unZipHgtFiles();
-            ZeichneAlles(punkte);
+
+
+
+        }
+        private void unZipHgtFiles(string zieldatei)
+        {
+            string pfad = System.IO.Path.GetDirectoryName(zieldatei);
+            ZipArchive zipfile = ZipFile.OpenRead(zieldatei);
+            foreach (ZipArchiveEntry entry in zipfile.Entries)
+            {
+                if (entry.Name.Length > 0)
+                    entry.ExtractToFile(pfad + "\\" + entry.Name, overwrite: true);
+                //MessageBox.Show("ZipFile:" + file + " gefunden!\n" + "Datei: " + entry.Name);
+
+
+            }
+            zipfile.Dispose();
+            File.Delete(zieldatei);
 
 
         }
 
         private void unZipHgtFiles()
         {
+
 
             foreach (var item in directorys)
             {
@@ -900,12 +935,12 @@ namespace HoehenGenerator
 
         private void downloadeHgtFiles()
         {
-            List<string> vs1 = new List<string>();
+            // List<string> vs1 = new List<string>();
             List<string> srtm1 = new List<string>();
             List<string> srtm3 = new List<string>();
             List<string> view1 = new List<string>();
             List<string> view3 = new List<string>();
-            string[] vs = HGTFiles.Text.Split('\n');
+            //string[] vs = HGTFiles.Text.Split('\n');
             if (Directory.Exists(hgtPfad + "\\noHgt"))
             {
                 string[] zulöschen = Directory.GetFiles(hgtPfad + "\\noHgt");
@@ -914,18 +949,19 @@ namespace HoehenGenerator
                     File.Delete(item);
                 }
             }
-            for (int i = 0; i < vs.Length; i++)
+            for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
-                if (vs[i] != "")
+                string file = lbHgtFiles.Items[i].ToString();
+                if (file.Length > 0)
                 {
-                    string[] url = findeUrl(vs[i]);
-                    vs1.Clear();
+                    string[] url = findeUrl(file);
+                    //   vs1.Clear();
                     if (url.Length == 0)
                     {
                         //MessageBox.Show("Datei: " + vs[i] + "nicht existent!");
                         if (!Directory.Exists(hgtPfad + "\\noHgt"))
                             Directory.CreateDirectory(hgtPfad + "\\noHgt");
-                        StreamWriter sw = File.CreateText(hgtPfad + "\\noHgt\\" + vs[i] + ".hgt");
+                        StreamWriter sw = File.CreateText(hgtPfad + "\\noHgt\\" + file + ".hgt");
                         sw.Close();
 
 
@@ -935,15 +971,15 @@ namespace HoehenGenerator
                     {
                         for (int j = 0; j < url.Length; j++)
                         {
-                            vs1.Add(url[j]);
-                            if (url[j].Contains("SRTM1") && !File.Exists(hgtPfad + "\\SRTM1\\" + vs[i] + ".hgt"))
-                                srtm1.Add(vs1[j]);
-                            if (url[j].Contains("SRTM3") && !File.Exists(hgtPfad + "\\SRTM3\\" + vs[i] + ".hgt"))
-                                srtm3.Add(vs1[j]);
-                            if (url[j].Contains("dem1") && !File.Exists(hgtPfad + "\\VIEW1\\" + vs[i] + ".hgt"))
-                                view1.Add(vs1[j]);
-                            if (url[j].Contains("dem3") && !File.Exists(hgtPfad + "\\VIEW3\\" + vs[i] + ".hgt"))
-                                view3.Add(vs1[j]);
+                            //  vs1.Add(url[j]);
+                            if (url[j].Contains("SRTM1") && !File.Exists(hgtPfad + "\\SRTM1\\" + file + ".hgt"))
+                                srtm1.Add(url[j]);
+                            if (url[j].Contains("SRTM3") && !File.Exists(hgtPfad + "\\SRTM3\\" + file + ".hgt"))
+                                srtm3.Add(url[j]);
+                            if (url[j].Contains("dem1") && !File.Exists(hgtPfad + "\\VIEW1\\" + file + ".hgt"))
+                                view1.Add(url[j]);
+                            if (url[j].Contains("dem3") && !File.Exists(hgtPfad + "\\VIEW3\\" + file + ".hgt"))
+                                view3.Add(url[j]);
                         }
 
                     }
@@ -951,41 +987,52 @@ namespace HoehenGenerator
                 }
 
             }
-            WebClient webClient = new WebClient()
-            {
-                Encoding = Encoding.UTF8
-            };
+
             for (int i = 0; i < srtm1.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(srtm1[i]);
                 String Zielname = hgtPfad + "\\SRTM1\\" + dateiname;
                 if (!File.Exists(Zielname))
-                    webClient.DownloadFile(srtm1[i], Zielname);
+                    ladeDateiens.Enqueue(new LadeDateien(srtm1[i], Zielname));
+                // LadeHGTFiles(srtm1[i], Zielname);
+                //  webClient.DownloadFile(srtm1[i], Zielname);
             }
             for (int i = 0; i < srtm3.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(srtm3[i]);
                 String Zielname = hgtPfad + "\\SRTM3\\" + dateiname;
                 if (!File.Exists(Zielname))
-                    webClient.DownloadFile(srtm3[i], Zielname);
+                    ladeDateiens.Enqueue(new LadeDateien(srtm3[i], Zielname));
+                // webClient.DownloadFile(srtm3[i], Zielname);
             }
             for (int i = 0; i < view1.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(view1[i]);
                 String Zielname = hgtPfad + "\\VIEW1\\" + dateiname;
                 if (!File.Exists(Zielname))
-                    webClient.DownloadFile(view1[i], Zielname);
+                    ladeDateiens.Enqueue(new LadeDateien(view1[i], Zielname));
+                // webClient.DownloadFile(view1[i], Zielname);
             }
             for (int i = 0; i < view3.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(view3[i]);
                 String Zielname = hgtPfad + "\\VIEW3\\" + dateiname;
                 if (!File.Exists(Zielname))
-                    webClient.DownloadFile(view3[i], Zielname);
+                    ladeDateiens.Enqueue(new LadeDateien(view3[i], Zielname));
+                //webClient.DownloadFile(view3[i], Zielname);
             }
 
 
 
+        }
+
+        private void LadeHGTDateien(string v, string zielname)
+        {
+            WebClient webClient = new WebClient()
+            {
+                Encoding = Encoding.UTF8
+            };
+            webClient.DownloadFile(v, zielname);
         }
 
         private string[] findeUrl(string item)
