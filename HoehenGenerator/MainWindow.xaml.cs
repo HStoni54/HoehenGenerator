@@ -37,6 +37,7 @@ namespace HoehenGenerator
         PointCollection punkte = new PointCollection();
         Canvas Zeichenfläche = new Canvas();
         TextBox HGTFiles = new TextBox();
+        ListBox lbHgtFiles = new ListBox();
         List<HGTFile> listHGTFiles = new List<HGTFile>();
         string anlagenname = "neueAnlage";
         string anlagenpfad;
@@ -106,16 +107,34 @@ namespace HoehenGenerator
                 BildeSchattenpunkte(orgpunkte);
                 punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
+                lbHgtFiles = lbHgtFiles1;
                 HGTFiles = HGTFiles1;
                 // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
                 //ZeichneRechteck(punkte);
                 //ZeichnePolygon(punkte);
                 //ZeichnePunkte(punkte);
-                Optimieren.IsEnabled = true;
-                Weiter.IsEnabled = true;
-                Drehen.IsEnabled = true;
-                generiereDirString();
+                if (lbHgtFiles.Items.Count <= 4)
+                {
+                    Optimieren.IsEnabled = true;
+                    Weiter.IsEnabled = true;
+                    Drehen.IsEnabled = true;
+                    generiereDirString();
+                }
+                else
+                { 
+                    Optimieren.IsEnabled = false;
+                    Weiter.IsEnabled = false;
+                    Drehen.IsEnabled = false;
+ 
+                    MessageBox.Show("Die Fläche ist zu groß! Es wurden "
+                                           + lbHgtFiles.Items.Count
+                                           + " Hgt-Files ermittelt!\nMaximal möglich sind 4 Hgt-Files!"
+                                           + " Bitte eine kleinere Fläche auswählen!");
+
+                }
+
+
             }
 
         }
@@ -360,6 +379,7 @@ namespace HoehenGenerator
             double minlat = Math.Round(points1.Min(x => x.Y) - 0.5);
             double maxlon = Math.Round(points1.Max(x => x.X) - 0.5);
             double minlon = Math.Round(points1.Min(x => x.X) - 0.5);
+            lbHgtFiles.Items.Clear();
             HGTFiles.Text = "";
             if (maxlon - minlon > 180)
             {
@@ -371,13 +391,13 @@ namespace HoehenGenerator
                 BildeHGTString(maxlat, minlat, maxlon, minlon);
 
             }
-            HGTFiles.Background = Brushes.Red;
-            string[] vs = HGTFiles.Text.Split('\n');
-            string[] vs1 = new string[vs.Length - 1];
-            bool[] vs2 = new bool[vs.Length - 1];
-            for (int i = 0; i < vs.Length - 1; i++)
+            //HGTFiles.Background = Brushes.Red;
+            //string[] vs = HGTFiles.Text.Split('\n');
+            string[] vs1 = new string[lbHgtFiles.Items.Count];
+            bool[] vs2 = new bool[lbHgtFiles.Items.Count];
+            for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
-                vs1[i] = vs[i];
+                vs1[i] = lbHgtFiles.Items[i].ToString();
                 vs2[i] = false;
             }
 
@@ -404,7 +424,7 @@ namespace HoehenGenerator
             }
             if (janein)
             {
-                HGTFiles.Background = Brushes.LightGreen;
+                //HGTFiles.Background = Brushes.LightGreen;
                 Weiter2.IsEnabled = true;
             }
 
@@ -435,8 +455,10 @@ namespace HoehenGenerator
                     {
                         hgt = hgt + "W" + (-j).ToString("D3");
                     }
+                    lbHgtFiles.Items.Add(hgt);
                     hgt = hgt + "\n";
                     HGTFiles.Text = HGTFiles.Text + hgt;
+
                 }
             }
 
@@ -678,12 +700,14 @@ namespace HoehenGenerator
         private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
         {
             Zeichenfläche = Zeichenfläche1;
+            lbHgtFiles = lbHgtFiles1;
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
         }
 
         private void ladeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
         {
             Zeichenfläche = Zeichenfläche2;
+            lbHgtFiles = lbHgtFiles2;
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
         }
 
@@ -1326,7 +1350,7 @@ namespace HoehenGenerator
                 hGTFile.Clear();
             }
 
-            ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas
+            ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();
