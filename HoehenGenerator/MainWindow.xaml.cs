@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -38,7 +40,7 @@ namespace HoehenGenerator
         Canvas Zeichenfläche = new Canvas();
         TextBox HGTFiles = new TextBox();
         ListBox lbHgtFiles = new ListBox();
-        
+
 
         List<HGTFile> listHGTFiles = new List<HGTFile>();
         string anlagenname = "neueAnlage";
@@ -55,7 +57,7 @@ namespace HoehenGenerator
         bool datumgrenze = false;
         int winkel = 0;
         string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
-
+        ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
 
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
@@ -66,6 +68,44 @@ namespace HoehenGenerator
             Title = "Höhengenerator für EEP";
 
 
+            Thread[] threads = new Thread[6];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(Arbeite);
+                threads[i].IsBackground = true;
+                threads[i].Start();
+            }
+        }
+
+        private void Arbeite()
+        {
+            while (true)
+            {
+
+                while (aufgabeIndices.Count > 0)
+                {
+
+                    AufgabeIndices aufgabe;
+                    bool istArbeitDa = aufgabeIndices.TryDequeue(out aufgabe);
+                    if (istArbeitDa)
+                    {
+                        System.Diagnostics.Debug.Print(aufgabe.Hgtart + " " + aufgabe.Auflösung + " " + aufgabe.Pfad);
+                        GeneriereIndices(aufgabe.Hgtart, aufgabe.Auflösung, aufgabe.Pfad);
+
+                    }
+                    if (aufgabeIndices.Count == 0)
+                        if (ÜberprüfeIndices())
+                            Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
+
+                        else
+                            Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = false));
+
+                }
+
+
+
+
+            }
         }
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
@@ -110,7 +150,7 @@ namespace HoehenGenerator
                 BildeSchattenpunkte(orgpunkte);
                 punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
-                
+
                 //HGTFiles = HGTFiles1;
                 // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
@@ -125,11 +165,11 @@ namespace HoehenGenerator
                     generiereDirString();
                 }
                 else
-                { 
+                {
                     Optimieren.IsEnabled = false;
                     Weiter.IsEnabled = false;
                     Drehen.IsEnabled = false;
- 
+
                     MessageBox.Show("Die Fläche ist zu groß! Es wurden "
                                            + lbHgtFiles.Items.Count
                                            + " Hgt-Files ermittelt!\nMaximal möglich sind 4 Hgt-Files!"
@@ -703,16 +743,16 @@ namespace HoehenGenerator
         private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
         {
             Zeichenfläche = Zeichenfläche1;
-            
+
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
         }
 
         private void ladeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
         {
 
-            
+
             Zeichenfläche = Zeichenfläche2;
-            
+
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
             int anzahl = lbHgtFiles.Items.Count;
             if (anzahl > 0)
@@ -774,7 +814,7 @@ namespace HoehenGenerator
             if (use1zoll)
             {
                 if (useview)
-                   if (!ÜberprüfeViewIndex(1, hgtPfad))
+                    if (!ÜberprüfeViewIndex(1, hgtPfad))
                         vorhanden = false;
                 if (usesrtm)
                     if (!ÜberprüfeSRTMIndex(1, hgtPfad))
@@ -813,7 +853,7 @@ namespace HoehenGenerator
         {
 
 
-            
+
             downloadeHgtFiles();
             unZipHgtFiles();
             ZeichneAlles(punkte);
@@ -1041,24 +1081,42 @@ namespace HoehenGenerator
             if (use1zoll)
             {
                 if (useview)
-                    GeneriereViewIndex(1, hgtPfad);
+                    aufgabeIndices.Enqueue(new AufgabeIndices("view", 1, hgtPfad));
+                //    GeneriereIndices("view",1, hgtPfad);
                 if (usesrtm)
-                    GeneriereSRTMIndex(1, hgtPfad);
+                    aufgabeIndices.Enqueue(new AufgabeIndices("srtm", 1, hgtPfad));
+                //  GeneriereIndices("srtm", 1, hgtPfad);
 
             }
 
             if (useview)
-                GeneriereViewIndex(3, hgtPfad);
+                aufgabeIndices.Enqueue(new AufgabeIndices("view", 3, hgtPfad));
+            //   GeneriereIndices("view",3, hgtPfad);
             if (usesrtm)
-                GeneriereSRTMIndex(3, hgtPfad);
+                aufgabeIndices.Enqueue(new AufgabeIndices("srtm", 3, hgtPfad));
+
+            //   GeneriereIndices("srtm",3, hgtPfad);
+            //while (aufgabeIndices.Count > 0)
+            //{
+            //    AufgabeIndices aufgabe = aufgabeIndices.Dequeue();
+            //    System.Diagnostics.Debug.Print(aufgabe.Hgtart + " " + aufgabe.Auflösung+ " " + aufgabe.Pfad);
+            //    GeneriereIndices(aufgabe.Hgtart, aufgabe.Auflösung, aufgabe.Pfad);
+            //}
+
 
             if (ÜberprüfeIndices())
                 LadeHGTFiles.IsEnabled = true;
-            else 
+            else
                 LadeHGTFiles.IsEnabled = false;
         }
 
-
+        private void GeneriereIndices(string s, int i, string hgtPfad)
+        {
+            if (s.ToLower() == "srtm")
+                GeneriereSRTMIndex(i, hgtPfad);
+            if (s.ToLower() == "view")
+                GeneriereViewIndex(i, hgtPfad);
+        }
 
         private void GeneriereSRTMIndex(int i, string hgtPfad)
         {
@@ -1280,7 +1338,7 @@ namespace HoehenGenerator
                 LadeHGTFiles.IsEnabled = true;
             else
                 LadeHGTFiles.IsEnabled = false;
-           generiereDirString();
+            generiereDirString();
         }
 
         private void VIEW_Checked(object sender, RoutedEventArgs e)
@@ -1304,7 +1362,7 @@ namespace HoehenGenerator
             else
                 LadeHGTFiles.IsEnabled = false;
             generiereDirString();
- 
+
         }
 
         private void generiereDirString()
@@ -1356,15 +1414,15 @@ namespace HoehenGenerator
             {
                 use1zoll = true;
                 lb1Zoll.Content = "1\"";
-                
+
             }
-                
+
             else
             {
                 use1zoll = false;
                 lb1Zoll.Content = "";
 
-               
+
 
             }
             if (ÜberprüfeIndices())
