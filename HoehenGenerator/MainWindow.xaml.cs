@@ -69,16 +69,47 @@ namespace HoehenGenerator
             Title = "Höhengenerator für EEP";
 
 
-            Thread[] threads = new Thread[6];
-            for (int i = 0; i < threads.Length; i++)
+            Thread[] thrHoleIndices = new Thread[4];
+            for (int i = 0; i < thrHoleIndices.Length; i++)
             {
-                threads[i] = new Thread(Arbeite);
-                threads[i].IsBackground = true;
-                threads[i].Start();
+                thrHoleIndices[i] = new Thread(HoleIndices);
+                thrHoleIndices[i].IsBackground = true;
+                thrHoleIndices[i].Start();
+            }
+
+            Thread thrHoleDateien = new Thread(HoleDateien);
+            thrHoleDateien.IsBackground = true;
+            thrHoleDateien.Start();
+        }
+
+        private void HoleDateien()
+        {
+            while (true)
+            {
+                while (ladeDateiens.Count > 0)
+                {
+                    bool istArbeitDa = ladeDateiens.TryDequeue(out LadeDateien datei);
+                    if (istArbeitDa)
+                    {
+
+                        LadeHGTDateien(datei.Url, datei.Zieldatei);
+                        unZipHgtFiles(datei.Zieldatei);
+                        Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
+                        //FärbeHgtLabel(datei.Zieldatei);
+                        Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
+                        //ZeichneAlles(punkte);
+                    }
+                    if (ladeDateiens.Count == 0)
+                    {
+
+
+                    }
+
+                }
             }
         }
 
-        private void Arbeite()
+        private void HoleIndices()
         {
             while (true)
             {
@@ -103,27 +134,6 @@ namespace HoehenGenerator
                     }
                 }
 
-                while (ladeDateiens.Count > 0)
-                {
-                    bool istArbeitDa = ladeDateiens.TryDequeue(out LadeDateien datei);
-                    if (istArbeitDa)
-                    {
-
-                        LadeHGTDateien(datei.Url, datei.Zieldatei);
-                        unZipHgtFiles(datei.Zieldatei);
-                        Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
-                        //FärbeHgtLabel(datei.Zieldatei);
-                        Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
-                        //ZeichneAlles(punkte);
-                    }
-                    if (ladeDateiens.Count == 0)
-                    {
-                        
-                       
-                    }
-                }
-
-
             }
         }
 
@@ -133,22 +143,30 @@ namespace HoehenGenerator
             string directory = System.IO.Path.GetDirectoryName(zieldatei);
             for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
-               if (File.Exists(directory + "\\" + lbHgtFiles.Items[i].ToString() + ".hgt"))
-                   solidColor = Brushes.LightGreen;
-               else
+                if (File.Exists(directory + "\\" + lbHgtFiles.Items[i].ToString() + ".hgt"))
+
+                    if (directory.EndsWith("1"))
+                        solidColor = Brushes.LightBlue;
+                    else
+                        solidColor = Brushes.LightGreen;
+                else
                     solidColor = Brushes.Red;
-               switch (i)
+                switch (i)
                 {
                     case 0:
+
                         lbFile1.Background = solidColor;
                         break;
                     case 1:
+
                         lbFile2.Background = solidColor;
                         break;
                     case 2:
+
                         lbFile3.Background = solidColor;
                         break;
                     case 3:
+
                         lbFile4.Background = solidColor;
                         break;
 
@@ -156,7 +174,7 @@ namespace HoehenGenerator
 
 
             }
-            
+
         }
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
@@ -501,11 +519,22 @@ namespace HoehenGenerator
 
                 if (hgtPfad != null)
                 {
+                    bool DateiVorhanden = false;
                     foreach (var directory in directorys)
                     {
                         if (directory.Length > 0)
-                            if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
-                                vs2[i] = true;
+                            if (!DateiVorhanden)
+                            {
+                                if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
+                                {
+                                    DateiVorhanden = true;
+                                    vs2[i] = true;
+                                    FärbeHgtLabel(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt");
+                                }
+
+                            }
+                        if (!DateiVorhanden)
+                            FärbeHgtLabel(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt");
                     }
                 }
 
@@ -1419,6 +1448,7 @@ namespace HoehenGenerator
             else
                 LadeHGTFiles.IsEnabled = false;
             generiereDirString();
+            ZeichneAlles(punkte);
         }
 
         private void VIEW_Checked(object sender, RoutedEventArgs e)
@@ -1442,7 +1472,7 @@ namespace HoehenGenerator
             else
                 LadeHGTFiles.IsEnabled = false;
             generiereDirString();
-
+            ZeichneAlles(punkte);
         }
 
         private void generiereDirString()
@@ -1510,6 +1540,7 @@ namespace HoehenGenerator
             else
                 LadeHGTFiles.IsEnabled = false;
             generiereDirString();
+            ZeichneAlles(punkte);
         }
 
 
@@ -1783,6 +1814,11 @@ namespace HoehenGenerator
         private void btnIndex_Click(object sender, RoutedEventArgs e)
         {
             GeneriereIndices();
+        }
+
+        private void VIEW_Checked(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
         }
     }
 }
