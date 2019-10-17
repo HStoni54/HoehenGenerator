@@ -38,6 +38,8 @@ namespace HoehenGenerator
         Canvas Zeichenfläche = new Canvas();
         TextBox HGTFiles = new TextBox();
         ListBox lbHgtFiles = new ListBox();
+        
+
         List<HGTFile> listHGTFiles = new List<HGTFile>();
         string anlagenname = "neueAnlage";
         string anlagenpfad;
@@ -68,6 +70,7 @@ namespace HoehenGenerator
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
         {
+            lbHgtFiles = lbHgtFiles1;
             Optimieren.IsEnabled = false;
             OpenFileDialog ofd = new OpenFileDialog
             {
@@ -107,7 +110,7 @@ namespace HoehenGenerator
                 BildeSchattenpunkte(orgpunkte);
                 punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
-                lbHgtFiles = lbHgtFiles1;
+                
                 HGTFiles = HGTFiles1;
                 // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
@@ -700,15 +703,41 @@ namespace HoehenGenerator
         private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
         {
             Zeichenfläche = Zeichenfläche1;
-            lbHgtFiles = lbHgtFiles1;
+            
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
         }
 
         private void ladeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
         {
+
+            
             Zeichenfläche = Zeichenfläche2;
-            lbHgtFiles = lbHgtFiles2;
+            
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
+            int anzahl = lbHgtFiles.Items.Count;
+            if (anzahl > 0)
+                lbFile1.Content = lbHgtFiles.Items[0].ToString();
+            else
+                lbFile1.Content = "";
+            if (anzahl > 1)
+                lbFile2.Content = lbHgtFiles.Items[1].ToString();
+            else
+                lbFile2.Content = "";
+            if (anzahl > 2)
+                lbFile3.Content = lbHgtFiles.Items[2].ToString();
+            else
+                lbFile3.Content = "";
+            if (anzahl > 3)
+                lbFile4.Content = lbHgtFiles.Items[3].ToString();
+            else
+                lbFile4.Content = "";
+            lb3Zoll.Content = "3\"";
+            if (use1zoll)
+                lb1Zoll.Content = "1\"";
+            else
+                lb1Zoll.Content = "";
+
+
         }
 
         private void buttonDirectory_Click(object sender, RoutedEventArgs e)
@@ -724,21 +753,67 @@ namespace HoehenGenerator
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 hgtPfad = fbd.SelectedPath;
-                LadeHGTFiles.IsEnabled = true;
+                btnIndex.IsEnabled = true;
                 ZeichneAlles(punkte);
             }
             else
             {
-                LadeHGTFiles.IsEnabled = false;
+                btnIndex.IsEnabled = false;
 
             }
+
+            if (ÜberprüfeIndices())
+                LadeHGTFiles.IsEnabled = true;
+            else
+                LadeHGTFiles.IsEnabled = false;
+        }
+
+        private bool ÜberprüfeIndices()
+        {
+            bool vorhanden = true;
+            if (use1zoll)
+            {
+                if (useview)
+                   if (!ÜberprüfeViewIndex(1, hgtPfad))
+                        vorhanden = false;
+                if (usesrtm)
+                    if (!ÜberprüfeSRTMIndex(1, hgtPfad))
+                        vorhanden = false;
+
+            }
+
+            if (useview)
+                if (!ÜberprüfeViewIndex(3, hgtPfad))
+                    vorhanden = false;
+            if (usesrtm)
+                if (!ÜberprüfeSRTMIndex(3, hgtPfad))
+                    vorhanden = false;
+            return vorhanden;
+        }
+
+        private bool ÜberprüfeSRTMIndex(int v, string hgtPfad)
+        {
+            if (File.Exists(hgtPfad + @"\srtmindex" + v + ".xml"))
+                return true;
+            else
+                return false;
+        }
+
+        private bool ÜberprüfeViewIndex(int v, string hgtPfad)
+        {
+            if (File.Exists(hgtPfad + @"\viewindex" + v + ".xml"))
+                return true;
+            else
+                return false;
+
+
         }
 
         private void LadeHGTFiles_Click(object sender, RoutedEventArgs e)
         {
 
 
-            GeneriereIndices();
+            
             downloadeHgtFiles();
             unZipHgtFiles();
             ZeichneAlles(punkte);
@@ -977,7 +1052,10 @@ namespace HoehenGenerator
             if (usesrtm)
                 GeneriereSRTMIndex(3, hgtPfad);
 
-
+            if (ÜberprüfeIndices())
+                LadeHGTFiles.IsEnabled = true;
+            else 
+                LadeHGTFiles.IsEnabled = false;
         }
 
 
@@ -1198,7 +1276,11 @@ namespace HoehenGenerator
 
 
             }
-            generiereDirString();
+            if (ÜberprüfeIndices())
+                LadeHGTFiles.IsEnabled = true;
+            else
+                LadeHGTFiles.IsEnabled = false;
+           generiereDirString();
         }
 
         private void VIEW_Checked(object sender, RoutedEventArgs e)
@@ -1217,7 +1299,12 @@ namespace HoehenGenerator
 
 
             }
+            if (ÜberprüfeIndices())
+                LadeHGTFiles.IsEnabled = true;
+            else
+                LadeHGTFiles.IsEnabled = false;
             generiereDirString();
+ 
         }
 
         private void generiereDirString()
@@ -1266,12 +1353,24 @@ namespace HoehenGenerator
         private void einZoll_Checked(object sender, RoutedEventArgs e)
         {
             if (einZoll.IsChecked == true)
+            {
                 use1zoll = true;
+                lb1Zoll.Content = "1\"";
+                
+            }
+                
             else
             {
                 use1zoll = false;
+                lb1Zoll.Content = "";
+
+               
 
             }
+            if (ÜberprüfeIndices())
+                LadeHGTFiles.IsEnabled = true;
+            else
+                LadeHGTFiles.IsEnabled = false;
             generiereDirString();
         }
 
@@ -1541,6 +1640,11 @@ namespace HoehenGenerator
         private void generiereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
+        }
+
+        private void btnIndex_Click(object sender, RoutedEventArgs e)
+        {
+            GeneriereIndices();
         }
     }
 }
