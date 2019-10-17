@@ -111,7 +111,7 @@ namespace HoehenGenerator
                 punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
                 
-                HGTFiles = HGTFiles1;
+                //HGTFiles = HGTFiles1;
                 // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
                 //ZeichneRechteck(punkte);

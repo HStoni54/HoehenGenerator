@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoehenGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="687" Width="800" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        Title="MainWindow" Height="492" Width="800" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
     <TabControl x:Name="tabControl" >
         <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="ladenTab_GotFocus" >
             <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
@@ -19,7 +19,7 @@
                 <Canvas x:Name="Zeichenfläche1" Grid.Column="1" Margin="10" SizeChanged="Zeichenfläche_SizeChanged" ToolTip="Lage des ausgewählten Polygons in der rechteckigen Anlage"/>
                 <Button x:Name="ladeDatei" Content="Datei Laden" HorizontalAlignment="Left" Margin="18,10,0,0" VerticalAlignment="Top" Width="87"  Click="LadeDatei_Click" ToolTip="GoogleEarth-Datei laden"/>
                 <Button x:Name="Optimieren" Content="Optimieren" HorizontalAlignment="Left" Margin="18,298,0,0" Width="87" IsEnabled="False" Click="Optimieren_Click" ToolTip="Umrahmendes Rechteck minimieren" VerticalAlignment="Top"/>
-                <Button x:Name="Drehen" Content="Drehen" HorizontalAlignment="Left" Margin="18,323,0,0" VerticalAlignment="Top" Width="87"  IsEnabled="False" Click="Drehen_Click" ToolTip="Anlage um 90 Grad drehen"/>
+                <Button x:Name="Drehen" Content="Drehen" HorizontalAlignment="Left" Margin="18,323,0,0" VerticalAlignment="Top" Width="87"  IsEnabled="False" Click="Drehen_Click" ToolTip="Anlage um 90 Grad im Uhrzeigersinn drehen"/>
                 <Button x:Name="Weiter" Content="Weiter" HorizontalAlignment="Left" Margin="18,348,0,0" VerticalAlignment="Top" Width="87" IsEnabled="False" Click="Weiter_Click" ToolTip="Der nächste Schritt"/>
                 <Label x:Name="Breite" Content="Breite:" HorizontalAlignment="Left" Margin="18,30,0,0" VerticalAlignment="Top" Width="87" />
                 <TextBox x:Name="breite" HorizontalAlignment="Left" Margin="18,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" ToolTip="Breite der Anlage"/>
@@ -27,9 +27,8 @@
                 <TextBox x:Name="höhe" HorizontalAlignment="Left"  Margin="18,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" ToolTip="Höhe der Anlage"/>
                 <Label x:Name="Fläche" Content="Fläche:" HorizontalAlignment="Left" Margin="18,118,0,0" VerticalAlignment="Top" Width="87" />
                 <TextBox x:Name="fläche" HorizontalAlignment="Left"  Margin="18,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" ToolTip="Fläche der Anlage"/>
-                <TextBox x:Name="HGTFiles1" HorizontalAlignment="Left" Height="95" Margin="18,373,0,0" VerticalAlignment="Top" Width="87" AllowDrop="False" Focusable="False" IsTabStop="False" ToolTip="Benötigte HGT-Dateien" VerticalScrollBarVisibility="Auto"/>
                 <Label x:Name="hgtFiles" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="18,162,0,0" VerticalAlignment="Top" Width="80" />
-                <ListBox x:Name="lbHgtFiles1" HorizontalAlignment="Left" Height="95" Margin="18,193,0,0" VerticalAlignment="Top" Width="87"/>
+                <ListBox x:Name="lbHgtFiles1" HorizontalAlignment="Left" Height="95" Margin="18,193,0,0" VerticalAlignment="Top" Width="87" ToolTip="Benötigte Hgt-Dateien" Focusable="False"/>
             </Grid>
         </TabItem>
         <TabItem x:Name="ladeHGTFiles" Header="HGT-Dateien" IsEnabled="False" GotFocus="ladeHGTFiles_GotFocus">
