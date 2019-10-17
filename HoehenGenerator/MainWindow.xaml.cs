@@ -111,6 +111,8 @@ namespace HoehenGenerator
 
                         LadeHGTDateien(datei.Url, datei.Zieldatei);
                         unZipHgtFiles(datei.Zieldatei);
+                        Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
+                        //FärbeHgtLabel(datei.Zieldatei);
                         Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
                         //ZeichneAlles(punkte);
                     }
@@ -125,6 +127,37 @@ namespace HoehenGenerator
             }
         }
 
+        private void FärbeHgtLabel(string zieldatei)
+        {
+            SolidColorBrush solidColor = new SolidColorBrush();
+            string directory = System.IO.Path.GetDirectoryName(zieldatei);
+            for (int i = 0; i < lbHgtFiles.Items.Count; i++)
+            {
+               if (File.Exists(directory + "\\" + lbHgtFiles.Items[i].ToString() + ".hgt"))
+                   solidColor = Brushes.LightGreen;
+               else
+                    solidColor = Brushes.Red;
+               switch (i)
+                {
+                    case 0:
+                        lbFile1.Background = solidColor;
+                        break;
+                    case 1:
+                        lbFile2.Background = solidColor;
+                        break;
+                    case 2:
+                        lbFile3.Background = solidColor;
+                        break;
+                    case 3:
+                        lbFile4.Background = solidColor;
+                        break;
+
+                }
+
+
+            }
+            
+        }
 
         private void LadeDatei_Click(object sender, RoutedEventArgs e)
         {
