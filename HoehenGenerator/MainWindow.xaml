@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoehenGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="492" Width="800" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        Title="MainWindow" Height="437" Width="800" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
     <TabControl x:Name="tabControl" >
         <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="ladenTab_GotFocus" >
             <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
@@ -41,11 +41,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Canvas x:Name="Zeichenfläche2" Grid.Column="1" Margin="10" SizeChanged="Zeichenfläche_SizeChanged" ToolTip="Lage des ausgewählten Polygons in der rechteckigen Anlage"/>
-                <TextBox x:Name="HGTFiles2" HorizontalAlignment="Left" Height="95" Margin="10,331,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" AllowDrop="False" Focusable="False" IsTabStop="False" ToolTip="Benötigte HGT-Dateien" VerticalScrollBarVisibility="Auto"/>
                 <Label x:Name="hgtFiles2" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" />
                 <Button x:Name="buttonDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="11,162,0,0" VerticalAlignment="Top" Width="87" ToolTip="Vewrzeichnis für Hgt-Dateien festlegen" Click="buttonDirectory_Click"/>
                 <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="9,272,0,0" VerticalAlignment="Top" Width="87" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
-                <Label x:Name="LblAusgabe" Content="" HorizontalAlignment="Left" Margin="18,340,0,0" VerticalAlignment="Top" Width="80"/>
                 <CheckBox x:Name="SRTM" Content="SRTM" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" Click="SRTM_Checked"/>
                 <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="10,207,0,0" VerticalAlignment="Top" Click="VIEW_Checked"/>
                 <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="10,227,0,0" VerticalAlignment="Top" Click="einZoll_Checked"/>

@@ -30,15 +30,17 @@ namespace HoehenGenerator
         String[] sepcoordinaten;
         GeoPunkt[] geoPunkts;
         GeoPunkt mittelpunkt;
-        GeoPunkt linksoben = new GeoPunkt();
-        GeoPunkt rechtsoben = new GeoPunkt();
-        GeoPunkt linksunten = new GeoPunkt();
-        GeoPunkt rechtsunten = new GeoPunkt();
-        //GeoPunkt verschiebung;
+        GeoPunkt linksoben;
+
+        GeoPunkt rechtsoben;
+        GeoPunkt linksunten;
+        GeoPunkt rechtsunten;
+        GeoPunkt hgtlinksunten;
+        GeoPunkt hgtrechtsoben;
         PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
         Canvas Zeichenfläche = new Canvas();
-        TextBox HGTFiles = new TextBox();
+        
         ListBox lbHgtFiles = new ListBox();
 
 
@@ -223,6 +225,8 @@ namespace HoehenGenerator
                 //HGTFiles = HGTFiles1;
                 // Optimiere(orgpunkte);
                 ZeichneAlles(punkte);
+                hgtlinksunten = linksunten;
+                hgtrechtsoben = rechtsoben;
                 //ZeichneRechteck(punkte);
                 //ZeichnePolygon(punkte);
                 //ZeichnePunkte(punkte);
@@ -245,6 +249,8 @@ namespace HoehenGenerator
                                            + " Bitte eine kleinere Fläche auswählen!");
 
                 }
+                hgtlinksunten = linksunten;
+                hgtrechtsoben = rechtsoben;
 
 
             }
@@ -492,7 +498,7 @@ namespace HoehenGenerator
             double maxlon = Math.Round(points1.Max(x => x.X) - 0.5);
             double minlon = Math.Round(points1.Min(x => x.X) - 0.5);
             lbHgtFiles.Items.Clear();
-            HGTFiles.Text = "";
+           // HGTFiles.Text = "";
             if (maxlon - minlon > 180)
             {
                 BildeHGTString(maxlat, minlat, 180, maxlon);
@@ -579,8 +585,8 @@ namespace HoehenGenerator
                         hgt = hgt + "W" + (-j).ToString("D3");
                     }
                     lbHgtFiles.Items.Add(hgt);
-                    hgt = hgt + "\n";
-                    HGTFiles.Text = HGTFiles.Text + hgt;
+                   // hgt = hgt + "\n";
+                   // HGTFiles.Text = HGTFiles.Text + hgt;
 
                 }
             }
@@ -801,7 +807,7 @@ namespace HoehenGenerator
             ladeHGTFiles.IsEnabled = true;
             ladeHGTFiles.IsSelected = true;
             Zeichenfläche = Zeichenfläche2;
-            HGTFiles = HGTFiles2;
+         //   HGTFiles = HGTFiles2;
             if (usesrtm == true)
                 SRTM.IsChecked = true;
             else
@@ -1637,10 +1643,10 @@ namespace HoehenGenerator
             Filemitauflösung fma = new Filemitauflösung("", 0);
             List<Filemitauflösung> lfma = new List<Filemitauflösung>();
             lfma.Clear();
-            string[] vs = HGTFiles.Text.Split('\n');
+            //string[] vs = HGTFiles.Text.Split('\n');
             List<int> aufl = new List<int>();
             bool nurdreiZoll = false;
-            foreach (string item in vs)
+            foreach (string item in lbHgtFiles.Items)
             {
 
                 if (item.Length > 0)
@@ -1655,7 +1661,7 @@ namespace HoehenGenerator
                 nurdreiZoll = true;
 
             lfma.Clear();
-            foreach (string item in vs)
+            foreach (string item in lbHgtFiles.Items)
             {
 
                 if (item.Length > 0)
