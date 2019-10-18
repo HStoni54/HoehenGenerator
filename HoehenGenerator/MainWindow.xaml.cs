@@ -671,10 +671,10 @@ namespace HoehenGenerator
             //minimaleHöhe = punkte.Min(x => x.Höhe);
             //maximaleHöhe = punkte.Max(x => x.Höhe);
             double punktgröße = 1;
-            for (int i = 0; i < punkte.Count; i++)
+            for (int i = 0; i < punkte.Count; i +=10)
             {
-                double Lon = GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge);
-                double Lat = GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite);
+                int Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
+                int Lat = (int)(GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite));
 
 
                 if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
@@ -1648,6 +1648,9 @@ namespace HoehenGenerator
             geoPunkts.Clear();
         }
 
+        
+
+       
         private bool IstPunktImRechteck(ref GeoPunkt geoPunkt1, double diff = 0.0)
         { // TODO: In allen Erdteilen? Datumgrenze?
             return geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) + diff
