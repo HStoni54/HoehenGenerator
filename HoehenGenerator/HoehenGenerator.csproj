@@ -104,9 +104,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AufgabeIndices.cs" />
+    <Compile Include="HgtmitKoordinaten.cs" />
     <Compile Include="LadeDateien.cs" />
     <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
+    <Compile Include="VierEcken.cs" />
     <Compile Include="ZeichneBitMap.cs" />
     <Compile Include="ZwischenspeicherHgt.cs" />
     <Page Include="MainWindow.xaml">
