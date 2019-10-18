@@ -41,20 +41,19 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Canvas x:Name="Zeichenfläche2" Grid.Column="1" Margin="10" SizeChanged="Zeichenfläche_SizeChanged" ToolTip="Lage des ausgewählten Polygons in der rechteckigen Anlage"/>
-                <Label x:Name="hgtFiles2" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" />
-                <Button x:Name="buttonDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="11,162,0,0" VerticalAlignment="Top" Width="87" ToolTip="Vewrzeichnis für Hgt-Dateien festlegen" Click="buttonDirectory_Click"/>
-                <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="9,272,0,0" VerticalAlignment="Top" Width="87" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
-                <CheckBox x:Name="SRTM" Content="SRTM" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" Click="SRTM_Checked"/>
-                <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="10,207,0,0" VerticalAlignment="Top" Click="VIEW_Checked"/>
-                <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="10,227,0,0" VerticalAlignment="Top" Click="einZoll_Checked"/>
-                <Button x:Name="Weiter2" Content="Weiter" HorizontalAlignment="Left" Margin="9,297,0,0" VerticalAlignment="Top" Width="86" IsEnabled="False" Click="Weiter2_Click"/>
-                <Button x:Name="btnIndex" Content="Index erstellen" HorizontalAlignment="Left" Margin="10,247,0,0" VerticalAlignment="Top" Width="86" Click="btnIndex_Click" IsEnabled="False"/>
-                <Label x:Name="lbFile1"  HorizontalAlignment="Left" Margin="9,33,0,0" VerticalAlignment="Top" Width="65" Content="Hgt-Datei" />
-                <Label x:Name="lbFile2" HorizontalAlignment="Left" Margin="9,57,0,0" VerticalAlignment="Top" Content="Hgt-Datei" />
-                <Label x:Name="lbFile3"  HorizontalAlignment="Left" Margin="9,81,0,0" VerticalAlignment="Top"  Content="Hgt-Datei"  />
-                <Label x:Name="lbFile4"  HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top"  Content="Hgt-Datei" />
+                <Label x:Name="hgtFiles2" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="11,10,0,0" VerticalAlignment="Top" Width="87" />
+                <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="11,247,0,0" VerticalAlignment="Top" Width="87" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
+                <CheckBox x:Name="SRTM" Content="SRTM" HorizontalAlignment="Left" Margin="11,162,0,0" VerticalAlignment="Top" Click="SRTM_Checked"/>
+                <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="11,182,0,0" VerticalAlignment="Top" Click="VIEW_Checked"/>
+                <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="11,202,0,0" VerticalAlignment="Top" Click="einZoll_Checked"/>
+                <Button x:Name="Weiter2" Content="Weiter" HorizontalAlignment="Left" Margin="11,272,0,0" VerticalAlignment="Top" Width="86" IsEnabled="False" Click="Weiter2_Click"/>
+                <Button x:Name="btnIndex" Content="Index erstellen" HorizontalAlignment="Left" Margin="11,222,0,0" VerticalAlignment="Top" Width="86" Click="btnIndex_Click" IsEnabled="False"/>
+                <Label x:Name="lbFile1"  HorizontalAlignment="Left" Margin="11,33,0,0" VerticalAlignment="Top" Width="65" Content="Hgt-Datei" />
+                <Label x:Name="lbFile2" HorizontalAlignment="Left" Margin="11,57,0,0" VerticalAlignment="Top" Content="Hgt-Datei" />
+                <Label x:Name="lbFile3"  HorizontalAlignment="Left" Margin="11,81,0,0" VerticalAlignment="Top"  Content="Hgt-Datei"  />
+                <Label x:Name="lbFile4"  HorizontalAlignment="Left" Margin="11,105,0,0" VerticalAlignment="Top"  Content="Hgt-Datei" />
                 <Label x:Name="lb1Zoll"  HorizontalAlignment="Left" Margin="36,131,0,0" VerticalAlignment="Top"  Content="1&quot;" />
-                <Label x:Name="lb3Zoll"  HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top"  Content="3&quot;" RenderTransformOrigin="0.667,1.115" />
+                <Label x:Name="lb3Zoll"  HorizontalAlignment="Left" Margin="11,131,0,0" VerticalAlignment="Top"  Content="3&quot;" RenderTransformOrigin="0.667,1.115" />
             </Grid>
         </TabItem>
         <TabItem x:Name="Verarbeitung" Header="Verarbeitung" GotFocus="Verarbeitung_GotFocus" IsEnabled="False">

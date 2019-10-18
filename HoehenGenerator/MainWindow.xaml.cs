@@ -192,6 +192,10 @@ namespace HoehenGenerator
             {
                 coordinaten = "";
                 string vName = ofd.FileName;
+                string pfad = System.IO.Path.GetDirectoryName(vName);
+                if (!Directory.Exists(pfad + "\\HGT"))
+                    Directory.CreateDirectory(pfad + "\\HGT");
+                hgtPfad = pfad + "\\HGT"; // TODO: Schreibberechtigung Directory prüfen, 
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
                     ZipArchive archive = ZipFile.OpenRead(vName);
@@ -836,7 +840,12 @@ namespace HoehenGenerator
         private void ladeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
         {
 
-
+            btnIndex.IsEnabled = true;
+            ZeichneAlles(punkte);
+            if (ÜberprüfeIndices())
+                LadeHGTFiles.IsEnabled = true;
+            else
+                LadeHGTFiles.IsEnabled = false;
             Zeichenfläche = Zeichenfläche2;
 
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
@@ -866,33 +875,7 @@ namespace HoehenGenerator
 
         }
 
-        private void buttonDirectory_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-            fbd.Description = "Bitte Verzeichnis für Hgt-Dateien auswählen";
-
-            //fbd.RootFolder = Environment.SpecialFolder.Personal;
-            string path = Environment.CurrentDirectory;
-            fbd.SelectedPath = @"X:\Trend\HöhenGenerator\HGT";
-
-            System.Windows.Forms.DialogResult result = fbd.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                hgtPfad = fbd.SelectedPath;
-                btnIndex.IsEnabled = true;
-                ZeichneAlles(punkte);
-            }
-            else
-            {
-                btnIndex.IsEnabled = false;
-
-            }
-
-            if (ÜberprüfeIndices())
-                LadeHGTFiles.IsEnabled = true;
-            else
-                LadeHGTFiles.IsEnabled = false;
-        }
+       
 
         private bool ÜberprüfeIndices()
         {
@@ -1096,7 +1079,7 @@ namespace HoehenGenerator
 
         private void LadeHGTDateien(string v, string zielname)
         {
-            WebClient webClient = new WebClient()
+            WebClient webClient = new WebClient() // TODO: Ausnahmen beim Internetzugriff "Kann Datei nicht laden o.ä.
             {
                 Encoding = Encoding.UTF8
             };
@@ -1685,7 +1668,9 @@ namespace HoehenGenerator
             }
            VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
             ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
- 
+            if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
+            else MessageBox.Show("Nur eine Hgt-Datei");
+
             ZeichneMatrix(lfma);
 
 
