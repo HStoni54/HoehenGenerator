@@ -19,7 +19,7 @@ namespace HoehenGenerator
         
         int anzahlLat, anzahlLon;
 
-        public ZwischenspeicherHgt(int auflösung, GeoPunkt linksunten, int anzahlLat, int anzahlLon)
+        public ZwischenspeicherHgt( GeoPunkt linksunten, int anzahlLat, int anzahlLon, int auflösung)
         {
             this.auflösung = auflösung;
             this.linksunten = linksunten;
@@ -28,12 +28,12 @@ namespace HoehenGenerator
             this.anzahlLat = anzahlLat;
             this.anzahlLon = anzahlLon;
             this.höhen = new short[AnzahlLat,AnzahlLon];
-            this.linksoben = new GeoPunkt(Linksunten.Lon, Linksunten.Lat + anzahlLat / 1200 * auflösung);
-            this.rechtsunten = new GeoPunkt(Linksunten.Lon + AnzahlLon / 1200 * auflösung, Linksunten.Lat);
-            this.rechtsoben = new GeoPunkt(Linksunten.Lon + AnzahlLon / 1200 * auflösung, Linksunten.Lat + anzahlLat / 1200 * auflösung);
+            this.linksoben = new GeoPunkt(Linksunten.Lon, Linksunten.Lat + anzahlLat / 3600 * auflösung);
+            this.rechtsunten = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat);
+            this.rechtsoben = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat + anzahlLat / 3600* auflösung);
         }
 
-        public ZwischenspeicherHgt(int auflösung, GeoPunkt linksunten, GeoPunkt rechtsoben)
+        public ZwischenspeicherHgt( GeoPunkt linksunten, GeoPunkt rechtsoben, int auflösung)
         {
             this.auflösung = auflösung;
             this.linksunten = linksunten;
@@ -42,8 +42,8 @@ namespace HoehenGenerator
             this.rechtsoben = rechtsoben;
             this.linksoben = new GeoPunkt(linksunten.Lon, rechtsoben.Lat);
             this.rechtsunten = new GeoPunkt(rechtsoben.Lon, linksunten.Lat);
-            this.anzahlLat = (int)((rechtsoben.Lat - linksunten.Lat) / auflösung * 1200);
-            this.anzahlLon = (int)((rechtsoben.Lon - linksunten.Lon) / auflösung * 1200);
+            this.anzahlLat = (int)((rechtsoben.Lat - linksunten.Lat) / auflösung * 3600);
+            this.anzahlLon = (int)((rechtsoben.Lon - linksunten.Lon) / auflösung * 3600);
             this.höhen = new short[AnzahlLat, AnzahlLon];
         }
 

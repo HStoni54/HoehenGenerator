@@ -474,7 +474,8 @@ namespace HoehenGenerator
             }
             //if (Optimieren.IsEnabled == false)
             GibHGTFileaus(linksoben, rechtsoben, linksunten, rechtsunten);
-            VierEcken vierEcken = new VierEcken(linksunten, rechtsoben, 3);
+            VierEcken vierEcken = new VierEcken(linksunten, rechtsoben, 1);
+            ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(linksunten, rechtsoben, 1);
         }
 
         private void GibHGTFileaus(GeoPunkt linksoben, GeoPunkt rechtsoben, GeoPunkt linksunten, GeoPunkt rechtsunten)

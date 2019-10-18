@@ -10,7 +10,7 @@ namespace HoehenGenerator
     class HgtmitKoordinaten
     {
         string name;
-       int dezLat;
+        int dezLat;
         int dezLon;
 
         public HgtmitKoordinaten(string name, int dezLat, int dezLon)
