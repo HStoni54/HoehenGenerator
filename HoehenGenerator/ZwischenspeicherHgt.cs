@@ -30,7 +30,7 @@ namespace HoehenGenerator
             this.höhen = new short[AnzahlLat,AnzahlLon];
             this.linksoben = new GeoPunkt(Linksunten.Lon, Linksunten.Lat + anzahlLat / 3600 * auflösung);
             this.rechtsunten = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat);
-            this.rechtsoben = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat + anzahlLat / 3600* auflösung);
+            this.rechtsoben = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat + anzahlLat / 3600 *  auflösung);
         }
 
         public ZwischenspeicherHgt( GeoPunkt linksunten, GeoPunkt rechtsoben, int auflösung)

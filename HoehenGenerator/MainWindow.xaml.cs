@@ -474,8 +474,6 @@ namespace HoehenGenerator
             }
             //if (Optimieren.IsEnabled == false)
             GibHGTFileaus(linksoben, rechtsoben, linksunten, rechtsunten);
-            VierEcken vierEcken = new VierEcken(linksunten, rechtsoben, 1);
-            ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(linksunten, rechtsoben, 1);
         }
 
         private void GibHGTFileaus(GeoPunkt linksoben, GeoPunkt rechtsoben, GeoPunkt linksunten, GeoPunkt rechtsunten)
@@ -1103,6 +1101,7 @@ namespace HoehenGenerator
                 Encoding = Encoding.UTF8
             };
             webClient.DownloadFile(v, zielname);
+            webClient.Dispose();
         }
 
         private string[] findeUrl(string item)
@@ -1300,7 +1299,7 @@ namespace HoehenGenerator
                 Encoding = Encoding.UTF8
             };
             string s = w.DownloadString(url);
-
+            w.Dispose();
             MatchCollection m = Regex.Matches(s, "<a href=\"([^\"]*)\">");
             string[] vs = new string[m.Count];
             for (int i2 = 0; i2 < m.Count; i2++)
@@ -1419,7 +1418,7 @@ namespace HoehenGenerator
                 MessageBox.Show("Fehler" + e.Message + "\nURL: " + url);
             }
 
-
+            w.Dispose();
             MatchCollection m = Regex.Matches(s, "<area .*>");
             string[] vs = new string[m.Count];
             for (int i2 = 0; i2 < m.Count; i2++)
@@ -1579,7 +1578,7 @@ namespace HoehenGenerator
             foreach (Filemitauflösung item in lfma)
             {
                 int auflösung = item.Auflösung;
-                HGTFile hGTFile = new HGTFile(item.Auflösung, item.Dateiname);
+                HGTFile hGTFile = new HGTFile(auflösung, item.Dateiname);
                 short[,] daten = hGTFile.LeseDaten();
                 string dateiname = System.IO.Path.GetFileName(item.Dateiname);
 
@@ -1643,7 +1642,8 @@ namespace HoehenGenerator
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
             Filemitauflösung fma = new Filemitauflösung("", 0);
-            List<Filemitauflösung> lfma = new List<Filemitauflösung>();
+            List<Filemitauflösung> lfma = new List<Filemitauflösung>(); 
+ 
             lfma.Clear();
             //string[] vs = HGTFiles.Text.Split('\n');
             List<int> aufl = new List<int>();
@@ -1671,7 +1671,7 @@ namespace HoehenGenerator
                     fma = findeErsteDatei(item, nurdreiZoll);
                     if (fma.Auflösung > 0)
                     {
-                        fma.Auflösung = 4 - fma.Auflösung;
+                        fma.Auflösung = fma.Auflösung;
                         lfma.Add(fma);
                         //HGTFile hGTFile = new HGTFile(fma.Auflösung, fma.Dateiname);
                         //hGTFile.LeseDaten();
@@ -1683,6 +1683,9 @@ namespace HoehenGenerator
                 //listHGTFiles.Find(x => x.Name == item);
 
             }
+           VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
+            ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
+ 
             ZeichneMatrix(lfma);
 
 
@@ -1706,8 +1709,8 @@ namespace HoehenGenerator
                     {
                         return fma;
                     }
-                    if (!(nurdreizoll && i == 1))
-                    {
+                    //if (!(nurdreizoll && i == 1))
+                    //{
 
                         if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
                         {
@@ -1715,7 +1718,7 @@ namespace HoehenGenerator
                             fma.Auflösung = i;
                             return fma;
                         }
-                    }
+                    //}
                 }
             }
             return fma;
