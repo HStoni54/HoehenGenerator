@@ -103,6 +103,7 @@
     <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
     <Compile Include="ZeichneBitMap.cs" />
+    <Compile Include="ZwischenspeicherHgt.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
