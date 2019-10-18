@@ -193,8 +193,20 @@ namespace HoehenGenerator
                 coordinaten = "";
                 string vName = ofd.FileName;
                 string pfad = System.IO.Path.GetDirectoryName(vName);
-                if (!Directory.Exists(pfad + "\\HGT"))
-                    Directory.CreateDirectory(pfad + "\\HGT");
+                if (!Directory.Exists(pfad + "\\HGT")) 
+                    try
+                {
+                   
+                        Directory.CreateDirectory(pfad + "\\HGT");
+                }
+                catch (Exception)
+                {
+
+                        MessageBox.Show("Kann Directory für Hgt-Dateien nicht erstellen!\n"
+                            + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
+                            + "\"" + pfad + "\"");
+                }
+               
                 hgtPfad = pfad + "\\HGT"; // TODO: Schreibberechtigung Directory prüfen, 
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
@@ -655,10 +667,10 @@ namespace HoehenGenerator
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
             //double punktgröße = 4 * GrößeH * GrößeB / punkte.Count;
-
+            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
             //minimaleHöhe = punkte.Min(x => x.Höhe);
             //maximaleHöhe = punkte.Max(x => x.Höhe);
-            double punktgröße = 5;
+            double punktgröße = 1;
             for (int i = 0; i < punkte.Count; i++)
             {
                 double Lon = GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge);
@@ -668,7 +680,7 @@ namespace HoehenGenerator
                 if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
                 {
                     Ellipse elli = new Ellipse();
-                    SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+                    
                     int höhe = punkte[i].Höhe * 100 + 1000;
 
                     int r1 = höhe % 256;
@@ -1083,7 +1095,17 @@ namespace HoehenGenerator
             {
                 Encoding = Encoding.UTF8
             };
-            webClient.DownloadFile(v, zielname);
+            try
+            {
+                webClient.DownloadFile(v, zielname);
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Fehler! Kann Datei: " + v +
+                   " nicht downloaden!\nBitte überprüfen Sie Ihre Internezverbindung");
+            }
+            
             webClient.Dispose();
         }
 
@@ -1277,11 +1299,22 @@ namespace HoehenGenerator
 
         private static string[] SammleUrls(string url)
         {
+            string s = "";
             WebClient w = new WebClient
             {
                 Encoding = Encoding.UTF8
             };
-            string s = w.DownloadString(url);
+            try
+            {
+                s = w.DownloadString(url);
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Fehler! Kann Datei: " + url +
+                    " nicht downloaden!\nBitte überprüfen Sie Ihre Internezverbindung");
+            }
+           
             w.Dispose();
             MatchCollection m = Regex.Matches(s, "<a href=\"([^\"]*)\">");
             string[] vs = new string[m.Count];
@@ -1605,7 +1638,8 @@ namespace HoehenGenerator
                     }
                 }
                 //MessageBox.Show("Anzahl der Punkte: " + geoPunkts.Count);
-                hGTFile.Clear();
+                daten = null;
+                hGTFile = null;
             }
 
             ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
@@ -1666,10 +1700,10 @@ namespace HoehenGenerator
                 //listHGTFiles.Find(x => x.Name == item);
 
             }
-           VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
-            ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
-            if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
-            else MessageBox.Show("Nur eine Hgt-Datei");
+           //VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
+           // ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
+           // if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
+           // else MessageBox.Show("Nur eine Hgt-Datei");
 
             ZeichneMatrix(lfma);
 
@@ -1724,8 +1758,8 @@ namespace HoehenGenerator
                 lat = -lat;
             if (nordsüd == "S")
                 lon = -lon;
-            geoPunkt.Lat = lat + breit / 1200.0 / auflösung;
-            geoPunkt.Lon = lon + hoch / 1200.0 / auflösung;
+            geoPunkt.Lat = lat + breit / 3600.0 * auflösung;
+            geoPunkt.Lon = lon + hoch / 3600.0 * auflösung;
             return geoPunkt;
         }
 

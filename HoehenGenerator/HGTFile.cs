@@ -12,16 +12,16 @@ namespace HoehenGenerator
 
         public HGTFile(int auflösung, string dateiname)
         {
-            this.auflösung = auflösung;
+            this.auflösung = 3 / auflösung;
 
 
             this.dateiname = dateiname;
             byte[] vs = new byte[2];
-            hgtDaten = new short[auflösung * 1200 + 1, auflösung * 1200 + 1];
+            hgtDaten = new short[this.auflösung * 1200 + 1, this.auflösung * 1200 + 1];
             FileStream fs = File.OpenRead(dateiname);
-            for (int i = 0; i < auflösung * 1200 + 1; i++)
+            for (int i = 0; i < this.auflösung * 1200 + 1; i++)
             {
-                for (int j = 0; j < auflösung * 1200 + 1; j++)
+                for (int j = 0; j < this.auflösung * 1200 + 1; j++)
                 {
 
                     vs[1] = (byte)fs.ReadByte();
@@ -50,7 +50,7 @@ namespace HoehenGenerator
                 FileStream fs = File.OpenRead(dateiname);
                 for (int i = 0; i < auflösung * 1200 + 1; i++)
                 {
-                    for (int j = 0; j < auflösung * 1200 + 1; j++)
+                    for (int j = 0; j <auflösung * 1200 + 1; j++)
                     {
                         
                         vs[1] = (byte)fs.ReadByte();
