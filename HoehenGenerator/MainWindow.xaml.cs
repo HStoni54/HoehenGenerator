@@ -96,12 +96,15 @@ namespace HoehenGenerator
                     if (istArbeitDa)
                     {
 
-                        LadeHGTDateien(datei.Url, datei.Zieldatei);
-                        unZipHgtFiles(datei.Zieldatei);
-                        Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
-                        //FärbeHgtLabel(datei.Zieldatei);
-                        Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
-                        //ZeichneAlles(punkte);
+                        if (LadeHGTDateien(datei.Url, datei.Zieldatei))
+                        {
+
+                            unZipHgtFiles(datei.Zieldatei);
+                            Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
+                            //FärbeHgtLabel(datei.Zieldatei);
+                            Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
+                            //ZeichneAlles(punkte);
+                        }
                     }
                     if (ladeDateiens.Count == 0)
                     {
@@ -198,6 +201,7 @@ namespace HoehenGenerator
                 string vName = ofd.FileName;
                 string pfad = System.IO.Path.GetDirectoryName(vName);
                 if (!Directory.Exists(pfad + "\\HGT"))
+
                     try
                     {
 
@@ -209,7 +213,7 @@ namespace HoehenGenerator
                         MessageBox.Show("Kann Directory für Hgt-Dateien nicht erstellen!\n"
                             + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
                             + "\"" + pfad + "\"");
-                        throw;
+                        
                     }
 
                 hgtPfad = pfad + "\\HGT";
@@ -224,7 +228,7 @@ namespace HoehenGenerator
                     MessageBox.Show("Kann im Directory für Hgt-Dateien nicht schreiben!\n"
                             + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
                             + "\"" + pfad + "\"");
-                    throw;
+                    
                 }
                 File.Delete(hgtPfad + "\\test.txt");
                 
@@ -1110,9 +1114,10 @@ namespace HoehenGenerator
 
         }
 
-        private void LadeHGTDateien(string v, string zielname)
+        private bool LadeHGTDateien(string v, string zielname)
         {
-            WebClient webClient = new WebClient() // TODO: Ausnahmen beim Internetzugriff "Kann Datei nicht laden o.ä.
+            bool ergebnis = true;
+            WebClient webClient = new WebClient() 
             {
                 Encoding = Encoding.UTF8
             };
@@ -1125,9 +1130,11 @@ namespace HoehenGenerator
 
                 MessageBox.Show("Fehler! Kann Datei: " + v +
                    " nicht downloaden!\nBitte überprüfen Sie Ihre Internezverbindung");
+                ergebnis = false;
             }
 
             webClient.Dispose();
+            return ergebnis;
         }
 
         private string[] findeUrl(string item)
@@ -1252,16 +1259,22 @@ namespace HoehenGenerator
                 LadeHGTFiles.IsEnabled = false;
         }
 
-        private void GeneriereIndices(string s, int i, string hgtPfad)
+        private bool GeneriereIndices(string s, int i, string hgtPfad)
         {
+            bool ergebnis = false;
             if (s.ToLower() == "srtm")
-                GeneriereSRTMIndex(i, hgtPfad);
+                if (GeneriereSRTMIndex(i, hgtPfad))
+                    ergebnis = true;
+              
             if (s.ToLower() == "view")
-                GeneriereViewIndex(i, hgtPfad);
+                if (GeneriereViewIndex(i, hgtPfad))
+                    ergebnis = true;
+            return ergebnis;
         }
 
-        private void GeneriereSRTMIndex(int i, string hgtPfad)
+        private bool GeneriereSRTMIndex(int i, string hgtPfad)
         {
+            bool ergebnis = false;
 
             if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".xml"))
             {
@@ -1280,6 +1293,8 @@ namespace HoehenGenerator
                 string url = baseurl + "srtm/version2_1/SRTM" + i;
 
                 string[] vs = SammleUrls(url);
+                if (vs.Length > 0)
+                    ergebnis = true;
 
                 for (int j = 0; j < vs.Length; j++)
                 {
@@ -1312,10 +1327,14 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
+                if (!ergebnis)
+                    File.Delete(hgtPfad + @"\srtmindex" + i + ".xml");
             }
+            else
+                ergebnis = true;
             if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
                 Directory.CreateDirectory(hgtPfad + @"\SRTM" + i);
-
+            return ergebnis;
         }
 
         private static string[] SammleUrls(string url)
@@ -1332,8 +1351,9 @@ namespace HoehenGenerator
             catch (Exception)
             {
 
-                MessageBox.Show("Fehler! Kann Datei: " + url +
-                    " nicht downloaden!\nBitte überprüfen Sie Ihre Internezverbindung");
+                MessageBox.Show("Fehler!\nKann Datei: " + url +
+                    " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
+               
             }
 
             w.Dispose();
@@ -1347,8 +1367,9 @@ namespace HoehenGenerator
             return vs;
         }
 
-        private void GeneriereViewIndex(int i, string hgtPfad)
+        private bool GeneriereViewIndex(int i, string hgtPfad)
         {
+            bool ergebnis = false;
 
             if (!File.Exists(hgtPfad + @"\viewindex" + i + ".xml"))
             {
@@ -1362,6 +1383,8 @@ namespace HoehenGenerator
                 string url = "http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org" + i + ".htm";
 
                 string[] vs = SammleAreas(url);
+                if (vs.Length > 0)
+                    ergebnis = true;
                 for (int j = 0; j < vs.Length; j++)
                 {
                     MatchCollection m1 = Regex.Matches(vs[j], "coords=\"([^\"]*)\"");
@@ -1382,11 +1405,16 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
+                if (!ergebnis)
+                    File.Delete(hgtPfad + @"\viewindex" + i + ".xml");
 
 
             }
+            else
+                ergebnis = true;
             if (!Directory.Exists(hgtPfad + @"\VIEW" + i))
                 Directory.CreateDirectory(hgtPfad + @"\VIEW" + i);
+            return ergebnis;
         }
 
         private string[] findeZipFiles(string value)
@@ -1452,7 +1480,8 @@ namespace HoehenGenerator
             }
             catch (Exception e)
             {
-                MessageBox.Show("Fehler" + e.Message + "\nURL: " + url);
+                MessageBox.Show("Fehler!\nKann Idex nicht erstellen!\nÜberprüfen Sie Ihre Internetverbindung");
+                
             }
 
             w.Dispose();
