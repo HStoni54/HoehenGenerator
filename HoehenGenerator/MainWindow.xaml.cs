@@ -1591,8 +1591,8 @@ namespace HoehenGenerator
         {
             VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
             ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
-            if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
-            else MessageBox.Show("Nur eine Hgt-Datei");
+            //if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
+            //else MessageBox.Show("Nur eine Hgt-Datei");
 
             List<FileMitEckKoordinaten> fileMitEcks = new List<FileMitEckKoordinaten>();
             vierEcken.Verzeichnispfad = System.IO.Path.GetDirectoryName(lfma[0].Dateiname);

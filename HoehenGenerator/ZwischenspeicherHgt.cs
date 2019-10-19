@@ -85,26 +85,30 @@ namespace HoehenGenerator
 
         private void LeseEin(HgtmitKoordinaten hgtname, string v, string pfad )
         {
-            // TODO: DateiPfad übergeben
+            HGTFile hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Name + ".hgt");
+            short[,] daten = hGTFile.LeseDaten();
+
             switch (v)
             {
                 case "lu":
-                    MessageBox.Show("Zweig lu");
+               //     MessageBox.Show("Zweig lu");
                     break;
                 case "lo":
-                    MessageBox.Show("Zweig lo");
+                  //  MessageBox.Show("Zweig lo");
                     break;
                 case "ru":
-                    MessageBox.Show("Zweig ru");
+                    //MessageBox.Show("Zweig ru");
                     break;
                 case "ro":
-                    MessageBox.Show("Zweig ro");
+                    //MessageBox.Show("Zweig ro");
                     break;
 
                 default:
                     break;
+
             }
-            MessageBox.Show("Einlesen von " + hgtname.Name + "Lage: " + v + " Verzeichnis: " + pfad);
+            //MessageBox.Show("Einlesen von " + hgtname.Name + "Lage: " + v + " Verzeichnis: " + pfad);
+            daten = null;
         }
 
         public short[,] Höhen { get => höhen; set => höhen = value; }
