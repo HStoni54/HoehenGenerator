@@ -110,24 +110,28 @@ namespace HoehenGenerator
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
                     // TODO: Werte für einlesen definieren
+                    /* beginn und ende im HgtFile
+                     * Beginn und anzahl im Datenfile
+                     * 
+                     */
 
                     //     MessageBox.Show("Zweig lu");
                     break;
                 case "lo":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
-                    // TODO: Werte für einlesen definieren
+                    // TODO: Werte für einlesen definieren s.o.
                     //  MessageBox.Show("Zweig lo");
                     break;
                 case "ru":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsunten.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
                     //MessageBox.Show("Zweig ru");
-                    // TODO: Werte für einlesen definieren
+                    // TODO: Werte für einlesen definieren s.o.
                     break;
                 case "ro":
                     //MessageBox.Show("Zweig ro");
-                    // TODO: Werte für einlesen definieren
+                    // TODO: Werte für einlesen definieren s.o.
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsoben.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
                     break;
