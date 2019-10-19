@@ -17,11 +17,11 @@ namespace HoehenGenerator
 
         public Bitmap Bitmap { get => bitmap; }
         public int Höhe1 { get => Höhe; }
-        public int Breite1 { get => Breite;  }
-        public Color[,] Color { get => color;}
-        public Color Color1 { get => color1;  }
+        public int Breite1 { get => Breite; }
+        public Color[,] Color { get => color; }
+        public Color Color1 { get => color1; }
 
-        public ZeichneBitMap(Bitmap bitmap,  Color color1)
+        public ZeichneBitMap(Bitmap bitmap, Color color1)
         {
             this.bitmap = bitmap;
             Höhe = bitmap.Height;
@@ -36,7 +36,7 @@ namespace HoehenGenerator
             {
 
             }
-            
+
 
         }
 
@@ -46,7 +46,7 @@ namespace HoehenGenerator
             Höhe = bitmap.Height;
             Breite = bitmap.Width;
             this.color = color;
-            
+
         }
 
 
@@ -54,12 +54,12 @@ namespace HoehenGenerator
         {
             bitmap.SetPixel(höhe, breite, color);
         }
-      
+
         private Color[,] colors(int höhe, int breite)
         {
             Color[,] color = new Color[höhe, breite];
             return color;
-            
+
         }
 
         public void FülleBitmap()
@@ -71,7 +71,7 @@ namespace HoehenGenerator
                     bitmap.SetPixel(j, i, color[i, j]);
                 }
             }
-            
+
         }
 
     }

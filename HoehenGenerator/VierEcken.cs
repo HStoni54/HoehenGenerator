@@ -41,7 +41,7 @@ namespace HoehenGenerator
         private HgtmitKoordinaten BestimmeHgtFile(double lon, double lat, string v)
         {
             string hgt;
-            int lat1=0, lon1=0;
+            int lat1 = 0, lon1 = 0;
             int lat2 = (int)lat;
             int lon2 = (int)lon;
             lat1 = (int)((lat - (int)lat) * 3600 / auflösung);
@@ -81,7 +81,7 @@ namespace HoehenGenerator
             {
                 hgt = hgt + "W" + (-lon2).ToString("D3");
             }
-            return  new HgtmitKoordinaten(hgt,lat1,lon1);;
+            return new HgtmitKoordinaten(hgt, lat1, lon1); ;
         }
 
         internal HgtmitKoordinaten Hgtlinksunten { get => hgtlinksunten; set => hgtlinksunten = value; }

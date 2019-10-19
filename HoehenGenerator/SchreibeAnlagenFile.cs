@@ -9,10 +9,10 @@ namespace HoehenGenerator
 {
     class SchreibeAnlagenFile
     {
-        string path; 
-        string anlagenname; 
-        int höhe; 
-        int breite; 
+        string path;
+        string anlagenname;
+        int höhe;
+        int breite;
         int rasterdichte;
         double drasterdichte;
         bool Ok;
@@ -22,14 +22,14 @@ namespace HoehenGenerator
             this.path = path;
             this.anlagenname = anlagenname;
             this.höhe = höhe;
-            
+
             this.breite = breite;
             this.rasterdichte = rasterdichte;
             Ok = SchreibeFile();
         }
 
         public bool SchreibeFile()
-        {  
+        {
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             drasterdichte = rasterdichte / 100000.0;
@@ -38,7 +38,7 @@ namespace HoehenGenerator
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("sutrackp");
             xmlWriter.WriteStartElement("Schandlaft");
-            xmlWriter.WriteAttributeString("extX",breite.ToString());
+            xmlWriter.WriteAttributeString("extX", breite.ToString());
             xmlWriter.WriteAttributeString("extY", höhe.ToString());
             xmlWriter.WriteAttributeString("dichte", drasterdichte.ToString(System.Globalization.CultureInfo.InvariantCulture));
             xmlWriter.WriteAttributeString("HoehenFile", "\\" + anlagenname + "H.bmp");

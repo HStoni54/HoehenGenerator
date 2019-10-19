@@ -10,10 +10,10 @@ namespace HoehenGenerator
     {
         string name;
         int auflösung;
-        int[] linksoben = new int[2]; 
-        int[] rechtsoben = new int[2]; 
-        int[] linksunten = new int[2]; 
-        int[] rechtsunten = new int[2]; 
+        int[] linksoben = new int[2];
+        int[] rechtsoben = new int[2];
+        int[] linksunten = new int[2];
+        int[] rechtsunten = new int[2];
 
         public FileMitEckKoordinaten(string name, int auflösung)
         {

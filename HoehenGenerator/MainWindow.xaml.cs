@@ -72,7 +72,7 @@ namespace HoehenGenerator
             Title = "Höhengenerator für EEP";
 
 
-            
+
 
             Thread thrHoleIndices = new Thread(HoleIndices);
             thrHoleIndices.IsBackground = true;
@@ -209,9 +209,25 @@ namespace HoehenGenerator
                         MessageBox.Show("Kann Directory für Hgt-Dateien nicht erstellen!\n"
                             + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
                             + "\"" + pfad + "\"");
+                        throw;
                     }
 
-                hgtPfad = pfad + "\\HGT"; // TODO: Schreibberechtigung Directory prüfen, 
+                hgtPfad = pfad + "\\HGT";
+                try
+                {
+                    FileStream fs = File.Create(hgtPfad + "\\test.txt");
+                    fs.Close();
+                    
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Kann im Directory für Hgt-Dateien nicht schreiben!\n"
+                            + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
+                            + "\"" + pfad + "\"");
+                    throw;
+                }
+                File.Delete(hgtPfad + "\\test.txt");
+                
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
                     ZipArchive archive = ZipFile.OpenRead(vName);
@@ -1646,11 +1662,11 @@ namespace HoehenGenerator
 
             int[] zwausmasse = { intanzahlLat, intanzahlLon };
 
-            ZwspeicherHgt = new ZwischenspeicherHgt(hgttolatlon(vierEcken.Hgtlinksunten.Name,vierEcken.Auflösung,vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
-                intanzahlLat,intanzahlLon,vierEcken.Auflösung);
-            ZwspeicherHgt.LeseSpeicherEin(vierEcken,fileMitEcks);
-           
-            
+            ZwspeicherHgt = new ZwischenspeicherHgt(hgttolatlon(vierEcken.Hgtlinksunten.Name, vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
+                intanzahlLat, intanzahlLon, vierEcken.Auflösung);
+            ZwspeicherHgt.LeseSpeicherEin(vierEcken, fileMitEcks);
+
+
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             maximaleHöhe = -10000.0;
             minimaleHöhe = 10000.0;
