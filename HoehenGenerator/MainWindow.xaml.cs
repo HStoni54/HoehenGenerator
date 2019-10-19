@@ -1647,14 +1647,9 @@ namespace HoehenGenerator
 
             ZwspeicherHgt = new ZwischenspeicherHgt(hgttolatlon(vierEcken.Hgtlinksunten.Name,vierEcken.Auflösung,vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
                 intanzahlLat,intanzahlLon,vierEcken.Auflösung);
-            bool zweiReihen = true;
-            bool zweiSpalten = true;
-
-            if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtlinksunten.Name)
-                zweiReihen = false;
-
-            if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtrechtsoben.Name)
-                zweiSpalten = false;
+            ZwspeicherHgt.LeseSpeicherEin(vierEcken);
+           
+            
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             maximaleHöhe = -10000.0;
             minimaleHöhe = 10000.0;

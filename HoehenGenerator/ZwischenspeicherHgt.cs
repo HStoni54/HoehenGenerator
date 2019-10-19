@@ -62,6 +62,27 @@ namespace HoehenGenerator
             // throw new NotImplementedException();
             return höhen[wertLat,wertLon];
         }
+        public void LeseSpeicherEin(VierEcken vierEcken)
+        {
+            bool zweiReihen = true;
+            bool zweiSpalten = true;
+
+            if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtlinksunten.Name)
+                zweiReihen = false;
+
+            if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtrechtsoben.Name)
+                zweiSpalten = false;
+            int[] startHgt = new int[2];
+            int[] startspeicher = new int[2];
+            int[] anzahl = new int[2];
+
+            LeseEin(vierEcken.Hgtrechtsoben.Name, startHgt, startspeicher, anzahl);
+        }
+
+        private void LeseEin(string name, int[] startHgt, int[] startspeicher, int[] anzahl)
+        {
+            // HgtDatei öffnen und Höhen von bis in höhen-Array speichen
+        }
 
         public short[,] Höhen { get => höhen; set => höhen = value; }
         public int Auflösung { get => auflösung; set => auflösung = value; }
