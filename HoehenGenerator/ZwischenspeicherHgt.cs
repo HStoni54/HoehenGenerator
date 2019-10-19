@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HoehenGenerator
 {
@@ -72,16 +73,38 @@ namespace HoehenGenerator
 
             if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtrechtsoben.Name)
                 zweiSpalten = false;
-            int[] startHgt = new int[2];
-            int[] startspeicher = new int[2];
-            int[] anzahl = new int[2];
-
-            LeseEin(vierEcken.Hgtrechtsoben.Name, startHgt, startspeicher, anzahl);
+           
+            LeseEin(vierEcken.Hgtlinksunten,"lu",vierEcken.Verzeichnispfad);
+            if (zweiReihen)
+                LeseEin(vierEcken.Hgtlinksoben,"lo", vierEcken.Verzeichnispfad);
+            if (zweiSpalten)
+                LeseEin(vierEcken.Hgtrechtsunten,"ru", vierEcken.Verzeichnispfad);
+            if (zweiReihen && zweiSpalten)
+                LeseEin(vierEcken.Hgtrechtsoben,"ro", vierEcken.Verzeichnispfad);
         }
 
-        private void LeseEin(string name, int[] startHgt, int[] startspeicher, int[] anzahl)
+        private void LeseEin(HgtmitKoordinaten hgtname, string v, string pfad )
         {
-            // HgtDatei öffnen und Höhen von bis in höhen-Array speichen
+            // TODO: DateiPfad übergeben
+            switch (v)
+            {
+                case "lu":
+                    MessageBox.Show("Zweig lu");
+                    break;
+                case "lo":
+                    MessageBox.Show("Zweig lo");
+                    break;
+                case "ru":
+                    MessageBox.Show("Zweig ru");
+                    break;
+                case "ro":
+                    MessageBox.Show("Zweig ro");
+                    break;
+
+                default:
+                    break;
+            }
+            MessageBox.Show("Einlesen von " + hgtname.Name + "Lage: " + v + " Verzeichnis: " + pfad);
         }
 
         public short[,] Höhen { get => höhen; set => höhen = value; }

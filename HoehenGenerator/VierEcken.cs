@@ -17,6 +17,7 @@ namespace HoehenGenerator
         HgtmitKoordinaten hgtlinksoben;
         HgtmitKoordinaten hgtrechtsunten;
         HgtmitKoordinaten hgtrechtsoben;
+        string verzeichnispfad;
         int auflösung;
 
         public VierEcken(GeoPunkt linksunten, GeoPunkt rechtsoben, int auflösung)
@@ -88,5 +89,6 @@ namespace HoehenGenerator
         internal HgtmitKoordinaten Hgtrechtsunten { get => hgtrechtsunten; set => hgtrechtsunten = value; }
         internal HgtmitKoordinaten Hgtrechtsoben { get => hgtrechtsoben; set => hgtrechtsoben = value; }
         public int Auflösung { get => auflösung; set => auflösung = value; }
+        public string Verzeichnispfad { get => verzeichnispfad; set => verzeichnispfad = value; }
     }
 }

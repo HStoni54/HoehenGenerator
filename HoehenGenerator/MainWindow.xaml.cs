@@ -1595,6 +1595,7 @@ namespace HoehenGenerator
             else MessageBox.Show("Nur eine Hgt-Datei");
 
             List<FileMitEckKoordinaten> fileMitEcks = new List<FileMitEckKoordinaten>();
+            vierEcken.Verzeichnispfad = System.IO.Path.GetDirectoryName(lfma[0].Dateiname);
             foreach (Filemitauflösung item in lfma)
             {
                 fileMitEcks.Add(new FileMitEckKoordinaten(System.IO.Path.GetFileNameWithoutExtension(item.Dateiname), item.Auflösung));
