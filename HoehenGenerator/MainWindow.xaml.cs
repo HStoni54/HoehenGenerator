@@ -40,7 +40,7 @@ namespace HoehenGenerator
         PointCollection orgpunkte = new PointCollection();
         PointCollection punkte = new PointCollection();
         Canvas Zeichenfläche = new Canvas();
-        
+
         ListBox lbHgtFiles = new ListBox();
 
 
@@ -61,6 +61,7 @@ namespace HoehenGenerator
         string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
         ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
         ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
+        ZwischenspeicherHgt ZwspeicherHgt;
 
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
@@ -71,16 +72,17 @@ namespace HoehenGenerator
             Title = "Höhengenerator für EEP";
 
 
-            Thread[] thrHoleIndices = new Thread[4];
-            for (int i = 0; i < thrHoleIndices.Length; i++)
-            {
-                thrHoleIndices[i] = new Thread(HoleIndices);
-                thrHoleIndices[i].IsBackground = true;
-                thrHoleIndices[i].Start();
-            }
+            
+
+            Thread thrHoleIndices = new Thread(HoleIndices);
+            thrHoleIndices.IsBackground = true;
+            thrHoleIndices.Priority = ThreadPriority.Lowest;
+            thrHoleIndices.Start();
+
 
             Thread thrHoleDateien = new Thread(HoleDateien);
             thrHoleDateien.IsBackground = true;
+            thrHoleDateien.Priority = ThreadPriority.Lowest;
             thrHoleDateien.Start();
         }
 
@@ -108,6 +110,7 @@ namespace HoehenGenerator
                     }
 
                 }
+                Thread.Sleep(100);
             }
         }
 
@@ -135,6 +138,7 @@ namespace HoehenGenerator
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = false));
                     }
                 }
+                Thread.Sleep(100);
 
             }
         }
@@ -193,20 +197,20 @@ namespace HoehenGenerator
                 coordinaten = "";
                 string vName = ofd.FileName;
                 string pfad = System.IO.Path.GetDirectoryName(vName);
-                if (!Directory.Exists(pfad + "\\HGT")) 
+                if (!Directory.Exists(pfad + "\\HGT"))
                     try
-                {
-                   
+                    {
+
                         Directory.CreateDirectory(pfad + "\\HGT");
-                }
-                catch (Exception)
-                {
+                    }
+                    catch (Exception)
+                    {
 
                         MessageBox.Show("Kann Directory für Hgt-Dateien nicht erstellen!\n"
                             + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
                             + "\"" + pfad + "\"");
-                }
-               
+                    }
+
                 hgtPfad = pfad + "\\HGT"; // TODO: Schreibberechtigung Directory prüfen, 
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
@@ -514,7 +518,7 @@ namespace HoehenGenerator
             double maxlon = Math.Round(points1.Max(x => x.X) - 0.5);
             double minlon = Math.Round(points1.Min(x => x.X) - 0.5);
             lbHgtFiles.Items.Clear();
-           // HGTFiles.Text = "";
+            // HGTFiles.Text = "";
             if (maxlon - minlon > 180)
             {
                 BildeHGTString(maxlat, minlat, 180, maxlon);
@@ -601,8 +605,8 @@ namespace HoehenGenerator
                         hgt = hgt + "W" + (-j).ToString("D3");
                     }
                     lbHgtFiles.Items.Add(hgt);
-                   // hgt = hgt + "\n";
-                   // HGTFiles.Text = HGTFiles.Text + hgt;
+                    // hgt = hgt + "\n";
+                    // HGTFiles.Text = HGTFiles.Text + hgt;
 
                 }
             }
@@ -668,11 +672,11 @@ namespace HoehenGenerator
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
             //double punktgröße = 4 * GrößeH * GrößeB / punkte.Count;
             SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-            
+
             //minimaleHöhe = punkte.Min(x => x.Höhe);
             //maximaleHöhe = punkte.Max(x => x.Höhe);
             double punktgröße = 1;
-            for (int i = 0; i < punkte.Count; i +=10)
+            for (int i = 0; i < punkte.Count; i += 10)
             {
                 int Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
                 int Lat = (int)(GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite));
@@ -681,7 +685,7 @@ namespace HoehenGenerator
                 if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
                 {
                     //Ellipse elli = new Ellipse();
-                    
+
                     //int höhe = punkte[i].Höhe * 100 + 1000;
 
                     //int r1 = höhe % 256;
@@ -824,7 +828,7 @@ namespace HoehenGenerator
             ladeHGTFiles.IsEnabled = true;
             ladeHGTFiles.IsSelected = true;
             Zeichenfläche = Zeichenfläche2;
-         //   HGTFiles = HGTFiles2;
+            //   HGTFiles = HGTFiles2;
             if (usesrtm == true)
                 SRTM.IsChecked = true;
             else
@@ -888,7 +892,7 @@ namespace HoehenGenerator
 
         }
 
-       
+
 
         private bool ÜberprüfeIndices()
         {
@@ -1106,7 +1110,7 @@ namespace HoehenGenerator
                 MessageBox.Show("Fehler! Kann Datei: " + v +
                    " nicht downloaden!\nBitte überprüfen Sie Ihre Internezverbindung");
             }
-            
+
             webClient.Dispose();
         }
 
@@ -1315,7 +1319,7 @@ namespace HoehenGenerator
                 MessageBox.Show("Fehler! Kann Datei: " + url +
                     " nicht downloaden!\nBitte überprüfen Sie Ihre Internezverbindung");
             }
-           
+
             w.Dispose();
             MatchCollection m = Regex.Matches(s, "<a href=\"([^\"]*)\">");
             string[] vs = new string[m.Count];
@@ -1584,15 +1588,16 @@ namespace HoehenGenerator
         }
 
         private void ZeichneMatrix(List<Filemitauflösung> lfma)
-        {     
+        {
             VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
             ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
             if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
             else MessageBox.Show("Nur eine Hgt-Datei");
+
             List<FileMitEckKoordinaten> fileMitEcks = new List<FileMitEckKoordinaten>();
             foreach (Filemitauflösung item in lfma)
             {
-                fileMitEcks.Add(new FileMitEckKoordinaten(System.IO.Path.GetFileNameWithoutExtension( item.Dateiname), item.Auflösung));
+                fileMitEcks.Add(new FileMitEckKoordinaten(System.IO.Path.GetFileNameWithoutExtension(item.Dateiname), item.Auflösung));
             }
             foreach (FileMitEckKoordinaten item in fileMitEcks)
             {
@@ -1601,8 +1606,8 @@ namespace HoehenGenerator
                     item.Linksoben[0] = vierEcken.Hgtlinksoben.DezLon;
                     item.Linksoben[1] = vierEcken.Hgtlinksoben.DezLat;
                     item.Linksunten[0] = vierEcken.Hgtlinksoben.DezLon;
-                     item.Rechtsoben[1] = vierEcken.Hgtlinksoben.DezLat;
-                   // Lat = RO
+                    item.Rechtsoben[1] = vierEcken.Hgtlinksoben.DezLat;
+                    // Lat = RO
                     // Lon = LU
                 }
                 if (item.Name == vierEcken.Hgtrechtsoben.Name)
@@ -1634,11 +1639,22 @@ namespace HoehenGenerator
                     // Lon = RO
                 }
 
-                int[] zwausmasse = {zwischenspeicherHgt.AnzahlLat,zwischenspeicherHgt.AnzahlLon };
-
             }
+            int intanzahlLat = (3600 / vierEcken.Auflösung + vierEcken.Hgtlinksoben.DezLat - vierEcken.Hgtlinksunten.DezLat) % (3600 / vierEcken.Auflösung);
+            int intanzahlLon = (3600 / vierEcken.Auflösung + vierEcken.Hgtrechtsunten.DezLon - vierEcken.Hgtlinksunten.DezLon) % (3600 / vierEcken.Auflösung);
 
+            int[] zwausmasse = { intanzahlLat, intanzahlLon };
 
+            ZwspeicherHgt = new ZwischenspeicherHgt(hgttolatlon(vierEcken.Hgtlinksunten.Name,vierEcken.Auflösung,vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
+                intanzahlLat,intanzahlLon,vierEcken.Auflösung);
+            bool zweiReihen = true;
+            bool zweiSpalten = true;
+
+            if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtlinksunten.Name)
+                zweiReihen = false;
+
+            if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtrechtsoben.Name)
+                zweiSpalten = false;
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             maximaleHöhe = -10000.0;
             minimaleHöhe = 10000.0;
@@ -1697,15 +1713,15 @@ namespace HoehenGenerator
                 hGTFile = null;
             }
 
-           // ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
+            // ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();
         }
 
-        
 
-       
+
+
         private bool IstPunktImRechteck(ref GeoPunkt geoPunkt1, double diff = 0.0)
         { // TODO: In allen Erdteilen? Datumgrenze?
             return geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) + diff
@@ -1717,8 +1733,8 @@ namespace HoehenGenerator
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
             Filemitauflösung fma = new Filemitauflösung("", 0);
-            List<Filemitauflösung> lfma = new List<Filemitauflösung>(); 
- 
+            List<Filemitauflösung> lfma = new List<Filemitauflösung>();
+
             lfma.Clear();
             //string[] vs = HGTFiles.Text.Split('\n');
             List<int> aufl = new List<int>();
@@ -1758,7 +1774,7 @@ namespace HoehenGenerator
                 //listHGTFiles.Find(x => x.Name == item);
 
             }
- 
+
             ZeichneMatrix(lfma);
 
 
@@ -1785,12 +1801,12 @@ namespace HoehenGenerator
                     //if (!(nurdreizoll && i == 1))
                     //{
 
-                        if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
-                        {
-                            fma.Dateiname = hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt";
-                            fma.Auflösung = i;
-                            return fma;
-                        }
+                    if (File.Exists(hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt"))
+                    {
+                        fma.Dateiname = hgtPfad + "\\" + verzeichnis + "\\" + item + ".hgt";
+                        fma.Auflösung = i;
+                        return fma;
+                    }
                     //}
                 }
             }
