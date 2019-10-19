@@ -63,44 +63,69 @@ namespace HoehenGenerator
             // throw new NotImplementedException();
             return höhen[wertLat,wertLon];
         }
-        public void LeseSpeicherEin(VierEcken vierEcken)
+        public void LeseSpeicherEin(VierEcken vierEcken, List<FileMitEckKoordinaten> fileMitEcks)
         {
             bool zweiReihen = true;
             bool zweiSpalten = true;
-
+            FileMitEckKoordinaten file;
             if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtlinksunten.Name)
                 zweiReihen = false;
 
             if (vierEcken.Hgtlinksoben.Name == vierEcken.Hgtrechtsoben.Name)
                 zweiSpalten = false;
-           
-            LeseEin(vierEcken.Hgtlinksunten,"lu",vierEcken.Verzeichnispfad);
-            if (zweiReihen)
-                LeseEin(vierEcken.Hgtlinksoben,"lo", vierEcken.Verzeichnispfad);
-            if (zweiSpalten)
-                LeseEin(vierEcken.Hgtrechtsunten,"ru", vierEcken.Verzeichnispfad);
-            if (zweiReihen && zweiSpalten)
-                LeseEin(vierEcken.Hgtrechtsoben,"ro", vierEcken.Verzeichnispfad);
-        }
+            file = fileMitEcks.Find(x => x.Name == vierEcken.Hgtlinksunten.Name);
 
-        private void LeseEin(HgtmitKoordinaten hgtname, string v, string pfad )
+            LeseEin(vierEcken, "lu", vierEcken.Verzeichnispfad,file);
+            if (zweiReihen)
+            {
+               file = fileMitEcks.Find(x => x.Name == vierEcken.Hgtlinksoben.Name);
+            LeseEin(vierEcken, "lo", vierEcken.Verzeichnispfad, file);
+ 
+            }
+            if (zweiSpalten)
+            {
+               file = fileMitEcks.Find(x => x.Name == vierEcken.Hgtrechtsunten.Name);
+            LeseEin(vierEcken, "ru", vierEcken.Verzeichnispfad, file);
+
+            }
+             if (zweiReihen && zweiSpalten)
+            {
+              file = fileMitEcks.Find(x => x.Name == vierEcken.Hgtrechtsoben.Name);
+            LeseEin(vierEcken, "ro", vierEcken.Verzeichnispfad, file);
+ 
+            }
+         }
+
+        private void LeseEin( VierEcken hgtname, string v, string pfad, FileMitEckKoordinaten fileMitEcks)
         {
-            HGTFile hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Name + ".hgt");
-            short[,] daten = hGTFile.LeseDaten();
+            HGTFile hGTFile;
+            short[,] daten;
+
 
             switch (v)
             {
+                
+
                 case "lu":
+                    hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
+                    daten = hGTFile.LeseDaten();
+
                //     MessageBox.Show("Zweig lu");
                     break;
                 case "lo":
-                  //  MessageBox.Show("Zweig lo");
+                    hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
+                    daten = hGTFile.LeseDaten();
+                    //  MessageBox.Show("Zweig lo");
                     break;
                 case "ru":
+                   hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsunten.Name + ".hgt");
+                    daten = hGTFile.LeseDaten();
                     //MessageBox.Show("Zweig ru");
                     break;
                 case "ro":
                     //MessageBox.Show("Zweig ro");
+                    hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsoben.Name + ".hgt");
+                    daten = hGTFile.LeseDaten();
                     break;
 
                 default:

@@ -1648,7 +1648,7 @@ namespace HoehenGenerator
 
             ZwspeicherHgt = new ZwischenspeicherHgt(hgttolatlon(vierEcken.Hgtlinksunten.Name,vierEcken.Auflösung,vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
                 intanzahlLat,intanzahlLon,vierEcken.Auflösung);
-            ZwspeicherHgt.LeseSpeicherEin(vierEcken);
+            ZwspeicherHgt.LeseSpeicherEin(vierEcken,fileMitEcks);
            
             
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
