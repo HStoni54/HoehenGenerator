@@ -110,8 +110,8 @@ namespace HoehenGenerator
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
                     // TODO: Werte für einlesen definieren
-                    /* beginn und ende im HgtFile
-                     * Beginn und anzahl im Datenfile
+                    /* beginn und ende im HgtFile -> steht im File
+                     * Beginn oder Ende und anzahl?? im Datenfile
                      * 
                      */
 
