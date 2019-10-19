@@ -668,6 +668,7 @@ namespace HoehenGenerator
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
             //double punktgröße = 4 * GrößeH * GrößeB / punkte.Count;
             SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            
             //minimaleHöhe = punkte.Min(x => x.Höhe);
             //maximaleHöhe = punkte.Max(x => x.Höhe);
             double punktgröße = 1;
@@ -679,24 +680,24 @@ namespace HoehenGenerator
 
                 if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
                 {
-                    Ellipse elli = new Ellipse();
+                    //Ellipse elli = new Ellipse();
                     
-                    int höhe = punkte[i].Höhe * 100 + 1000;
+                    //int höhe = punkte[i].Höhe * 100 + 1000;
 
-                    int r1 = höhe % 256;
-                    int g1 = (höhe / 256) % 256;
-                    int b1 = (höhe / 256 / 256) % 256;
-                    byte r = (byte)r1;
-                    byte g = (byte)g1; ;
-                    byte b = (byte)b1; ;
-                    mySolidColorBrush.Color = Color.FromRgb(r, g, b);
-                    elli.Width = punktgröße;
-                    elli.Height = punktgröße;
-                    elli.Fill = mySolidColorBrush;
-                    Zeichenfläche.Children.Add(elli);
+                    //int r1 = höhe % 256;
+                    //int g1 = (höhe / 256) % 256;
+                    //int b1 = (höhe / 256 / 256) % 256;
+                    //byte r = (byte)r1;
+                    //byte g = (byte)g1; ;
+                    //byte b = (byte)b1; ;
+                    //mySolidColorBrush.Color = Color.FromRgb(r, g, b);
+                    //elli.Width = punktgröße;
+                    //elli.Height = punktgröße;
+                    //elli.Fill = mySolidColorBrush;
+                    //Zeichenfläche.Children.Add(elli);
 
-                    Canvas.SetLeft(elli, Lon - punktgröße / 2);
-                    Canvas.SetTop(elli, Lat - punktgröße / 2);
+                    //Canvas.SetLeft(elli, Lon - punktgröße / 2);
+                    //Canvas.SetTop(elli, Lat - punktgröße / 2);
 
                 }
             }
@@ -1583,7 +1584,61 @@ namespace HoehenGenerator
         }
 
         private void ZeichneMatrix(List<Filemitauflösung> lfma)
-        {
+        {     
+            VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
+            ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
+            if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
+            else MessageBox.Show("Nur eine Hgt-Datei");
+            List<FileMitEckKoordinaten> fileMitEcks = new List<FileMitEckKoordinaten>();
+            foreach (Filemitauflösung item in lfma)
+            {
+                fileMitEcks.Add(new FileMitEckKoordinaten(System.IO.Path.GetFileNameWithoutExtension( item.Dateiname), item.Auflösung));
+            }
+            foreach (FileMitEckKoordinaten item in fileMitEcks)
+            {
+                if (item.Name == vierEcken.Hgtlinksoben.Name)
+                {
+                    item.Linksoben[0] = vierEcken.Hgtlinksoben.DezLon;
+                    item.Linksoben[1] = vierEcken.Hgtlinksoben.DezLat;
+                    item.Linksunten[0] = vierEcken.Hgtlinksoben.DezLon;
+                     item.Rechtsoben[1] = vierEcken.Hgtlinksoben.DezLat;
+                   // Lat = RO
+                    // Lon = LU
+                }
+                if (item.Name == vierEcken.Hgtrechtsoben.Name)
+                {
+                    item.Rechtsoben[0] = vierEcken.Hgtrechtsoben.DezLon;
+                    item.Rechtsoben[1] = vierEcken.Hgtrechtsoben.DezLat;
+                    item.Rechtsunten[0] = vierEcken.Hgtrechtsoben.DezLon;
+                    item.Linksoben[1] = vierEcken.Hgtrechtsoben.DezLat;
+                    // Lat = LO
+                    // Lon = RU
+
+                }
+                if (item.Name == vierEcken.Hgtlinksunten.Name)
+                {
+                    item.Linksunten[0] = vierEcken.Hgtlinksunten.DezLon;
+                    item.Linksunten[1] = vierEcken.Hgtlinksunten.DezLat;
+                    item.Linksoben[0] = vierEcken.Hgtlinksunten.DezLon;
+                    item.Rechtsunten[1] = vierEcken.Hgtlinksunten.DezLat;
+                    // Lat = RU
+                    // Lon = LO
+                }
+                if (item.Name == vierEcken.Hgtrechtsunten.Name)
+                {
+                    item.Rechtsunten[0] = vierEcken.Hgtrechtsunten.DezLon;
+                    item.Rechtsunten[1] = vierEcken.Hgtrechtsunten.DezLat;
+                    item.Rechtsoben[0] = vierEcken.Hgtrechtsunten.DezLon;
+                    item.Linksunten[1] = vierEcken.Hgtrechtsunten.DezLat;
+                    // Lat = LU
+                    // Lon = RO
+                }
+
+                int[] zwausmasse = {zwischenspeicherHgt.AnzahlLat,zwischenspeicherHgt.AnzahlLon };
+
+            }
+
+
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             maximaleHöhe = -10000.0;
             minimaleHöhe = 10000.0;
@@ -1642,7 +1697,7 @@ namespace HoehenGenerator
                 hGTFile = null;
             }
 
-            ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
+           // ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();
@@ -1703,11 +1758,7 @@ namespace HoehenGenerator
                 //listHGTFiles.Find(x => x.Name == item);
 
             }
-           //VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
-           // ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, fma.Auflösung);
-           // if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
-           // else MessageBox.Show("Nur eine Hgt-Datei");
-
+ 
             ZeichneMatrix(lfma);
 
 

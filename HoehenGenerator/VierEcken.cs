@@ -11,6 +11,8 @@ namespace HoehenGenerator
     {
         GeoPunkt linksunten;
         GeoPunkt rechtsoben;
+        GeoPunkt linksoben;
+        GeoPunkt rechtsunten;
         HgtmitKoordinaten hgtlinksunten;
         HgtmitKoordinaten hgtlinksoben;
         HgtmitKoordinaten hgtrechtsunten;
@@ -22,15 +24,17 @@ namespace HoehenGenerator
             this.linksunten = linksunten;
             this.rechtsoben = rechtsoben;
             this.auflösung = auflösung;
+            this.linksoben = new GeoPunkt(linksunten.Lon, rechtsoben.Lat);
+            this.rechtsunten = new GeoPunkt(rechtsoben.Lon, linksunten.Lat);
             BestimmePunkte();
         }
 
         private void BestimmePunkte()
         {
-            hgtlinksoben = BestimmeHgtFile(linksunten.Lon, rechtsoben.Lat, "lo");
+            hgtlinksoben = BestimmeHgtFile(linksoben.Lon, linksoben.Lat, "lo");
             hgtlinksunten = BestimmeHgtFile(linksunten.Lon, linksunten.Lat, "lu");
             hgtrechtsoben = BestimmeHgtFile(rechtsoben.Lon, rechtsoben.Lat, "ro");
-            hgtrechtsunten = BestimmeHgtFile(rechtsoben.Lon, linksunten.Lat, "ru");
+            hgtrechtsunten = BestimmeHgtFile(rechtsunten.Lon, rechtsunten.Lat, "ru");
         }
 
         private HgtmitKoordinaten BestimmeHgtFile(double lon, double lat, string v)
@@ -76,7 +80,7 @@ namespace HoehenGenerator
             {
                 hgt = hgt + "W" + (-lon2).ToString("D3");
             }
-            return  new HgtmitKoordinaten(hgt,lon1,lat1);;
+            return  new HgtmitKoordinaten(hgt,lat1,lon1);;
         }
 
         internal HgtmitKoordinaten Hgtlinksunten { get => hgtlinksunten; set => hgtlinksunten = value; }
