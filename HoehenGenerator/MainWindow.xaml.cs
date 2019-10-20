@@ -1707,7 +1707,9 @@ namespace HoehenGenerator
             {
                 int auflösung = item.Auflösung;
                 HGTFile hGTFile = new HGTFile(auflösung, item.Dateiname);
-                short[,] daten = hGTFile.LeseDaten();
+                short[,] daten = hGTFile.HgtDaten;
+
+                //short[,] daten = hGTFile.LeseDaten();
                 string dateiname = System.IO.Path.GetFileName(item.Dateiname);
 
                 int anzahl = (int)Math.Sqrt(daten.Length);
@@ -1869,7 +1871,7 @@ namespace HoehenGenerator
                 lat = -lat;
             if (nordsüd == "S")
                 lon = -lon;
-            geoPunkt.Lat = lat + breit / 3600.0 * auflösung;
+            geoPunkt.Lat = lat +  breit / 3600.0 * auflösung;
             geoPunkt.Lon = lon +  hoch / 3600.0 * auflösung;
             return geoPunkt;
         }

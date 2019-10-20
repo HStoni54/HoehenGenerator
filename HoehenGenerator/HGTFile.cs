@@ -19,9 +19,10 @@ namespace HoehenGenerator
             byte[] vs = new byte[2];
             hgtDaten = new short[this.auflösung * 1200 + 1, this.auflösung * 1200 + 1];
             FileStream fs = File.OpenRead(dateiname);
-            for (int i = 0; i < this.auflösung * 1200 + 1; i++)
+            //for (int i = 0; i < this.auflösung * 1200 + 1; i++)
+            for (int i = this.auflösung * 1200; i >= 0; i--)
             {
-                for (int j = 0; j < this.auflösung * 1200 + 1; j++)
+                    for (int j = 0; j < this.auflösung * 1200 + 1; j++)
                 {
 
                     vs[1] = (byte)fs.ReadByte();
