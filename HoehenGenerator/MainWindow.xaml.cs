@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml;
+using System.Linq;
 
 
 
@@ -1695,6 +1696,8 @@ namespace HoehenGenerator
                 intanzahlLat, intanzahlLon, vierEcken.Auflösung);
             ZwspeicherHgt.LeseSpeicherEin(vierEcken, fileMitEcks);
 
+            var maxarr = (from short v in ZwspeicherHgt.Höhen select v).Max();
+            var minarr = (from short v in ZwspeicherHgt.Höhen select v).Min();
 
             List<GeoPunkt> geoPunkts = new List<GeoPunkt>();
             maximaleHöhe = -10000.0;
