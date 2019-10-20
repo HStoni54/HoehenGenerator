@@ -48,7 +48,7 @@ namespace HoehenGenerator
             if (File.Exists(dateiname))
             {
                 FileStream fs = File.OpenRead(dateiname);
-                // http://www.naviuser.at/forum/showthread.php?t=321 auswetren
+                // http://www.naviuser.at/forum/showthread.php?t=321 auswerten
                 for (int i = auflösung * 1200; i >= 0; i--)
                 //for (int i = 0; i < auflösung * 1200 + 1;  i++)
                 {
