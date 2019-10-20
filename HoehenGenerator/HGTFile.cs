@@ -49,8 +49,8 @@ namespace HoehenGenerator
             {
                 FileStream fs = File.OpenRead(dateiname);
                 // http://www.naviuser.at/forum/showthread.php?t=321 auswerten
-                for (int i = auflösung * 1200; i >= 0; i--)
-                //for (int i = 0; i < auflösung * 1200 + 1;  i++)
+               // for (int i = auflösung * 1200; i >= 0; i--)
+                for (int i = 0; i < auflösung * 1200 + 1;  i++)
                 {
                     for (int j = 0; j < auflösung * 1200 + 1; j++)
                     {

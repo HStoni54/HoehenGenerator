@@ -104,7 +104,7 @@ namespace HoehenGenerator
 
             switch (v)
             {
-
+                // TODO einlesen "2Hoch un 4Dateien" stimmt nicht  
 
                 case "lu":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
