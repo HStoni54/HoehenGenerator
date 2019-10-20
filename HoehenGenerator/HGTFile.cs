@@ -48,7 +48,8 @@ namespace HoehenGenerator
             if (File.Exists(dateiname))
             {
                 FileStream fs = File.OpenRead(dateiname);
-                for (int i = 0; i < auflösung * 1200 + 1; i++)
+                //for (int i = auflösung * 1200; i >= 0; i--)
+                    for (int i = 0; i < auflösung * 1200 + 1;  i++)
                 {
                     for (int j = 0; j < auflösung * 1200 + 1; j++)
                     {

@@ -46,25 +46,25 @@ namespace HoehenGenerator
             int lon2 = (int)lon;
             lat1 = (int)((lat - (int)lat) * 3600 / auflösung);
             lon1 = (int)((lon - (int)lon) * 3600 / auflösung);
-            switch (v)
-            {
-                case "lo":
-                    lat1 += 3;
-                    lon1 -= 1;
-                    break;
-                case "lu":
-                    lat1 -= 1;
-                    lon1 -= 1;
-                    break;
-                case "ro":
-                    lat1 += 3;
-                    lon1 += 3;
-                    break;
-                case "ru":
-                    lat1 -= 1;
-                    lon1 += 3;
-                    break;
-            }
+            //switch (v)
+            //{
+            //    case "lo":
+            //        lat1 += 3;
+            //        lon1 -= 1;
+            //        break;
+            //    case "lu":
+            //        lat1 -= 1;
+            //        lon1 -= 1;
+            //        break;
+            //    case "ro":
+            //        lat1 += 3;
+            //        lon1 += 3;
+            //        break;
+            //    case "ru":
+            //        lat1 -= 1;
+            //        lon1 += 3;
+            //        break;
+            //}
             if (lat2 >= 0)
             {
                 hgt = "N" + lat2.ToString("D2");
