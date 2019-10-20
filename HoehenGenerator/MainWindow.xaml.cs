@@ -696,7 +696,7 @@ namespace HoehenGenerator
             //minimaleHöhe = punkte.Min(x => x.Höhe);
             //maximaleHöhe = punkte.Max(x => x.Höhe);
             double punktgröße = 1;
-            for (int i = 0; i < punkte.Count; i += 10)
+            for (int i = 0; i < punkte.Count; i += 1)
             {
                 int Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
                 int Lat = (int)(GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite));
@@ -704,24 +704,24 @@ namespace HoehenGenerator
 
                 if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
                 {
-                    //Ellipse elli = new Ellipse();
+                    Ellipse elli = new Ellipse();
 
-                    //int höhe = punkte[i].Höhe * 100 + 1000;
+                    int höhe = punkte[i].Höhe * 100 + 1000;
 
-                    //int r1 = höhe % 256;
-                    //int g1 = (höhe / 256) % 256;
-                    //int b1 = (höhe / 256 / 256) % 256;
-                    //byte r = (byte)r1;
-                    //byte g = (byte)g1; ;
-                    //byte b = (byte)b1; ;
-                    //mySolidColorBrush.Color = Color.FromRgb(r, g, b);
-                    //elli.Width = punktgröße;
-                    //elli.Height = punktgröße;
-                    //elli.Fill = mySolidColorBrush;
-                    //Zeichenfläche.Children.Add(elli);
+                    int r1 = höhe % 256;
+                    int g1 = (höhe / 256) % 256;
+                    int b1 = (höhe / 256 / 256) % 256;
+                    byte r = (byte)r1;
+                    byte g = (byte)g1; ;
+                    byte b = (byte)b1; ;
+                    mySolidColorBrush.Color = Color.FromRgb(r, g, b);
+                    elli.Width = punktgröße;
+                    elli.Height = punktgröße;
+                    elli.Fill = mySolidColorBrush;
+                    Zeichenfläche.Children.Add(elli);
 
-                    //Canvas.SetLeft(elli, Lon - punktgröße / 2);
-                    //Canvas.SetTop(elli, Lat - punktgröße / 2);
+                    Canvas.SetLeft(elli, Lon - punktgröße / 2);
+                    Canvas.SetTop(elli, Lat - punktgröße / 2);
 
                 }
             }
@@ -1754,7 +1754,7 @@ namespace HoehenGenerator
                 hGTFile = null;
             }
 
-            // ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
+            //ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();
@@ -1870,7 +1870,7 @@ namespace HoehenGenerator
             if (nordsüd == "S")
                 lon = -lon;
             geoPunkt.Lat = lat + breit / 3600.0 * auflösung;
-            geoPunkt.Lon = lon + hoch / 3600.0 * auflösung;
+            geoPunkt.Lon = lon +  hoch / 3600.0 * auflösung;
             return geoPunkt;
         }
 
