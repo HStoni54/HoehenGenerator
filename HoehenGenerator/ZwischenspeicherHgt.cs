@@ -28,7 +28,7 @@ namespace HoehenGenerator
 
             this.anzahlLat = anzahlLat;
             this.anzahlLon = anzahlLon;
-            this.höhen = new short[AnzahlLat, AnzahlLon];
+            this.höhen = new short[AnzahlLon, AnzahlLat];
             this.linksoben = new GeoPunkt(Linksunten.Lon, Linksunten.Lat + anzahlLat / 3600 * auflösung);
             this.rechtsunten = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat);
             this.rechtsoben = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat + anzahlLat / 3600 * auflösung);
@@ -45,7 +45,7 @@ namespace HoehenGenerator
             this.rechtsunten = new GeoPunkt(rechtsoben.Lon, linksunten.Lat);
             this.anzahlLat = (int)((rechtsoben.Lat - linksunten.Lat) / auflösung * 3600);
             this.anzahlLon = (int)((rechtsoben.Lon - linksunten.Lon) / auflösung * 3600);
-            this.höhen = new short[AnzahlLat, AnzahlLon];
+            this.höhen = new short[AnzahlLon, AnzahlLat];
         }
 
         public short HöheVonPunkt(GeoPunkt geoPunkt)
@@ -110,10 +110,18 @@ namespace HoehenGenerator
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
                     // TODO: Werte für einlesen definieren
-                    /* beginn und ende im HgtFile -> steht im File
-                     * Beginn oder Ende und anzahl?? im Datenfile
+                    /* beginn und ende im HgtFile -> steht im File also vorher auslesen
+                     * Anzahl ergibt sich daraus
+                     * Beginn oder Ende  im Datenfile das einzige, was sich ändert
                      * 
                      */
+                    for (int i = fileMitEcks.Linksunten[0];  i < fileMitEcks.Rechtsoben[0]; i++)
+                    {
+                        for (int j = fileMitEcks.Linksunten[1] ; j < fileMitEcks.Rechtsoben[1]; j++)
+                        {
+                            höhen[i - fileMitEcks.Linksunten[0], j - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                        }
+                    }
 
                     //     MessageBox.Show("Zweig lu");
                     break;

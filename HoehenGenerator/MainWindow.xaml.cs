@@ -1681,7 +1681,7 @@ namespace HoehenGenerator
                     item.Rechtsunten[1] = vierEcken.Hgtrechtsunten.DezLat;
                     item.Rechtsoben[0] = vierEcken.Hgtrechtsunten.DezLon;
                     item.Linksunten[1] = vierEcken.Hgtrechtsunten.DezLat;
-                    // Lat = LU
+                    //// Lat = LU
                     // Lon = RO
                 }
 
