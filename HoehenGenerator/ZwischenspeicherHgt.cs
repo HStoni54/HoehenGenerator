@@ -128,21 +128,44 @@ namespace HoehenGenerator
                 case "lo":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
+                    // TODO: für höhen[,] j korrigierern
+                    for (int i = fileMitEcks.Linksunten[0]; i < fileMitEcks.Rechtsoben[0]; i++)
+                    {
+                        for (int j = fileMitEcks.Linksunten[1]; j < fileMitEcks.Rechtsoben[1]; j++)
+                        {
+                            höhen[i - fileMitEcks.Linksunten[0], j - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                        }
+                    }                
                     // TODO: Werte für einlesen definieren s.o.
                     //  MessageBox.Show("Zweig lo");
                     break;
                 case "ru":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsunten.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
-                    //MessageBox.Show("Zweig ru");
+                    // TODO: für höhen[,] i korrigierern
+                    for (int i = fileMitEcks.Linksunten[0]; i < fileMitEcks.Rechtsoben[0]; i++)
+                    {
+                        for (int j = fileMitEcks.Linksunten[1]; j < fileMitEcks.Rechtsoben[1]; j++)
+                        {
+                            höhen[i - fileMitEcks.Linksunten[0], j - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                        }
+                    }                  //MessageBox.Show("Zweig ru");
                     // TODO: Werte für einlesen definieren s.o.
                     break;
                 case "ro":
-                    //MessageBox.Show("Zweig ro");
-                    // TODO: Werte für einlesen definieren s.o.
+                   // TODO: Werte für einlesen definieren s.o.
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsoben.Name + ".hgt");
                     daten = hGTFile.LeseDaten();
-                    break;
+                    // TODO: für höhen[,] j korrigierern
+                    // TODO: für höhen[,] i korrigierern
+                    for (int i = fileMitEcks.Linksunten[0]; i < fileMitEcks.Rechtsoben[0]; i++)
+                    {
+                        for (int j = fileMitEcks.Linksunten[1]; j < fileMitEcks.Rechtsoben[1]; j++)
+                        {
+                            höhen[i - fileMitEcks.Linksunten[0], j - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                        }
+                    }                  //MessageBox.Show("Zweig ro");
+                     break;
 
                 default:
                     break;
