@@ -20,7 +20,7 @@ namespace HoehenGenerator
 
         int anzahlLat, anzahlLon;
 
-        public ZwischenspeicherHgt(GeoPunkt linksunten, int anzahlLat, int anzahlLon, int auflösung)
+        public ZwischenspeicherHgt(GeoPunkt linksunten, int anzahlLon, int anzahlLat, int auflösung)
         {
             this.auflösung = auflösung;
             this.linksunten = linksunten;
@@ -119,11 +119,11 @@ namespace HoehenGenerator
                      * 
                      * Hier stimmt etwas noch nicht,  es werden falsche Zahlen ausgelesen 
                      */
-                    for (int i = fileMitEcks.Linksunten[0];  i < fileMitEcks.Rechtsoben[0]; i++)
+                    for (int i = fileMitEcks.Linksunten[1];  i < fileMitEcks.Rechtsoben[1]; i++)
                     {
-                        for (int j = fileMitEcks.Linksunten[1] ; j < fileMitEcks.Rechtsoben[1]; j++)
+                        for (int j = fileMitEcks.Linksunten[0] ; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                            höhen[i - fileMitEcks.Linksunten[0], j - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                            höhen[i - fileMitEcks.Linksunten[1], j - fileMitEcks.Linksunten[0]] = hGTFile.HgtDaten[i, j];
                         }
                     }
 
