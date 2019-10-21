@@ -733,11 +733,11 @@ namespace HoehenGenerator
 
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
-            double punktgröße =  Math.Round( Math.Sqrt(GrößeH * GrößeB / punkte.Count ) + 1);
+            double punktgröße =  Math.Round( Math.Sqrt(GrößeH * GrößeB / punkte.Count ) + 1) * 1.5;
 
-            zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
-            SolidColorBrush[] solidColorBrushes = new SolidColorBrush[punkte.Count];
-            Color[] colors = new Color[punkte.Count];
+            //zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
+            //SolidColorBrush[] solidColorBrushes = new SolidColorBrush[punkte.Count];
+            //Color[] colors = new Color[punkte.Count];
 
             minimaleHöhe = punkte.Min(x => x.Höhe);
             maximaleHöhe = punkte.Max(x => x.Höhe);
@@ -771,9 +771,9 @@ namespace HoehenGenerator
 
 
                     punkteAufCanvas.Enqueue(new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße,  Lon, Lat));
-                    zeichePunkteAufCanvas[i] = new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße, Lon, Lat);
-                    solidColorBrushes[i] = mySolidColorBrush;
-                    colors[i] = mySolidColorBrush.Color;
+                    //zeichePunkteAufCanvas[i] = new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße, Lon, Lat);
+                    //solidColorBrushes[i] = mySolidColorBrush;
+                    //colors[i] = mySolidColorBrush.Color;
                 }
             }
 
@@ -1795,7 +1795,7 @@ namespace HoehenGenerator
                 {
                     for (int j = 0; j < anzahl; j++)
                     {
-                        geoPunkt = hgttolatlon(dateiname, auflösung, i, j); // TODO: Berechnung überprüfen
+                        geoPunkt = hgttolatlon(dateiname, auflösung, i, j); 
                         geoPunkt.Höhe = daten[i, j];
 
                         if (IstPunktImRechteck(ref geoPunkt, 0.2))
@@ -1812,7 +1812,7 @@ namespace HoehenGenerator
 
                             //point.X = geoPunkt1.Lat;
                             //point.Y = geoPunkt1.Lon;
-                            //TODO: Anzahl der zu lesender Punkte vorher einschränken
+                            //
                             //TODO: Andere Globusteile einbeziehen Fläche überprüfen Methode Punkt innerhalb Polygon hier und oben
                             if (IstPunktImRechteck(ref geoPunkt1))
                             {
@@ -1841,7 +1841,7 @@ namespace HoehenGenerator
                 hGTFile = null;
             }
 
-            ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
+            ZeichnePunkte(geoPunkts); 
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();

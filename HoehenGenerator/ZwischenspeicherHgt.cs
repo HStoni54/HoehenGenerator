@@ -104,13 +104,13 @@ namespace HoehenGenerator
 
             switch (v)
             {
-                // TODO einlesen "2Hoch un 4Dateien" stimmt nicht  
+                
 
                 case "lu":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
                     //daten = hGTFile.LeseDaten();
                     //daten = hGTFile.HgtDaten;
-                    // TODO: Werte für einlesen definieren
+                    // 
                     /* beginn und ende im HgtFile -> steht im File also vorher auslesen
                      * Anzahl ergibt sich daraus
                      * Beginn oder Ende  im Datenfile das einzige, was sich ändert
@@ -132,7 +132,7 @@ namespace HoehenGenerator
                 case "lo":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
                     //daten = hGTFile.HgtDaten; reihen und Spalten vertauschen
-                    // TODO: für höhen[,] j korrigierern (AnzahlLat)
+                    // 
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
@@ -141,13 +141,13 @@ namespace HoehenGenerator
                             höhen[AnzahlLon + i - fileMitEcks.Rechtsoben[1], j - fileMitEcks.Linksunten[0]] = hGTFile.HgtDaten[i, j];
                         }
                     }                
-                    // TODO: Werte für einlesen definieren s.o.
+                    // 
                     //  MessageBox.Show("Zweig lo");
                     break;
                 case "ru":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsunten.Name + ".hgt");
                     //daten = hGTFile.HgtDaten;
-                    // TODO: für höhen[,] i korrigierern (AnzahlLon)
+                    // 
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
@@ -155,14 +155,14 @@ namespace HoehenGenerator
                             höhen[i - fileMitEcks.Linksunten[1], AnzahlLat + j - fileMitEcks.Rechtsoben[0]] = hGTFile.HgtDaten[i, j];
                         }
                     }                  //MessageBox.Show("Zweig ru");
-                    // TODO: Werte für einlesen definieren s.o.
+                    // 
                     break;
                 case "ro":
-                   // TODO: Werte für einlesen definieren s.o.
+                   // 
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsoben.Name + ".hgt");
                     //daten = hGTFile.HgtDaten;
-                    // TODO: für höhen[,] j korrigierern (AnzahlLat)
-                    // TODO: für höhen[,] i korrigierern (AnzahlLon)
+                    // 
+                    // 
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
