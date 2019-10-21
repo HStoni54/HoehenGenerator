@@ -80,7 +80,8 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="115"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="162*"/>
+                    <ColumnDefinition Width="509*"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="btnAnlagenDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="80" Click="btnAnlagenDirectory_Click"/>
                 <Label x:Name="label2" Content="Anlagenname" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" FontSize="11"/>
@@ -88,17 +89,19 @@
                 <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="btnGeneriereAnlage_Click" IsEnabled="False"/>
                 <Label x:Name="label3" Content="Maximale Knotenzahl" Grid.Column="1" HorizontalAlignment="Left" Margin="32,17,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label4" Content="x 100.000" Grid.Column="1" HorizontalAlignment="Left" Margin="77,55,0,0" VerticalAlignment="Top"/>
-                <ListBox x:Name="libKnotenMax" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="42,61,0,0" VerticalAlignment="Top" Width="35"/>
+                <ListBox x:Name="libKnotenMax" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="32,61,0,0" VerticalAlignment="Top" Width="45" Focusable="False" IsTextSearchEnabled="False">
+  
+                </ListBox>
                 <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="61,175,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label6" Content="Anlagengröße" Grid.Column="1" HorizontalAlignment="Left" Margin="42,95,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label7" Content="Breite" Grid.Column="1" HorizontalAlignment="Left" Margin="61,126,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label8" Content="Höhe" Grid.Column="1" HorizontalAlignment="Left" Margin="64,157,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label9" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="155,126,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label9_Copy" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="155,165,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="17" Margin="107,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
-                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="110,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45"/>
-                <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="64,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60"/>
-                <Label x:Name="lbKnotenAktuell" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="157,85,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label9" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="155,126,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <Label x:Name="label9_Copy" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="155,165,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="17" Margin="107,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbBreiteDerAnlage_TextChanged"/>
+                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="110,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" TextChanged="tbHöheDerAnlage_TextChanged"/>
+                <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="64,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextChanged="tbRasterDichte_TextChanged"/>
+                <Label x:Name="lbKnotenAktuell" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="157,85,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             </Grid>
         </TabItem>
         <TabItem  IsEnabled="False">

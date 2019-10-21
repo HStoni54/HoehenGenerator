@@ -1991,12 +1991,15 @@ namespace HoehenGenerator
             else
                 btnAnlagenDirectory.IsEnabled = true;
         }
-
+        double zahlbreiteDerAnlage = 1.5;
+        double zahltbHöheDerAnlage = 1.5;
+        int zahltbRasterdichte = 150;
         private void btnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
-            int höhe = 90;
-            int breite = 150;
+            int höhe = (int)zahltbHöheDerAnlage * zahltbRasterdichte;
+            int breite = (int)zahlbreiteDerAnlage * zahltbRasterdichte;
+            int rasterdichte = zahltbRasterdichte;
             System.Drawing.Color[] colors = { System.Drawing.Color.FromArgb(255,0, 100, 0) ,
                 System.Drawing.Color.FromArgb(255, 200, 200, 200),
                 System.Drawing.Color.FromArgb(255, 16, 39, 0),
@@ -2024,7 +2027,7 @@ namespace HoehenGenerator
 
             }
 
-            SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, 150);
+            SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, rasterdichte);
             if (af.SchreibeFile())
                 MessageBox.Show("Anlagendatei geschrieben");
             else
@@ -2037,8 +2040,14 @@ namespace HoehenGenerator
         private void generiereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
+            libKnotenMax.Items.Clear();
+            for (int i = 8; i <= 50; i++)
+            {
+                
+                libKnotenMax.Items.Add( i.ToString());
+            }
         }
-
+        
         private void btnIndex_Click(object sender, RoutedEventArgs e)
         {
             GeneriereIndices();
@@ -2047,6 +2056,103 @@ namespace HoehenGenerator
         private void VIEW_Checked(object sender, DependencyPropertyChangedEventArgs e)
         {
 
+        }
+        string last_String1;
+        string last_String2;
+        string last_String3;
+        
+      
+        private void tbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+             //tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
+            
+            try
+            {
+                if (tbBreiteDerAnlage.Text == "")
+                    zahlbreiteDerAnlage = 1.5;
+                else
+                {
+                    zahlbreiteDerAnlage = Convert.ToDouble(tbBreiteDerAnlage.Text);
+                    last_String1 = tbBreiteDerAnlage.Text;
+                }
+            }
+            catch
+            {
+
+                int old_Cursor = tbBreiteDerAnlage.CaretIndex;
+                
+                tbBreiteDerAnlage.Text = last_String1;
+                tbBreiteDerAnlage.CaretIndex = old_Cursor - 1;
+            }
+            lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
+
+            if (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte <= 800000)
+            {
+                lbKnotenAktuell.Background = Brushes.LightGreen;
+            }
+            else
+            if (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte <= 1000000)
+            {
+                lbKnotenAktuell.Background = Brushes.LightCyan;
+            }
+            else
+            if (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte <= 5000000)
+            {
+                lbKnotenAktuell.Background = Brushes.Yellow;
+            }
+            else
+                lbKnotenAktuell.Background = Brushes.Red;
+        }
+
+
+        private void tbHöheDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
+
+            try
+            {
+                if (tbHöheDerAnlage.Text == "")
+                    zahltbHöheDerAnlage = 1.5;
+                else
+                {
+                    zahltbHöheDerAnlage = Convert.ToDouble(tbHöheDerAnlage.Text);
+                    last_String2 = tbHöheDerAnlage.Text;
+                }
+            }
+            catch
+            {
+
+                int old_Cursor = tbHöheDerAnlage.CaretIndex;
+
+                tbHöheDerAnlage.Text = last_String2;
+                tbHöheDerAnlage.CaretIndex = old_Cursor - 1;
+            }
+            lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
+        }
+        
+        private void tbRasterDichte_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //tbRasterDichte.Text = zahltbRasterdichte.ToString();
+
+            try
+            {
+                if (tbRasterDichte.Text == "")
+                    zahltbRasterdichte = 150;
+                else
+                {
+                    zahltbRasterdichte = Convert.ToInt32 (tbRasterDichte.Text);
+                    last_String3 = tbRasterDichte.Text;
+                }
+            }
+            catch
+            {
+
+                int old_Cursor = tbRasterDichte.CaretIndex;
+
+                tbRasterDichte.Text = last_String3;
+                tbRasterDichte.CaretIndex = old_Cursor - 1;
+            }
+            lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
         }
     }
 
