@@ -2046,6 +2046,9 @@ namespace HoehenGenerator
                 
                 libKnotenMax.Items.Add( i.ToString());
             }
+            tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
+            tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
+            tbRasterDichte.Text = zahltbRasterdichte.ToString();
         }
         
         private void btnIndex_Click(object sender, RoutedEventArgs e)
