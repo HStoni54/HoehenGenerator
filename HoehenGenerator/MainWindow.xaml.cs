@@ -64,6 +64,7 @@ namespace HoehenGenerator
         ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
         ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
         ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
+        ConcurrentQueue<clZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<clZeichneMatrix>();
         ZwischenspeicherHgt ZwspeicherHgt;
 
 
@@ -75,28 +76,55 @@ namespace HoehenGenerator
             Title = "Höhengenerator für EEP";
 
 
+         Thread thrHoleDateien = new Thread(HoleDateien);
+            thrHoleDateien.IsBackground = true;
+            thrHoleDateien.Priority = ThreadPriority.Lowest;
+            thrHoleDateien.Start();
 
-
-            Thread thrHoleIndices = new Thread(HoleIndices);
+           Thread thrHoleIndices = new Thread(HoleIndices);
             thrHoleIndices.IsBackground = true;
             thrHoleIndices.Priority = ThreadPriority.Lowest;
             thrHoleIndices.Start();
 
 
-            Thread thrHoleDateien = new Thread(HoleDateien);
-            thrHoleDateien.IsBackground = true;
-            thrHoleDateien.Priority = ThreadPriority.Lowest;
-            thrHoleDateien.Start();
+            
 
             Thread thrUnzpFiles = new Thread(UnzipDateien);
             thrUnzpFiles.IsBackground = true;
             thrUnzpFiles.Priority = ThreadPriority.Lowest;
             thrUnzpFiles.Start();
 
-            Thread thrZeichneCanvas = new Thread(ZeichneCanvas);
-            thrZeichneCanvas.IsBackground = true;
-            thrZeichneCanvas.Priority = ThreadPriority.Lowest;
-            thrZeichneCanvas.Start();
+            Thread thrZeichneMatrix = new Thread(classZeichneMatrix);
+            thrZeichneMatrix.IsBackground = true;
+            thrZeichneMatrix.Priority = ThreadPriority.Lowest;
+            thrZeichneMatrix.Start();
+            
+            Thread[] thrZeichneCanvas = new Thread[6];
+            for (int i = 0; i < thrZeichneCanvas.Length; i++)
+            {
+                thrZeichneCanvas[i] = new Thread(ZeichneCanvas);
+                thrZeichneCanvas[i].IsBackground = true;
+                thrZeichneCanvas[i].Priority = ThreadPriority.Lowest;
+                thrZeichneCanvas[i].Start();
+            }
+
+        }
+
+        private void classZeichneMatrix()
+        {
+            while (true)
+            {
+                while (clZeichneMatrices.Count > 0)
+                {
+                    bool istArbeitDa = clZeichneMatrices.TryDequeue(out clZeichneMatrix datei);
+                    if (istArbeitDa)
+                    {
+                        Dispatcher.BeginInvoke(new Action(() => LeseEinUndMachWeiter()));
+                    }
+                }
+                Thread.Sleep(100);
+            }
+
         }
 
         private void ZeichneCanvas()
@@ -109,8 +137,11 @@ namespace HoehenGenerator
                     bool istArbeitDa = punkteAufCanvas.TryDequeue(out zeichePunkteAufCanvas datei);
                     if (istArbeitDa)
                     {
-                        Dispatcher.BeginInvoke(new Action(() => ZeichneCanvasPunkte(datei.MySolidColorBrush, datei.Punktgröße  ,datei.Lon1 ,datei.Lat1)));
+                       
+                        Dispatcher.BeginInvoke(new Action(() => ZeichneCanvasPunkte(datei.MySolidColorBrush, datei.Punktgröße, datei.Lon1, datei.Lat1)));
                     }
+                    
+                       
                 }
                 Thread.Sleep(100);
             }
@@ -125,17 +156,17 @@ namespace HoehenGenerator
                     bool istArbeitDa = unzippeDateiens.TryDequeue(out UnzippeDateien datei);
                     if (istArbeitDa)
                     {
-                          unZipHgtFiles(datei.Zieldatei);
-                            Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
-                            //FärbeHgtLabel(datei.Zieldatei);
-                            Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
-                            //ZeichneAlles(punkte);
-  
+                        unZipHgtFiles(datei.Zieldatei);
+                        Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
+                        //FärbeHgtLabel(datei.Zieldatei);
+                        Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
+                        //ZeichneAlles(punkte);
+
                     }
                 }
                 Thread.Sleep(100);
             }
-            
+
         }
 
         private void HoleDateien()
@@ -152,8 +183,9 @@ namespace HoehenGenerator
                         {
                             unzippeDateiens.Enqueue(new UnzippeDateien(datei.Zieldatei));
                         }
-                    }
+                    } 
                     
+
 
                 }
                 Thread.Sleep(100);
@@ -178,7 +210,12 @@ namespace HoehenGenerator
                     if (aufgabeIndices.Count == 0)
                     {
                         if (ÜberprüfeIndices())
-                            Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
+                        
+                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
+                           
+                       
+                           
+                       
 
                         else
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = false));
@@ -256,7 +293,7 @@ namespace HoehenGenerator
                         MessageBox.Show("Kann Directory für Hgt-Dateien nicht erstellen!\n"
                             + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
                             + "\"" + pfad + "\"");
-                        
+
                     }
 
                 hgtPfad = pfad + "\\HGT";
@@ -264,17 +301,17 @@ namespace HoehenGenerator
                 {
                     FileStream fs = File.Create(hgtPfad + "\\test.txt");
                     fs.Close();
-                    
+
                 }
                 catch (Exception)
                 {
                     MessageBox.Show("Kann im Directory für Hgt-Dateien nicht schreiben!\n"
                             + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
                             + "\"" + pfad + "\"");
-                    
+
                 }
                 File.Delete(hgtPfad + "\\test.txt");
-                
+
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
                     ZipArchive archive = ZipFile.OpenRead(vName);
@@ -733,7 +770,7 @@ namespace HoehenGenerator
 
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
-            double punktgröße =  Math.Round( Math.Sqrt(GrößeH * GrößeB / punkte.Count ) + 1) * 1.5;
+            double punktgröße = Math.Round(Math.Sqrt(GrößeH * GrößeB / punkte.Count) + 1) * 1.5;
 
             //zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
             //SolidColorBrush[] solidColorBrushes = new SolidColorBrush[punkte.Count];
@@ -757,20 +794,20 @@ namespace HoehenGenerator
                     int r1 = höhe % 256;
                     int g1 = (höhe / 256) % 256;
                     int b1 = (höhe / 256 / 256) % 256;
-                    byte höhe1 = (byte)(((punkte[i].Höhe - minimaleHöhe) * 100 + 1000)/ (höhendifferenz + 10) / 100 * 256 -1);
+                    byte höhe1 = (byte)(((punkte[i].Höhe - minimaleHöhe) * 100 + 1000) / (höhendifferenz + 10) / 100 * 256 - 1);
 
                     b1 = höhe1;
                     r1 = b1;
                     g1 = b1;
                     //b1 = 0;
                     byte r = (byte)r1;
-                    byte g = (byte)g1; 
-                    byte b = (byte)b1; 
+                    byte g = (byte)g1;
+                    byte b = (byte)b1;
                     SolidColorBrush mySolidColorBrush = new SolidColorBrush();
                     mySolidColorBrush.Color = Color.FromRgb(r, g, b);
 
 
-                    punkteAufCanvas.Enqueue(new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße,  Lon, Lat));
+                    punkteAufCanvas.Enqueue(new zeichePunkteAufCanvas(mySolidColorBrush, punktgröße, Lon, Lat));
                     //zeichePunkteAufCanvas[i] = new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße, Lon, Lat);
                     //solidColorBrushes[i] = mySolidColorBrush;
                     //colors[i] = mySolidColorBrush.Color;
@@ -782,23 +819,23 @@ namespace HoehenGenerator
 
         }
 
-        private void ZeichneCanvasPunkte( SolidColorBrush mySolidColorBrush, double punktgröße,  int Lon, int Lat)
+        private void ZeichneCanvasPunkte(SolidColorBrush mySolidColorBrush, double punktgröße, int Lon, int Lat)
         {
             Ellipse elli = new Ellipse();
 
-       
+
             elli.Width = punktgröße;
             elli.Height = punktgröße;
 
             elli.Fill = mySolidColorBrush;
             //elli.Fill = Brushes.Yellow;
             Zeichenfläche.Children.Add(elli);
-            
+
             Canvas.SetLeft(elli, Lon - punktgröße / 2);
-            Canvas.SetBottom (elli, Lat - punktgröße / 2);
-                
-                
-               
+            Canvas.SetBottom(elli, Lat - punktgröße / 2);
+
+
+
         }
 
         private void AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe)
@@ -1179,15 +1216,15 @@ namespace HoehenGenerator
                     ladeDateiens.Enqueue(new LadeDateien(view3[i], Zielname));
                 //webClient.DownloadFile(view3[i], Zielname);
             }
-
-
+           
+   
 
         }
 
         private bool LadeHGTDateien(string v, string zielname)
         {
             bool ergebnis = true;
-            WebClient webClient = new WebClient() 
+            WebClient webClient = new WebClient()
             {
                 Encoding = Encoding.UTF8
             };
@@ -1321,7 +1358,7 @@ namespace HoehenGenerator
             //    System.Diagnostics.Debug.Print(aufgabe.Hgtart + " " + aufgabe.Auflösung+ " " + aufgabe.Pfad);
             //    GeneriereIndices(aufgabe.Hgtart, aufgabe.Auflösung, aufgabe.Pfad);
             //}
-
+           
 
             if (ÜberprüfeIndices())
                 LadeHGTFiles.IsEnabled = true;
@@ -1335,7 +1372,7 @@ namespace HoehenGenerator
             if (s.ToLower() == "srtm")
                 if (GeneriereSRTMIndex(i, hgtPfad))
                     ergebnis = true;
-              
+
             if (s.ToLower() == "view")
                 if (GeneriereViewIndex(i, hgtPfad))
                     ergebnis = true;
@@ -1423,7 +1460,7 @@ namespace HoehenGenerator
 
                 MessageBox.Show("Fehler!\nKann Datei: " + url +
                     " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
-               
+
             }
 
             w.Dispose();
@@ -1551,7 +1588,7 @@ namespace HoehenGenerator
             catch (Exception e)
             {
                 MessageBox.Show("Fehler!\nKann Idex nicht erstellen!\nÜberprüfen Sie Ihre Internetverbindung");
-                
+
             }
 
             w.Dispose();
@@ -1795,7 +1832,7 @@ namespace HoehenGenerator
                 {
                     for (int j = 0; j < anzahl; j++)
                     {
-                        geoPunkt = hgttolatlon(dateiname, auflösung, i, j); 
+                        geoPunkt = hgttolatlon(dateiname, auflösung, i, j);
                         geoPunkt.Höhe = daten[i, j];
 
                         if (IstPunktImRechteck(ref geoPunkt, 0.2))
@@ -1841,9 +1878,10 @@ namespace HoehenGenerator
                 hGTFile = null;
             }
 
-            ZeichnePunkte(geoPunkts); 
+            ZeichnePunkte(geoPunkts);
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
+            btWeiter3.IsEnabled = true;
             geoPunkts.Clear();
         }
 
@@ -1859,6 +1897,14 @@ namespace HoehenGenerator
         }
 
         private void Einlesen_Click(object sender, RoutedEventArgs e)
+        {
+
+            clZeichneMatrices.Enqueue(new clZeichneMatrix("mach hin"));
+           // LeseEinUndMachWeiter();
+
+        }
+
+        private void LeseEinUndMachWeiter()
         {
             Filemitauflösung fma = new Filemitauflösung("", 0);
             List<Filemitauflösung> lfma = new List<Filemitauflösung>();
@@ -1904,8 +1950,6 @@ namespace HoehenGenerator
             }
 
             ZeichneMatrix(lfma);
-
-
         }
 
         private Filemitauflösung findeErsteDatei(string item, bool nurdreizoll = false)
@@ -1956,8 +2000,8 @@ namespace HoehenGenerator
                 lat = -lat;
             if (nordsüd == "S")
                 lon = -lon;
-            geoPunkt.Lat = lat +  breit / 3600.0 * auflösung;
-            geoPunkt.Lon = lon +  hoch / 3600.0 * auflösung;
+            geoPunkt.Lat = lat + breit / 3600.0 * auflösung;
+            geoPunkt.Lon = lon + hoch / 3600.0 * auflösung;
             return geoPunkt;
         }
 
@@ -2043,14 +2087,14 @@ namespace HoehenGenerator
             libKnotenMax.Items.Clear();
             for (int i = 8; i <= 50; i++)
             {
-                
-                libKnotenMax.Items.Add( i.ToString());
+
+                libKnotenMax.Items.Add(i.ToString());
             }
             tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
             tbRasterDichte.Text = zahltbRasterdichte.ToString();
         }
-        
+
         private void btnIndex_Click(object sender, RoutedEventArgs e)
         {
             GeneriereIndices();
@@ -2063,12 +2107,12 @@ namespace HoehenGenerator
         string last_String1;
         string last_String2;
         string last_String3;
-        
-      
+
+
         private void tbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
-             //tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
-            
+            //tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
+
             try
             {
                 if (tbBreiteDerAnlage.Text == "")
@@ -2083,7 +2127,7 @@ namespace HoehenGenerator
             {
 
                 int old_Cursor = tbBreiteDerAnlage.CaretIndex;
-                
+
                 tbBreiteDerAnlage.Text = last_String1;
                 tbBreiteDerAnlage.CaretIndex = old_Cursor - 1;
             }
@@ -2132,7 +2176,7 @@ namespace HoehenGenerator
             }
             lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
         }
-        
+
         private void tbRasterDichte_TextChanged(object sender, TextChangedEventArgs e)
         {
             //tbRasterDichte.Text = zahltbRasterdichte.ToString();
@@ -2143,7 +2187,7 @@ namespace HoehenGenerator
                     zahltbRasterdichte = 150;
                 else
                 {
-                    zahltbRasterdichte = Convert.ToInt32 (tbRasterDichte.Text);
+                    zahltbRasterdichte = Convert.ToInt32(tbRasterDichte.Text);
                     last_String3 = tbRasterDichte.Text;
                 }
             }
@@ -2156,6 +2200,12 @@ namespace HoehenGenerator
                 tbRasterDichte.CaretIndex = old_Cursor - 1;
             }
             lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
+        }
+
+        private void btWeiter3_Click(object sender, RoutedEventArgs e)
+        {
+            tabHöhenkorrektur.IsEnabled = true;
+            tabHöhenkorrektur.IsSelected = true;
         }
     }
 
