@@ -62,6 +62,8 @@ namespace HoehenGenerator
         string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
         ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
         ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
+        ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
+        ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
         ZwischenspeicherHgt ZwspeicherHgt;
 
 
@@ -85,6 +87,55 @@ namespace HoehenGenerator
             thrHoleDateien.IsBackground = true;
             thrHoleDateien.Priority = ThreadPriority.Lowest;
             thrHoleDateien.Start();
+
+            Thread thrUnzpFiles = new Thread(UnzipDateien);
+            thrUnzpFiles.IsBackground = true;
+            thrUnzpFiles.Priority = ThreadPriority.Lowest;
+            thrUnzpFiles.Start();
+
+            Thread thrZeichneCanvas = new Thread(ZeichneCanvas);
+            thrZeichneCanvas.IsBackground = true;
+            thrZeichneCanvas.Priority = ThreadPriority.Lowest;
+            thrZeichneCanvas.Start();
+        }
+
+        private void ZeichneCanvas()
+        {
+
+            while (true)
+            {
+                while (punkteAufCanvas.Count > 0)
+                {
+                    bool istArbeitDa = punkteAufCanvas.TryDequeue(out zeichePunkteAufCanvas datei);
+                    if (istArbeitDa)
+                    {
+                        Dispatcher.BeginInvoke(new Action(() => ZeichneCanvasPunkte(datei.MySolidColorBrush, datei.Punktgröße  ,datei.Lon1 ,datei.Lat1)));
+                    }
+                }
+                Thread.Sleep(100);
+            }
+        }
+
+        private void UnzipDateien()
+        {
+            while (true)
+            {
+                while (unzippeDateiens.Count > 0)
+                {
+                    bool istArbeitDa = unzippeDateiens.TryDequeue(out UnzippeDateien datei);
+                    if (istArbeitDa)
+                    {
+                          unZipHgtFiles(datei.Zieldatei);
+                            Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
+                            //FärbeHgtLabel(datei.Zieldatei);
+                            Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
+                            //ZeichneAlles(punkte);
+  
+                    }
+                }
+                Thread.Sleep(100);
+            }
+            
         }
 
         private void HoleDateien()
@@ -99,19 +150,10 @@ namespace HoehenGenerator
 
                         if (LadeHGTDateien(datei.Url, datei.Zieldatei))
                         {
-
-                            unZipHgtFiles(datei.Zieldatei);
-                            Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
-                            //FärbeHgtLabel(datei.Zieldatei);
-                            Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
-                            //ZeichneAlles(punkte);
+                            unzippeDateiens.Enqueue(new UnzippeDateien(datei.Zieldatei));
                         }
                     }
-                    if (ladeDateiens.Count == 0)
-                    {
-
-
-                    }
+                    
 
                 }
                 Thread.Sleep(100);
@@ -692,11 +734,14 @@ namespace HoehenGenerator
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
             //double punktgröße = 4 * GrößeH * GrößeB / punkte.Count;
-            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            
+            zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
+            SolidColorBrush[] solidColorBrushes = new SolidColorBrush[punkte.Count];
+            Color[] colors = new Color[punkte.Count];
 
-            //minimaleHöhe = punkte.Min(x => x.Höhe);
-            //maximaleHöhe = punkte.Max(x => x.Höhe);
-            double punktgröße = 1;
+            minimaleHöhe = punkte.Min(x => x.Höhe);
+            maximaleHöhe = punkte.Max(x => x.Höhe);
+            double punktgröße = 5;
             for (int i = 0; i < punkte.Count; i += 1)
             {
                 int Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
@@ -705,31 +750,51 @@ namespace HoehenGenerator
 
                 if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
                 {
-                    Ellipse elli = new Ellipse();
 
                     int höhe = punkte[i].Höhe * 100 + 1000;
 
                     int r1 = höhe % 256;
                     int g1 = (höhe / 256) % 256;
                     int b1 = (höhe / 256 / 256) % 256;
+                    //r1 = 0;
+                    //g1 = 0;
+                    //b1 = 0;
                     byte r = (byte)r1;
-                    byte g = (byte)g1; ;
-                    byte b = (byte)b1; ;
+                    byte g = (byte)g1; 
+                    byte b = (byte)b1; 
+                    SolidColorBrush mySolidColorBrush = new SolidColorBrush();
                     mySolidColorBrush.Color = Color.FromRgb(r, g, b);
-                    elli.Width = punktgröße;
-                    elli.Height = punktgröße;
-                    elli.Fill = mySolidColorBrush;
-                    Zeichenfläche.Children.Add(elli);
-
-                    Canvas.SetLeft(elli, Lon - punktgröße / 2);
-                    Canvas.SetTop(elli, Lat - punktgröße / 2);
-
+                   
+                    
+                    punkteAufCanvas.Enqueue(new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße,  Lon, Lat));
+                    zeichePunkteAufCanvas[i] = new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße, Lon, Lat);
+                    solidColorBrushes[i] = mySolidColorBrush;
+                    colors[i] = mySolidColorBrush.Color;
                 }
             }
 
 
 
 
+        }
+
+        private void ZeichneCanvasPunkte( SolidColorBrush mySolidColorBrush, double punktgröße,  int Lon, int Lat)
+        {
+            Ellipse elli = new Ellipse();
+
+       
+            elli.Width = punktgröße;
+            elli.Height = punktgröße;
+
+            elli.Fill = mySolidColorBrush;
+            //elli.Fill = Brushes.Yellow;
+            Zeichenfläche.Children.Add(elli);
+            
+            Canvas.SetLeft(elli, Lon - punktgröße / 2);
+            Canvas.SetBottom (elli, Lat - punktgröße / 2);
+                
+                
+               
         }
 
         private void AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe)
@@ -1705,7 +1770,7 @@ namespace HoehenGenerator
             GeoPunkt geoPunkt = new GeoPunkt();
             GeoPunkt geoPunkt1 = new GeoPunkt();
             List<GeoPunkt> geos = new List<GeoPunkt>();
-            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (-1 * winkel));
+            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (winkel));
             foreach (Filemitauflösung item in lfma)
             {
                 int auflösung = item.Auflösung;
@@ -1772,7 +1837,7 @@ namespace HoehenGenerator
                 hGTFile = null;
             }
 
-            //ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
+            ZeichnePunkte(geoPunkts); //TODO: Zeichnen in Image und nicht Canvas als Datei und dann darstellen ??
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
             geoPunkts.Clear();
@@ -1980,5 +2045,8 @@ namespace HoehenGenerator
 
         }
     }
+
+
+
 }
 

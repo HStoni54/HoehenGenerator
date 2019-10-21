@@ -109,7 +109,9 @@
     <Compile Include="LadeDateien.cs" />
     <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
+    <Compile Include="UnzippeDateien.cs" />
     <Compile Include="VierEcken.cs" />
+    <Compile Include="zeichePunkteAufCanvas.cs" />
     <Compile Include="ZeichneBitMap.cs" />
     <Compile Include="ZwischenspeicherHgt.cs" />
     <Page Include="MainWindow.xaml">
