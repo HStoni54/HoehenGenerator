@@ -733,15 +733,16 @@ namespace HoehenGenerator
 
             double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
-            //double punktgröße = 4 * GrößeH * GrößeB / punkte.Count;
-            
+            double punktgröße =  Math.Round( Math.Sqrt(GrößeH * GrößeB / punkte.Count ) + 1);
+
             zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
             SolidColorBrush[] solidColorBrushes = new SolidColorBrush[punkte.Count];
             Color[] colors = new Color[punkte.Count];
 
             minimaleHöhe = punkte.Min(x => x.Höhe);
             maximaleHöhe = punkte.Max(x => x.Höhe);
-            double punktgröße = 5;
+            double höhendifferenz = maximaleHöhe - minimaleHöhe;
+            //double punktgröße = 5;
             for (int i = 0; i < punkte.Count; i += 1)
             {
                 int Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
@@ -756,16 +757,19 @@ namespace HoehenGenerator
                     int r1 = höhe % 256;
                     int g1 = (höhe / 256) % 256;
                     int b1 = (höhe / 256 / 256) % 256;
-                    //r1 = 0;
-                    //g1 = 0;
+                    byte höhe1 = (byte)(((punkte[i].Höhe - minimaleHöhe) * 100 + 1000)/ (höhendifferenz + 10) / 100 * 256 -1);
+
+                    b1 = höhe1;
+                    r1 = b1;
+                    g1 = b1;
                     //b1 = 0;
                     byte r = (byte)r1;
                     byte g = (byte)g1; 
                     byte b = (byte)b1; 
                     SolidColorBrush mySolidColorBrush = new SolidColorBrush();
                     mySolidColorBrush.Color = Color.FromRgb(r, g, b);
-                   
-                    
+
+
                     punkteAufCanvas.Enqueue(new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße,  Lon, Lat));
                     zeichePunkteAufCanvas[i] = new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße, Lon, Lat);
                     solidColorBrushes[i] = mySolidColorBrush;
