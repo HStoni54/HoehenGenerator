@@ -109,11 +109,13 @@ namespace HoehenGenerator
                 case "lu":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
                     //daten = hGTFile.LeseDaten();
-                    daten = hGTFile.HgtDaten;
+                    //daten = hGTFile.HgtDaten;
                     // TODO: Werte für einlesen definieren
                     /* beginn und ende im HgtFile -> steht im File also vorher auslesen
                      * Anzahl ergibt sich daraus
                      * Beginn oder Ende  im Datenfile das einzige, was sich ändert
+                     * 
+                     * Ich habe mal wieder Lat und Lon vertauscht
                      * 
                      * Hier stimmt etwas noch nicht,  es werden falsche Zahlen ausgelesen 
                      */
@@ -129,7 +131,7 @@ namespace HoehenGenerator
                     break;
                 case "lo":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
-                    daten = hGTFile.HgtDaten;
+                    //daten = hGTFile.HgtDaten;
                     // TODO: für höhen[,] j korrigierern (AnzahlLat)
                     for (int i = fileMitEcks.Linksunten[0]; i < fileMitEcks.Rechtsoben[0]; i++)
                     {
@@ -143,7 +145,7 @@ namespace HoehenGenerator
                     break;
                 case "ru":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsunten.Name + ".hgt");
-                    daten = hGTFile.HgtDaten;
+                    //daten = hGTFile.HgtDaten;
                     // TODO: für höhen[,] i korrigierern (AnzahlLon)
                     for (int i = fileMitEcks.Linksunten[0]; i < fileMitEcks.Rechtsoben[0]; i++)
                     {
@@ -157,7 +159,7 @@ namespace HoehenGenerator
                 case "ro":
                    // TODO: Werte für einlesen definieren s.o.
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsoben.Name + ".hgt");
-                    daten = hGTFile.HgtDaten;
+                    //daten = hGTFile.HgtDaten;
                     // TODO: für höhen[,] j korrigierern (AnzahlLat)
                     // TODO: für höhen[,] i korrigierern (AnzahlLon)
                     for (int i = fileMitEcks.Linksunten[0]; i < fileMitEcks.Rechtsoben[0]; i++)

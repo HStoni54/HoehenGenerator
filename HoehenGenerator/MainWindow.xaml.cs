@@ -1716,7 +1716,12 @@ namespace HoehenGenerator
                 string dateiname = System.IO.Path.GetFileName(item.Dateiname);
 
                 int anzahl = (int)Math.Sqrt(daten.Length);
-
+                int[] pu = new int[2];
+                int pu_i = 0;
+                int pu_j = 0;
+                List<object> punktliste = new List<object>();
+                List<int> pu_i_list = new List<int>();
+                List<int> pu_j_list = new List<int>();
                 for (int i = 0; i < anzahl; i++)
                 {
                     for (int j = 0; j < anzahl; j++)
@@ -1749,7 +1754,15 @@ namespace HoehenGenerator
 
                                 if (geoPunkt1.Höhe != -32768)
                                     geoPunkts.Add(geoPunkt1);
-
+                                pu[0] = i;
+                                pu_i = i;
+                                pu[1] = j;
+                                pu_j = j;
+                                if (!pu_i_list.Contains(i))
+                                    pu_i_list.Add(i);
+                                if (!pu_j_list.Contains(j))
+                                    pu_j_list.Add(j);
+                                punktliste.Add(pu);
                             }
                         }
                     }

@@ -97,7 +97,7 @@ namespace HoehenGenerator
             {
                 hgt = hgt + "W" + (-lon2).ToString("D3");
             }
-            return new HgtmitKoordinaten(hgt, lat1, lon1); ;
+            return new HgtmitKoordinaten(hgt, lon1, lat1); ;
         }
 
         internal HgtmitKoordinaten Hgtlinksunten { get => hgtlinksunten; set => hgtlinksunten = value; }
