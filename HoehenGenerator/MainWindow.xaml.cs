@@ -56,7 +56,16 @@ namespace HoehenGenerator
 
         string hgtPfad;
         double maximaleHöhe = -10000.0;
-        double minimaleHöhe = 10000.0;
+        double minimaleHöhe = 10000.0; 
+        double zahlbreiteDerAnlage = 1.5;
+        double zahltbHöheDerAnlage = 1.5;
+        double hoehe2;
+        double breite2;
+       int zahltbRasterdichte = 150;
+      string last_String1;
+        string last_String2;
+        string last_String3;
+
         bool datumgrenze = false;
         int winkel = 0;
         string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
@@ -312,6 +321,41 @@ namespace HoehenGenerator
                 }
                 File.Delete(hgtPfad + "\\test.txt");
 
+
+                if (!Directory.Exists(pfad + "\\Anlagen"))
+
+                    try
+                    {
+
+                        Directory.CreateDirectory(pfad + "\\Anlagen");
+                    }
+                    catch (Exception)
+                    {
+
+                        MessageBox.Show("Kann Directory für EEP-Anlagen nicht erstellen!\n"
+                            + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
+                            + "\"" + pfad + "\"");
+
+                    }
+
+                anlagenpfad = pfad + "\\Anlagen";
+                try
+                {
+                    FileStream fs = File.Create(anlagenpfad + "\\test.txt");
+                    fs.Close();
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Kann im Directory für EEP-Anlagen nicht schreiben!\n"
+                            + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
+                            + "\"" + pfad + "\"");
+
+                }
+                File.Delete(anlagenpfad + "\\test.txt");
+                btnAnlagenDirectory.IsEnabled = false;
+                btnGeneriereAnlage.IsEnabled = true;
+
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
                     ZipArchive archive = ZipFile.OpenRead(vName);
@@ -539,12 +583,12 @@ namespace HoehenGenerator
         private void ZeichneRechteck(PointCollection punkte)
         {
             Polyline rechteckpunkte = new Polyline();
-            double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
+            double Größe, GrößeH, GrößeB,  minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite, out Größe);
             double flaeche2 = hoehe2 * breite2;
-            fläche.Text = Math.Round(flaeche2).ToString() + " km²";
-            höhe.Text = Math.Round(hoehe2).ToString() + " km";
-            breite.Text = Math.Round(breite2).ToString() + " km";
+            fläche.Text = Math.Round(flaeche2,2).ToString() + " km²";
+            höhe.Text = Math.Round(hoehe2,2).ToString() + " km";
+            breite.Text = Math.Round(breite2,2).ToString() + " km";
             Zeichenfläche.Children.Clear();
             PointCollection canvasrechteckpunkte = new PointCollection();
             canvasrechteckpunkte.Add(new Point(GrößeB, -1 * GrößeH));
@@ -2012,7 +2056,7 @@ namespace HoehenGenerator
 
             //fbd.RootFolder = Environment.SpecialFolder.Personal;
             string path = Environment.CurrentDirectory;
-            fbd.SelectedPath = @"X:\Trend\HöhenGenerator\Anlagen";
+            fbd.SelectedPath = anlagenpfad;
 
             System.Windows.Forms.DialogResult result = fbd.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
@@ -2035,14 +2079,11 @@ namespace HoehenGenerator
             else
                 btnAnlagenDirectory.IsEnabled = true;
         }
-        double zahlbreiteDerAnlage = 1.5;
-        double zahltbHöheDerAnlage = 1.5;
-        int zahltbRasterdichte = 150;
         private void btnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
-            int höhe = (int)zahltbHöheDerAnlage * zahltbRasterdichte;
-            int breite = (int)zahlbreiteDerAnlage * zahltbRasterdichte;
+            int höhe = (int)(zahltbHöheDerAnlage * zahltbRasterdichte);
+            int breite = (int)(zahlbreiteDerAnlage * zahltbRasterdichte);
             int rasterdichte = zahltbRasterdichte;
             System.Drawing.Color[] colors = { System.Drawing.Color.FromArgb(255,0, 100, 0) ,
                 System.Drawing.Color.FromArgb(255, 200, 200, 200),
@@ -2057,39 +2098,59 @@ namespace HoehenGenerator
 
             for (int i = 0; i < bitmapnamen.Length; i++)
             {
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite, höhe, pixelFormat);
-
-
-                ZeichneBitMap zeichneBitMap = new ZeichneBitMap(bitmap, colors[i]);
-
-                zeichneBitMap.FülleBitmap();
-
-
-                SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen[i]);
-
-                speicherBild.Speichern(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen[i]);
+                GeneriereEEPBitMap(bitmapnamen[i], höhe, breite, colors[i], pixelFormat);
 
             }
 
+            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte);
+
+        }
+
+        private void SchreibeEEPAnlagenDatei(int höhe, int breite, int rasterdichte)
+        {
             SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, rasterdichte);
             if (af.SchreibeFile())
                 MessageBox.Show("Anlagendatei geschrieben");
             else
                 MessageBox.Show("Fehler beim Anlagenscheiben");
-
         }
 
+        private void GeneriereEEPBitMap(string bitmapnamen, int höhe, int breite, System.Drawing.Color colors, System.Drawing.Imaging.PixelFormat pixelFormat)
+        {
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite, höhe, pixelFormat);
+            ZeichneBitMap zeichneBitMap;
+            if (bitmapnamen.EndsWith("H.bmp"))
+            {
+                System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
+                Generiere(colors1);
+                zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
+            }
+                
+            else
+                
+            zeichneBitMap = new ZeichneBitMap(bitmap, colors);
 
+            zeichneBitMap.FülleBitmap();
+
+            SpeicherEEPBitMap(bitmapnamen, zeichneBitMap);
+        }
+
+        private void Generiere(System.Drawing.Color[,] colors1)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void SpeicherEEPBitMap(string bitmapnamen, ZeichneBitMap zeichneBitMap)
+        {
+            SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
+
+            speicherBild.Speichern(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
+        }
 
         private void generiereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
-            libKnotenMax.Items.Clear();
-            for (int i = 8; i <= 50; i++)
-            {
-
-                libKnotenMax.Items.Add(i.ToString());
-            }
+       
             tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
             tbRasterDichte.Text = zahltbRasterdichte.ToString();
@@ -2104,10 +2165,7 @@ namespace HoehenGenerator
         {
 
         }
-        string last_String1;
-        string last_String2;
-        string last_String3;
-
+  
 
         private void tbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -2131,26 +2189,30 @@ namespace HoehenGenerator
                 tbBreiteDerAnlage.Text = last_String1;
                 tbBreiteDerAnlage.CaretIndex = old_Cursor - 1;
             }
-            lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
+            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
 
-            if (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte <= 800000)
+            ÄndereBackgroundKnotenzahl();
+        }
+
+        private void ÄndereBackgroundKnotenzahl()
+        {
+            if ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte) <= 800000)
             {
                 lbKnotenAktuell.Background = Brushes.LightGreen;
             }
             else
-            if (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte <= 1000000)
+            if ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte) <= 1000000)
             {
                 lbKnotenAktuell.Background = Brushes.LightCyan;
             }
             else
-            if (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte <= 5000000)
+            if ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte) <= 5000000)
             {
                 lbKnotenAktuell.Background = Brushes.Yellow;
             }
             else
                 lbKnotenAktuell.Background = Brushes.Red;
         }
-
 
         private void tbHöheDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -2174,7 +2236,8 @@ namespace HoehenGenerator
                 tbHöheDerAnlage.Text = last_String2;
                 tbHöheDerAnlage.CaretIndex = old_Cursor - 1;
             }
-            lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
+            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+            ÄndereBackgroundKnotenzahl();
         }
 
         private void tbRasterDichte_TextChanged(object sender, TextChangedEventArgs e)
@@ -2199,13 +2262,21 @@ namespace HoehenGenerator
                 tbRasterDichte.Text = last_String3;
                 tbRasterDichte.CaretIndex = old_Cursor - 1;
             }
-            lbKnotenAktuell.Content = (zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte).ToString();
+            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+            ÄndereBackgroundKnotenzahl();
         }
 
         private void btWeiter3_Click(object sender, RoutedEventArgs e)
         {
-            tabHöhenkorrektur.IsEnabled = true;
-            tabHöhenkorrektur.IsSelected = true;
+            zahlbreiteDerAnlage = breite2;
+            zahltbHöheDerAnlage = hoehe2;
+            tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString();
+            tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString();
+            ÄndereBackgroundKnotenzahl();
+
+            generiereAnlage.IsSelected = true;
+            tbBreiteDerAnlage.IsEnabled = false;
+            tbHöheDerAnlage.IsEnabled = false;
         }
     }
 

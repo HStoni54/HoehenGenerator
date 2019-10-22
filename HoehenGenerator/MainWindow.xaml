@@ -74,18 +74,7 @@
                 <Button x:Name="btWeiter3" Content="Weiter" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="80" IsEnabled="False" Click="btWeiter3_Click"/>
             </Grid>
         </TabItem>
-           <TabItem x:Name="tabHöhenkorrektur" Header="Höhenkorrektur">
-            <Grid Background="#FFE5E5E5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="391"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="115"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image x:Name="image" Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="212,115,0,0" VerticalAlignment="Top" Width="100"/>
-            </Grid>
-        </TabItem> <TabItem x:Name="generiereAnlage"   IsEnabled="True" HorizontalAlignment="Right" Header="EEP-Anlage" GotFocus="generiereAnlage_GotFocus">
+        <TabItem x:Name="generiereAnlage"   IsEnabled="True" HorizontalAlignment="Right" Header="EEP-Anlage" GotFocus="generiereAnlage_GotFocus">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
@@ -99,11 +88,7 @@
                 <Label x:Name="label2" Content="Anlagenname" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" FontSize="11"/>
                 <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="neueAnlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="tbAnlagenname_TextChanged"/>
                 <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="btnGeneriereAnlage_Click" IsEnabled="False"/>
-                <Label x:Name="label3" Content="Maximale Knotenzahl" Grid.Column="1" HorizontalAlignment="Left" Margin="32,17,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label4" Content="x 100.000" Grid.Column="1" HorizontalAlignment="Left" Margin="77,55,0,0" VerticalAlignment="Top"/>
-                <ListBox x:Name="libKnotenMax" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="32,61,0,0" VerticalAlignment="Top" Width="45" Focusable="False" IsTextSearchEnabled="False">
-
-                </ListBox>
+                <Label x:Name="label3" Content="Knotenzahl" Grid.Column="1" HorizontalAlignment="Left" Margin="32,17,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="61,175,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label6" Content="Anlagengröße" Grid.Column="1" HorizontalAlignment="Left" Margin="42,95,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label7" Content="Breite" Grid.Column="1" HorizontalAlignment="Left" Margin="61,126,0,0" VerticalAlignment="Top"/>
@@ -113,10 +98,10 @@
                 <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="17" Margin="107,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbBreiteDerAnlage_TextChanged"/>
                 <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="110,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="45" TextChanged="tbHöheDerAnlage_TextChanged"/>
                 <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="64,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextChanged="tbRasterDichte_TextChanged"/>
-                <Label x:Name="lbKnotenAktuell" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="157,85,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <Label x:Name="lbKnotenAktuell" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="106,17,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.5,-1.731"/>
             </Grid>
         </TabItem>
-    
+
         <TabItem   IsEnabled="False">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
