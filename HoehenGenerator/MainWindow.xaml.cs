@@ -2181,6 +2181,8 @@ namespace HoehenGenerator
                 tbMaxEEPHöhe.Background = Brushes.LightGreen;
             tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0");
             tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0");
+            tbHöhenausgleich.Text = höhenausgleich.ToString("N0");
+            tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0");
         }
 
         private void btnIndex_Click(object sender, RoutedEventArgs e)
