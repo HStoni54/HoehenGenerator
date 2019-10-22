@@ -2127,7 +2127,7 @@ namespace HoehenGenerator
             if (bitmapnamen.EndsWith("H.bmp"))
             {
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                Generiere(colors1);
+                //Generiere(colors1);
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
             }
                 
@@ -2140,10 +2140,7 @@ namespace HoehenGenerator
             SpeicherEEPBitMap(bitmapnamen, zeichneBitMap);
         }
 
-        private void Generiere(System.Drawing.Color[,] colors1)
-        {
-            //throw new NotImplementedException();
-        }
+        
 
         private void SpeicherEEPBitMap(string bitmapnamen, ZeichneBitMap zeichneBitMap)
         {
