@@ -2168,19 +2168,19 @@ namespace HoehenGenerator
         private void AnzeigeHöhenAufLetztemTab()
         {
             if (minimaleHöhe < 10000) 
-                minimaleEEPHöhe = minimaleHöhe - höhenausgleich;
+                minimaleEEPHöhe = minimaleHöhe + höhenausgleich;
             if (minimaleEEPHöhe < -100 || minimaleEEPHöhe > 1000)
                 tbMinEEPHöhe.Background = Brushes.Red;
             else
                 tbMinEEPHöhe.Background = Brushes.LightGreen;
             if (maximaleHöhe > -10000)
-                maximaleEEPHöhe = (maximaleHöhe - höhenausgleich) * ausgleichfaktor;
+                maximaleEEPHöhe = (maximaleHöhe + höhenausgleich) * ausgleichfaktor;
             if (maximaleEEPHöhe < -100 || maximaleEEPHöhe > 1000)
                 tbMaxEEPHöhe.Background = Brushes.Red;
             else
                 tbMaxEEPHöhe.Background = Brushes.LightGreen;
-            tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0");
-            tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0");
+            tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0") + " m";
+            tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0") + " m";
             tbHöhenausgleich.Text = höhenausgleich.ToString("N0");
             tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0");
         }
@@ -2302,14 +2302,14 @@ namespace HoehenGenerator
             tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString();
             tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString();
             ÄndereBackgroundKnotenzahl();
-            tbMinEEPHöhe.IsEnabled = true;
-            tbMaxEEPHöhe.IsEnabled = true;
+
             generiereAnlage.IsSelected = true;
             tbBreiteDerAnlage.IsEnabled = false;
             tbHöheDerAnlage.IsEnabled = false;
             tbScalierung.IsEnabled = true;
             tbHöhenausgleich.IsEnabled = true;
             btnAutoAnpassung.IsEnabled = true;
+            btnSkalierungZurücksetzen.IsEnabled = true;
         }
 
         private void tbMaxEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
@@ -2334,7 +2334,17 @@ namespace HoehenGenerator
 
         private void btnAutoAnpassung_Click(object sender, RoutedEventArgs e)
         {
+            höhenausgleich = -1 * minimaleHöhe;
+            ausgleichfaktor = 1000 / (maximaleHöhe - minimaleHöhe);
+            AnzeigeHöhenAufLetztemTab();
 
+        }
+
+        private void btnSkalierungZurücksetzen_Click(object sender, RoutedEventArgs e)
+        {
+            höhenausgleich = 0.0;
+            ausgleichfaktor = 1.0;
+            AnzeigeHöhenAufLetztemTab();
         }
     }
 

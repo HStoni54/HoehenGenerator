@@ -56,7 +56,7 @@ namespace HoehenGenerator
 
         private short BerechneHöhe(GeoPunkt geoPunkt)
         {
-            // TODO: richtige Interpolation einführen
+            // TODO: richtige Interpolation einführen Überprüfung Reihenfolge der Rückgabewerte
             int wertLon = (int)((geoPunkt.Lon - linksunten.Lon) / auflösung * 1200);
             int wertLat = (int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 1200);
 
