@@ -2190,37 +2190,24 @@ namespace HoehenGenerator
             GeneriereIndices();
         }
 
-        private void VIEW_Checked(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
+    
   
 
         private void tbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
+            double test;
+            if (double.TryParse(tbBreiteDerAnlage.Text,out test))
+            {
+                zahlbreiteDerAnlage = test;
+                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+
+                ÄndereBackgroundKnotenzahl();
+            }
             //tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
 
-            try
-            {
-                if (tbBreiteDerAnlage.Text == "")
-                    zahlbreiteDerAnlage = 1.5;
-                else
-                {
-                    zahlbreiteDerAnlage = Convert.ToDouble(tbBreiteDerAnlage.Text);
-                    last_String1 = tbBreiteDerAnlage.Text;
-                }
-            }
-            catch
-            {
-
-                int old_Cursor = tbBreiteDerAnlage.CaretIndex;
-
-                tbBreiteDerAnlage.Text = last_String1;
-                tbBreiteDerAnlage.CaretIndex = old_Cursor - 1;
-            }
-            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
-
-            ÄndereBackgroundKnotenzahl();
+           
+           
+            
         }
 
         private void ÄndereBackgroundKnotenzahl()
@@ -2245,54 +2232,31 @@ namespace HoehenGenerator
 
         private void tbHöheDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
-
-            try
+            double test;
+            if (double.TryParse(tbHöheDerAnlage.Text, out test))
             {
-                if (tbHöheDerAnlage.Text == "")
-                    zahltbHöheDerAnlage = 1.5;
-                else
-                {
-                    zahltbHöheDerAnlage = Convert.ToDouble(tbHöheDerAnlage.Text);
-                    last_String2 = tbHöheDerAnlage.Text;
-                }
-            }
-            catch
-            {
-
-                int old_Cursor = tbHöheDerAnlage.CaretIndex;
-
-                tbHöheDerAnlage.Text = last_String2;
-                tbHöheDerAnlage.CaretIndex = old_Cursor - 1;
-            }
+                zahltbHöheDerAnlage = test;
+           
+     
             lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
             ÄndereBackgroundKnotenzahl();
+            }
+
         }
 
         private void tbRasterDichte_TextChanged(object sender, TextChangedEventArgs e)
         {
+            int test;
             //tbRasterDichte.Text = zahltbRasterdichte.ToString();
-
-            try
-            {
-                if (tbRasterDichte.Text == "")
-                    zahltbRasterdichte = 150;
-                else
-                {
-                    zahltbRasterdichte = Convert.ToInt32(tbRasterDichte.Text);
-                    last_String3 = tbRasterDichte.Text;
-                }
-            }
-            catch
+            if (int.TryParse(tbRasterDichte.Text, out test))
             {
 
-                int old_Cursor = tbRasterDichte.CaretIndex;
+            
+                zahltbRasterdichte = test;
 
-                tbRasterDichte.Text = last_String3;
-                tbRasterDichte.CaretIndex = old_Cursor - 1;
-            }
-            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
             ÄndereBackgroundKnotenzahl();
+            }
         }
 
         private void btWeiter3_Click(object sender, RoutedEventArgs e)
@@ -2312,30 +2276,14 @@ namespace HoehenGenerator
             btnSkalierungZurücksetzen.IsEnabled = true;
         }
 
-        private void tbMaxEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
-        {
+     
 
-        }
-
-        private void tbMinEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void tbHöhenausgleich_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void tbScalierung_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
+   
 
         private void btnAutoAnpassung_Click(object sender, RoutedEventArgs e)
         {
             höhenausgleich = -1 * minimaleHöhe;
-            ausgleichfaktor = 1000 / (maximaleHöhe - minimaleHöhe);
+            ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe)) * 100))/100.0;
             AnzeigeHöhenAufLetztemTab();
 
         }
@@ -2345,6 +2293,27 @@ namespace HoehenGenerator
             höhenausgleich = 0.0;
             ausgleichfaktor = 1.0;
             AnzeigeHöhenAufLetztemTab();
+        }
+
+        private void tbScalierung_TextChanged(object sender, TextChangedEventArgs e)
+        { double test;
+            if (double.TryParse(tbScalierung.Text, out test))
+            {
+                ausgleichfaktor = test / 100;
+                AnzeigeHöhenAufLetztemTab();
+            }
+                
+
+        }
+
+        private void tbHöhenausgleich_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            double test;
+            if (double.TryParse(tbHöhenausgleich.Text, out test))
+            {
+                höhenausgleich = test;
+                AnzeigeHöhenAufLetztemTab();
+            }
         }
     }
 
