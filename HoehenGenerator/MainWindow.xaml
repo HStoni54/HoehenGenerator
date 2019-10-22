@@ -121,8 +121,8 @@
                 <Label x:Name="label13_Copy" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="445,62,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="tbScalierungEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="388,95,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="tbScalierungEEPHöhe_TextChanged"/>
                 <Label x:Name="label13_Copy3" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="445,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.25,-0.269"/>
-                <Button x:Name="btEEPHBScalieren" Content="Skalierung von Höhen übernehmen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,161,0,0" VerticalAlignment="Top" Width="195" Click="btEEPHBScalieren_Click"/>
-                <Button x:Name="btEEPHBzurücksetzen" Content="Skalierung H/B zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,186,0,0" VerticalAlignment="Top" Width="195" Click="btEEPHBzurücksetzen_Click"/>
+                <Button x:Name="btEEPHBScalieren" Content="Skalierung von Höhen übernehmen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,161,0,0" VerticalAlignment="Top" Width="195" Click="btEEPHBScalieren_Click" IsEnabled="False"/>
+                <Button x:Name="btEEPHBzurücksetzen" Content="Skalierung H/B zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,186,0,0" VerticalAlignment="Top" Width="195" Click="btEEPHBzurücksetzen_Click" IsEnabled="False"/>
             </Grid>
         </TabItem>
 

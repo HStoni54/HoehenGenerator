@@ -79,6 +79,8 @@ namespace HoehenGenerator
         private double minimaleEEPHöhe;
         private double höhenausgleich = 0.0;
         private double ausgleichfaktor = 1.0;
+        private double zahlScalierungEEPBreite = 1.0;
+        private double zahlScalierungEEPHöhe = 1.0;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -2161,7 +2163,7 @@ namespace HoehenGenerator
                 tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0") + " m";
             if (minimaleHöhe < 10000)
                 tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0") + " m";
-
+     
             AnzeigeHöhenAufLetztemTab();
         }
 
@@ -2182,7 +2184,10 @@ namespace HoehenGenerator
             tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0") + " m";
             tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0") + " m";
             tbHöhenausgleich.Text = höhenausgleich.ToString("N0");
-            tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0");
+            tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0"); 
+            tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0");
+            tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0");
+
         }
 
         private void btnIndex_Click(object sender, RoutedEventArgs e)
@@ -2261,11 +2266,7 @@ namespace HoehenGenerator
 
         private void btWeiter3_Click(object sender, RoutedEventArgs e)
         {
-            zahlbreiteDerAnlage = breite2;
-            zahltbHöheDerAnlage = hoehe2;
-            tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString();
-            tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString();
-            ÄndereBackgroundKnotenzahl();
+            AnlagewerteAufTabAnzeigen();
 
             generiereAnlage.IsSelected = true;
             tbBreiteDerAnlage.IsEnabled = false;
@@ -2274,11 +2275,26 @@ namespace HoehenGenerator
             tbHöhenausgleich.IsEnabled = true;
             btnAutoAnpassung.IsEnabled = true;
             btnSkalierungZurücksetzen.IsEnabled = true;
+            btEEPHBScalieren.IsEnabled = true;
+            btEEPHBzurücksetzen.IsEnabled = true;
+            tbScalierungEEPBreite.IsEnabled = true;
+            tbScalierungEEPHöhe.IsEnabled = true;
         }
 
-     
+        private void AnlagewerteAufTabAnzeigen()
+        {
+            zahlbreiteDerAnlage = zahlScalierungEEPBreite * breite2;
+            zahltbHöheDerAnlage = zahlScalierungEEPHöhe *   hoehe2;
+            tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString();
+            tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString();
+            tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0");
+            tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0");
 
-   
+            ÄndereBackgroundKnotenzahl();
+        }
+
+
+
 
         private void btnAutoAnpassung_Click(object sender, RoutedEventArgs e)
         {
@@ -2328,11 +2344,16 @@ namespace HoehenGenerator
 
         private void btEEPHBScalieren_Click(object sender, RoutedEventArgs e)
         {
-
+            zahlScalierungEEPBreite = ausgleichfaktor;
+            zahlScalierungEEPHöhe = ausgleichfaktor;
+            AnlagewerteAufTabAnzeigen();
         }
 
         private void btEEPHBzurücksetzen_Click(object sender, RoutedEventArgs e)
         {
+            zahlScalierungEEPBreite = 1.0;
+            zahlScalierungEEPHöhe = 1.0;
+            AnlagewerteAufTabAnzeigen();
 
         }
     }
