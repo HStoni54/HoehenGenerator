@@ -61,10 +61,8 @@ namespace HoehenGenerator
         double zahltbHöheDerAnlage = 1.5;
         double hoehe2;
         double breite2;
-       int zahltbRasterdichte = 150;
-      string last_String1;
-        string last_String2;
-        string last_String3;
+        int zahltbRasterdichte = 150;
+        double minLänge, maxLänge, minBreite, maxBreite;
 
         bool datumgrenze = false;
         int winkel = 0;
@@ -817,9 +815,9 @@ namespace HoehenGenerator
         private void ZeichnePunkte(List<GeoPunkt> punkte)
         {
 
-            double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
+            double Größe, GrößeH, GrößeB, hoehe2, breite2;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
-            double punktgröße = Math.Round(Math.Sqrt(GrößeH * GrößeB / punkte.Count) + 1) * 1.5;
+           
 
             //zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
             //SolidColorBrush[] solidColorBrushes = new SolidColorBrush[punkte.Count];
@@ -829,6 +827,7 @@ namespace HoehenGenerator
             maximaleHöhe = punkte.Max(x => x.Höhe);
             double höhendifferenz = maximaleHöhe - minimaleHöhe;
             //double punktgröße = 5;
+            double punktgröße = Math.Round(Math.Sqrt(GrößeH * GrößeB / punkte.Count) + 1) * 1.5;
             for (int i = 0; i < punkte.Count; i += 1)
             {
                 int Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
@@ -2126,9 +2125,31 @@ namespace HoehenGenerator
             ZeichneBitMap zeichneBitMap;
             if (bitmapnamen.EndsWith("H.bmp"))
             {
+                Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
+                GeoPunkt tempPunkt;
+                GeoPunkt temppunkt1;
+
+
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                //Generiere(colors1);
-                zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
+                for (int i = 0; i < höhe; i++)
+                    for (int j = 0; j < breite; j++)
+                    {
+                        tempPunkt = new GeoPunkt(j/breite *(maxBreite - minBreite) +minBreite,i/höhe *(maxLänge - minLänge) + minLänge);
+                        temppunkt1 = DrehePunkt(tempPunkt, drehung);
+                        short abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                       int abshöhe2 = (int)((abshöhe + höhenausgleich) * ausgleichfaktor); 
+                        int eephöhe = abshöhe2 * 100 + 100;
+  
+                        int r1 = eephöhe % 256;
+                        int g1 = (eephöhe / 256) % 256;
+                        int b1 = (eephöhe / 256 / 256) % 256;
+                       
+                       
+                        
+                        colors1[i, j] = System.Drawing.Color.FromArgb(255,r1, g1, b1);
+                    }
+               
+                    zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
             }
                 
             else
@@ -2141,7 +2162,7 @@ namespace HoehenGenerator
         }
 
         
-
+       
         private void SpeicherEEPBitMap(string bitmapnamen, ZeichneBitMap zeichneBitMap)
         {
             SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
