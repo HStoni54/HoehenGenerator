@@ -2153,24 +2153,32 @@ namespace HoehenGenerator
         private void generiereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
-       
+
             tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
             tbRasterDichte.Text = zahltbRasterdichte.ToString();
             if (maximaleHöhe > -10000)
-            tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0") + " m";
+                tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0") + " m";
             if (minimaleHöhe < 10000)
-            tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0") + " m";
-            minimaleEEPHöhe = minimaleHöhe - höhenausgleich;
+                tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0") + " m";
+
+            AnzeigeHöhenAufLetztemTab();
+        }
+
+        private void AnzeigeHöhenAufLetztemTab()
+        {
+            if (minimaleHöhe < 10000) 
+                minimaleEEPHöhe = minimaleHöhe - höhenausgleich;
             if (minimaleEEPHöhe < -100 || minimaleEEPHöhe > 1000)
                 tbMinEEPHöhe.Background = Brushes.Red;
-                else
+            else
                 tbMinEEPHöhe.Background = Brushes.LightGreen;
-            maximaleEEPHöhe = (maximaleHöhe - höhenausgleich) * ausgleichfaktor;
+            if (maximaleHöhe > -10000)
+                maximaleEEPHöhe = (maximaleHöhe - höhenausgleich) * ausgleichfaktor;
             if (maximaleEEPHöhe < -100 || maximaleEEPHöhe > 1000)
                 tbMaxEEPHöhe.Background = Brushes.Red;
             else
-                tbMinEEPHöhe.Background = Brushes.LightGreen;
+                tbMaxEEPHöhe.Background = Brushes.LightGreen;
             tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0");
             tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0");
         }
