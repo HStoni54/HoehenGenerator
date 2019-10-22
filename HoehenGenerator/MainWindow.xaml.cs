@@ -2307,6 +2307,34 @@ namespace HoehenGenerator
             generiereAnlage.IsSelected = true;
             tbBreiteDerAnlage.IsEnabled = false;
             tbHöheDerAnlage.IsEnabled = false;
+            tbScalierung.IsEnabled = true;
+            tbHöhenausgleich.IsEnabled = true;
+            btnAutoAnpassung.IsEnabled = true;
+        }
+
+        private void tbMaxEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void tbMinEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void tbHöhenausgleich_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void tbScalierung_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void btnAutoAnpassung_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

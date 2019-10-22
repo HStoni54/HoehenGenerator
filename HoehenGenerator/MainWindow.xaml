@@ -106,16 +106,17 @@
                 <Label x:Name="label11_Copy" Content="Minimale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,145,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="tbMaxGeländeHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="105,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
                 <TextBox x:Name="tbMinGeländeHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="105,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
-                <TextBox x:Name="tbMaxEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
-                <TextBox x:Name="tbMinEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
+                <TextBox x:Name="tbMaxEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False" TextChanged="tbMaxEEPHöhe_TextChanged"/>
+                <TextBox x:Name="tbMinEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False" TextChanged="tbMinEEPHöhe_TextChanged"/>
                 <Label x:Name="label13" Content="m" Grid.Column="1" HorizontalAlignment="Left" Margin="163,119,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label13_Copy" Content="m" Grid.Column="1" HorizontalAlignment="Left" Margin="163,145,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.25,0.577"/>
                 <Label x:Name="label14" Content="Höhenausgleich:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,176,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label15" Content="Skalierung:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,202,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbHöhenausgleich" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57"/>
-                <TextBox x:Name="tbScalierung" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,207,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57"/>
+                <TextBox x:Name="tbHöhenausgleich" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" TextChanged="tbHöhenausgleich_TextChanged" IsEnabled="False"/>
+                <TextBox x:Name="tbScalierung" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,207,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" TextChanged="tbScalierung_TextChanged" IsEnabled="False"/>
                 <Label x:Name="label13_Copy1" Content="m" Grid.Column="1" HorizontalAlignment="Left" Margin="163,176,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label13_Copy2" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="163,202,0,0" VerticalAlignment="Top"/>
+                <Button x:Name="btnAutoAnpassung" Content="Automatische Anpassung" Grid.Column="1" HorizontalAlignment="Left" Margin="11,245,0,0" VerticalAlignment="Top" Width="151" Click="btnAutoAnpassung_Click" IsEnabled="False"/>
             </Grid>
         </TabItem>
 
