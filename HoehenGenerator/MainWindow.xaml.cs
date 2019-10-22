@@ -75,7 +75,10 @@ namespace HoehenGenerator
         ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
         ConcurrentQueue<clZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<clZeichneMatrix>();
         ZwischenspeicherHgt ZwspeicherHgt;
-
+        private double maximaleEEPHöhe;
+        private double minimaleEEPHöhe;
+        private double höhenausgleich = 0.0;
+        private double ausgleichfaktor = 1.0;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -1923,8 +1926,8 @@ namespace HoehenGenerator
             }
 
             ZeichnePunkte(geoPunkts);
-            tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + "m";
-            tbMinHöhe.Text = minimaleHöhe.ToString("N0") + "m";
+            tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + " m";
+            tbMinHöhe.Text = minimaleHöhe.ToString("N0") + " m";
             btWeiter3.IsEnabled = true;
             geoPunkts.Clear();
         }
@@ -2154,6 +2157,22 @@ namespace HoehenGenerator
             tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
             tbRasterDichte.Text = zahltbRasterdichte.ToString();
+            if (maximaleHöhe > -10000)
+            tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0") + " m";
+            if (minimaleHöhe < 10000)
+            tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0") + " m";
+            minimaleEEPHöhe = minimaleHöhe - höhenausgleich;
+            if (minimaleEEPHöhe < -100 || minimaleEEPHöhe > 1000)
+                tbMinEEPHöhe.Background = Brushes.Red;
+                else
+                tbMinEEPHöhe.Background = Brushes.LightGreen;
+            maximaleEEPHöhe = (maximaleHöhe - höhenausgleich) * ausgleichfaktor;
+            if (maximaleEEPHöhe < -100 || maximaleEEPHöhe > 1000)
+                tbMaxEEPHöhe.Background = Brushes.Red;
+            else
+                tbMinEEPHöhe.Background = Brushes.LightGreen;
+            tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0");
+            tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0");
         }
 
         private void btnIndex_Click(object sender, RoutedEventArgs e)
@@ -2273,7 +2292,8 @@ namespace HoehenGenerator
             tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString();
             tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString();
             ÄndereBackgroundKnotenzahl();
-
+            tbMinEEPHöhe.IsEnabled = true;
+            tbMaxEEPHöhe.IsEnabled = true;
             generiereAnlage.IsSelected = true;
             tbBreiteDerAnlage.IsEnabled = false;
             tbHöheDerAnlage.IsEnabled = false;

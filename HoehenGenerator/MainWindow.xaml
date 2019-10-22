@@ -88,16 +88,28 @@
                 <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="neueAnlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="tbAnlagenname_TextChanged"/>
                 <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="btnGeneriereAnlage_Click" IsEnabled="False" Height="20"/>
                 <Label x:Name="label3" Content="Knotenzahl:" Grid.Column="1" HorizontalAlignment="Left" Margin="237,16,0,0" VerticalAlignment="Top" Height="26"/>
-                <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="237,130,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
+                <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="237,124,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
                 <Label x:Name="label6" Content="Anlagengröße" Grid.Column="1" HorizontalAlignment="Left" Margin="237,43,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
                 <Label x:Name="label7" Content="Breite" Grid.Column="1" HorizontalAlignment="Left" Margin="237,69,0,0" VerticalAlignment="Top" Height="26" Width="41"/>
-                <Label x:Name="label8" Content="Höhe" Grid.Column="1" HorizontalAlignment="Left" Margin="237,99,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
-                <Label x:Name="label9" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,70,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.654,-1.192"/>
-                <Label x:Name="label9_Copy" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,95,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.846,-1.154"/>
-                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbBreiteDerAnlage_TextChanged"/>
-                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbHöheDerAnlage_TextChanged"/>
-                <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="318,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" TextChanged="tbRasterDichte_TextChanged"/>
+                <Label x:Name="label8" Content="Höhe" Grid.Column="1" HorizontalAlignment="Left" Margin="237,96,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
+                <Label x:Name="label9" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,69,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.654,-1.192"/>
+                <Label x:Name="label9_Copy" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,96,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.846,-1.154"/>
+                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbBreiteDerAnlage_TextChanged"/>
+                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbHöheDerAnlage_TextChanged"/>
+                <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="313,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" TextChanged="tbRasterDichte_TextChanged"/>
                 <Label x:Name="lbKnotenAktuell" Content="Knotenzahl aktuell" Grid.Column="1" HorizontalAlignment="Left" Margin="311,17,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.5,-1.731" Height="26"/>
+                <Label x:Name="label4" Content="Gelände" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label10" Content="Maximale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label11" Content="Minimale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,62,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label12" Content="EEP-Anlage" Grid.Column="1" HorizontalAlignment="Left" Margin="11,93,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label10_Copy" Content="Maximale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,119,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label11_Copy" Content="Minimale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="12,145,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbMaxGeländeHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="105,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
+                <TextBox x:Name="tbMinGeländeHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="105,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
+                <TextBox x:Name="tbMaxEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
+                <TextBox x:Name="tbMinEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False"/>
+                <Label x:Name="label13" Content="m" Grid.Column="1" HorizontalAlignment="Left" Margin="163,119,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label13_Copy" Content="m" Grid.Column="1" HorizontalAlignment="Left" Margin="163,145,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.25,0.577"/>
             </Grid>
         </TabItem>
 
