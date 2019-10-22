@@ -2156,9 +2156,9 @@ namespace HoehenGenerator
         {
             tbAnlagenname.Text = anlagenname;
 
-            tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
-            tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString();
-            tbRasterDichte.Text = zahltbRasterdichte.ToString();
+            tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString("N2");
+            tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString("N2");
+            tbRasterDichte.Text = zahltbRasterdichte.ToString("N0");
             if (maximaleHöhe > -10000)
                 tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0") + " m";
             if (minimaleHöhe < 10000)
@@ -2285,8 +2285,8 @@ namespace HoehenGenerator
         {
             zahlbreiteDerAnlage = zahlScalierungEEPBreite * breite2;
             zahltbHöheDerAnlage = zahlScalierungEEPHöhe *   hoehe2;
-            tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString();
-            tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString();
+            tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString("N2");
+            tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString("N2");
             tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0");
             tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0");
 
@@ -2334,12 +2334,23 @@ namespace HoehenGenerator
 
         private void tbScalierungEEPBreite_TextChanged(object sender, TextChangedEventArgs e)
         {
+            double test;
+            if(double.TryParse(tbScalierungEEPBreite.Text,out test))
+            {
+                zahlScalierungEEPBreite = test / 100;
+                AnlagewerteAufTabAnzeigen();
+            }
 
         }
 
         private void tbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            double test;
+            if (double.TryParse(tbScalierungEEPHöhe.Text, out test))
+            {
+                zahlScalierungEEPHöhe = test / 100;
+                AnlagewerteAufTabAnzeigen();
+            }
         }
 
         private void btEEPHBScalieren_Click(object sender, RoutedEventArgs e)
