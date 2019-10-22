@@ -2315,6 +2315,26 @@ namespace HoehenGenerator
                 AnzeigeHöhenAufLetztemTab();
             }
         }
+
+        private void tbScalierungEEPBreite_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void tbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void btEEPHBScalieren_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btEEPHBzurücksetzen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 
