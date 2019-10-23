@@ -2125,20 +2125,22 @@ namespace HoehenGenerator
             ZeichneBitMap zeichneBitMap;
             if (bitmapnamen.EndsWith("H.bmp"))
             {
-                Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
+                Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
 
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                for (int i = 0; i < höhe; i++)
+                for (int i = 0 ; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
                     {
-                        tempPunkt = new GeoPunkt((double)j/ (double)breite *(maxBreite - minBreite) +minBreite, (double)i / (double)höhe *(maxLänge - minLänge) + minLänge);
+                        tempPunkt = new GeoPunkt( (double)j / (double)breite *(maxLänge - minLänge) + minLänge,(double)i/ (double)höhe *(maxBreite - minBreite) +minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                        short abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1, höhe, breite);
+                        short abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
                        int abshöhe2 = (int)((abshöhe + höhenausgleich) * ausgleichfaktor); 
                         int eephöhe = (abshöhe2 +100) * 100;
+                        if (eephöhe < 0)
+                            eephöhe = 0;
   
                         int r1 = eephöhe % 256;
                         int g1 = (eephöhe / 256) % 256;

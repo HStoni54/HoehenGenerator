@@ -48,30 +48,30 @@ namespace HoehenGenerator
             this.höhen = new short[AnzahlLon, AnzahlLat];
         }
 
-        public short HöheVonPunkt(GeoPunkt geoPunkt, int höhe, int breite)
+        public short HöheVonPunkt(GeoPunkt geoPunkt)
         {
-            short interpolierteHöhe = BerechneHöhe(geoPunkt, höhe, breite);
+            short interpolierteHöhe = BerechneHöhe(geoPunkt);
             return interpolierteHöhe;
         }
 
-        private short BerechneHöhe(GeoPunkt geoPunkt, int höhe, int breite)
+        private short BerechneHöhe(GeoPunkt geoPunkt)
         {
             // TODO: richtige Interpolation einführen Überprüfung Reihenfolge der Rückgabewerte
 
 
-            int wertLon = (int)((geoPunkt.Lon - linksunten.Lat) / auflösung * 3600.0);
-            int wertLat = (int)((geoPunkt.Lat - linksunten.Lon) / auflösung * 3600.0);
+            int wertLat = anzahlLon - (int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0);
+            int wertLon = (int)((geoPunkt.Lon - linksunten.Lon) / auflösung * 3600.0);
             if (wertLat < 0)
                 wertLat = 0;
             if (wertLon < 0)
                 wertLon = 0;
-            if (wertLat > anzahlLat - 1)
-                wertLat = anzahlLat - 1;
-            if (wertLon > anzahlLon - 1)
-                wertLon = anzahlLon - 1;
+            if (wertLon > anzahlLat - 1)
+                wertLon = anzahlLat - 1;
+            if (wertLat > anzahlLon - 1)
+                wertLat = anzahlLon - 1;
 
             // throw new NotImplementedException();
-            return höhen[wertLon, wertLat];
+            return höhen[wertLat, wertLon];
         }
         public void LeseSpeicherEin(VierEcken vierEcken, List<FileMitEckKoordinaten> fileMitEcks)
         {
