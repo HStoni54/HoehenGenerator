@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace HoehenGenerator
 {
@@ -48,18 +44,45 @@ namespace HoehenGenerator
             this.höhen = new short[AnzahlLon, AnzahlLat];
         }
 
-        public short HöheVonPunkt(GeoPunkt geoPunkt)
+        public double HöheVonPunkt(GeoPunkt geoPunkt)
         {
-            short interpolierteHöhe = BerechneHöhe(geoPunkt);
+            double interpolierteHöhe = BerechneHöhe(geoPunkt);
+            //float interpolierteHöhe = InterpoliereHöhe(geoPunkt);
             return interpolierteHöhe;
         }
 
-        private short BerechneHöhe(GeoPunkt geoPunkt)
+        //private double InterpoliereHöhe(GeoPunkt geoPunkt)
+        //{
+        //    double[,] ndata = new double[4, 4];
+        //    for (int X = 0; X < 4; X++)
+        //        for (int Y = 0; Y < 4; Y++)
+        //            //Smoothing done by averaging the general area around the coords.
+        //            ndata[X, Y] = SmoothedNoise(intx + (X - 1), inty + (Y - 1));
+
+        //    double x1 = CubicPolate(ndata[0, 0], ndata[1, 0], ndata[2, 0], ndata[3, 0], fracx);
+        //    double x2 = CubicPolate(ndata[0, 1], ndata[1, 1], ndata[2, 1], ndata[3, 1], fracx);
+        //    double x3 = CubicPolate(ndata[0, 2], ndata[1, 2], ndata[2, 2], ndata[3, 2], fracx);
+        //    double x4 = CubicPolate(ndata[0, 3], ndata[1, 3], ndata[2, 3], ndata[3, 3], fracx);
+
+        //    double y1 = CubicPolate(x1, x2, x3, x4, fracy);
+        //    return y1;
+        //}
+          private double CubicPolate(double v0, double v1, double v2, double v3, double fracy)
+            {
+            double A = (v3 - v2) - (v0 - v1);
+            double B = (v0 - v1) - A;
+            double C = v2 - v0;
+            double D = v1;
+
+                return A * Math.Pow(fracy, 3) + B * Math.Pow(fracy, 2) + C * fracy + D;
+            
+            }
+        private double BerechneHöhe(GeoPunkt geoPunkt)
         {
             // TODO: richtige Interpolation einführen Überprüfung Reihenfolge der Rückgabewerte
 
 
-            int wertLat =(int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0);
+            int wertLat = (int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0);
             int wertLon = (int)((geoPunkt.Lon - linksunten.Lon) / auflösung * 3600.0);
             if (wertLat < 0)
                 wertLat = 0;
@@ -71,7 +94,7 @@ namespace HoehenGenerator
                 wertLat = anzahlLon - 1;
 
             // throw new NotImplementedException();
-            return höhen[anzahlLon - wertLat, wertLon];
+            return höhen[anzahlLon - wertLat , wertLon];
         }
         public void LeseSpeicherEin(VierEcken vierEcken, List<FileMitEckKoordinaten> fileMitEcks)
         {
@@ -114,7 +137,7 @@ namespace HoehenGenerator
 
             switch (v)
             {
-                
+
 
                 case "lu":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
@@ -129,9 +152,9 @@ namespace HoehenGenerator
                      * 
                      * Hier stimmt etwas noch nicht,  es werden falsche Zahlen ausgelesen 
                      */
-                    for (int i = fileMitEcks.Linksunten[1];  i < fileMitEcks.Rechtsoben[1]; i++)
+                    for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
-                        for (int j = fileMitEcks.Linksunten[0] ; j < fileMitEcks.Rechtsoben[0]; j++)
+                        for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
                             höhen[i - fileMitEcks.Linksunten[1], j - fileMitEcks.Linksunten[0]] = hGTFile.HgtDaten[i, j];
                         }
@@ -150,7 +173,7 @@ namespace HoehenGenerator
                             //höhen[i - fileMitEcks.Linksunten[1], AnzahlLat - 1 + fileMitEcks.Rechtsoben[0] - j ] = hGTFile.HgtDaten[i, j];
                             höhen[AnzahlLon + i - fileMitEcks.Rechtsoben[1], j - fileMitEcks.Linksunten[0]] = hGTFile.HgtDaten[i, j];
                         }
-                    }                
+                    }
                     // 
                     //  MessageBox.Show("Zweig lo");
                     break;
@@ -168,7 +191,7 @@ namespace HoehenGenerator
                     // 
                     break;
                 case "ro":
-                   // 
+                    // 
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsoben.Name + ".hgt");
                     //daten = hGTFile.HgtDaten;
                     // 
@@ -180,7 +203,7 @@ namespace HoehenGenerator
                             höhen[AnzahlLon + i - fileMitEcks.Rechtsoben[1], AnzahlLat + j - fileMitEcks.Rechtsoben[0]] = hGTFile.HgtDaten[i, j];
                         }
                     }                  //MessageBox.Show("Zweig ro");
-                     break;
+                    break;
 
                 default:
                     break;

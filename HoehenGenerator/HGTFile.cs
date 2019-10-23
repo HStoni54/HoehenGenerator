@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Windows;
 
 namespace HoehenGenerator
 {
@@ -22,7 +21,7 @@ namespace HoehenGenerator
             //for (int i = 0; i < this.auflösung * 1200 + 1; i++)
             for (int i = this.auflösung * 1200; i >= 0; i--)
             {
-                    for (int j = 0; j < this.auflösung * 1200 + 1; j++)
+                for (int j = 0; j < this.auflösung * 1200 + 1; j++)
                 {
 
                     vs[1] = (byte)fs.ReadByte();
@@ -51,8 +50,8 @@ namespace HoehenGenerator
                 FileStream fs = File.OpenRead(dateiname);
                 // http://www.naviuser.at/forum/showthread.php?t=321 auswerten
                 for (int i = auflösung * 1200; i >= 0; i--)
-                    //for (int i = 0; i < auflösung * 1200 + 1; i++)
-                    {
+                //for (int i = 0; i < auflösung * 1200 + 1; i++)
+                {
                     for (int j = 0; j < auflösung * 1200 + 1; j++)
                     {
 

@@ -56,7 +56,7 @@ namespace HoehenGenerator
 
         string hgtPfad;
         double maximaleHöhe = -10000.0;
-        double minimaleHöhe = 10000.0; 
+        double minimaleHöhe = 10000.0;
         double zahlbreiteDerAnlage = 1.5;
         double zahltbHöheDerAnlage = 1.5;
         double hoehe2 = 0.6;
@@ -88,18 +88,18 @@ namespace HoehenGenerator
             Title = "Höhengenerator für EEP";
 
 
-         Thread thrHoleDateien = new Thread(HoleDateien);
+            Thread thrHoleDateien = new Thread(HoleDateien);
             thrHoleDateien.IsBackground = true;
             thrHoleDateien.Priority = ThreadPriority.Lowest;
             thrHoleDateien.Start();
 
-           Thread thrHoleIndices = new Thread(HoleIndices);
+            Thread thrHoleIndices = new Thread(HoleIndices);
             thrHoleIndices.IsBackground = true;
             thrHoleIndices.Priority = ThreadPriority.Lowest;
             thrHoleIndices.Start();
 
 
-            
+
 
             Thread thrUnzpFiles = new Thread(UnzipDateien);
             thrUnzpFiles.IsBackground = true;
@@ -150,11 +150,11 @@ namespace HoehenGenerator
                     bool istArbeitDa = punkteAufCanvas.TryDequeue(out zeichePunkteAufCanvas datei);
                     if (istArbeitDa)
                     {
-                       
+
                         Dispatcher.BeginInvoke(new Action(() => ZeichneCanvasPunkte(datei.MySolidColorBrush, datei.Punktgröße, datei.Lon1, datei.Lat1)));
                     }
-                    
-                       
+
+
                 }
                 Thread.Sleep(100);
             }
@@ -196,8 +196,8 @@ namespace HoehenGenerator
                         {
                             unzippeDateiens.Enqueue(new UnzippeDateien(datei.Zieldatei));
                         }
-                    } 
-                    
+                    }
+
 
 
                 }
@@ -223,12 +223,12 @@ namespace HoehenGenerator
                     if (aufgabeIndices.Count == 0)
                     {
                         if (ÜberprüfeIndices())
-                        
-                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
-                           
-                       
-                           
-                       
+
+                            Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
+
+
+
+
 
                         else
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = false));
@@ -587,12 +587,12 @@ namespace HoehenGenerator
         private void ZeichneRechteck(PointCollection punkte)
         {
             Polyline rechteckpunkte = new Polyline();
-            double Größe, GrößeH, GrößeB,  minLänge, maxLänge, minBreite, maxBreite;
+            double Größe, GrößeH, GrößeB, minLänge, maxLänge, minBreite, maxBreite;
             AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite, out Größe);
             double flaeche2 = hoehe2 * breite2;
-            fläche.Text = Math.Round(flaeche2,2).ToString() + " km²";
-            höhe.Text = Math.Round(hoehe2,2).ToString() + " km";
-            breite.Text = Math.Round(breite2,2).ToString() + " km";
+            fläche.Text = Math.Round(flaeche2, 2).ToString() + " km²";
+            höhe.Text = Math.Round(hoehe2, 2).ToString() + " km";
+            breite.Text = Math.Round(breite2, 2).ToString() + " km";
             Zeichenfläche.Children.Clear();
             PointCollection canvasrechteckpunkte = new PointCollection();
             canvasrechteckpunkte.Add(new Point(GrößeB, -1 * GrößeH));
@@ -818,7 +818,7 @@ namespace HoehenGenerator
 
             double Größe, GrößeH, GrößeB, hoehe2, breite2;
             AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
-           
+
 
             //zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
             //SolidColorBrush[] solidColorBrushes = new SolidColorBrush[punkte.Count];
@@ -1265,8 +1265,8 @@ namespace HoehenGenerator
                     ladeDateiens.Enqueue(new LadeDateien(view3[i], Zielname));
                 //webClient.DownloadFile(view3[i], Zielname);
             }
-           
-   
+
+
 
         }
 
@@ -1407,7 +1407,7 @@ namespace HoehenGenerator
             //    System.Diagnostics.Debug.Print(aufgabe.Hgtart + " " + aufgabe.Auflösung+ " " + aufgabe.Pfad);
             //    GeneriereIndices(aufgabe.Hgtart, aufgabe.Auflösung, aufgabe.Pfad);
             //}
-           
+
 
             if (ÜberprüfeIndices())
                 LadeHGTFiles.IsEnabled = true;
@@ -1949,7 +1949,7 @@ namespace HoehenGenerator
         {
 
             clZeichneMatrices.Enqueue(new clZeichneMatrix("mach hin"));
-           // LeseEinUndMachWeiter();
+            // LeseEinUndMachWeiter();
 
         }
 
@@ -2132,40 +2132,44 @@ namespace HoehenGenerator
 
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                for (int i = 0 ; i < höhe; i++)
+                for (int i = 0; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
                     {
-                        tempPunkt = new GeoPunkt( (double)j / (double)breite *(maxLänge - minLänge) + minLänge,(double)i/ (double)höhe *(maxBreite - minBreite) +minBreite);
+                        tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                        short abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
-                       int abshöhe2 = (int)((abshöhe + höhenausgleich) * ausgleichfaktor); 
-                        int eephöhe = (abshöhe2 +100) * 100;
+                        double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                        double abshöhe2 = (abshöhe  * (double)ausgleichfaktor) + höhenausgleich * (double)ausgleichfaktor ;
+                        if (abshöhe2 < 0)
+                        {
+                            int c;
+                        }
+                        int eephöhe = (int)(abshöhe2 * 100) + 10000;
                         if (eephöhe < 0)
                             eephöhe = 0;
-  
+
                         int r1 = eephöhe % 256;
                         int g1 = (eephöhe / 256) % 256;
                         int b1 = (eephöhe / 256 / 256) % 256;
-                       
-                       
-                        
-                        colors1[i, j] = System.Drawing.Color.FromArgb(255,r1, g1, b1);
+
+
+
+                        colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
                     }
-               
-                    zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
+
+                zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
             }
-                
+
             else
-                
-            zeichneBitMap = new ZeichneBitMap(bitmap, colors);
+
+                zeichneBitMap = new ZeichneBitMap(bitmap, colors);
 
             zeichneBitMap.FülleBitmap();
 
             SpeicherEEPBitMap(bitmapnamen, zeichneBitMap);
         }
 
-        
-       
+
+
         private void SpeicherEEPBitMap(string bitmapnamen, ZeichneBitMap zeichneBitMap)
         {
             SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
@@ -2184,13 +2188,13 @@ namespace HoehenGenerator
                 tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0") + " m";
             if (minimaleHöhe < 10000)
                 tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0") + " m";
-     
+
             AnzeigeHöhenAufLetztemTab();
         }
 
         private void AnzeigeHöhenAufLetztemTab()
         {
-            if (minimaleHöhe < 10000) 
+            if (minimaleHöhe < 10000)
                 minimaleEEPHöhe = minimaleHöhe + höhenausgleich;
             if (minimaleEEPHöhe < -100 || minimaleEEPHöhe > 1000)
                 tbMinEEPHöhe.Background = Brushes.Red;
@@ -2205,7 +2209,7 @@ namespace HoehenGenerator
             tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0") + " m";
             tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0") + " m";
             tbHöhenausgleich.Text = höhenausgleich.ToString("N0");
-            tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0"); 
+            tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0");
             tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0");
             tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0");
 
@@ -2216,13 +2220,13 @@ namespace HoehenGenerator
             GeneriereIndices();
         }
 
-    
-  
+
+
 
         private void tbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
             double test;
-            if (double.TryParse(tbBreiteDerAnlage.Text,out test))
+            if (double.TryParse(tbBreiteDerAnlage.Text, out test))
             {
                 zahlbreiteDerAnlage = test;
                 lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
@@ -2231,9 +2235,9 @@ namespace HoehenGenerator
             }
             //tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString();
 
-           
-           
-            
+
+
+
         }
 
         private void ÄndereBackgroundKnotenzahl()
@@ -2262,10 +2266,10 @@ namespace HoehenGenerator
             if (double.TryParse(tbHöheDerAnlage.Text, out test))
             {
                 zahltbHöheDerAnlage = test;
-           
-     
-            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
-            ÄndereBackgroundKnotenzahl();
+
+
+                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+                ÄndereBackgroundKnotenzahl();
             }
 
         }
@@ -2277,11 +2281,11 @@ namespace HoehenGenerator
             if (int.TryParse(tbRasterDichte.Text, out test))
             {
 
-            
+
                 zahltbRasterdichte = test;
 
                 lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
-            ÄndereBackgroundKnotenzahl();
+                ÄndereBackgroundKnotenzahl();
             }
         }
 
@@ -2305,7 +2309,7 @@ namespace HoehenGenerator
         private void AnlagewerteAufTabAnzeigen()
         {
             zahlbreiteDerAnlage = zahlScalierungEEPBreite * breite2;
-            zahltbHöheDerAnlage = zahlScalierungEEPHöhe *   hoehe2;
+            zahltbHöheDerAnlage = zahlScalierungEEPHöhe * hoehe2;
             tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString("N2");
             tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString("N2");
             tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0");
@@ -2320,7 +2324,7 @@ namespace HoehenGenerator
         private void btnAutoAnpassung_Click(object sender, RoutedEventArgs e)
         {
             höhenausgleich = -1 * minimaleHöhe;
-            ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe)) * 100))/100.0;
+            ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe)) * 100)) / 100.0;
             AnzeigeHöhenAufLetztemTab();
 
         }
@@ -2333,13 +2337,14 @@ namespace HoehenGenerator
         }
 
         private void tbScalierung_TextChanged(object sender, TextChangedEventArgs e)
-        { double test;
+        {
+            double test;
             if (double.TryParse(tbScalierung.Text, out test))
             {
                 ausgleichfaktor = test / 100;
                 AnzeigeHöhenAufLetztemTab();
             }
-                
+
 
         }
 
@@ -2356,7 +2361,7 @@ namespace HoehenGenerator
         private void tbScalierungEEPBreite_TextChanged(object sender, TextChangedEventArgs e)
         {
             double test;
-            if(double.TryParse(tbScalierungEEPBreite.Text,out test))
+            if (double.TryParse(tbScalierungEEPBreite.Text, out test))
             {
                 zahlScalierungEEPBreite = test / 100;
                 AnlagewerteAufTabAnzeigen();
