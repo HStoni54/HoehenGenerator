@@ -212,12 +212,7 @@ namespace HoehenGenerator
             //MessageBox.Show("Einlesen von " + hgtname.Name + "Lage: " + v + " Verzeichnis: " + pfad);
             daten = null;
         }
-        public void ErmittleMinMax(out double max, out double min)
-        {
-            max = 0;
-            min = 0;
-
-        }
+     
 
         public short[,] Höhen { get => höhen; set => höhen = value; }
         public int Auflösung { get => auflösung; set => auflösung = value; }
