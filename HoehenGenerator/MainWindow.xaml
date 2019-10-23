@@ -85,13 +85,13 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="btnAnlagenDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="80" Click="btnAnlagenDirectory_Click" Height="20"/>
                 <Label x:Name="label2" Content="Anlagenname" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" FontSize="11" Height="25"/>
-                <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="neueAnlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="tbAnlagenname_TextChanged"/>
+                <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="Neue Anlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="tbAnlagenname_TextChanged"/>
                 <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="btnGeneriereAnlage_Click" IsEnabled="False" Height="20"/>
                 <Label x:Name="label3" Content="Knotenzahl:" Grid.Column="1" HorizontalAlignment="Left" Margin="237,16,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="237,124,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
                 <Label x:Name="label6" Content="Anlagengröße" Grid.Column="1" HorizontalAlignment="Left" Margin="237,43,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
                 <Label x:Name="label7" Content="Breite" Grid.Column="1" HorizontalAlignment="Left" Margin="237,69,0,0" VerticalAlignment="Top" Height="26" Width="41"/>
-                <Label x:Name="label8" Content="Höhe" Grid.Column="1" HorizontalAlignment="Left" Margin="237,96,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
+                <Label x:Name="label8" Content="Länge" Grid.Column="1" HorizontalAlignment="Left" Margin="237,96,0,0" VerticalAlignment="Top" Height="26" />
                 <Label x:Name="label9" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,69,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.654,-1.192"/>
                 <Label x:Name="label9_Copy" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,96,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.846,-1.154"/>
                 <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbBreiteDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>

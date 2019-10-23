@@ -59,7 +59,7 @@ namespace HoehenGenerator
             // TODO: richtige Interpolation einführen Überprüfung Reihenfolge der Rückgabewerte
 
 
-            int wertLat = anzahlLon - (int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0);
+            int wertLat =(int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0);
             int wertLon = (int)((geoPunkt.Lon - linksunten.Lon) / auflösung * 3600.0);
             if (wertLat < 0)
                 wertLat = 0;
@@ -71,7 +71,7 @@ namespace HoehenGenerator
                 wertLat = anzahlLon - 1;
 
             // throw new NotImplementedException();
-            return höhen[wertLat, wertLon];
+            return höhen[anzahlLon - wertLat, wertLon];
         }
         public void LeseSpeicherEin(VierEcken vierEcken, List<FileMitEckKoordinaten> fileMitEcks)
         {

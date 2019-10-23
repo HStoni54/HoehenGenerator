@@ -46,7 +46,7 @@ namespace HoehenGenerator
 
 
         List<HGTFile> listHGTFiles = new List<HGTFile>();
-        string anlagenname = "neueAnlage";
+        string anlagenname = "Neue Anlage";
         string anlagenpfad;
         bool usesrtm = false;
 
@@ -59,8 +59,8 @@ namespace HoehenGenerator
         double minimaleHöhe = 10000.0; 
         double zahlbreiteDerAnlage = 1.5;
         double zahltbHöheDerAnlage = 1.5;
-        double hoehe2;
-        double breite2;
+        double hoehe2 = 0.6;
+        double breite2 = 1.0;
         int zahltbRasterdichte = 150;
         double minLänge, maxLänge, minBreite, maxBreite;
 
@@ -359,7 +359,7 @@ namespace HoehenGenerator
                 File.Delete(anlagenpfad + "\\test.txt");
                 btnAnlagenDirectory.IsEnabled = false;
                 btnGeneriereAnlage.IsEnabled = true;
-
+                anlagenname = System.IO.Path.GetFileNameWithoutExtension(vName);
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
                     ZipArchive archive = ZipFile.OpenRead(vName);
@@ -2124,7 +2124,7 @@ namespace HoehenGenerator
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite, höhe, pixelFormat);
             ZeichneBitMap zeichneBitMap;
-            if (bitmapnamen.EndsWith("H.bmp"))
+            if (bitmapnamen.EndsWith("H.bmp") && ZwspeicherHgt != null)
             {
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
                 GeoPunkt tempPunkt;
