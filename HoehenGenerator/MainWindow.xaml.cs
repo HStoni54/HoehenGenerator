@@ -110,8 +110,9 @@ namespace HoehenGenerator
             thrZeichneMatrix.IsBackground = true;
             thrZeichneMatrix.Priority = ThreadPriority.Lowest;
             thrZeichneMatrix.Start();
-            
-            Thread[] thrZeichneCanvas = new Thread[6];
+
+            int prozessoranzahl = Environment.ProcessorCount;
+            Thread[] thrZeichneCanvas = new Thread[prozessoranzahl];
             for (int i = 0; i < thrZeichneCanvas.Length; i++)
             {
                 thrZeichneCanvas[i] = new Thread(ZeichneCanvas);
