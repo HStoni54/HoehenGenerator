@@ -2134,11 +2134,11 @@ namespace HoehenGenerator
                 for (int i = 0; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
                     {
-                        tempPunkt = new GeoPunkt(j/breite *(maxBreite - minBreite) +minBreite,i/höhe *(maxLänge - minLänge) + minLänge);
+                        tempPunkt = new GeoPunkt((double)j/ (double)breite *(maxBreite - minBreite) +minBreite, (double)i / (double)höhe *(maxLänge - minLänge) + minLänge);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                        short abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                        short abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1, höhe, breite);
                        int abshöhe2 = (int)((abshöhe + höhenausgleich) * ausgleichfaktor); 
-                        int eephöhe = abshöhe2 * 100 + 100;
+                        int eephöhe = (abshöhe2 +100) * 100;
   
                         int r1 = eephöhe % 256;
                         int g1 = (eephöhe / 256) % 256;

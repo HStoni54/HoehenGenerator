@@ -29,9 +29,9 @@ namespace HoehenGenerator
             this.anzahlLat = anzahlLat;
             this.anzahlLon = anzahlLon;
             this.höhen = new short[AnzahlLon, AnzahlLat];
-            this.linksoben = new GeoPunkt(Linksunten.Lon, Linksunten.Lat + anzahlLat / 3600 * auflösung);
-            this.rechtsunten = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat);
-            this.rechtsoben = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600 * auflösung, Linksunten.Lat + anzahlLat / 3600 * auflösung);
+            this.linksoben = new GeoPunkt(Linksunten.Lon, Linksunten.Lat + anzahlLat / 3600.0 * auflösung);
+            this.rechtsunten = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600.0 * auflösung, Linksunten.Lat);
+            this.rechtsoben = new GeoPunkt(Linksunten.Lon + AnzahlLon / 3600.0 * auflösung, Linksunten.Lat + anzahlLat / 3600.0 * auflösung);
         }
 
         public ZwischenspeicherHgt(GeoPunkt linksunten, GeoPunkt rechtsoben, int auflösung)
@@ -48,20 +48,30 @@ namespace HoehenGenerator
             this.höhen = new short[AnzahlLon, AnzahlLat];
         }
 
-        public short HöheVonPunkt(GeoPunkt geoPunkt)
+        public short HöheVonPunkt(GeoPunkt geoPunkt, int höhe, int breite)
         {
-            short interpolierteHöhe = BerechneHöhe(geoPunkt);
+            short interpolierteHöhe = BerechneHöhe(geoPunkt, höhe, breite);
             return interpolierteHöhe;
         }
 
-        private short BerechneHöhe(GeoPunkt geoPunkt)
+        private short BerechneHöhe(GeoPunkt geoPunkt, int höhe, int breite)
         {
             // TODO: richtige Interpolation einführen Überprüfung Reihenfolge der Rückgabewerte
-            int wertLon = (int)((geoPunkt.Lon - linksunten.Lat)/anzahlLat / auflösung * 1200);
-            int wertLat = (int)((geoPunkt.Lat - linksunten.Lon) / anzahlLon / auflösung * 1200);
+
+
+            int wertLon = (int)((geoPunkt.Lon - linksunten.Lat) / auflösung * 3600.0);
+            int wertLat = (int)((geoPunkt.Lat - linksunten.Lon) / auflösung * 3600.0);
+            if (wertLat < 0)
+                wertLat = 0;
+            if (wertLon < 0)
+                wertLon = 0;
+            if (wertLat > anzahlLat - 1)
+                wertLat = anzahlLat - 1;
+            if (wertLon > anzahlLon - 1)
+                wertLon = anzahlLon - 1;
 
             // throw new NotImplementedException();
-            return höhen[wertLat, wertLon];
+            return höhen[wertLon, wertLat];
         }
         public void LeseSpeicherEin(VierEcken vierEcken, List<FileMitEckKoordinaten> fileMitEcks)
         {
