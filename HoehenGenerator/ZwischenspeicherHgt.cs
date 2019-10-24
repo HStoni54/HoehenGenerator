@@ -78,7 +78,7 @@ namespace HoehenGenerator
                     if (istLat > anzahlLon - 1)
                         istLat = anzahlLon - 1;
 
-                    ndata[Y, X] = höhen[istLat, istLon];
+                    ndata[Y,X] = höhen[istLat, istLon];
                 }
             double x1 = CubicPolate(ndata[0, 0], ndata[1, 0], ndata[2, 0], ndata[3, 0], restLat);
             double x2 = CubicPolate(ndata[0, 1], ndata[1, 1], ndata[2, 1], ndata[3, 1], restLat);
