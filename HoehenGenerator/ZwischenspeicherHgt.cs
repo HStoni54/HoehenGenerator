@@ -67,8 +67,8 @@ namespace HoehenGenerator
 
 
                     //Smoothing done by averaging the general area around the coords.
-                    int istLat = wertLat + (Y - 1);
-                    int istLon = anzahlLon - wertLon - (X - 1);
+                    int istLat = anzahlLon - wertLat - (Y - 1);
+                    int istLon = wertLon + (X - 1);
                     if (istLat < 0)
                         istLat = 0;
                     if (istLon < 0)
@@ -78,7 +78,7 @@ namespace HoehenGenerator
                     if (istLat > anzahlLon - 1)
                         istLat = anzahlLon - 1;
 
-                    ndata[X, 3 - Y] = höhen[istLat, istLon];
+                    ndata[Y, X] = höhen[istLat, istLon];
                 }
             double x1 = CubicPolate(ndata[0, 0], ndata[1, 0], ndata[2, 0], ndata[3, 0], restLat);
             double x2 = CubicPolate(ndata[0, 1], ndata[1, 1], ndata[2, 1], ndata[3, 1], restLat);
