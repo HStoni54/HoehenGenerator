@@ -61,8 +61,8 @@ namespace HoehenGenerator
         private readonly ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
         private readonly ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
         private readonly ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
-        private readonly ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
-        private readonly ConcurrentQueue<clZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<clZeichneMatrix>();
+        private readonly ConcurrentQueue<ZeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<ZeichePunkteAufCanvas>();
+        private readonly ConcurrentQueue<ClZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<ClZeichneMatrix>();
         private ZwischenspeicherHgt ZwspeicherHgt;
         private double maximaleEEPHöhe;
         private double minimaleEEPHöhe;
@@ -130,7 +130,7 @@ namespace HoehenGenerator
             {
                 while (clZeichneMatrices.Count > 0)
                 {
-                    bool istArbeitDa = clZeichneMatrices.TryDequeue(out clZeichneMatrix datei);
+                    bool istArbeitDa = clZeichneMatrices.TryDequeue(out ClZeichneMatrix datei);
                     if (istArbeitDa)
                     {
                         Dispatcher.BeginInvoke(new Action(() => LeseEinUndMachWeiter()));
@@ -148,7 +148,7 @@ namespace HoehenGenerator
             {
                 while (punkteAufCanvas.Count > 0)
                 {
-                    bool istArbeitDa = punkteAufCanvas.TryDequeue(out zeichePunkteAufCanvas datei);
+                    bool istArbeitDa = punkteAufCanvas.TryDequeue(out ZeichePunkteAufCanvas datei);
                     if (istArbeitDa)
                     {
 
@@ -590,9 +590,9 @@ namespace HoehenGenerator
             Polyline rechteckpunkte = new Polyline();
             AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double maxLänge, out double minBreite, out double maxBreite, out double Größe);
             double flaeche2 = hoehe2 * breite2;
-            fläche.Text = Math.Round(flaeche2, 2).ToString() + " km²";
-            höhe.Text = Math.Round(hoehe2, 2).ToString() + " km";
-            breite.Text = Math.Round(breite2, 2).ToString() + " km";
+            fläche.Text = Math.Round(flaeche2, 2).ToString(CultureInfo.CurrentCulture) + " km²";
+            höhe.Text = Math.Round(hoehe2, 2).ToString( CultureInfo.CurrentCulture) + " km";
+            breite.Text = Math.Round(breite2, 2).ToString( CultureInfo.CurrentCulture) + " km";
             Zeichenfläche.Children.Clear();
             PointCollection canvasrechteckpunkte = new PointCollection
             {
@@ -861,7 +861,7 @@ namespace HoehenGenerator
                     };
 
 
-                    punkteAufCanvas.Enqueue(new zeichePunkteAufCanvas(mySolidColorBrush, punktgröße, Lon, Lat));
+                    punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, punktgröße, Lon, Lat));
                     //zeichePunkteAufCanvas[i] = new zeichePunkteAufCanvas( mySolidColorBrush, punktgröße, Lon, Lat);
                     //solidColorBrushes[i] = mySolidColorBrush;
                     //colors[i] = mySolidColorBrush.Color;
@@ -1928,7 +1928,7 @@ namespace HoehenGenerator
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
 
-            clZeichneMatrices.Enqueue(new clZeichneMatrix("mach hin"));
+            clZeichneMatrices.Enqueue(new ClZeichneMatrix("mach hin"));
             // LeseEinUndMachWeiter();
 
         }

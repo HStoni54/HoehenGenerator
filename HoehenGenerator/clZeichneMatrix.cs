@@ -1,10 +1,10 @@
 ﻿namespace HoehenGenerator
 {
-    internal class clZeichneMatrix
+    internal class ClZeichneMatrix
     {
         private string macheEs;
 
-        public clZeichneMatrix(string macheEs)
+        public ClZeichneMatrix(string macheEs)
         {
             this.macheEs = macheEs;
         }

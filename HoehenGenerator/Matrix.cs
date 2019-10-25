@@ -52,7 +52,7 @@ namespace HoehenGenerator
         {
             if (value.Length != mColumnCount)
             {
-                throw new Exception("Größeninkongruenz");
+               throw new Exception("Größeninkongruenz");
             }
             for (int i = 0; i < value.Length; i++)
             {
