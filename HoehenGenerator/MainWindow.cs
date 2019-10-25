@@ -248,7 +248,7 @@ namespace HoehenGenerator
             {
                 if (File.Exists(directory + "\\" + lbHgtFiles.Items[i].ToString() + ".hgt"))
 
-                    if (directory.EndsWith("1"))
+                    if (directory.EndsWith("1", StringComparison.CurrentCulture))
                         solidColor = Brushes.LightBlue;
                     else
                         solidColor = Brushes.LightGreen;
@@ -740,19 +740,19 @@ namespace HoehenGenerator
 
                     if (i >= 0)
                     {
-                        hgt = "N" + i.ToString("D2");
+                        hgt = "N" + i.ToString("D2",CultureInfo.CurrentCulture);
                     }
                     else
                     {
-                        hgt = "S" + (-i).ToString("D2");
+                        hgt = "S" + (-i).ToString("D2", CultureInfo.CurrentCulture);
                     }
                     if (j >= 0)
                     {
-                        hgt = hgt + "E" + j.ToString("D3");
+                        hgt = hgt + "E" + j.ToString("D3", CultureInfo.CurrentCulture);
                     }
                     else
                     {
-                        hgt = hgt + "W" + (-j).ToString("D3");
+                        hgt = hgt + "W" + (-j).ToString("D3", CultureInfo.CurrentCulture);
                     }
                     lbHgtFiles.Items.Add(hgt);
                     // hgt = hgt + "\n";
@@ -1098,7 +1098,7 @@ namespace HoehenGenerator
             return vorhanden;
         }
 
-        private bool ÜberprüfeSRTMIndex(int v, string hgtPfad)
+        private static bool ÜberprüfeSRTMIndex(int v, string hgtPfad)
         {
             if (File.Exists(hgtPfad + @"\srtmindex" + v + ".xml"))
                 return true;
@@ -1106,7 +1106,7 @@ namespace HoehenGenerator
                 return false;
         }
 
-        private bool ÜberprüfeViewIndex(int v, string hgtPfad)
+        private static bool ÜberprüfeViewIndex(int v, string hgtPfad)
         {
             if (File.Exists(hgtPfad + @"\viewindex" + v + ".xml"))
                 return true;
@@ -1126,7 +1126,7 @@ namespace HoehenGenerator
 
 
         }
-        private void UnZipHgtFiles(string zieldatei)
+        private static void UnZipHgtFiles(string zieldatei)
         {
             string pfad = System.IO.Path.GetDirectoryName(zieldatei);
             ZipArchive zipfile = ZipFile.OpenRead(zieldatei);
@@ -1243,7 +1243,7 @@ namespace HoehenGenerator
 
         }
 
-        private bool LadeHGTDateien(string v, string zielname)
+        private static bool LadeHGTDateien(string v, string zielname)
         {
             bool ergebnis = true;
             WebClient webClient = new WebClient()
@@ -1296,7 +1296,7 @@ namespace HoehenGenerator
             return vs2;
         }
 
-        private string DurchsucheIndex(int i, string hgtPfad, string item, string v)
+        private static string DurchsucheIndex(int i, string hgtPfad, string item, string v)
         {
             string ergebnis = "";
             string ersterTeil = "";
@@ -1389,20 +1389,20 @@ namespace HoehenGenerator
                 LadeHGTFiles.IsEnabled = false;
         }
 
-        private bool GeneriereIndices(string s, int i, string hgtPfad)
+        private static bool GeneriereIndices(string s, int i, string hgtPfad)
         {
             bool ergebnis = false;
-            if (s.ToLower() == "srtm")
+            if (s.ToLower(CultureInfo.CurrentCulture) == "srtm")
                 if (GeneriereSRTMIndex(i, hgtPfad))
                     ergebnis = true;
 
-            if (s.ToLower() == "view")
+            if (s.ToLower(CultureInfo.CurrentCulture) == "view")
                 if (GeneriereViewIndex(i, hgtPfad))
                     ergebnis = true;
             return ergebnis;
         }
 
-        private bool GeneriereSRTMIndex(int i, string hgtPfad)
+        private static bool GeneriereSRTMIndex(int i, string hgtPfad)
         {
             bool ergebnis = false;
 
@@ -1431,14 +1431,14 @@ namespace HoehenGenerator
                 for (int j = 0; j < vs.Length; j++)
                 {
 
-                    if (!vs[j].StartsWith("/") && vs[j].EndsWith("/"))
+                    if (!vs[j].StartsWith("/",StringComparison.CurrentCulture) && vs[j].EndsWith("/",StringComparison.CurrentCulture))
                     {
                         xmlWriter.WriteStartElement("Abschnitt");
                         xmlWriter.WriteAttributeString("Url", url + "/" + vs[j]);
                         string[] vs2 = SammleUrls(url + "/" + vs[j]);
                         for (int k = 0; k < vs2.Length; k++)
                         {
-                            if (!vs2[k].StartsWith("/"))
+                            if (!vs2[k].StartsWith("/", StringComparison.CurrentCulture))
                             {
                                 xmlWriter.WriteStartElement("ZipDatei");
                                 xmlWriter.WriteAttributeString("Dateiname", vs2[k]);
@@ -1499,7 +1499,7 @@ namespace HoehenGenerator
             return vs;
         }
 
-        private bool GeneriereViewIndex(int i, string hgtPfad)
+        private static bool GeneriereViewIndex(int i, string hgtPfad)
         {
             bool ergebnis = false;
 
@@ -1551,17 +1551,17 @@ namespace HoehenGenerator
             return ergebnis;
         }
 
-        private string[] FindeZipFiles(string value)
+        private static string[] FindeZipFiles(string value)
         {
             double viewDimension = 1800.0 / 360.0;
             string lonName = "";
             string latName = "";
             string[] vs = value.Split(',');
 
-            int l = int.Parse(vs[0]);
-            int t = int.Parse(vs[1]);
-            int r = int.Parse(vs[2]);
-            int b = int.Parse(vs[3]);
+            int l = int.Parse(vs[0],CultureInfo.CurrentCulture);
+            int t = int.Parse(vs[1], CultureInfo.CurrentCulture);
+            int r = int.Parse(vs[2], CultureInfo.CurrentCulture);
+            int b = int.Parse(vs[3], CultureInfo.CurrentCulture);
             int w = (int)(l / viewDimension + 0.5) - 180;
             int e = (int)(r / viewDimension + 0.5) - 180;
             int s = 90 - (int)(b / viewDimension + 0.5);
@@ -1573,19 +1573,19 @@ namespace HoehenGenerator
                 {
                     if (lon < 0)
                     {
-                        lonName = "W" + (-lon).ToString("D3");
+                        lonName = "W" + (-lon).ToString("D3", CultureInfo.CurrentCulture);
                     }
                     else
                     {
-                        lonName = "E" + (lon).ToString("D3");
+                        lonName = "E" + (lon).ToString("D3", CultureInfo.CurrentCulture);
                     }
                     if (lat < 0)
                     {
-                        latName = "S" + (-lat).ToString("D2");
+                        latName = "S" + (-lat).ToString("D2", CultureInfo.CurrentCulture);
                     }
                     else
                     {
-                        latName = "N" + (lat).ToString("D2");
+                        latName = "N" + (lat).ToString("D2", CultureInfo.CurrentCulture);
                     }
                     string name = latName + lonName;
                     vs1.Add(name);
@@ -1908,8 +1908,8 @@ namespace HoehenGenerator
             ZeichnePunkte(geoPunkts);
             maximaleHöhe = maxarr;
             minimaleHöhe = minarr;
-            tbMaxhöhe.Text = maximaleHöhe.ToString("N0") + " m";
-            tbMinHöhe.Text = minimaleHöhe.ToString("N0") + " m";
+            tbMaxhöhe.Text = maximaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
+            tbMinHöhe.Text = minimaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             btWeiter3.IsEnabled = true;
             geoPunkts.Clear();
         }
@@ -1993,7 +1993,7 @@ namespace HoehenGenerator
                     int i;
                     try
                     {
-                        i = int.Parse(a);
+                        i = int.Parse(a, CultureInfo.CurrentCulture);
                     }
                     catch (Exception)
                     {
@@ -2014,7 +2014,7 @@ namespace HoehenGenerator
             return fma;
         }
 
-        private GeoPunkt Hgttolatlon(string filename, int auflösung, int breit, int hoch)
+        private static GeoPunkt Hgttolatlon(string filename, int auflösung, int breit, int hoch)
         {
             GeoPunkt geoPunkt = new GeoPunkt();
             string ostwest;
@@ -2023,8 +2023,8 @@ namespace HoehenGenerator
             double lon;
             ostwest = filename.Substring(0, 1);
             nordsüd = filename.Substring(3, 1);
-            lat = int.Parse(filename.Substring(1, 2));
-            lon = int.Parse(filename.Substring(4, 3));
+            lat = int.Parse(filename.Substring(1, 2), CultureInfo.CurrentCulture);
+            lon = int.Parse(filename.Substring(4, 3), CultureInfo.CurrentCulture);
             if (ostwest == "W")
                 lat = -lat;
             if (nordsüd == "S")
@@ -2106,7 +2106,7 @@ namespace HoehenGenerator
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite, höhe, pixelFormat);
             ZeichneBitMap zeichneBitMap;
-            if (bitmapnamen.EndsWith("H.bmp") && ZwspeicherHgt != null)
+            if (bitmapnamen.EndsWith("H.bmp",StringComparison.CurrentCulture) && ZwspeicherHgt != null)
             {
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
                 GeoPunkt tempPunkt;
@@ -2163,13 +2163,13 @@ namespace HoehenGenerator
         {
             tbAnlagenname.Text = anlagenname;
 
-            tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString("N2");
-            tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString("N2");
-            tbRasterDichte.Text = zahltbRasterdichte.ToString("N0");
+            tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
+            tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
+            tbRasterDichte.Text = zahltbRasterdichte.ToString("N0", CultureInfo.CurrentCulture);
             if (maximaleHöhe > -10000)
-                tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0") + " m";
+                tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             if (minimaleHöhe < 10000)
-                tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0") + " m";
+                tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
 
             AnzeigeHöhenAufLetztemTab();
         }
@@ -2188,12 +2188,12 @@ namespace HoehenGenerator
                 tbMaxEEPHöhe.Background = Brushes.Red;
             else
                 tbMaxEEPHöhe.Background = Brushes.LightGreen;
-            tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0") + " m";
-            tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0") + " m";
-            tbHöhenausgleich.Text = höhenausgleich.ToString("N0");
-            tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0");
-            tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0");
-            tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0");
+            tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
+            tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
+            tbHöhenausgleich.Text = höhenausgleich.ToString("N0", CultureInfo.CurrentCulture);
+            tbScalierung.Text = (ausgleichfaktor * 100).ToString("N0", CultureInfo.CurrentCulture);
+            tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0", CultureInfo.CurrentCulture);
+            tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0", CultureInfo.CurrentCulture);
 
         }
 
@@ -2210,7 +2210,7 @@ namespace HoehenGenerator
             if (double.TryParse(tbBreiteDerAnlage.Text, out double test))
             {
                 zahlbreiteDerAnlage = test;
-                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString( CultureInfo.CurrentCulture);
 
                 ÄndereBackgroundKnotenzahl();
             }
@@ -2248,7 +2248,7 @@ namespace HoehenGenerator
                 zahltbHöheDerAnlage = test;
 
 
-                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString( CultureInfo.CurrentCulture);
                 ÄndereBackgroundKnotenzahl();
             }
 
@@ -2263,7 +2263,7 @@ namespace HoehenGenerator
 
                 zahltbRasterdichte = test;
 
-                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
+                lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString( CultureInfo.CurrentCulture);
                 ÄndereBackgroundKnotenzahl();
             }
         }
@@ -2289,10 +2289,10 @@ namespace HoehenGenerator
         {
             zahlbreiteDerAnlage = zahlScalierungEEPBreite * breite2;
             zahltbHöheDerAnlage = zahlScalierungEEPHöhe * hoehe2;
-            tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString("N2");
-            tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString("N2");
-            tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0");
-            tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0");
+            tbBreiteDerAnlage.Text = Math.Round(zahlbreiteDerAnlage, 2).ToString("N2", CultureInfo.CurrentCulture);
+            tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString("N2", CultureInfo.CurrentCulture);
+            tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0", CultureInfo.CurrentCulture);
+            tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0", CultureInfo.CurrentCulture);
 
             ÄndereBackgroundKnotenzahl();
         }

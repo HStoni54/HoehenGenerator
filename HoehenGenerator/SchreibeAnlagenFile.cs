@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Xml;
 
 namespace HoehenGenerator
 {
@@ -35,9 +36,9 @@ namespace HoehenGenerator
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("sutrackp");
             xmlWriter.WriteStartElement("Schandlaft");
-            xmlWriter.WriteAttributeString("extX", breite.ToString());
-            xmlWriter.WriteAttributeString("extY", höhe.ToString());
-            xmlWriter.WriteAttributeString("dichte", drasterdichte.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            xmlWriter.WriteAttributeString("extX", breite.ToString( CultureInfo.CurrentCulture));
+            xmlWriter.WriteAttributeString("extY", höhe.ToString(CultureInfo.CurrentCulture));
+            xmlWriter.WriteAttributeString("dichte", drasterdichte.ToString(CultureInfo.InvariantCulture));
             xmlWriter.WriteAttributeString("HoehenFile", "\\" + anlagenname + "H.bmp");
             xmlWriter.WriteAttributeString("FarbenFile", "\\" + anlagenname + "F.bmp");
             xmlWriter.WriteAttributeString("TexturenFile", "\\" + anlagenname + "T.bmp");

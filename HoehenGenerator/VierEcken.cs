@@ -1,4 +1,6 @@
-﻿namespace HoehenGenerator
+﻿using System.Globalization;
+
+namespace HoehenGenerator
 {
     internal class VierEcken
     {
@@ -76,19 +78,19 @@
             }
             if (lat2 >= 0)
             {
-                hgt = "N" + lat2.ToString("D2");
+                hgt = "N" + lat2.ToString("D2", CultureInfo.CurrentCulture);
             }
             else
             {
-                hgt = "S" + (-lat2).ToString("D2");
+                hgt = "S" + (-lat2).ToString("D2", CultureInfo.CurrentCulture);
             }
             if (lon2 >= 0)
             {
-                hgt = hgt + "E" + lon2.ToString("D3");
+                hgt = hgt + "E" + lon2.ToString("D3", CultureInfo.CurrentCulture);
             }
             else
             {
-                hgt = hgt + "W" + (-lon2).ToString("D3");
+                hgt = hgt + "W" + (-lon2).ToString("D3", CultureInfo.CurrentCulture);
             }
             return new HgtmitKoordinaten(hgt, lon1, lat1); ;
         }
