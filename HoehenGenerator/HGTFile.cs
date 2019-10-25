@@ -5,9 +5,9 @@ namespace HoehenGenerator
     internal class HGTFile
     {
         private readonly short[,] hgtDaten;
-        private int auflösung;
+        private readonly int auflösung;
         private string name;
-        private string dateiname;
+        private readonly string dateiname;
 
         public HGTFile(int auflösung, string dateiname)
         {

@@ -5,10 +5,10 @@ namespace HoehenGenerator
 {
     internal class ZeichneBitMap
     {
-        private Bitmap bitmap;
-        private int Höhe, Breite;
-        private Color[,] color;
-        private Color color1;
+        private readonly Bitmap bitmap;
+        private readonly int Höhe, Breite;
+        private readonly Color[,] color;
+        private readonly Color color1;
 
         public Bitmap Bitmap { get => bitmap; }
         public int Höhe1 { get => Höhe; }

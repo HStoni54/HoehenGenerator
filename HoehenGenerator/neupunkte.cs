@@ -4,8 +4,8 @@ namespace HoehenGenerator
 {
     internal class NeuPunkte
     {
-        private PointCollection punkte = new PointCollection();
-        private double fläche;
+        private readonly PointCollection punkte = new PointCollection();
+        private readonly double fläche;
 
         public PointCollection Punkte { get => punkte; }
         public double Fläche { get => fläche; }

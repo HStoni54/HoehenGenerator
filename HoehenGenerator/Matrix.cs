@@ -4,13 +4,13 @@ namespace HoehenGenerator
 {
     public class Matrix
     {
-        private double[,] mInnerMatrix;
-        private int mRowCount = 0;
+        private readonly double[,] mInnerMatrix;
+        private readonly int mRowCount = 0;
         public int RowCount
         {
             get { return mRowCount; }
         }
-        private int mColumnCount = 0;
+        private readonly int mColumnCount = 0;
         public int ColumnCount
         {
             get { return mColumnCount; }

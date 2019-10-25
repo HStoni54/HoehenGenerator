@@ -37,11 +37,10 @@ namespace HoehenGenerator
         private GeoPunkt rechtsunten;
         private GeoPunkt hgtlinksunten;
         private GeoPunkt hgtrechtsoben;
-        private PointCollection orgpunkte = new PointCollection();
+        private readonly PointCollection orgpunkte = new PointCollection();
         private PointCollection punkte = new PointCollection();
         private Canvas Zeichenfläche = new Canvas();
         private ListBox lbHgtFiles = new ListBox();
-        private List<HGTFile> listHGTFiles = new List<HGTFile>();
         private string anlagenname = "Neue Anlage";
         private string anlagenpfad;
         private bool usesrtm = false;
@@ -58,12 +57,12 @@ namespace HoehenGenerator
         private double minLänge, maxLänge, minBreite, maxBreite;
         private bool datumgrenze = false;
         private int winkel = 0;
-        private string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
-        private ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
-        private ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
-        private ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
-        private ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
-        private ConcurrentQueue<clZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<clZeichneMatrix>();
+        private readonly string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
+        private readonly ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
+        private readonly ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
+        private readonly ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
+        private readonly ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
+        private readonly ConcurrentQueue<clZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<clZeichneMatrix>();
         private ZwischenspeicherHgt ZwspeicherHgt;
         private double maximaleEEPHöhe;
         private double minimaleEEPHöhe;
@@ -80,42 +79,52 @@ namespace HoehenGenerator
             Title = "Höhengenerator für EEP";
 
 
-            Thread thrHoleDateien = new Thread(HoleDateien);
-            thrHoleDateien.IsBackground = true;
-            thrHoleDateien.Priority = ThreadPriority.Lowest;
+            Thread thrHoleDateien = new Thread(HoleDateien)
+            {
+                IsBackground = true,
+                Priority = ThreadPriority.Lowest
+            };
             thrHoleDateien.Start();
 
-            Thread thrHoleIndices = new Thread(HoleIndices);
-            thrHoleIndices.IsBackground = true;
-            thrHoleIndices.Priority = ThreadPriority.Lowest;
+            Thread thrHoleIndices = new Thread(HoleIndices)
+            {
+                IsBackground = true,
+                Priority = ThreadPriority.Lowest
+            };
             thrHoleIndices.Start();
 
 
 
 
-            Thread thrUnzpFiles = new Thread(UnzipDateien);
-            thrUnzpFiles.IsBackground = true;
-            thrUnzpFiles.Priority = ThreadPriority.Lowest;
+            Thread thrUnzpFiles = new Thread(UnzipDateien)
+            {
+                IsBackground = true,
+                Priority = ThreadPriority.Lowest
+            };
             thrUnzpFiles.Start();
 
-            Thread thrZeichneMatrix = new Thread(classZeichneMatrix);
-            thrZeichneMatrix.IsBackground = true;
-            thrZeichneMatrix.Priority = ThreadPriority.Lowest;
+            Thread thrZeichneMatrix = new Thread(ClassZeichneMatrix)
+            {
+                IsBackground = true,
+                Priority = ThreadPriority.Lowest
+            };
             thrZeichneMatrix.Start();
 
             int prozessoranzahl = Environment.ProcessorCount;
             Thread[] thrZeichneCanvas = new Thread[prozessoranzahl];
             for (int i = 0; i < thrZeichneCanvas.Length; i++)
             {
-                thrZeichneCanvas[i] = new Thread(ZeichneCanvas);
-                thrZeichneCanvas[i].IsBackground = true;
-                thrZeichneCanvas[i].Priority = ThreadPriority.Lowest;
+                thrZeichneCanvas[i] = new Thread(ZeichneCanvas)
+                {
+                    IsBackground = true,
+                    Priority = ThreadPriority.Lowest
+                };
                 thrZeichneCanvas[i].Start();
             }
 
         }
 
-        private void classZeichneMatrix()
+        private void ClassZeichneMatrix()
         {
             while (true)
             {
@@ -161,7 +170,7 @@ namespace HoehenGenerator
                     bool istArbeitDa = unzippeDateiens.TryDequeue(out UnzippeDateien datei);
                     if (istArbeitDa)
                     {
-                        unZipHgtFiles(datei.Zieldatei);
+                        UnZipHgtFiles(datei.Zieldatei);
                         Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
                         //FärbeHgtLabel(datei.Zieldatei);
                         Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
@@ -233,7 +242,7 @@ namespace HoehenGenerator
 
         private void FärbeHgtLabel(string zieldatei)
         {
-            SolidColorBrush solidColor = new SolidColorBrush();
+            SolidColorBrush solidColor;
             string directory = System.IO.Path.GetDirectoryName(zieldatei);
             for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
@@ -463,7 +472,7 @@ namespace HoehenGenerator
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, v);
                 point = DrehePunkt(orgpunkte[i], drehung);
                 if (Datumgrenze && point.X < 0)
-                    point.X = point.X + 360;
+                    point.X += 360;
                 points.Add(point);
             }
             double minLänge = points.Min(x => x.X);
@@ -579,19 +588,20 @@ namespace HoehenGenerator
         private void ZeichneRechteck(PointCollection punkte)
         {
             Polyline rechteckpunkte = new Polyline();
-            double Größe, GrößeH, GrößeB, minLänge, maxLänge, minBreite, maxBreite;
-            AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite, out Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double maxLänge, out double minBreite, out double maxBreite, out double Größe);
             double flaeche2 = hoehe2 * breite2;
             fläche.Text = Math.Round(flaeche2, 2).ToString() + " km²";
             höhe.Text = Math.Round(hoehe2, 2).ToString() + " km";
             breite.Text = Math.Round(breite2, 2).ToString() + " km";
             Zeichenfläche.Children.Clear();
-            PointCollection canvasrechteckpunkte = new PointCollection();
-            canvasrechteckpunkte.Add(new Point(GrößeB, -1 * GrößeH));
-            canvasrechteckpunkte.Add(new Point(0, -1 * GrößeH));
-            canvasrechteckpunkte.Add(new Point(0, -1 * 0));
-            canvasrechteckpunkte.Add(new Point(GrößeB, -1 * 0));
-            canvasrechteckpunkte.Add(new Point(GrößeB, -1 * GrößeH));
+            PointCollection canvasrechteckpunkte = new PointCollection
+            {
+                new Point(GrößeB, -1 * GrößeH),
+                new Point(0, -1 * GrößeH),
+                new Point(0, -1 * 0),
+                new Point(GrößeB, -1 * 0),
+                new Point(GrößeB, -1 * GrößeH)
+            };
             rechteckpunkte.Points = canvasrechteckpunkte;
             rechteckpunkte.Fill = Brushes.Blue;
             Zeichenfläche.Children.Add(rechteckpunkte);
@@ -760,8 +770,7 @@ namespace HoehenGenerator
 
 
             Polyline polypunkte = new Polyline();
-            double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
-            AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
             double flaeche2 = hoehe2 * breite2;
             PointCollection canvaspunkte = new PointCollection();
             //Zeichenfläche.Children.Clear();
@@ -782,23 +791,26 @@ namespace HoehenGenerator
         private void ZeichnePunkte(PointCollection punkte)
         {
 
-            double Größe, GrößeH, GrößeB, hoehe2, breite2, minLänge, maxLänge, minBreite, maxBreite;
-            AnzeigeFlächeBerechnen(punkte, out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
             for (int i = 0; i < punkte.Count; i++)
             {
-                Ellipse elli = new Ellipse();
-                elli.Width = 5.0;
-                elli.Height = 5.0;
-                elli.Fill = Brushes.Red;
+                Ellipse elli = new Ellipse
+                {
+                    Width = 5.0,
+                    Height = 5.0,
+                    Fill = Brushes.Red
+                };
                 Zeichenfläche.Children.Add(elli);
 
                 Canvas.SetLeft(elli, GrößeB / (maxLänge - minLänge) * (punkte[i].X - minLänge) - 2.5);
                 Canvas.SetBottom(elli, GrößeH / (maxBreite - minBreite) * (punkte[i].Y - minBreite) - 2.5);
             }
-            Ellipse elli2 = new Ellipse();
-            elli2.Width = 5.0;
-            elli2.Height = 5.0;
-            elli2.Fill = Brushes.Red;
+            Ellipse elli2 = new Ellipse
+            {
+                Width = 5.0,
+                Height = 5.0,
+                Fill = Brushes.Red
+            };
             Zeichenfläche.Children.Add(elli2);
 
             Canvas.SetLeft(elli2, GrößeB / (maxLänge - minLänge) * ((maxLänge - minLänge) / 2) - 2.5);
@@ -808,8 +820,7 @@ namespace HoehenGenerator
         private void ZeichnePunkte(List<GeoPunkt> punkte)
         {
 
-            double Größe, GrößeH, GrößeB, hoehe2, breite2;
-            AnzeigeFlächeBerechnen(out GrößeH, out GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out Größe);
+            AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
 
 
             //zeichePunkteAufCanvas[] zeichePunkteAufCanvas = new zeichePunkteAufCanvas[punkte.Count];
@@ -844,8 +855,10 @@ namespace HoehenGenerator
                     byte r = (byte)r1;
                     byte g = (byte)g1;
                     byte b = (byte)b1;
-                    SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-                    mySolidColorBrush.Color = Color.FromRgb(r, g, b);
+                    SolidColorBrush mySolidColorBrush = new SolidColorBrush
+                    {
+                        Color = Color.FromRgb(r, g, b)
+                    };
 
 
                     punkteAufCanvas.Enqueue(new zeichePunkteAufCanvas(mySolidColorBrush, punktgröße, Lon, Lat));
@@ -862,13 +875,13 @@ namespace HoehenGenerator
 
         private void ZeichneCanvasPunkte(SolidColorBrush mySolidColorBrush, double punktgröße, int Lon, int Lat)
         {
-            Ellipse elli = new Ellipse();
+            Ellipse elli = new Ellipse
+            {
+                Width = punktgröße,
+                Height = punktgröße,
 
-
-            elli.Width = punktgröße;
-            elli.Height = punktgröße;
-
-            elli.Fill = mySolidColorBrush;
+                Fill = mySolidColorBrush
+            };
             //elli.Fill = Brushes.Yellow;
             Zeichenfläche.Children.Add(elli);
 
@@ -985,7 +998,7 @@ namespace HoehenGenerator
 
         private void Drehen_Click(object sender, RoutedEventArgs e)
         {
-            winkel = winkel + 90;
+            winkel += 90;
             NeuPunkte neuPunkte = DrehePolygon(orgpunkte, winkel);
             punkte = neuPunkte.Punkte;
             ZeichneAlles(punkte);
@@ -1113,7 +1126,7 @@ namespace HoehenGenerator
 
 
         }
-        private void unZipHgtFiles(string zieldatei)
+        private void UnZipHgtFiles(string zieldatei)
         {
             string pfad = System.IO.Path.GetDirectoryName(zieldatei);
             ZipArchive zipfile = ZipFile.OpenRead(zieldatei);
@@ -1426,9 +1439,11 @@ namespace HoehenGenerator
 
             if (!File.Exists(hgtPfad + @"\srtmindex" + i + ".xml"))
             {
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Indent = true;
-                settings.IndentChars = "  ";
+                XmlWriterSettings settings = new XmlWriterSettings
+                {
+                    Indent = true,
+                    IndentChars = "  "
+                };
                 XmlWriter xmlWriter = XmlWriter.Create(hgtPfad + @"\srtmindex" + i + ".xml", settings);
                 xmlWriter.WriteStartDocument();
                 xmlWriter.WriteStartElement("HgtDateien");
@@ -1521,9 +1536,11 @@ namespace HoehenGenerator
 
             if (!File.Exists(hgtPfad + @"\viewindex" + i + ".xml"))
             {
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Indent = true;
-                settings.IndentChars = "  ";
+                XmlWriterSettings settings = new XmlWriterSettings
+                {
+                    Indent = true,
+                    IndentChars = "  "
+                };
                 XmlWriter xmlWriter = XmlWriter.Create(hgtPfad + @"\viewindex" + i + ".xml", settings);
                 xmlWriter.WriteStartDocument();
                 xmlWriter.WriteStartElement("HgtDateien");
@@ -2050,8 +2067,10 @@ namespace HoehenGenerator
 
         private void btnAnlagenDirectory_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-            fbd.Description = "Bitte Verzeichnis für Anlagen-Dateien auswählen";
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = "Bitte Verzeichnis für Anlagen-Dateien auswählen"
+            };
 
             //fbd.RootFolder = Environment.SpecialFolder.Personal;
             string path = Environment.CurrentDirectory;
@@ -2219,8 +2238,7 @@ namespace HoehenGenerator
 
         private void tbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double test;
-            if (double.TryParse(tbBreiteDerAnlage.Text, out test))
+            if (double.TryParse(tbBreiteDerAnlage.Text, out double test))
             {
                 zahlbreiteDerAnlage = test;
                 lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString();
@@ -2256,8 +2274,7 @@ namespace HoehenGenerator
 
         private void tbHöheDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double test;
-            if (double.TryParse(tbHöheDerAnlage.Text, out test))
+            if (double.TryParse(tbHöheDerAnlage.Text, out double test))
             {
                 zahltbHöheDerAnlage = test;
 
@@ -2270,9 +2287,8 @@ namespace HoehenGenerator
 
         private void tbRasterDichte_TextChanged(object sender, TextChangedEventArgs e)
         {
-            int test;
             //tbRasterDichte.Text = zahltbRasterdichte.ToString();
-            if (int.TryParse(tbRasterDichte.Text, out test))
+            if (int.TryParse(tbRasterDichte.Text, out int test))
             {
 
 
@@ -2332,8 +2348,7 @@ namespace HoehenGenerator
 
         private void tbScalierung_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double test;
-            if (double.TryParse(tbScalierung.Text, out test))
+            if (double.TryParse(tbScalierung.Text, out double test))
             {
                 ausgleichfaktor = test / 100;
                 AnzeigeHöhenAufLetztemTab();
@@ -2344,8 +2359,7 @@ namespace HoehenGenerator
 
         private void tbHöhenausgleich_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double test;
-            if (double.TryParse(tbHöhenausgleich.Text, out test))
+            if (double.TryParse(tbHöhenausgleich.Text, out double test))
             {
                 höhenausgleich = test;
                 AnzeigeHöhenAufLetztemTab();
@@ -2354,8 +2368,7 @@ namespace HoehenGenerator
 
         private void tbScalierungEEPBreite_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double test;
-            if (double.TryParse(tbScalierungEEPBreite.Text, out test))
+            if (double.TryParse(tbScalierungEEPBreite.Text, out double test))
             {
                 zahlScalierungEEPBreite = test / 100;
                 AnlagewerteAufTabAnzeigen();
@@ -2365,8 +2378,7 @@ namespace HoehenGenerator
 
         private void tbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double test;
-            if (double.TryParse(tbScalierungEEPHöhe.Text, out test))
+            if (double.TryParse(tbScalierungEEPHöhe.Text, out double test))
             {
                 zahlScalierungEEPHöhe = test / 100;
                 AnlagewerteAufTabAnzeigen();

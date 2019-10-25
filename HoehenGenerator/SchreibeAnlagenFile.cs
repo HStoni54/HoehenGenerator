@@ -4,13 +4,13 @@ namespace HoehenGenerator
 {
     internal class SchreibeAnlagenFile
     {
-        private string path;
-        private string anlagenname;
-        private int höhe;
-        private int breite;
-        private int rasterdichte;
+        private readonly string path;
+        private readonly string anlagenname;
+        private readonly int höhe;
+        private readonly int breite;
+        private readonly int rasterdichte;
         private double drasterdichte;
-        private bool Ok;
+        private readonly bool Ok;
 
         public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte)
         {
@@ -25,8 +25,10 @@ namespace HoehenGenerator
 
         public bool SchreibeFile()
         {
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true
+            };
             drasterdichte = rasterdichte / 100000.0;
             settings.IndentChars = "  ";
             XmlWriter xmlWriter = XmlWriter.Create(path + "\\" + anlagenname + ".anl3", settings);
