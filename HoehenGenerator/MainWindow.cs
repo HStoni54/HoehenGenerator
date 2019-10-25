@@ -671,7 +671,7 @@ namespace HoehenGenerator
             // HGTFiles.Text = "";
             if (maxlon - minlon > 180)
             {
-                BildeHGTString(maxlat, minlat, 180, maxlon);
+                BildeHGTString(maxlat, minlat, 179, maxlon);
                 BildeHGTString(maxlat, minlat, minlon, -180);
             }
             else
