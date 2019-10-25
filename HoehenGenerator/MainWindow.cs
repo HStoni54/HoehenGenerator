@@ -27,8 +27,8 @@ namespace HoehenGenerator
     public partial class MainWindow : Window
     {
         private readonly XmlDocument ge = new XmlDocument();
-        String coordinaten;
-        String[] sepcoordinaten;
+        string coordinaten;
+        string[] sepcoordinaten;
         GeoPunkt[] geoPunkts;
         GeoPunkt mittelpunkt;
         GeoPunkt linksoben;
@@ -1235,7 +1235,7 @@ namespace HoehenGenerator
             for (int i = 0; i < srtm1.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(srtm1[i]);
-                String Zielname = hgtPfad + "\\SRTM1\\" + dateiname;
+                string Zielname = hgtPfad + "\\SRTM1\\" + dateiname;
                 if (!File.Exists(Zielname))
                     ladeDateiens.Enqueue(new LadeDateien(srtm1[i], Zielname));
                 // LadeHGTFiles(srtm1[i], Zielname);
@@ -1244,7 +1244,7 @@ namespace HoehenGenerator
             for (int i = 0; i < srtm3.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(srtm3[i]);
-                String Zielname = hgtPfad + "\\SRTM3\\" + dateiname;
+                string Zielname = hgtPfad + "\\SRTM3\\" + dateiname;
                 if (!File.Exists(Zielname))
                     ladeDateiens.Enqueue(new LadeDateien(srtm3[i], Zielname));
                 // webClient.DownloadFile(srtm3[i], Zielname);
@@ -1252,7 +1252,7 @@ namespace HoehenGenerator
             for (int i = 0; i < view1.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(view1[i]);
-                String Zielname = hgtPfad + "\\VIEW1\\" + dateiname;
+                string Zielname = hgtPfad + "\\VIEW1\\" + dateiname;
                 if (!File.Exists(Zielname))
                     ladeDateiens.Enqueue(new LadeDateien(view1[i], Zielname));
                 // webClient.DownloadFile(view1[i], Zielname);
@@ -1260,7 +1260,7 @@ namespace HoehenGenerator
             for (int i = 0; i < view3.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(view3[i]);
-                String Zielname = hgtPfad + "\\VIEW3\\" + dateiname;
+                string Zielname = hgtPfad + "\\VIEW3\\" + dateiname;
                 if (!File.Exists(Zielname))
                     ladeDateiens.Enqueue(new LadeDateien(view3[i], Zielname));
                 //webClient.DownloadFile(view3[i], Zielname);
