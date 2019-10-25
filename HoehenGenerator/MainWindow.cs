@@ -404,7 +404,7 @@ namespace HoehenGenerator
                     Optimieren.IsEnabled = true;
                     Weiter.IsEnabled = true;
                     Drehen.IsEnabled = true;
-                    generiereDirString();
+                    GeneriereDirString();
                 }
                 else
                 {
@@ -1028,14 +1028,14 @@ namespace HoehenGenerator
             ZeichneAlles(punkte);
         }
 
-        private void ladenTab_GotFocus(object sender, RoutedEventArgs e)
+        private void LadenTab_GotFocus(object sender, RoutedEventArgs e)
         {
             Zeichenfläche = Zeichenfläche1;
 
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
         }
 
-        private void ladeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
+        private void LadeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
         {
 
             btnIndex.IsEnabled = true;
@@ -1121,7 +1121,7 @@ namespace HoehenGenerator
 
 
 
-            downloadeHgtFiles();
+            DownloadeHgtFiles();
 
 
 
@@ -1144,45 +1144,9 @@ namespace HoehenGenerator
 
         }
 
-        private void unZipHgtFiles()
-        {
 
 
-            foreach (var item in directorys)
-            {
-                if (item.Length > 0)
-                    if (Directory.Exists(hgtPfad + "\\" + item))
-                    {
-                        string[] zipfiles = Directory.GetFiles(hgtPfad + "\\" + item, "*.zip");
-                        foreach (var file in zipfiles)
-                        {
-                            ZipArchive zipfile = ZipFile.OpenRead(file);
-                            foreach (ZipArchiveEntry entry in zipfile.Entries)
-                            {
-                                if (entry.Name.Length > 0)
-                                    entry.ExtractToFile(hgtPfad + "\\" + item + "\\" + entry.Name, overwrite: true);
-                                //MessageBox.Show("ZipFile:" + file + " gefunden!\n" + "Datei: " + entry.Name);
-
-
-                            }
-                            zipfile.Dispose();
-
-                            File.Delete(file);
-
-
-                        }
-
-
-                    }
-
-
-
-            }
-
-
-        }
-
-        private void downloadeHgtFiles()
+        private void DownloadeHgtFiles()
         {
             // List<string> vs1 = new List<string>();
             List<string> srtm1 = new List<string>();
@@ -1203,7 +1167,7 @@ namespace HoehenGenerator
                 string file = lbHgtFiles.Items[i].ToString();
                 if (file.Length > 0)
                 {
-                    string[] url = findeUrl(file);
+                    string[] url = FindeUrl(file);
                     //   vs1.Clear();
                     if (url.Length == 0)
                     {
@@ -1222,13 +1186,17 @@ namespace HoehenGenerator
                         {
                             //  vs1.Add(url[j]);
                             if (url[j].Contains("SRTM1") && !File.Exists(hgtPfad + "\\SRTM1\\" + file + ".hgt"))
+                                if (!srtm1.Contains(url[j]))
                                 srtm1.Add(url[j]);
                             if (url[j].Contains("SRTM3") && !File.Exists(hgtPfad + "\\SRTM3\\" + file + ".hgt"))
-                                srtm3.Add(url[j]);
+                                if (!srtm3.Contains(url[j]))
+                                    srtm3.Add(url[j]);
                             if (url[j].Contains("dem1") && !File.Exists(hgtPfad + "\\VIEW1\\" + file + ".hgt"))
-                                view1.Add(url[j]);
+                                if (!view1.Contains(url[j]))
+                                    view1.Add(url[j]);
                             if (url[j].Contains("dem3") && !File.Exists(hgtPfad + "\\VIEW3\\" + file + ".hgt"))
-                                view3.Add(url[j]);
+                                if (!view3.Contains(url[j]))
+                                    view3.Add(url[j]);
                         }
 
                     }
@@ -1298,7 +1266,7 @@ namespace HoehenGenerator
             return ergebnis;
         }
 
-        private string[] findeUrl(string item)
+        private string[] FindeUrl(string item)
         {
             List<string> vs = new List<string>();
             for (int i = 1; i < 4; i += 2)
@@ -1381,6 +1349,7 @@ namespace HoehenGenerator
 
                     }
                 }
+                xmlReader.Close();
             }
             return ergebnis;
         }
@@ -1558,7 +1527,7 @@ namespace HoehenGenerator
                     xmlWriter.WriteAttributeString("Url", m2[0].Groups[1].Value);
 
                     xmlWriter.WriteElementString("Koordinaten", m1[0].Groups[1].Value);
-                    string[] zf = findeZipFiles(m1[0].Groups[1].Value);
+                    string[] zf = FindeZipFiles(m1[0].Groups[1].Value);
                     for (int k = 0; k < zf.Length; k++)
                     {
                         xmlWriter.WriteElementString("Datei", zf[k]);
@@ -1582,7 +1551,7 @@ namespace HoehenGenerator
             return ergebnis;
         }
 
-        private string[] findeZipFiles(string value)
+        private string[] FindeZipFiles(string value)
         {
             double viewDimension = 1800.0 / 360.0;
             string lonName = "";
@@ -1643,7 +1612,7 @@ namespace HoehenGenerator
             {
                 s = w.DownloadString(url);
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 MessageBox.Show("Fehler!\nKann Idex nicht erstellen!\nÜberprüfen Sie Ihre Internetverbindung");
 
@@ -1660,7 +1629,7 @@ namespace HoehenGenerator
             return vs;
         }
 
-        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
 
         }
@@ -1685,7 +1654,7 @@ namespace HoehenGenerator
                 LadeHGTFiles.IsEnabled = true;
             else
                 LadeHGTFiles.IsEnabled = false;
-            generiereDirString();
+            GeneriereDirString();
             ZeichneAlles(punkte);
         }
 
@@ -1709,11 +1678,11 @@ namespace HoehenGenerator
                 LadeHGTFiles.IsEnabled = true;
             else
                 LadeHGTFiles.IsEnabled = false;
-            generiereDirString();
+            GeneriereDirString();
             ZeichneAlles(punkte);
         }
 
-        private void generiereDirString()
+        private void GeneriereDirString()
         {
             if (!useview)
             {
@@ -1756,7 +1725,7 @@ namespace HoehenGenerator
 
         }
 
-        private void einZoll_Checked(object sender, RoutedEventArgs e)
+        private void EinZoll_Checked(object sender, RoutedEventArgs e)
         {
             if (einZoll.IsChecked == true)
             {
@@ -1777,7 +1746,7 @@ namespace HoehenGenerator
                 LadeHGTFiles.IsEnabled = true;
             else
                 LadeHGTFiles.IsEnabled = false;
-            generiereDirString();
+            GeneriereDirString();
             ZeichneAlles(punkte);
         }
 
@@ -1856,7 +1825,7 @@ namespace HoehenGenerator
 
             int[] zwausmasse = { intanzahlLat, intanzahlLon };
 
-            ZwspeicherHgt = new ZwischenspeicherHgt(hgttolatlon(vierEcken.Hgtlinksunten.Name, vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
+            ZwspeicherHgt = new ZwischenspeicherHgt(Hgttolatlon(vierEcken.Hgtlinksunten.Name, vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
                 intanzahlLat, intanzahlLon, vierEcken.Auflösung);
             ZwspeicherHgt.LeseSpeicherEin(vierEcken, fileMitEcks);
 
@@ -1890,7 +1859,7 @@ namespace HoehenGenerator
                 {
                     for (int j = 0; j < anzahl; j++)
                     {
-                        geoPunkt = hgttolatlon(dateiname, auflösung, i, j);
+                        geoPunkt = Hgttolatlon(dateiname, auflösung, i, j);
                         geoPunkt.Höhe = daten[i, j];
 
                         if (IstPunktImRechteck(ref geoPunkt, 0.2))
@@ -1978,7 +1947,7 @@ namespace HoehenGenerator
 
                 if (item.Length > 0)
                 {
-                    fma = findeErsteDatei(item);
+                    fma = FindeErsteDatei(item);
                     aufl.Add(fma.Auflösung);
 
                 }
@@ -1993,7 +1962,7 @@ namespace HoehenGenerator
 
                 if (item.Length > 0)
                 {
-                    fma = findeErsteDatei(item, nurdreiZoll);
+                    fma = FindeErsteDatei(item, nurdreiZoll);
                     if (fma.Auflösung > 0)
                     {
                         fma.Auflösung = fma.Auflösung;
@@ -2012,9 +1981,8 @@ namespace HoehenGenerator
             ZeichneMatrix(lfma);
         }
 
-        private Filemitauflösung findeErsteDatei(string item, bool nurdreizoll = false)
+        private Filemitauflösung FindeErsteDatei(string item, bool nurdreizoll = false)
         {
-            int i = 0;
             Filemitauflösung fma = new Filemitauflösung("", 0);
             foreach (string verzeichnis in directorys)
 
@@ -2022,6 +1990,7 @@ namespace HoehenGenerator
                 if (verzeichnis.Length > 0)
                 {
                     string a = verzeichnis.Substring(verzeichnis.Length - 1);
+                    int i;
                     try
                     {
                         i = int.Parse(a);
@@ -2045,7 +2014,7 @@ namespace HoehenGenerator
             return fma;
         }
 
-        private GeoPunkt hgttolatlon(string filename, int auflösung, int breit, int hoch)
+        private GeoPunkt Hgttolatlon(string filename, int auflösung, int breit, int hoch)
         {
             GeoPunkt geoPunkt = new GeoPunkt();
             string ostwest;
@@ -2065,7 +2034,7 @@ namespace HoehenGenerator
             return geoPunkt;
         }
 
-        private void btnAnlagenDirectory_Click(object sender, RoutedEventArgs e)
+        private void BtnAnlagenDirectory_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog
             {
@@ -2073,7 +2042,7 @@ namespace HoehenGenerator
             };
 
             //fbd.RootFolder = Environment.SpecialFolder.Personal;
-            string path = Environment.CurrentDirectory;
+            
             fbd.SelectedPath = anlagenpfad;
 
             System.Windows.Forms.DialogResult result = fbd.ShowDialog();
@@ -2083,13 +2052,13 @@ namespace HoehenGenerator
                 btnGeneriereAnlage.IsEnabled = true;
 
             }
-
+            fbd.Dispose();
 
         }
 
 
 
-        private void tbAnlagenname_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbAnlagenname_TextChanged(object sender, TextChangedEventArgs e)
         {
             anlagenname = tbAnlagenname.Text;
             if (anlagenname.Length == 0)
@@ -2097,7 +2066,7 @@ namespace HoehenGenerator
             else
                 btnAnlagenDirectory.IsEnabled = true;
         }
-        private void btnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
+        private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
             int höhe = (int)(zahltbHöheDerAnlage * zahltbRasterdichte);
@@ -2190,7 +2159,7 @@ namespace HoehenGenerator
             speicherBild.Speichern(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
         }
 
-        private void generiereAnlage_GotFocus(object sender, RoutedEventArgs e)
+        private void GeneriereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
 
@@ -2228,7 +2197,7 @@ namespace HoehenGenerator
 
         }
 
-        private void btnIndex_Click(object sender, RoutedEventArgs e)
+        private void BtnIndex_Click(object sender, RoutedEventArgs e)
         {
             GeneriereIndices();
         }
@@ -2236,7 +2205,7 @@ namespace HoehenGenerator
 
 
 
-        private void tbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbBreiteDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbBreiteDerAnlage.Text, out double test))
             {
@@ -2272,7 +2241,7 @@ namespace HoehenGenerator
                 lbKnotenAktuell.Background = Brushes.Red;
         }
 
-        private void tbHöheDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbHöheDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbHöheDerAnlage.Text, out double test))
             {
@@ -2285,7 +2254,7 @@ namespace HoehenGenerator
 
         }
 
-        private void tbRasterDichte_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbRasterDichte_TextChanged(object sender, TextChangedEventArgs e)
         {
             //tbRasterDichte.Text = zahltbRasterdichte.ToString();
             if (int.TryParse(tbRasterDichte.Text, out int test))
@@ -2299,7 +2268,7 @@ namespace HoehenGenerator
             }
         }
 
-        private void btWeiter3_Click(object sender, RoutedEventArgs e)
+        private void BtWeiter3_Click(object sender, RoutedEventArgs e)
         {
             AnlagewerteAufTabAnzeigen();
 
@@ -2331,7 +2300,7 @@ namespace HoehenGenerator
 
 
 
-        private void btnAutoAnpassung_Click(object sender, RoutedEventArgs e)
+        private void BtnAutoAnpassung_Click(object sender, RoutedEventArgs e)
         {
             höhenausgleich = -1 * minimaleHöhe;
             ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe)) * 100)) / 100.0;
@@ -2339,14 +2308,14 @@ namespace HoehenGenerator
 
         }
 
-        private void btnSkalierungZurücksetzen_Click(object sender, RoutedEventArgs e)
+        private void BtnSkalierungZurücksetzen_Click(object sender, RoutedEventArgs e)
         {
             höhenausgleich = 0.0;
             ausgleichfaktor = 1.0;
             AnzeigeHöhenAufLetztemTab();
         }
 
-        private void tbScalierung_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbScalierung_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierung.Text, out double test))
             {
@@ -2357,7 +2326,7 @@ namespace HoehenGenerator
 
         }
 
-        private void tbHöhenausgleich_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbHöhenausgleich_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbHöhenausgleich.Text, out double test))
             {
@@ -2366,7 +2335,7 @@ namespace HoehenGenerator
             }
         }
 
-        private void tbScalierungEEPBreite_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbScalierungEEPBreite_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierungEEPBreite.Text, out double test))
             {
@@ -2376,7 +2345,7 @@ namespace HoehenGenerator
 
         }
 
-        private void tbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierungEEPHöhe.Text, out double test))
             {
@@ -2385,14 +2354,14 @@ namespace HoehenGenerator
             }
         }
 
-        private void btEEPHBScalieren_Click(object sender, RoutedEventArgs e)
+        private void BtEEPHBScalieren_Click(object sender, RoutedEventArgs e)
         {
             zahlScalierungEEPBreite = ausgleichfaktor;
             zahlScalierungEEPHöhe = ausgleichfaktor;
             AnlagewerteAufTabAnzeigen();
         }
 
-        private void btEEPHBzurücksetzen_Click(object sender, RoutedEventArgs e)
+        private void BtEEPHBzurücksetzen_Click(object sender, RoutedEventArgs e)
         {
             zahlScalierungEEPBreite = 1.0;
             zahlScalierungEEPHöhe = 1.0;

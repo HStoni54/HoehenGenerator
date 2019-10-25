@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="437" Width="800" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
     <TabControl x:Name="tabControl" >
-        <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="ladenTab_GotFocus" >
+        <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="LadenTab_GotFocus" >
             <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -31,7 +31,7 @@
                 <ListBox x:Name="lbHgtFiles1" HorizontalAlignment="Left" Height="95" Margin="18,193,0,0" VerticalAlignment="Top" Width="87" ToolTip="Benötigte Hgt-Dateien" Focusable="False"/>
             </Grid>
         </TabItem>
-        <TabItem x:Name="ladeHGTFiles" Header="HGT-Dateien" IsEnabled="False" GotFocus="ladeHGTFiles_GotFocus">
+        <TabItem x:Name="ladeHGTFiles" Header="HGT-Dateien" IsEnabled="False" GotFocus="LadeHGTFiles_GotFocus">
             <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -45,9 +45,9 @@
                 <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="11,247,0,0" VerticalAlignment="Top" Width="87" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
                 <CheckBox x:Name="SRTM" Content="SRTM" HorizontalAlignment="Left" Margin="11,162,0,0" VerticalAlignment="Top" Click="SRTM_Checked"/>
                 <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="11,182,0,0" VerticalAlignment="Top" Click="VIEW_Checked"/>
-                <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="11,202,0,0" VerticalAlignment="Top" Click="einZoll_Checked"/>
+                <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="11,202,0,0" VerticalAlignment="Top" Click="EinZoll_Checked"/>
                 <Button x:Name="Weiter2" Content="Weiter" HorizontalAlignment="Left" Margin="11,272,0,0" VerticalAlignment="Top" Width="86" IsEnabled="False" Click="Weiter2_Click"/>
-                <Button x:Name="btnIndex" Content="Index erstellen" HorizontalAlignment="Left" Margin="11,222,0,0" VerticalAlignment="Top" Width="86" Click="btnIndex_Click" IsEnabled="False"/>
+                <Button x:Name="btnIndex" Content="Index erstellen" HorizontalAlignment="Left" Margin="11,222,0,0" VerticalAlignment="Top" Width="86" Click="BtnIndex_Click" IsEnabled="False"/>
                 <Label x:Name="lbFile1"  HorizontalAlignment="Left" Margin="11,33,0,0" VerticalAlignment="Top" Width="65" Content="Hgt-Datei" />
                 <Label x:Name="lbFile2" HorizontalAlignment="Left" Margin="11,57,0,0" VerticalAlignment="Top" Content="Hgt-Datei" />
                 <Label x:Name="lbFile3"  HorizontalAlignment="Left" Margin="11,81,0,0" VerticalAlignment="Top"  Content="Hgt-Datei"  />
@@ -71,10 +71,10 @@
                 <Label x:Name="label1" Content="Min.Höhe:" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" Width="80"/>
                 <TextBox x:Name="tbMaxhöhe" HorizontalAlignment="Left" Height="23" Margin="10,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsEnabled="False" HorizontalContentAlignment="Right"/>
                 <TextBox x:Name="tbMinHöhe" HorizontalAlignment="Left" Height="23" Margin="10,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsEnabled="False" HorizontalContentAlignment="Right"/>
-                <Button x:Name="btWeiter3" Content="Weiter" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="80" IsEnabled="False" Click="btWeiter3_Click"/>
+                <Button x:Name="btWeiter3" Content="Weiter" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="80" IsEnabled="False" Click="BtWeiter3_Click"/>
             </Grid>
         </TabItem>
-        <TabItem x:Name="generiereAnlage"   IsEnabled="True" HorizontalAlignment="Right" Header="EEP-Anlage" GotFocus="generiereAnlage_GotFocus">
+        <TabItem x:Name="generiereAnlage"   IsEnabled="True" HorizontalAlignment="Right" Header="EEP-Anlage" GotFocus="GeneriereAnlage_GotFocus">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
@@ -83,10 +83,10 @@
                     <ColumnDefinition Width="115"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnAnlagenDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="80" Click="btnAnlagenDirectory_Click" Height="20"/>
+                <Button x:Name="btnAnlagenDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="80" Click="BtnAnlagenDirectory_Click" Height="20"/>
                 <Label x:Name="label2" Content="Anlagenname" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" FontSize="11" Height="25"/>
-                <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="Neue Anlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="tbAnlagenname_TextChanged"/>
-                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="btnGeneriereAnlage_Click" IsEnabled="False" Height="20"/>
+                <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="Neue Anlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="TbAnlagenname_TextChanged"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20"/>
                 <Label x:Name="label3" Content="Knotenzahl:" Grid.Column="1" HorizontalAlignment="Left" Margin="237,16,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="237,124,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
                 <Label x:Name="label6" Content="Anlagengröße" Grid.Column="1" HorizontalAlignment="Left" Margin="237,43,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
@@ -94,9 +94,9 @@
                 <Label x:Name="label8" Content="Länge" Grid.Column="1" HorizontalAlignment="Left" Margin="237,96,0,0" VerticalAlignment="Top" Height="26" />
                 <Label x:Name="label9" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,69,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.654,-1.192"/>
                 <Label x:Name="label9_Copy" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,96,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.846,-1.154"/>
-                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbBreiteDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
-                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="tbHöheDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
-                <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="313,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" TextChanged="tbRasterDichte_TextChanged" HorizontalContentAlignment="Right"/>
+                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="TbBreiteDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
+                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="TbHöheDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
+                <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="313,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" TextChanged="TbRasterDichte_TextChanged" HorizontalContentAlignment="Right"/>
                 <Label x:Name="lbKnotenAktuell" Content="Knotenzahl aktuell" Grid.Column="1" HorizontalAlignment="Left" Margin="311,17,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.5,-1.731" Height="26"/>
                 <Label x:Name="label4" Content="Gelände" Grid.Column="1" HorizontalAlignment="Left" Margin="11,10,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label10" Content="Maximale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,36,0,0" VerticalAlignment="Top"/>
@@ -110,19 +110,19 @@
                 <TextBox x:Name="tbMinEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right"/>
                 <Label x:Name="label14" Content="Höhenausgleich:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,176,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label15" Content="Skalierung:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,202,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbHöhenausgleich" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="tbHöhenausgleich_TextChanged"/>
-                <TextBox x:Name="tbScalierung" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,207,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="tbScalierung_TextChanged"/>
+                <TextBox x:Name="tbHöhenausgleich" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbHöhenausgleich_TextChanged"/>
+                <TextBox x:Name="tbScalierung" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="106,207,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbScalierung_TextChanged"/>
                 <Label x:Name="label13_Copy1" Content="m" Grid.Column="1" HorizontalAlignment="Left" Margin="163,176,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label13_Copy2" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="163,202,0,0" VerticalAlignment="Top"/>
-                <Button x:Name="btnAutoAnpassung" Content="Automatische Anpassung" Grid.Column="1" HorizontalAlignment="Left" Margin="11,245,0,0" VerticalAlignment="Top" Width="151" Click="btnAutoAnpassung_Click" IsEnabled="False"/>
-                <Button x:Name="btnSkalierungZurücksetzen" Content="Skalierung zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="11,270,0,0" VerticalAlignment="Top" Width="151" Click="btnSkalierungZurücksetzen_Click" IsEnabled="False"/>
+                <Button x:Name="btnAutoAnpassung" Content="Automatische Anpassung" Grid.Column="1" HorizontalAlignment="Left" Margin="11,245,0,0" VerticalAlignment="Top" Width="151" Click="BtnAutoAnpassung_Click" IsEnabled="False"/>
+                <Button x:Name="btnSkalierungZurücksetzen" Content="Skalierung zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="11,270,0,0" VerticalAlignment="Top" Width="151" Click="BtnSkalierungZurücksetzen_Click" IsEnabled="False"/>
                 <Label x:Name="label13" Content="Skalierung" Grid.Column="1" HorizontalAlignment="Left" Margin="380,43,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbScalierungEEPBreite" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="388,67,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="tbScalierungEEPBreite_TextChanged"/>
+                <TextBox x:Name="tbScalierungEEPBreite" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="388,67,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbScalierungEEPBreite_TextChanged"/>
                 <Label x:Name="label13_Copy" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="445,62,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbScalierungEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="388,95,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="tbScalierungEEPHöhe_TextChanged"/>
+                <TextBox x:Name="tbScalierungEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="388,95,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbScalierungEEPHöhe_TextChanged"/>
                 <Label x:Name="label13_Copy3" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="445,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.25,-0.269"/>
-                <Button x:Name="btEEPHBScalieren" Content="Skalierung von Höhen übernehmen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,161,0,0" VerticalAlignment="Top" Width="195" Click="btEEPHBScalieren_Click" IsEnabled="False"/>
-                <Button x:Name="btEEPHBzurücksetzen" Content="Skalierung H/B zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,186,0,0" VerticalAlignment="Top" Width="195" Click="btEEPHBzurücksetzen_Click" IsEnabled="False"/>
+                <Button x:Name="btEEPHBScalieren" Content="Skalierung von Höhen übernehmen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,161,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBScalieren_Click" IsEnabled="False"/>
+                <Button x:Name="btEEPHBzurücksetzen" Content="Skalierung H/B zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,186,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBzurücksetzen_Click" IsEnabled="False"/>
             </Grid>
         </TabItem>
 
