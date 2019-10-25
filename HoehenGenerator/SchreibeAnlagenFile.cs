@@ -2,15 +2,15 @@
 
 namespace HoehenGenerator
 {
-    class SchreibeAnlagenFile
+    internal class SchreibeAnlagenFile
     {
-        string path;
-        string anlagenname;
-        int höhe;
-        int breite;
-        int rasterdichte;
-        double drasterdichte;
-        bool Ok;
+        private string path;
+        private string anlagenname;
+        private int höhe;
+        private int breite;
+        private int rasterdichte;
+        private double drasterdichte;
+        private bool Ok;
 
         public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte)
         {

@@ -3,18 +3,15 @@ using System.Collections.Generic;
 
 namespace HoehenGenerator
 {
-    class ZwischenspeicherHgt
+    internal class ZwischenspeicherHgt
     {
-        short[,] höhen;
-        int auflösung;
-        GeoPunkt linksunten;
-        GeoPunkt linksoben;
-        GeoPunkt rechtsunten;
-        GeoPunkt rechtsoben;
-
-
-
-        int anzahlLat, anzahlLon;
+        private short[,] höhen;
+        private int auflösung;
+        private GeoPunkt linksunten;
+        private GeoPunkt linksoben;
+        private GeoPunkt rechtsunten;
+        private GeoPunkt rechtsoben;
+        private int anzahlLat, anzahlLon;
 
         public ZwischenspeicherHgt(GeoPunkt linksunten, int anzahlLon, int anzahlLat, int auflösung)
         {
@@ -78,7 +75,7 @@ namespace HoehenGenerator
                     if (istLat > anzahlLon - 1)
                         istLat = anzahlLon - 1;
 
-                    ndata[Y,X] = höhen[istLat, istLon];
+                    ndata[Y, X] = höhen[istLat, istLon];
                 }
             double x1 = CubicPolate(ndata[0, 0], ndata[1, 0], ndata[2, 0], ndata[3, 0], restLat);
             double x2 = CubicPolate(ndata[0, 1], ndata[1, 1], ndata[2, 1], ndata[3, 1], restLat);
@@ -88,7 +85,7 @@ namespace HoehenGenerator
             double y1 = CubicPolate(x1, x2, x3, x4, restLon);
             return y1;
         }
-        private double CubicPolate(double v0, double v1, double v2, double v3, double fracy)
+        private static double CubicPolate(double v0, double v1, double v2, double v3, double fracy)
         {
             double A = (v3 - v2) - (v0 - v1);
             double B = (v0 - v1) - A;

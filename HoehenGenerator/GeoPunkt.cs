@@ -2,18 +2,18 @@
 
 namespace HoehenGenerator
 {
-    struct GeoPunkt
+    internal struct GeoPunkt
     {
-        double lon;
+        private double lon;
         public double Lon
         { get { return lon; } set { lon = value; } }
 
-        double lat;
+        private double lat;
         public double Lat
         { get { return lat; } set { lat = value; } }
-        double entfernung;
 
-        short höhe;
+        private double entfernung;
+        private short höhe;
         public short Höhe
         { get { return höhe; } set { höhe = value; } }
         public GeoPunkt(double lon = 0, double lat = 0, double entfernung = 0, short höhe = 0)
@@ -26,13 +26,14 @@ namespace HoehenGenerator
 
         }
 
-        const double radius = 6371.0; //km
+        private const double radius = 6371.0; //km
 
         public static double bogen(double winkelInGrad)
         {
             return winkelInGrad / 180.0 * Math.PI;
         }
-        static double grad(double BogenInGrad)
+
+        private static double grad(double BogenInGrad)
         {
             return BogenInGrad * 180.0 / Math.PI;
         }

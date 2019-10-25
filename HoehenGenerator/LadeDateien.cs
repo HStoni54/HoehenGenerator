@@ -1,9 +1,9 @@
 ﻿namespace HoehenGenerator
 {
-    class LadeDateien
+    internal class LadeDateien
     {
-        string url;
-        string zieldatei;
+        private string url;
+        private string zieldatei;
 
         public LadeDateien(string url, string zieldatei)
         {

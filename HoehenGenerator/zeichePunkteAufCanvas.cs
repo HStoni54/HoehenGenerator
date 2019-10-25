@@ -5,12 +5,10 @@ namespace HoehenGenerator
     internal class zeichePunkteAufCanvas
 
     {
-
-        SolidColorBrush mySolidColorBrush;
-        double punktgröße;
-
-        int Lon;
-        int Lat;
+        private SolidColorBrush mySolidColorBrush;
+        private double punktgröße;
+        private int Lon;
+        private int Lat;
 
         public zeichePunkteAufCanvas(SolidColorBrush mySolidColorBrush, double punktgröße, int lon, int lat)
         {

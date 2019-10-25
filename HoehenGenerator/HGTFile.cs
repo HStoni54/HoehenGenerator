@@ -2,12 +2,12 @@
 
 namespace HoehenGenerator
 {
-    class HGTFile
+    internal class HGTFile
     {
-        readonly short[,] hgtDaten;
-        int auflösung;
-        string name;
-        string dateiname;
+        private readonly short[,] hgtDaten;
+        private int auflösung;
+        private string name;
+        private string dateiname;
 
         public HGTFile(int auflösung, string dateiname)
         {

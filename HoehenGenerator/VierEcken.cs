@@ -1,17 +1,17 @@
 ﻿namespace HoehenGenerator
 {
-    class VierEcken
+    internal class VierEcken
     {
-        GeoPunkt linksunten;
-        GeoPunkt rechtsoben;
-        GeoPunkt linksoben;
-        GeoPunkt rechtsunten;
-        HgtmitKoordinaten hgtlinksunten;
-        HgtmitKoordinaten hgtlinksoben;
-        HgtmitKoordinaten hgtrechtsunten;
-        HgtmitKoordinaten hgtrechtsoben;
-        string verzeichnispfad;
-        int auflösung;
+        private GeoPunkt linksunten;
+        private GeoPunkt rechtsoben;
+        private GeoPunkt linksoben;
+        private GeoPunkt rechtsunten;
+        private HgtmitKoordinaten hgtlinksunten;
+        private HgtmitKoordinaten hgtlinksoben;
+        private HgtmitKoordinaten hgtrechtsunten;
+        private HgtmitKoordinaten hgtrechtsoben;
+        private string verzeichnispfad;
+        private int auflösung;
 
         public VierEcken(GeoPunkt linksunten, GeoPunkt rechtsoben, int auflösung)
         {

@@ -1,13 +1,13 @@
 ﻿namespace HoehenGenerator
 {
-    class FileMitEckKoordinaten
+    internal class FileMitEckKoordinaten
     {
-        string name;
-        int auflösung;
-        int[] linksoben = new int[2];
-        int[] rechtsoben = new int[2];
-        int[] linksunten = new int[2];
-        int[] rechtsunten = new int[2];
+        private string name;
+        private int auflösung;
+        private int[] linksoben = new int[2];
+        private int[] rechtsoben = new int[2];
+        private int[] linksunten = new int[2];
+        private int[] rechtsunten = new int[2];
 
         public FileMitEckKoordinaten(string name, int auflösung)
         {

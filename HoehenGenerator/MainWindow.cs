@@ -27,52 +27,44 @@ namespace HoehenGenerator
     public partial class MainWindow : Window
     {
         private readonly XmlDocument ge = new XmlDocument();
-        string coordinaten;
-        string[] sepcoordinaten;
-        GeoPunkt[] geoPunkts;
-        GeoPunkt mittelpunkt;
-        GeoPunkt linksoben;
-
-        GeoPunkt rechtsoben;
-        GeoPunkt linksunten;
-        GeoPunkt rechtsunten;
-        GeoPunkt hgtlinksunten;
-        GeoPunkt hgtrechtsoben;
-        PointCollection orgpunkte = new PointCollection();
-        PointCollection punkte = new PointCollection();
-        Canvas Zeichenfläche = new Canvas();
-
-        ListBox lbHgtFiles = new ListBox();
-
-
-        List<HGTFile> listHGTFiles = new List<HGTFile>();
-        string anlagenname = "Neue Anlage";
-        string anlagenpfad;
-        bool usesrtm = false;
-
-        bool useview = true;
-
-        bool use1zoll = true;
-
-        string hgtPfad;
-        double maximaleHöhe = -10000.0;
-        double minimaleHöhe = 10000.0;
-        double zahlbreiteDerAnlage = 1.5;
-        double zahltbHöheDerAnlage = 1.5;
-        double hoehe2 = 0.6;
-        double breite2 = 1.0;
-        int zahltbRasterdichte = 150;
-        double minLänge, maxLänge, minBreite, maxBreite;
-
-        bool datumgrenze = false;
-        int winkel = 0;
-        string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
-        ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
-        ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
-        ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
-        ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
-        ConcurrentQueue<clZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<clZeichneMatrix>();
-        ZwischenspeicherHgt ZwspeicherHgt;
+        private string coordinaten;
+        private string[] sepcoordinaten;
+        private GeoPunkt[] geoPunkts;
+        private GeoPunkt mittelpunkt;
+        private GeoPunkt linksoben;
+        private GeoPunkt rechtsoben;
+        private GeoPunkt linksunten;
+        private GeoPunkt rechtsunten;
+        private GeoPunkt hgtlinksunten;
+        private GeoPunkt hgtrechtsoben;
+        private PointCollection orgpunkte = new PointCollection();
+        private PointCollection punkte = new PointCollection();
+        private Canvas Zeichenfläche = new Canvas();
+        private ListBox lbHgtFiles = new ListBox();
+        private List<HGTFile> listHGTFiles = new List<HGTFile>();
+        private string anlagenname = "Neue Anlage";
+        private string anlagenpfad;
+        private bool usesrtm = false;
+        private bool useview = true;
+        private bool use1zoll = true;
+        private string hgtPfad;
+        private double maximaleHöhe = -10000.0;
+        private double minimaleHöhe = 10000.0;
+        private double zahlbreiteDerAnlage = 1.5;
+        private double zahltbHöheDerAnlage = 1.5;
+        private double hoehe2 = 0.6;
+        private double breite2 = 1.0;
+        private int zahltbRasterdichte = 150;
+        private double minLänge, maxLänge, minBreite, maxBreite;
+        private bool datumgrenze = false;
+        private int winkel = 0;
+        private string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
+        private ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
+        private ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
+        private ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
+        private ConcurrentQueue<zeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<zeichePunkteAufCanvas>();
+        private ConcurrentQueue<clZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<clZeichneMatrix>();
+        private ZwischenspeicherHgt ZwspeicherHgt;
         private double maximaleEEPHöhe;
         private double minimaleEEPHöhe;
         private double höhenausgleich = 0.0;
@@ -2140,7 +2132,7 @@ namespace HoehenGenerator
                         tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
                         double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
-                        double abshöhe2 = ((abshöhe   + höhenausgleich)* (double)ausgleichfaktor)  ;
+                        double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
                         //if (abshöhe2 < 0)
                         //{
                         //    int c;

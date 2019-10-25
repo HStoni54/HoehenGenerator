@@ -2,7 +2,7 @@
 {
     internal class UnzippeDateien
     {
-        string zieldatei;
+        private string zieldatei;
 
         public UnzippeDateien(string zieldatei)
         {

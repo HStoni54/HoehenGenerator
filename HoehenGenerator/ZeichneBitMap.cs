@@ -3,12 +3,12 @@ using System.Drawing;
 
 namespace HoehenGenerator
 {
-    class ZeichneBitMap
+    internal class ZeichneBitMap
     {
-        Bitmap bitmap;
-        int Höhe, Breite;
-        Color[,] color;
-        Color color1;
+        private Bitmap bitmap;
+        private int Höhe, Breite;
+        private Color[,] color;
+        private Color color1;
 
         public Bitmap Bitmap { get => bitmap; }
         public int Höhe1 { get => Höhe; }

@@ -5,11 +5,10 @@ using System.Windows;
 
 namespace HoehenGenerator
 {
-    class SpeicherBild
+    internal class SpeicherBild
     {
-
-        Bitmap bitmap;
-        string dateiname;
+        private Bitmap bitmap;
+        private string dateiname;
 
         public SpeicherBild(Bitmap bitmap, string dateiname)
         {

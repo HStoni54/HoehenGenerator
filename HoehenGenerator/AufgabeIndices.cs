@@ -1,10 +1,10 @@
 ﻿namespace HoehenGenerator
 {
-    class AufgabeIndices
+    internal class AufgabeIndices
     {
-        string hgtart;
-        int auflösung;
-        string pfad;
+        private string hgtart;
+        private int auflösung;
+        private string pfad;
 
         public AufgabeIndices(string hgtart, int auflösung, string pfad)
         {

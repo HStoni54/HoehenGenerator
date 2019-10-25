@@ -1,8 +1,8 @@
 ﻿namespace HoehenGenerator
 {
-    class clZeichneMatrix
+    internal class clZeichneMatrix
     {
-        string macheEs;
+        private string macheEs;
 
         public clZeichneMatrix(string macheEs)
         {

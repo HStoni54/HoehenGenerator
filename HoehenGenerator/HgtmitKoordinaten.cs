@@ -1,10 +1,10 @@
 ﻿namespace HoehenGenerator
 {
-    class HgtmitKoordinaten
+    internal class HgtmitKoordinaten
     {
-        string name;
-        int dezLat;
-        int dezLon;
+        private string name;
+        private int dezLat;
+        private int dezLon;
 
         public HgtmitKoordinaten(string name, int dezLon, int dezLat)
         {

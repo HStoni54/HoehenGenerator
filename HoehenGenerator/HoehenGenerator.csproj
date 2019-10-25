@@ -110,6 +110,7 @@
     <Compile Include="AufgabeIndices.cs" />
     <Compile Include="clZeichneMatrix.cs" />
     <Compile Include="FileMitEckKoordinaten.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HgtmitKoordinaten.cs" />
     <Compile Include="LadeDateien.cs" />
     <Compile Include="SchreibeAnlagenFile.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Filemitauflösung.cs" />
     <Compile Include="GeoPunkt.cs" />
     <Compile Include="HGTFile.cs" />
-    <Compile Include="ListenListe2.cs" />
     <Compile Include="MainWindow.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

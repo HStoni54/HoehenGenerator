@@ -2,10 +2,10 @@
 
 namespace HoehenGenerator
 {
-    class NeuPunkte
+    internal class NeuPunkte
     {
-        PointCollection punkte = new PointCollection();
-        double fläche;
+        private PointCollection punkte = new PointCollection();
+        private double fläche;
 
         public PointCollection Punkte { get => punkte; }
         public double Fläche { get => fläche; }

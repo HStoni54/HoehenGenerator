@@ -1,9 +1,9 @@
 ﻿namespace HoehenGenerator
 {
-    class Filemitauflösung
+    internal class Filemitauflösung
     {
-        string dateiname;
-        int auflösung;
+        private string dateiname;
+        private int auflösung;
 
         public Filemitauflösung(string dateiname, int auflösung)
         {
