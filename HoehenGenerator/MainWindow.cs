@@ -1769,7 +1769,7 @@ namespace HoehenGenerator
         private void ZeichneMatrix(List<Filemitauflösung> lfma)
         {
             VierEcken vierEcken = new VierEcken(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
-            ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
+            //ZwischenspeicherHgt zwischenspeicherHgt = new ZwischenspeicherHgt(hgtlinksunten, hgtrechtsoben, lfma[0].Auflösung);
             //if (vierEcken.Hgtlinksoben.Name != vierEcken.Hgtrechtsunten.Name) MessageBox.Show("Mehr als eine Hgt-Datei");
             //else MessageBox.Show("Nur eine Hgt-Datei");
 
@@ -1825,11 +1825,11 @@ namespace HoehenGenerator
 
             int[] zwausmasse = { intanzahlLat, intanzahlLon };
             // TODO: Zwischenspeicher auf Lat Lon überprüfen
-            ZwischenspeicherHgt ZwspeicherHgt1 = new ZwischenspeicherHgt(
-                Hgttolatlon(vierEcken.Hgtlinksunten.Name,vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
-                intanzahlLon, 
-                intanzahlLat, 
-                vierEcken.Auflösung);
+            //ZwischenspeicherHgt ZwspeicherHgt1 = new ZwischenspeicherHgt(
+            //    Hgttolatlon(vierEcken.Hgtlinksunten.Name,vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
+            //    intanzahlLon, 
+            //    intanzahlLat, 
+            //    vierEcken.Auflösung);
             ZwspeicherHgt = new ZwischenspeicherHgt(
                 Hgttolatlon(vierEcken.Hgtlinksunten.Name, vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
                Hgttolatlon(vierEcken.Hgtrechtsoben.Name, vierEcken.Auflösung, vierEcken.Hgtrechtsoben.DezLat, vierEcken.Hgtrechtsoben.DezLon),
