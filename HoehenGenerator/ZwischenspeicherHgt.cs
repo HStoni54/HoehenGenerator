@@ -64,18 +64,18 @@ namespace HoehenGenerator
 
 
                     //Smoothing done by averaging the general area around the coords.
-                    int istLat = anzahlLon - wertLat - (Y - 1);
+                    int istLat = anzahlLat - wertLat - (Y - 1);
                     int istLon = wertLon + (X - 1);
                     if (istLat < 0)
                         istLat = 0;
                     if (istLon < 0)
                         istLon = 0;
-                    if (istLon > anzahlLat - 1)
-                        istLon = anzahlLat - 1;
-                    if (istLat > anzahlLon - 1)
-                        istLat = anzahlLon - 1;
+                    if (istLon > anzahlLon - 1)
+                        istLon = anzahlLon - 1;
+                    if (istLat > anzahlLat - 1)
+                        istLat = anzahlLat - 1;
 
-                    ndata[Y, X] = höhen[istLat, istLon];
+                    ndata[Y, X] = höhen[istLon, istLat];
                 }
             double x1 = CubicPolate(ndata[0, 0], ndata[1, 0], ndata[2, 0], ndata[3, 0], restLat);
             double x2 = CubicPolate(ndata[0, 1], ndata[1, 1], ndata[2, 1], ndata[3, 1], restLat);
@@ -188,8 +188,8 @@ namespace HoehenGenerator
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                            //höhen[i - fileMitEcks.Linksunten[1], AnzahlLat - 1 + fileMitEcks.Rechtsoben[0] - j ] = hGTFile.HgtDaten[i, j];
-                            höhen[AnzahlLon + i - fileMitEcks.Rechtsoben[1], j - fileMitEcks.Linksunten[0]] = hGTFile.HgtDaten[i, j];
+                           //höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                            höhen[j - fileMitEcks.Linksunten[0], AnzahlLat + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }
                     // 
@@ -203,7 +203,8 @@ namespace HoehenGenerator
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                            höhen[i - fileMitEcks.Linksunten[1], AnzahlLat + j - fileMitEcks.Rechtsoben[0]] = hGTFile.HgtDaten[i, j];
+                            //höhen[j - fileMitEcks.Linksunten[0], AnzahlLat + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
+                            höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }                  //MessageBox.Show("Zweig ru");
                     // 
@@ -218,7 +219,7 @@ namespace HoehenGenerator
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                            höhen[AnzahlLon + i - fileMitEcks.Rechtsoben[1], AnzahlLat + j - fileMitEcks.Rechtsoben[0]] = hGTFile.HgtDaten[i, j];
+                            höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], AnzahlLat + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }                  //MessageBox.Show("Zweig ro");
                     break;
