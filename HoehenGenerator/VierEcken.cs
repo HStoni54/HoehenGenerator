@@ -84,12 +84,13 @@ namespace HoehenGenerator
             {
                 hgt = "S" + (-lat2).ToString("D2", CultureInfo.CurrentCulture);
             }
-            if (lon2 >= 0)
+            if (lon2 >= 0 && lon2 < 180)
             {
                 hgt = hgt + "E" + lon2.ToString("D3", CultureInfo.CurrentCulture);
             }
-            else
-            {
+            else {
+                if (lon2 >= 180) lon2 = lon2 - 360;
+            
                 hgt = hgt + "W" + (-lon2).ToString("D3", CultureInfo.CurrentCulture);
             }
             return new HgtmitKoordinaten(hgt, lon1, lat1); ;
