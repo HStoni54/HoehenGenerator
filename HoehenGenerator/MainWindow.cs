@@ -1825,10 +1825,15 @@ namespace HoehenGenerator
 
             int[] zwausmasse = { intanzahlLat, intanzahlLon };
             // TODO: Zwischenspeicher auf Lat Lon überprüfen
-            ZwspeicherHgt = new ZwischenspeicherHgt(Hgttolatlon(vierEcken.Hgtlinksunten.Name, vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
-                intanzahlLat, intanzahlLon, vierEcken.Auflösung);
-            ZwischenspeicherHgt ZwspeicherHgt1 = new ZwischenspeicherHgt(Hgttolatlon(vierEcken.Hgtlinksunten.Name, vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
-               Hgttolatlon(vierEcken.Hgtrechtsoben.Name, vierEcken.Auflösung, vierEcken.Hgtrechtsoben.DezLat, vierEcken.Hgtrechtsoben.DezLon), vierEcken.Auflösung);
+            ZwischenspeicherHgt ZwspeicherHgt1 = new ZwischenspeicherHgt(
+                Hgttolatlon(vierEcken.Hgtlinksunten.Name,vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
+                intanzahlLon, 
+                intanzahlLat, 
+                vierEcken.Auflösung);
+            ZwspeicherHgt = new ZwischenspeicherHgt(
+                Hgttolatlon(vierEcken.Hgtlinksunten.Name, vierEcken.Auflösung, vierEcken.Hgtlinksunten.DezLat, vierEcken.Hgtlinksunten.DezLon),
+               Hgttolatlon(vierEcken.Hgtrechtsoben.Name, vierEcken.Auflösung, vierEcken.Hgtrechtsoben.DezLat, vierEcken.Hgtrechtsoben.DezLon),
+               vierEcken.Auflösung);
             ZwspeicherHgt.LeseSpeicherEin(vierEcken, fileMitEcks);
 
             var maxarr = (from short v in ZwspeicherHgt.Höhen select v).Max();

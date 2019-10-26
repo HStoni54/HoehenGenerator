@@ -36,8 +36,8 @@ namespace HoehenGenerator
             this.rechtsoben = rechtsoben;
             this.linksoben = new GeoPunkt(linksunten.Lon, rechtsoben.Lat);
             this.rechtsunten = new GeoPunkt(rechtsoben.Lon, linksunten.Lat);
-            this.anzahlLat = (int)((rechtsoben.Lat - linksunten.Lat) / auflösung * 3600);
-            this.anzahlLon = (int)((rechtsoben.Lon - linksunten.Lon) / auflösung * 3600);
+            this.anzahlLat = (int)((rechtsoben.Lat - linksunten.Lat) / auflösung * 3600) + 1;
+            this.anzahlLon = (int)((rechtsoben.Lon - linksunten.Lon) / auflösung * 3600) + 1;
             this.höhen = new short[AnzahlLon, AnzahlLat];
         }
 
@@ -174,7 +174,7 @@ namespace HoehenGenerator
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                            höhen[i - fileMitEcks.Linksunten[1], j - fileMitEcks.Linksunten[0]] = hGTFile.HgtDaten[i, j];
+                            höhen[ j - fileMitEcks.Linksunten[0],i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }
 
