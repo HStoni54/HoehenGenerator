@@ -154,9 +154,9 @@ namespace HoehenGenerator
 
                                 throw;
                             }
-                            for (int i = 0; i < 3601; i++)
+                            for (int i = 0; i < 1201; i++)
                             {
-                                for (int j = 0; j < 3601; j++)
+                                for (int j = 0; j < 1201; j++)
                                 {
                                     for (int k = 0; k < 2; k++)
                                     {
@@ -2043,18 +2043,18 @@ namespace HoehenGenerator
             foreach (string verzeichnis in directorys)
 
             {
+                int i = 3;
+                fma.Auflösung = i;
+
                 if (verzeichnis.Length > 0)
                 {
                     string a = verzeichnis.Substring(verzeichnis.Length - 1);
-                    int i;
-                    try
-                    {
-                        i = int.Parse(a, CultureInfo.CurrentCulture);
-                    }
-                    catch (Exception)
-                    {
-                        return fma;
-                    }
+                    int j;
+
+                    bool success = int.TryParse(a, out j);
+                    if (success) i = j;
+                    
+                   
                     //if (!(nurdreizoll && i == 1))
                     //{
 
