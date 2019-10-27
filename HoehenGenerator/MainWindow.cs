@@ -1930,7 +1930,7 @@ namespace HoehenGenerator
 
         private void LeseEinUndMachWeiter()
         {
-            Filemitauflösung fma = new Filemitauflösung("", 0);
+            Filemitauflösung fma ;
             List<Filemitauflösung> lfma = new List<Filemitauflösung>();
 
             lfma.Clear();
