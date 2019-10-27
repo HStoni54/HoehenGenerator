@@ -22,7 +22,7 @@ namespace HoehenGenerator
             try
             {
 
-                if (dateiname.EndsWith(".bmp",StringComparison.CurrentCulture))
+                if (dateiname.EndsWith(".bmp", StringComparison.CurrentCulture))
                 {
                     Bitmap.Save(dateiname, ImageFormat.Bmp);
                 }

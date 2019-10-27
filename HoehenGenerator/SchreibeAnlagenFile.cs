@@ -36,7 +36,7 @@ namespace HoehenGenerator
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("sutrackp");
             xmlWriter.WriteStartElement("Schandlaft");
-            xmlWriter.WriteAttributeString("extX", breite.ToString( CultureInfo.CurrentCulture));
+            xmlWriter.WriteAttributeString("extX", breite.ToString(CultureInfo.CurrentCulture));
             xmlWriter.WriteAttributeString("extY", höhe.ToString(CultureInfo.CurrentCulture));
             xmlWriter.WriteAttributeString("dichte", drasterdichte.ToString(CultureInfo.InvariantCulture));
             xmlWriter.WriteAttributeString("HoehenFile", "\\" + anlagenname + "H.bmp");

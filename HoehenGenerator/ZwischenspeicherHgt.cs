@@ -85,7 +85,7 @@ namespace HoehenGenerator
                         istLat = anzahlLat - 1;
 
                     ndata[Y, X] = höhen[istLon, istLat];
-                    if (ndata[Y,X] == 0)
+                    if (ndata[Y, X] == 0)
                     {
 
                     }
@@ -189,8 +189,8 @@ namespace HoehenGenerator
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                            höhen[ j - fileMitEcks.Linksunten[0],i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
-                      
+                            höhen[j - fileMitEcks.Linksunten[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+
                         }
                     }
                     short test = hGTFile.HgtDaten[1200, 1200];
@@ -204,7 +204,7 @@ namespace HoehenGenerator
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                           //höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                            //höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
                             höhen[j - fileMitEcks.Linksunten[0], AnzahlLat - 1 + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }
@@ -220,11 +220,11 @@ namespace HoehenGenerator
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0] + 1; j++)
                         {
                             //höhen[j - fileMitEcks.Linksunten[0], AnzahlLat + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
-                            
-                            
-                            
-                            
-                            
+
+
+
+
+
                             höhen[AnzahlLon - 1 + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }                  //MessageBox.Show("Zweig ru");

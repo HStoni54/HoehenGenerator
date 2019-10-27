@@ -108,6 +108,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AufgabeIndices.cs" />
+    <Compile Include="ClGeneriereLeerHGTs1.cs" />
     <Compile Include="ClZeichneMatrix.cs" />
     <Compile Include="FileMitEckKoordinaten.cs" />
     <Compile Include="GlobalSuppressions.cs" />

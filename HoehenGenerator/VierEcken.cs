@@ -41,7 +41,7 @@ namespace HoehenGenerator
             int lon2 = (int)lon;
             lat1 = (int)((lat - (int)lat) * 3600 / auflösung);
             lon1 = (int)((lon - (int)lon) * 3600 / auflösung);
- 
+
             if (lat2 >= 0)
             {
                 hgt = "N" + lat2.ToString("D2", CultureInfo.CurrentCulture);
@@ -55,15 +55,16 @@ namespace HoehenGenerator
             {
                 hgt = hgt + "E" + lon2.ToString("D3", CultureInfo.CurrentCulture);
             }
-            else {
+            else
+            {
                 if (lon2 >= 180)
                 {
-                    lon2 = lon2 - 360; 
+                    lon2 = lon2 - 360;
                     hgt = hgt + "W" + (-lon2).ToString("D3", CultureInfo.CurrentCulture);
                 }
                 else
                 {
-                lon1 = 3600 / auflösung + lon1;
+                    lon1 = 3600 / auflösung + lon1;
                     hgt = hgt + "W" + (-lon2 + 1).ToString("D3", CultureInfo.CurrentCulture);
 
                 }
