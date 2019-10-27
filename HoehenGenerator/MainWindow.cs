@@ -663,10 +663,10 @@ namespace HoehenGenerator
                 points1.Add(DrehePunkt(points[i], drehung));
             }
 
-            double maxlat = Math.Round(points1.Max(x => x.Y) - 0.5);
-            double minlat = Math.Round(points1.Min(x => x.Y) - 0.5);
-            double maxlon = Math.Round(points1.Max(x => x.X) - 0.5);
-            double minlon = Math.Round(points1.Min(x => x.X) - 0.5);
+            double maxlat = Math.Round(points1.Max(x => x.Y + 0.002) - 0.5);
+            double minlat = Math.Round(points1.Min(x => x.Y - 0.002) - 0.5);
+            double maxlon = Math.Round(points1.Max(x => x.X + 0.002) - 0.5);
+            double minlon = Math.Round(points1.Min(x => x.X - 0.002) - 0.5);
             lbHgtFiles.Items.Clear();
             // HGTFiles.Text = "";
             if (maxlon - minlon > 180)

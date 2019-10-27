@@ -27,10 +27,10 @@ namespace HoehenGenerator
 
         private void BestimmePunkte()
         {
-            hgtlinksoben = BestimmeHgtFile(linksoben.Lon, linksoben.Lat, "lo");
-            hgtlinksunten = BestimmeHgtFile(linksunten.Lon, linksunten.Lat, "lu");
-            hgtrechtsoben = BestimmeHgtFile(rechtsoben.Lon, rechtsoben.Lat, "ro");
-            hgtrechtsunten = BestimmeHgtFile(rechtsunten.Lon, rechtsunten.Lat, "ru");
+            hgtlinksoben = BestimmeHgtFile(linksoben.Lon - 0.01, linksoben.Lat + 0.01, "lo");
+            hgtlinksunten = BestimmeHgtFile(linksunten.Lon - 0.01, linksunten.Lat - 0.01, "lu");
+            hgtrechtsoben = BestimmeHgtFile(rechtsoben.Lon + 0.01, rechtsoben.Lat + 0.01, "ro");
+            hgtrechtsunten = BestimmeHgtFile(rechtsunten.Lon + 0.01, rechtsunten.Lat - 0.01, "ru");
         }
 
         private HgtmitKoordinaten BestimmeHgtFile(double lon, double lat, string v)
@@ -41,41 +41,41 @@ namespace HoehenGenerator
             int lon2 = (int)lon;
             lat1 = (int)((lat - (int)lat) * 3600 / auflösung);
             lon1 = (int)((lon - (int)lon) * 3600 / auflösung);
-            switch (v)
-            {
-                case "lo":
-                    lat1 += 3;
-                    if (lat1 > 3600 / auflösung)
-                        lat1 = 3600 / auflösung;
-                    lon1 -= 1;
-                    if (lon1 < 0)
-                        lon1 = 0;
-                    break;
-                case "lu":
-                    lat1 -= 1;
-                    if (lat1 < 0)
-                        lat1 = 0;
-                    lon1 -= 1;
-                    if (lon1 < 0)
-                        lon1 = 0;
-                    break;
-                case "ro":
-                    lat1 += 3;
-                    if (lat1 > 3600 / auflösung)
-                        lat1 = 3600 / auflösung;
-                    lon1 += 3;
-                    if (lon1 > 3600 / auflösung)
-                        lon1 = 3600 / auflösung;
-                    break;
-                case "ru":
-                    lat1 -= 1;
-                    if (lat1 < 0)
-                        lat1 = 0;
-                    lon1 += 3;
-                    if (lon1 > 3600 / auflösung)
-                        lon1 = 3600 / auflösung;
-                    break;
-            }
+            //switch (v)
+            //{
+            //    case "lo":
+            //        lat1 += 3;
+            //        if (lat1 > 3600 / auflösung)
+            //            lat1 = 3600 / auflösung;
+            //        lon1 -= 1;
+            //        if (lon1 < 0)
+            //            lon1 = 0;
+            //        break;
+            //    case "lu":
+            //        lat1 -= 1;
+            //        if (lat1 < 0)
+            //            lat1 = 0;
+            //        lon1 -= 1;
+            //        if (lon1 < 0)
+            //            lon1 = 0;
+            //        break;
+            //    case "ro":
+            //        lat1 += 3;
+            //        if (lat1 > 3600 / auflösung)
+            //            lat1 = 3600 / auflösung;
+            //        lon1 += 3;
+            //        if (lon1 > 3600 / auflösung)
+            //            lon1 = 3600 / auflösung;
+            //        break;
+            //    case "ru":
+            //        lat1 -= 1;
+            //        if (lat1 < 0)
+            //            lat1 = 0;
+            //        lon1 += 3;
+            //        if (lon1 > 3600 / auflösung)
+            //            lon1 = 3600 / auflösung;
+            //        break;
+            //}
             if (lat2 >= 0)
             {
                 hgt = "N" + lat2.ToString("D2", CultureInfo.CurrentCulture);
