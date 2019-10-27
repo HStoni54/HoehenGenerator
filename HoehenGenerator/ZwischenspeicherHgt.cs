@@ -178,6 +178,8 @@ namespace HoehenGenerator
                      * Ich habe mal wieder Lat und Lon vertauscht
                      * 
                      * Hier stimmt etwas noch nicht,  es werden falsche Zahlen ausgelesen 
+                     * 
+                     *  TODO: wenn i oder j maximum ,dann fehlt ein wert
                      */
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
@@ -186,7 +188,7 @@ namespace HoehenGenerator
                             höhen[ j - fileMitEcks.Linksunten[0],i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }
-
+                    short test = hGTFile.HgtDaten[1200, 1200];
                     //     MessageBox.Show("Zweig lu");
                     break;
                 case "lo":
