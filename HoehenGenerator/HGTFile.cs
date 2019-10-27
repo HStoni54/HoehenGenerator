@@ -13,7 +13,7 @@ namespace HoehenGenerator
         {
             this.auflösung = 3 / auflösung;
 
-
+            // TODO mal wieder Datumsauflösung
             this.dateiname = dateiname;
             byte[] vs = new byte[2];
             hgtDaten = new short[this.auflösung * 1200 + 1, this.auflösung * 1200 + 1];
