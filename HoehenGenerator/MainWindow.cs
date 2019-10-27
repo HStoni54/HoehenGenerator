@@ -834,7 +834,10 @@ namespace HoehenGenerator
             double punktgröße = Math.Round(Math.Sqrt(GrößeH * GrößeB / punkte.Count) + 1) * 1.5;
             for (int i = 0; i < punkte.Count; i += 1)
             {
-                int Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
+                int Lon;
+                if (punkte[i].Lon - minLänge >= 0)
+                    Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
+                else Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge + 360));
                 int Lat = (int)(GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite));
 
 
@@ -1926,10 +1929,13 @@ namespace HoehenGenerator
 
         private bool IstPunktImRechteck(ref GeoPunkt geoPunkt1, double diff = 0.0)
         { // TODO: In allen Erdteilen? Datumgrenze?
+            
             return geoPunkt1.Lat <= Math.Max(linksoben.Lat, rechtsoben.Lat) + diff
                 && geoPunkt1.Lat >= Math.Min(linksunten.Lat, rechtsunten.Lat) - diff
-                && geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) + diff
-                && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon) - diff;
+                &&(( geoPunkt1.Lon <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) + diff
+                && geoPunkt1.Lon >= Math.Min(linksunten.Lon, linksoben.Lon) - diff)
+                || (geoPunkt1.Lon + 360 <= Math.Max(rechtsoben.Lon, rechtsunten.Lon) + diff
+                && geoPunkt1.Lon + 360 >= Math.Min(linksunten.Lon, linksoben.Lon) - diff));
         }
 
         private void Einlesen_Click(object sender, RoutedEventArgs e)
@@ -2028,14 +2034,14 @@ namespace HoehenGenerator
             string nordsüd;
             double lat;
             double lon;
-            ostwest = filename.Substring(0, 1);
-            nordsüd = filename.Substring(3, 1);
+            nordsüd = filename.Substring(0, 1);
+            ostwest = filename.Substring(3, 1);
             lat = int.Parse(filename.Substring(1, 2), CultureInfo.CurrentCulture);
             lon = int.Parse(filename.Substring(4, 3), CultureInfo.CurrentCulture);
             if (ostwest == "W")
-                lat = -lat;
-            if (nordsüd == "S")
                 lon = -lon;
+            if (nordsüd == "S")
+                lat = -lat;
             geoPunkt.Lat = lat + breit / 3600.0 * auflösung;
             geoPunkt.Lon = lon + hoch / 3600.0 * auflösung;
             return geoPunkt;

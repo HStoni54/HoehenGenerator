@@ -31,13 +31,20 @@ namespace HoehenGenerator
         {
             this.auflösung = auflösung;
             this.linksunten = linksunten;
-
+            double zwischenwert;
 
             this.rechtsoben = rechtsoben;
             this.linksoben = new GeoPunkt(linksunten.Lon, rechtsoben.Lat);
             this.rechtsunten = new GeoPunkt(rechtsoben.Lon, linksunten.Lat);
             this.anzahlLat = (int)((rechtsoben.Lat - linksunten.Lat) / auflösung * 3600) + 1;
-            this.anzahlLon = (int)((rechtsoben.Lon - linksunten.Lon) / auflösung * 3600) + 1;
+            zwischenwert = rechtsoben.Lon - linksunten.Lon;
+            if (zwischenwert < 0)
+                //zwischenwert = 360.0 + zwischenwert;
+
+
+
+                this.anzahlLon = (int)((360.0 + zwischenwert) / auflösung * 3600);
+            else this.anzahlLon = (int)((zwischenwert) / auflösung * 3600 + 1);
             this.höhen = new short[AnzahlLon, AnzahlLat];
         }
 
@@ -50,8 +57,10 @@ namespace HoehenGenerator
 
         private double InterpoliereHöhe(GeoPunkt geoPunkt)
         {
+            double zwischenwert = geoPunkt.Lon - linksunten.Lon;
+            if (zwischenwert < 0) zwischenwert = zwischenwert + 360;
             double doLat = (geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0;
-            double doLon = (geoPunkt.Lon - linksunten.Lon) / auflösung * 3600.0;
+            double doLon = (zwischenwert) / auflösung * 3600.0;
             int wertLat = (int)doLat;
             int wertLon = (int)doLon;
             double restLat = doLat - wertLat;
