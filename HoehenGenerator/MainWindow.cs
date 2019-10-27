@@ -57,7 +57,7 @@ namespace HoehenGenerator
         private double minLänge, maxLänge, minBreite, maxBreite;
         private bool datumgrenze = false;
         private int winkel = 0;
-        private readonly string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" };
+        private readonly string[] directorys = { "VIEW1", "SRTM1", "VIEW3", "SRTM3" };
         private readonly ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
         private readonly ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
         private readonly ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
@@ -1672,24 +1672,24 @@ namespace HoehenGenerator
             if (!useview)
             {
                 directorys[0] = "";
-                directorys[1] = "";
+                directorys[2] = "";
             }
             else
             {
                 directorys[0] = "VIEW1";
-                directorys[1] = "VIEW3";
+                directorys[2] = "VIEW3";
 
             }
 
 
             if (!usesrtm)
             {
-                directorys[2] = "";
+                directorys[1] = "";
                 directorys[3] = "";
             }
             else
             {
-                directorys[2] = "SRTM1";
+                directorys[1] = "SRTM1";
                 directorys[3] = "SRTM3";
 
             }
@@ -1697,14 +1697,14 @@ namespace HoehenGenerator
             if (!use1zoll)
             {
                 directorys[0] = "";
-                directorys[2] = "";
+                directorys[1] = "";
             }
             else
             {
                 if (useview)
                     directorys[0] = "VIEW1";
                 if (usesrtm)
-                    directorys[2] = "SRTM1";
+                    directorys[1] = "SRTM1";
 
             }
 
