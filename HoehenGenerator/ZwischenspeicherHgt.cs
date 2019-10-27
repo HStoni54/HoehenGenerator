@@ -182,8 +182,8 @@ namespace HoehenGenerator
                      * Ich habe mal wieder Lat und Lon vertauscht
                      * 
                      * Hier stimmt etwas noch nicht,  es werden falsche Zahlen ausgelesen 
-                     * 
-                     *  TODO: wenn i oder j maximum ,dann fehlt ein wert
+                     *  
+                     *  TODO: wenn anderer Quadrant Werte falsch
                      */
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
