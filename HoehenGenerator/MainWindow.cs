@@ -1172,6 +1172,7 @@ namespace HoehenGenerator
                 {
                     string[] url = FindeUrl(file);
                     //   vs1.Clear();
+                    // TODO: in den Zip-Files sind nicht alle Hgt-Dateien
                     if (url.Length == 0)
                     {
                         //MessageBox.Show("Datei: " + vs[i] + "nicht existent!");
