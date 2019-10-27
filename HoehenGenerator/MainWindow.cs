@@ -1872,10 +1872,10 @@ namespace HoehenGenerator
                             //TODO: Andere Globusteile einbeziehen Fläche überprüfen Methode Punkt innerhalb Polygon hier und oben
                             if (IstPunktImRechteck(ref geoPunkt1))
                             {
-                                //if (maximaleHöhe < geoPunkt1.Höhe)
-                                //    maximaleHöhe = geoPunkt1.Höhe;
-                                //if (minimaleHöhe > geoPunkt1.Höhe && geoPunkt1.Höhe != -32768)
-                                //    minimaleHöhe = geoPunkt1.Höhe;
+                                if (maximaleHöhe < geoPunkt1.Höhe)
+                                    maximaleHöhe = geoPunkt1.Höhe;
+                                if (minimaleHöhe > geoPunkt1.Höhe && geoPunkt1.Höhe != -32768)
+                                    minimaleHöhe = geoPunkt1.Höhe;
 
                                 if (geoPunkt1.Höhe != -32768)
                                     geoPunkts.Add(geoPunkt1);
@@ -1898,8 +1898,8 @@ namespace HoehenGenerator
             }
 
             ZeichnePunkte(geoPunkts);
-            maximaleHöhe = maxarr;
-            minimaleHöhe = minarr;
+            //maximaleHöhe = maxarr;
+            //minimaleHöhe = minarr;
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             btWeiter3.IsEnabled = true;

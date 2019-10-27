@@ -41,48 +41,15 @@ namespace HoehenGenerator
             int lon2 = (int)lon;
             lat1 = (int)((lat - (int)lat) * 3600 / auflösung);
             lon1 = (int)((lon - (int)lon) * 3600 / auflösung);
-            //switch (v)
-            //{
-            //    case "lo":
-            //        lat1 += 3;
-            //        if (lat1 > 3600 / auflösung)
-            //            lat1 = 3600 / auflösung;
-            //        lon1 -= 1;
-            //        if (lon1 < 0)
-            //            lon1 = 0;
-            //        break;
-            //    case "lu":
-            //        lat1 -= 1;
-            //        if (lat1 < 0)
-            //            lat1 = 0;
-            //        lon1 -= 1;
-            //        if (lon1 < 0)
-            //            lon1 = 0;
-            //        break;
-            //    case "ro":
-            //        lat1 += 3;
-            //        if (lat1 > 3600 / auflösung)
-            //            lat1 = 3600 / auflösung;
-            //        lon1 += 3;
-            //        if (lon1 > 3600 / auflösung)
-            //            lon1 = 3600 / auflösung;
-            //        break;
-            //    case "ru":
-            //        lat1 -= 1;
-            //        if (lat1 < 0)
-            //            lat1 = 0;
-            //        lon1 += 3;
-            //        if (lon1 > 3600 / auflösung)
-            //            lon1 = 3600 / auflösung;
-            //        break;
-            //}
+ 
             if (lat2 >= 0)
             {
                 hgt = "N" + lat2.ToString("D2", CultureInfo.CurrentCulture);
             }
             else
             {
-                hgt = "S" + (-lat2).ToString("D2", CultureInfo.CurrentCulture);
+                hgt = "S" + (-lat2 + 1).ToString("D2", CultureInfo.CurrentCulture);
+                lat1 = 3600 / auflösung + lat1;
             }
             if (lon2 >= 0 && lon2 < 180)
             {
@@ -90,8 +57,9 @@ namespace HoehenGenerator
             }
             else {
                 if (lon2 >= 180) lon2 = lon2 - 360;
-            
-                hgt = hgt + "W" + (-lon2).ToString("D3", CultureInfo.CurrentCulture);
+                lon1 = 3600 / auflösung + lon1;
+
+                hgt = hgt + "W" + (-lon2 + 1).ToString("D3", CultureInfo.CurrentCulture);
             }
             return new HgtmitKoordinaten(hgt, lon1, lat1); ;
         }
