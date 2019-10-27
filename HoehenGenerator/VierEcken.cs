@@ -56,10 +56,21 @@ namespace HoehenGenerator
                 hgt = hgt + "E" + lon2.ToString("D3", CultureInfo.CurrentCulture);
             }
             else {
-                if (lon2 >= 180) lon2 = lon2 - 360;
+                if (lon2 >= 180)
+                {
+                    lon2 = lon2 - 360; 
+                    hgt = hgt + "W" + (-lon2).ToString("D3", CultureInfo.CurrentCulture);
+                }
+                else
+                {
                 lon1 = 3600 / auflösung + lon1;
+                    hgt = hgt + "W" + (-lon2 + 1).ToString("D3", CultureInfo.CurrentCulture);
 
-                hgt = hgt + "W" + (-lon2 + 1).ToString("D3", CultureInfo.CurrentCulture);
+                }
+
+
+
+
             }
             return new HgtmitKoordinaten(hgt, lon1, lat1); ;
         }
