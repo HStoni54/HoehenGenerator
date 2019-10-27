@@ -57,7 +57,7 @@ namespace HoehenGenerator
         private double minLänge, maxLänge, minBreite, maxBreite;
         private bool datumgrenze = false;
         private int winkel = 0;
-        private readonly string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3", "noHgt" };
+        private readonly string[] directorys = { "VIEW1", "VIEW3", "SRTM1", "SRTM3" };
         private readonly ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
         private readonly ConcurrentQueue<LadeDateien> ladeDateiens = new ConcurrentQueue<LadeDateien>();
         private readonly ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
@@ -70,6 +70,7 @@ namespace HoehenGenerator
         private double ausgleichfaktor = 1.0;
         private double zahlScalierungEEPBreite = 1.0;
         private double zahlScalierungEEPHöhe = 1.0;
+        int downloadcount = 0;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -171,11 +172,13 @@ namespace HoehenGenerator
                     if (istArbeitDa)
                     {
                         UnZipHgtFiles(datei.Zieldatei);
+                        downloadcount -= 1;
                         Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.Zieldatei)));
                         //FärbeHgtLabel(datei.Zieldatei);
                         Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
                         //ZeichneAlles(punkte);
-
+                        if (downloadcount == 0)
+                            Dispatcher.BeginInvoke(new Action(() => Weiter2.IsEnabled = true));
                     }
                 }
                 Thread.Sleep(100);
@@ -226,11 +229,6 @@ namespace HoehenGenerator
                         if (ÜberprüfeIndices())
 
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
-
-
-
-
-
                         else
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = false));
                     }
@@ -1157,14 +1155,7 @@ namespace HoehenGenerator
             List<string> view1 = new List<string>();
             List<string> view3 = new List<string>();
             //string[] vs = HGTFiles.Text.Split('\n');
-            if (Directory.Exists(hgtPfad + "\\noHgt"))
-            {
-                string[] zulöschen = Directory.GetFiles(hgtPfad + "\\noHgt");
-                foreach (var item in zulöschen)
-                {
-                    File.Delete(item);
-                }
-            }
+   
             for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
                 string file = lbHgtFiles.Items[i].ToString();
@@ -1173,18 +1164,8 @@ namespace HoehenGenerator
                     string[] url = FindeUrl(file);
                     //   vs1.Clear();
                     // TODO: in den Zip-Files sind nicht alle Hgt-Dateien
-                    if (url.Length == 0)
-                    {
-                        //MessageBox.Show("Datei: " + vs[i] + "nicht existent!");
-                        if (!Directory.Exists(hgtPfad + "\\noHgt"))
-                            Directory.CreateDirectory(hgtPfad + "\\noHgt");
-                        StreamWriter sw = File.CreateText(hgtPfad + "\\noHgt\\" + file + ".hgt");
-                        sw.Close();
+                    if (url.Length != 0)
 
-
-
-                    }
-                    else
                     {
                         for (int j = 0; j < url.Length; j++)
                         {
@@ -1208,7 +1189,7 @@ namespace HoehenGenerator
                 }
 
             }
-
+            downloadcount = srtm1.Count + srtm3.Count + view1.Count + view3.Count;
             for (int i = 0; i < srtm1.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(srtm1[i]);
