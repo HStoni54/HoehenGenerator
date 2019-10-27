@@ -85,6 +85,10 @@ namespace HoehenGenerator
                         istLat = anzahlLat - 1;
 
                     ndata[Y, X] = höhen[istLon, istLat];
+                    if (ndata[Y,X] == 0)
+                    {
+
+                    }
                 }
             double x1 = CubicPolate(ndata[0, 0], ndata[1, 0], ndata[2, 0], ndata[3, 0], restLat);
             double x2 = CubicPolate(ndata[0, 1], ndata[1, 1], ndata[2, 1], ndata[3, 1], restLat);
@@ -186,6 +190,7 @@ namespace HoehenGenerator
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
                             höhen[ j - fileMitEcks.Linksunten[0],i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                      
                         }
                     }
                     short test = hGTFile.HgtDaten[1200, 1200];
@@ -195,12 +200,12 @@ namespace HoehenGenerator
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
                     //daten = hGTFile.HgtDaten; reihen und Spalten vertauschen
                     // 
-                    for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
+                    for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1] + 1; i++)
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
                            //höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
-                            höhen[j - fileMitEcks.Linksunten[0], AnzahlLat + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
+                            höhen[j - fileMitEcks.Linksunten[0], AnzahlLat - 1 + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }
                     // 
@@ -212,10 +217,15 @@ namespace HoehenGenerator
                     // 
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
-                        for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
+                        for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0] + 1; j++)
                         {
                             //höhen[j - fileMitEcks.Linksunten[0], AnzahlLat + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
-                            höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
+                            
+                            
+                            
+                            
+                            
+                            höhen[AnzahlLon - 1 + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }                  //MessageBox.Show("Zweig ru");
                     // 
@@ -226,11 +236,11 @@ namespace HoehenGenerator
                     //daten = hGTFile.HgtDaten;
                     // 
                     // 
-                    for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
+                    for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1] + 1; i++)
                     {
-                        for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
+                        for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0] + 1; j++)
                         {
-                            höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], AnzahlLat + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
+                            höhen[AnzahlLon - 1 + j - fileMitEcks.Rechtsoben[0], AnzahlLat - 1 + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }                  //MessageBox.Show("Zweig ro");
                     break;

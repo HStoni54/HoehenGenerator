@@ -2133,6 +2133,10 @@ namespace HoehenGenerator
                         tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
                         double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                        if (abshöhe == 0)
+                        {
+
+                        }
                         double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
                         //if (abshöhe2 < 0)
                         //{
@@ -2141,7 +2145,10 @@ namespace HoehenGenerator
                         int eephöhe = (int)(abshöhe2 * 100) + 10000;
                         if (eephöhe < 0)
                             eephöhe = 0;
+                        if (eephöhe == 0)
+                        {
 
+                        }
                         int r1 = eephöhe % 256;
                         int g1 = (eephöhe / 256) % 256;
                         int b1 = (eephöhe / 256 / 256) % 256;
