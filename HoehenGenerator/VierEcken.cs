@@ -27,10 +27,10 @@ namespace HoehenGenerator
 
         private void BestimmePunkte()
         {
-            hgtlinksoben = BestimmeHgtFile(linksoben.Lon - 0.01, linksoben.Lat + 0.01, "lo");
-            hgtlinksunten = BestimmeHgtFile(linksunten.Lon - 0.01, linksunten.Lat - 0.01, "lu");
-            hgtrechtsoben = BestimmeHgtFile(rechtsoben.Lon + 0.01, rechtsoben.Lat + 0.01, "ro");
-            hgtrechtsunten = BestimmeHgtFile(rechtsunten.Lon + 0.01, rechtsunten.Lat - 0.01, "ru");
+            hgtlinksoben = BestimmeHgtFile(linksoben.Lon - 0.02, linksoben.Lat + 0.02, "lo");
+            hgtlinksunten = BestimmeHgtFile(linksunten.Lon - 0.02, linksunten.Lat - 0.02, "lu");
+            hgtrechtsoben = BestimmeHgtFile(rechtsoben.Lon + 0.02, rechtsoben.Lat + 0.02, "ro");
+            hgtrechtsunten = BestimmeHgtFile(rechtsunten.Lon + 0.02, rechtsunten.Lat - 0.02, "ru");
         }
 
         private HgtmitKoordinaten BestimmeHgtFile(double lon, double lat, string v)
