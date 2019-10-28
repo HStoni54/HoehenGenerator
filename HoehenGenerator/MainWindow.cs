@@ -2356,7 +2356,6 @@ namespace HoehenGenerator
             tbHöheDerAnlage.Text = Math.Round(zahltbHöheDerAnlage, 2).ToString("N2", CultureInfo.CurrentCulture);
             tbScalierungEEPBreite.Text = (zahlScalierungEEPBreite * 100).ToString("N0", CultureInfo.CurrentCulture);
             tbScalierungEEPHöhe.Text = (zahlScalierungEEPHöhe * 100).ToString("N0", CultureInfo.CurrentCulture);
-
             ÄndereBackgroundKnotenzahl();
         }
 
@@ -2406,6 +2405,34 @@ namespace HoehenGenerator
                 AnlagewerteAufTabAnzeigen();
             }
 
+        }
+
+        private void btnRasterdichte8_Click(object sender, RoutedEventArgs e)
+        {
+            zahltbRasterdichte = (int)Math.Sqrt(800000.0 / zahlbreiteDerAnlage / zahltbHöheDerAnlage);
+            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString(CultureInfo.CurrentCulture);
+            tbRasterDichte.Text = zahltbRasterdichte.ToString("N0", CultureInfo.CurrentCulture);
+
+            ÄndereBackgroundKnotenzahl();
+            //AnlagewerteAufTabAnzeigen();
+        }
+
+        private void btnRasterdichte10_Click(object sender, RoutedEventArgs e)
+        {
+            zahltbRasterdichte = (int)Math.Sqrt(1000000.0 / zahlbreiteDerAnlage / zahltbHöheDerAnlage);
+            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString(CultureInfo.CurrentCulture);
+            tbRasterDichte.Text = zahltbRasterdichte.ToString("N0", CultureInfo.CurrentCulture);
+            ÄndereBackgroundKnotenzahl();
+            //AnlagewerteAufTabAnzeigen();
+        }
+
+        private void btnRasterdichte50_Click(object sender, RoutedEventArgs e)
+        {
+            zahltbRasterdichte = (int)Math.Sqrt(5000000.0 / zahlbreiteDerAnlage / zahltbHöheDerAnlage);
+            lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString(CultureInfo.CurrentCulture);
+            tbRasterDichte.Text = zahltbRasterdichte.ToString("N0", CultureInfo.CurrentCulture);
+            ÄndereBackgroundKnotenzahl();
+            //AnlagewerteAufTabAnzeigen();
         }
 
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)

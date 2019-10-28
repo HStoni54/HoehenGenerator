@@ -58,7 +58,7 @@ namespace HoehenGenerator
         private double InterpoliereHöhe(GeoPunkt geoPunkt)
         {
             double zwischenwert = geoPunkt.Lon - linksunten.Lon;
-            if (zwischenwert < 0) zwischenwert = zwischenwert + 360;
+            if (zwischenwert < 0) zwischenwert += 360;
             double doLat = (geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0;
             double doLon = (zwischenwert) / auflösung * 3600.0;
             int wertLat = (int)doLat;

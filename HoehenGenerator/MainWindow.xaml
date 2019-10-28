@@ -123,6 +123,10 @@
                 <Label x:Name="label13_Copy3" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="445,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.25,-0.269"/>
                 <Button x:Name="btEEPHBScalieren" Content="Skalierung von Höhen übernehmen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,161,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBScalieren_Click" IsEnabled="False"/>
                 <Button x:Name="btEEPHBzurücksetzen" Content="Skalierung H/B zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,186,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBzurücksetzen_Click" IsEnabled="False"/>
+                <Label x:Name="label16" Content="Rasterdichte setzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,212,0,0" VerticalAlignment="Top" Width="195"/>
+                <Button x:Name="btnRasterdichte8" Content="800.000" Grid.Column="1" HorizontalAlignment="Left" Margin="262,243,0,0" VerticalAlignment="Top" Width="60" Click="btnRasterdichte8_Click"/>
+                <Button x:Name="btnRasterdichte10" Content="1.000.000" Grid.Column="1" HorizontalAlignment="Left" Margin="327,243,0,0" VerticalAlignment="Top" Width="60" Click="btnRasterdichte10_Click"/>
+                <Button x:Name="btnRasterdichte50" Content="5.000.000" Grid.Column="1" HorizontalAlignment="Left" Margin="392,243,0,0" VerticalAlignment="Top" Width="60" Click="btnRasterdichte50_Click"/>
             </Grid>
         </TabItem>
 
