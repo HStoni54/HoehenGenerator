@@ -184,6 +184,7 @@ namespace HoehenGenerator
                      * Hier stimmt etwas noch nicht,  es werden falsche Zahlen ausgelesen 
                      *  
                      *  TODO: wenn anderer Quadrant Werte falsch
+                     *  Nur beim Überschreiten Nullmeridian oder Äquator
                      */
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
