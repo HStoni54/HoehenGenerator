@@ -839,6 +839,7 @@ namespace HoehenGenerator
 
 
             Polyline polypunkte = new Polyline();
+            //Polygon polypunkte = new Polygon();
             AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
             double flaeche2 = hoehe2 * breite2;
             PointCollection canvaspunkte = new PointCollection();
@@ -878,7 +879,7 @@ namespace HoehenGenerator
             {
                 Width = 5.0,
                 Height = 5.0,
-                Fill = Brushes.Red
+                Fill = Brushes.Yellow
             };
             Zeichenfläche.Children.Add(elli2);
 
@@ -1031,7 +1032,8 @@ namespace HoehenGenerator
             {
                 if (ge.ChildNodes[i].Name == "coordinates")
                 {
-                    coordinaten = ge.ChildNodes[i].InnerText;
+                    coordinaten += " ";
+                    coordinaten += ge.ChildNodes[i].InnerText;
                 }
                 SuchenNode(ge.ChildNodes[i]);
                 char[] charsToTrim = { '\n', ' ', '\t' };

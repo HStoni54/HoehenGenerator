@@ -35,6 +35,53 @@ namespace HoehenGenerator
             XmlWriter xmlWriter = XmlWriter.Create(path + "\\" + anlagenname + ".anl3", settings);
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("sutrackp");
+            xmlWriter.WriteStartElement("Gebaeudesammlung");
+            xmlWriter.WriteAttributeString("GebaudesammlungID", "5");
+
+            // ab hier Baum
+            xmlWriter.WriteStartElement("Immobile");
+            xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
+            xmlWriter.WriteAttributeString("ImmoIdx", "1"); // hier hochzählen
+            xmlWriter.WriteAttributeString("TreeShake", "2");
+            xmlWriter.WriteStartElement("Dreibein");
+            xmlWriter.WriteStartElement("Vektor");
+     
+
+            xmlWriter.WriteAttributeString("x", "2930");  // hier Koordinaten und Höhe
+            xmlWriter.WriteAttributeString("y", "-8056");
+            xmlWriter.WriteAttributeString("z", "24367");
+            xmlWriter.WriteString("Pos");
+            xmlWriter.WriteEndElement();
+ 
+
+            xmlWriter.WriteEndElement();
+             xmlWriter.WriteStartElement("Modell");      
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndElement();
+
+
+            // bis hier Baum
+            xmlWriter.WriteStartElement("Immobile");
+            xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
+            xmlWriter.WriteAttributeString("ImmoIdx", "2"); // hier hochzählen
+            xmlWriter.WriteAttributeString("TreeShake", "2");
+            xmlWriter.WriteStartElement("Dreibein");
+            xmlWriter.WriteStartElement("Vektor");
+            xmlWriter.WriteAttributeString("x", "3930");  // hier Koordinaten und Höhe
+            xmlWriter.WriteAttributeString("y", "-7056");
+            xmlWriter.WriteAttributeString("z", "24367");
+            xmlWriter.WriteString("Pos");
+            xmlWriter.WriteEndElement();
+
+
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteStartElement("Modell");
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndElement();
+            // bis hier Baum
+            xmlWriter.WriteEndElement();
+
+           
             xmlWriter.WriteStartElement("Schandlaft");
             xmlWriter.WriteAttributeString("extX", breite.ToString(CultureInfo.CurrentCulture));
             xmlWriter.WriteAttributeString("extY", höhe.ToString(CultureInfo.CurrentCulture));
