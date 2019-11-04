@@ -363,8 +363,6 @@ namespace HoehenGenerator
                     }
 
                 hgtPfad = pfad + "\\HGT";
-                if (!Directory.Exists(hgtPfad + @"\noHGT"))
-                    Directory.CreateDirectory(hgtPfad + @"\noHGT");
                 try
                 {
                     FileStream fs = File.Create(hgtPfad + "\\test.txt");
@@ -379,7 +377,17 @@ namespace HoehenGenerator
 
                 }
                 File.Delete(hgtPfad + "\\test.txt");
+                if (Directory.Exists(hgtPfad + @"\noHGT"))
+                {
+                    string[] file = Directory.GetFiles(hgtPfad + @"\noHGT");
+                    foreach (var item in file)
+                    {
 
+                        File.Delete(item);
+                    }
+                }
+                
+ 
 
                 if (!Directory.Exists(pfad + "\\Anlagen"))
 
@@ -412,8 +420,13 @@ namespace HoehenGenerator
 
                 }
                 File.Delete(anlagenpfad + "\\test.txt");
+                if (!Directory.Exists(hgtPfad + @"\noHGT"))
+                    Directory.CreateDirectory(hgtPfad + @"\noHGT");
+
                 btnAnlagenDirectory.IsEnabled = false;
                 btnGeneriereAnlage.IsEnabled = true;
+                generiereAnlage.IsEnabled = false;
+                Weiter2.IsEnabled = false;
                 anlagenname = System.IO.Path.GetFileNameWithoutExtension(vName);
                 if (vName.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                 {
@@ -748,6 +761,8 @@ namespace HoehenGenerator
             {
 
                 if (hgtPfad != null)
+                    //if (File.Exists(hgtPfad + "\\noHGT\\" + vs1[i] + ".hgt"))
+                    //    File.Delete(hgtPfad + "\\noHGT\\" + vs1[i] + ".hgt");
                 {
                     bool DateiVorhanden = false;
                     foreach (var directory in directorys)
@@ -1087,6 +1102,9 @@ namespace HoehenGenerator
 
         private void LadenTab_GotFocus(object sender, RoutedEventArgs e)
         {
+            ladeHGTFiles.IsEnabled = false;
+            Verarbeitung.IsEnabled = false;
+            generiereAnlage.IsEnabled = false;
             Zeichenfläche = Zeichenfläche1;
 
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
@@ -1094,7 +1112,9 @@ namespace HoehenGenerator
 
         private void LadeHGTFiles_GotFocus(object sender, RoutedEventArgs e)
         {
-
+            Verarbeitung.IsEnabled = false;
+            generiereAnlage.IsEnabled = false;
+            Weiter2.IsEnabled = false;
             btnIndex.IsEnabled = true;
             ZeichneAlles(punkte);
             if (ÜberprüfeIndices())
@@ -1806,6 +1826,8 @@ namespace HoehenGenerator
 
         private void Verarbeitung_GotFocus(object sender, RoutedEventArgs e)
         {
+            
+            generiereAnlage.IsEnabled = false;
             Zeichenfläche = Zeichenfläche3;
             Hauptfenster.ResizeMode = ResizeMode.NoResize;
             ZeichneAlles(punkte);
@@ -2333,8 +2355,9 @@ namespace HoehenGenerator
 
         private void BtWeiter3_Click(object sender, RoutedEventArgs e)
         {
+            generiereAnlage.IsEnabled = true;
             AnlagewerteAufTabAnzeigen();
-
+            btWeiter3.IsEnabled = false;
             generiereAnlage.IsSelected = true;
             tbBreiteDerAnlage.IsEnabled = false;
             tbHöheDerAnlage.IsEnabled = false;
