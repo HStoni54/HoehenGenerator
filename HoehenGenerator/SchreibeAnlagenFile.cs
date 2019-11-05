@@ -47,8 +47,8 @@ namespace HoehenGenerator
                 xmlWriter.WriteStartElement("Dreibein");
                 xmlWriter.WriteStartElement("Vektor");
                 xmlWriter.WriteAttributeString("x", baeume[i,0].ToString());  // hier Koordinaten und Höhe
-                xmlWriter.WriteAttributeString("y", baeume[i,0].ToString());
-                xmlWriter.WriteAttributeString("z", baeume[i, 0].ToString());
+                xmlWriter.WriteAttributeString("y", baeume[i,1].ToString());
+                xmlWriter.WriteAttributeString("z", baeume[i, 2].ToString());
                 xmlWriter.WriteString("Pos");
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("Vektor");

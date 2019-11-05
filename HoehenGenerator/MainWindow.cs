@@ -2177,11 +2177,24 @@ namespace HoehenGenerator
         private void GeneriereBäume(double zahltbHöheDerAnlage, double zahlbreiteDerAnlage)
         {
             baeume = new int[punkte.Count, 3];
+            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, winkel);
+            GeoPunkt tempPunkt;
+            GeoPunkt temppunkt1;
             for (int i = 0; i < punkte.Count; i++)
             {
-                baeume[i, 0] = 1;
-                baeume[i, 1] = 1;
-                baeume[i, 2] = 1;
+                tempPunkt = new GeoPunkt(punkte[i].X, punkte[i].Y);
+                temppunkt1 = DrehePunkt(tempPunkt, drehung);
+                double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+    
+                double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
+                //if (abshöhe2 < 0)
+                //{
+                //    int c;
+                //}
+                int eephöhe = (int)(abshöhe2 * 100) ;
+                baeume[i, 0] = (int)((((punkte[i].X -  minLänge) / (maxLänge - minLänge) * zahlbreiteDerAnlage * 1000) - zahlbreiteDerAnlage * 1000 / 2)*100);
+                baeume[i, 1] = (int)((((punkte[i].Y - minBreite) / (maxBreite - minBreite)  * zahltbHöheDerAnlage * 1000)- zahltbHöheDerAnlage * 1000 / 2) * 100);
+                baeume[i, 2] = eephöhe;
             }
 
         }
@@ -2216,7 +2229,7 @@ namespace HoehenGenerator
                         if (abshöhe == 0)
                         {
 
-                        }
+                        };
                         double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
                         //if (abshöhe2 < 0)
                         //{

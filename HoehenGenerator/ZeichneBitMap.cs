@@ -63,7 +63,7 @@ namespace HoehenGenerator
             {
                 for (int j = 0; j < bitmap.Width; j++)
                 {
-                    bitmap.SetPixel(j, i, color[i, j]);
+                    bitmap.SetPixel(j, i, color[bitmap.Height - i - 1, j]);
                 }
             }
 

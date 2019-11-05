@@ -73,7 +73,7 @@ namespace HoehenGenerator
 
 
                     //Smoothing done by averaging the general area around the coords.
-                    int istLat = anzahlLat - wertLat - (Y - 1);
+                    int istLat = wertLat + (Y - 1);
                     int istLon = wertLon + (X - 1);
                     if (istLat < 0)
                         istLat = 0;
