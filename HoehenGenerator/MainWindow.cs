@@ -71,6 +71,7 @@ namespace HoehenGenerator
         private double ausgleichfaktor = 1.0;
         private double zahlScalierungEEPBreite = 1.0;
         private double zahlScalierungEEPHöhe = 1.0;
+        public int[,] baeume;
         int downloadcount = 0;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
@@ -140,14 +141,14 @@ namespace HoehenGenerator
                     bool istArbeitDa = ClGeneriereLeerHGTs.TryDequeue(out ClGeneriereLeerHGTs datei);
                     if (istArbeitDa)
                     {
-                       
+
                         if (!File.Exists(datei.HgtDateiname1))
                         {
 
                             FileStream stream;
                             try
                             {
-                               stream = File.Create(datei.HgtDateiname1);
+                                stream = File.Create(datei.HgtDateiname1);
                             }
                             catch (Exception)
                             {
@@ -166,11 +167,11 @@ namespace HoehenGenerator
                                 }
                             }
                             stream.Close();
-                        Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.HgtDateiname1)));
+                            Dispatcher.BeginInvoke(new Action(() => FärbeHgtLabel(datei.HgtDateiname1)));
                         }
                     }
-                    
-                        
+
+
                 }
                 Thread.Sleep(100);
             }
@@ -386,8 +387,8 @@ namespace HoehenGenerator
                         File.Delete(item);
                     }
                 }
-                
- 
+
+
 
                 if (!Directory.Exists(pfad + "\\Anlagen"))
 
@@ -454,7 +455,7 @@ namespace HoehenGenerator
             {
                 //MessageBox.Show(coordinaten);
                 SepariereKoordinaten(coordinaten);
-                BildeSchattenpunkte(orgpunkte);
+                //BildeSchattenpunkte(orgpunkte);
                 punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
 
@@ -493,12 +494,12 @@ namespace HoehenGenerator
 
         }
 
-        private PointCollection BildeSchattenpunkte(PointCollection orgpunkte)
-        {
+        //private PointCollection BildeSchattenpunkte(PointCollection orgpunkte)
+        //{
 
-            return orgpunkte;
+        //    return orgpunkte;
 
-        }
+        //}
 
         private void Optimiere(PointCollection orgpunkte)
         {
@@ -761,8 +762,8 @@ namespace HoehenGenerator
             {
 
                 if (hgtPfad != null)
-                    //if (File.Exists(hgtPfad + "\\noHGT\\" + vs1[i] + ".hgt"))
-                    //    File.Delete(hgtPfad + "\\noHGT\\" + vs1[i] + ".hgt");
+                //if (File.Exists(hgtPfad + "\\noHGT\\" + vs1[i] + ".hgt"))
+                //    File.Delete(hgtPfad + "\\noHGT\\" + vs1[i] + ".hgt");
                 {
                     bool DateiVorhanden = false;
                     foreach (var directory in directorys)
@@ -849,9 +850,9 @@ namespace HoehenGenerator
                 canvaspunkte.Add(new Point(GrößeB / (maxLänge - minLänge) * (punkte[i].X - minLänge), -1 * GrößeH / (maxBreite - minBreite) * (punkte[i].Y - minBreite)));
             }
             polypunkte.Points = canvaspunkte;
-            polypunkte.Fill = Brushes.Green;
-            if (ishgtwert)
-                polypunkte.Fill = Brushes.Yellow;
+            //polypunkte.Fill = Brushes.Green;
+            //if (ishgtwert)
+            //    polypunkte.Fill = Brushes.Yellow;
             Zeichenfläche.Children.Add(polypunkte);
             Canvas.SetLeft(polypunkte, 0);
             Canvas.SetBottom(polypunkte, 0);
@@ -875,16 +876,16 @@ namespace HoehenGenerator
                 Canvas.SetLeft(elli, GrößeB / (maxLänge - minLänge) * (punkte[i].X - minLänge) - 2.5);
                 Canvas.SetBottom(elli, GrößeH / (maxBreite - minBreite) * (punkte[i].Y - minBreite) - 2.5);
             }
-            Ellipse elli2 = new Ellipse
-            {
-                Width = 5.0,
-                Height = 5.0,
-                Fill = Brushes.Yellow
-            };
-            Zeichenfläche.Children.Add(elli2);
+            //Ellipse elli2 = new Ellipse
+            //{
+            //    Width = 5.0,
+            //    Height = 5.0,
+            //    Fill = Brushes.Yellow
+            //};
+            //Zeichenfläche.Children.Add(elli2);
 
-            Canvas.SetLeft(elli2, GrößeB / (maxLänge - minLänge) * ((maxLänge - minLänge) / 2) - 2.5);
-            Canvas.SetBottom(elli2, GrößeH / (maxBreite - minBreite) * ((maxBreite - minBreite) / 2) - 2.5);
+            //Canvas.SetLeft(elli2, GrößeB / (maxLänge - minLänge) * ((maxLänge - minLänge) / 2) - 2.5);
+            //Canvas.SetBottom(elli2, GrößeH / (maxBreite - minBreite) * ((maxBreite - minBreite) / 2) - 2.5);
 
         }
         private void ZeichnePunkte(List<GeoPunkt> punkte)
@@ -1828,7 +1829,7 @@ namespace HoehenGenerator
 
         private void Verarbeitung_GotFocus(object sender, RoutedEventArgs e)
         {
-            
+
             generiereAnlage.IsEnabled = false;
             Zeichenfläche = Zeichenfläche3;
             Hauptfenster.ResizeMode = ResizeMode.NoResize;
@@ -2077,8 +2078,8 @@ namespace HoehenGenerator
 
                     bool success = int.TryParse(a, out j);
                     if (success) i = j;
-                    
-                   
+
+
                     //if (!(nurdreizoll && i == 1))
                     //{
 
@@ -2168,14 +2169,26 @@ namespace HoehenGenerator
                 GeneriereEEPBitMap(bitmapnamen[i], höhe, breite, colors[i], pixelFormat);
 
             }
-
-            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte);
+            GeneriereBäume(zahltbHöheDerAnlage, zahlbreiteDerAnlage);
+            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte,baeume);
 
         }
 
-        private void SchreibeEEPAnlagenDatei(int höhe, int breite, int rasterdichte)
+        private void GeneriereBäume(double zahltbHöheDerAnlage, double zahlbreiteDerAnlage)
         {
-            SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, rasterdichte);
+            baeume = new int[punkte.Count, 3];
+            for (int i = 0; i < punkte.Count; i++)
+            {
+                baeume[i, 0] = 1;
+                baeume[i, 1] = 1;
+                baeume[i, 2] = 1;
+            }
+
+        }
+
+        private void SchreibeEEPAnlagenDatei(int höhe, int breite, int rasterdichte, int[,] baeume)
+        {
+            SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, rasterdichte, baeume);
             if (af.SchreibeFile())
                 MessageBox.Show("Anlagendatei geschrieben");
             else

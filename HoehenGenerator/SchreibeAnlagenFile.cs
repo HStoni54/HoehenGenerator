@@ -12,13 +12,14 @@ namespace HoehenGenerator
         private readonly int rasterdichte;
         private double drasterdichte;
         private readonly bool Ok;
+        int[,] baeume;
 
-        public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte)
+        public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte,int[,] baeume)
         {
             this.path = path;
             this.anlagenname = anlagenname;
             this.höhe = höhe;
-
+            this.baeume = baeume;
             this.breite = breite;
             this.rasterdichte = rasterdichte;
             Ok = SchreibeFile();
@@ -37,51 +38,45 @@ namespace HoehenGenerator
             xmlWriter.WriteStartElement("sutrackp");
             xmlWriter.WriteStartElement("Gebaeudesammlung");
             xmlWriter.WriteAttributeString("GebaudesammlungID", "5");
+            for (int i = 0; i < baeume.Length/3; i++)
+            {
+                xmlWriter.WriteStartElement("Immobile");
+                xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
+                xmlWriter.WriteAttributeString("ImmoIdx", (i + 1).ToString()); // hier hochzählen
+                xmlWriter.WriteAttributeString("TreeShake", "2");
+                xmlWriter.WriteStartElement("Dreibein");
+                xmlWriter.WriteStartElement("Vektor");
+                xmlWriter.WriteAttributeString("x", baeume[i,0].ToString());  // hier Koordinaten und Höhe
+                xmlWriter.WriteAttributeString("y", baeume[i,0].ToString());
+                xmlWriter.WriteAttributeString("z", baeume[i, 0].ToString());
+                xmlWriter.WriteString("Pos");
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("Vektor");
+                xmlWriter.WriteAttributeString("x", "20");  // hier Koordinaten und Höhe
+                xmlWriter.WriteAttributeString("y", "0");
+                xmlWriter.WriteAttributeString("z", "0");
+                xmlWriter.WriteString("Ditr");
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("Vektor");
+                xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
+                xmlWriter.WriteAttributeString("y", "20");
+                xmlWriter.WriteAttributeString("z", "0");
+                xmlWriter.WriteString("Nor");
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("Vektor");
+                xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
+                xmlWriter.WriteAttributeString("y", "0");
+                xmlWriter.WriteAttributeString("z", "20");
+                xmlWriter.WriteString("Bin");
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("Modell");
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndElement();
 
-            // ab hier Baum
-            xmlWriter.WriteStartElement("Immobile");
-            xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
-            xmlWriter.WriteAttributeString("ImmoIdx", "1"); // hier hochzählen
-            xmlWriter.WriteAttributeString("TreeShake", "2");
-            xmlWriter.WriteStartElement("Dreibein");
-            xmlWriter.WriteStartElement("Vektor");
-     
-
-            xmlWriter.WriteAttributeString("x", "2930");  // hier Koordinaten und Höhe
-            xmlWriter.WriteAttributeString("y", "-8056");
-            xmlWriter.WriteAttributeString("z", "24367");
-            xmlWriter.WriteString("Pos");
-            xmlWriter.WriteEndElement();
- 
-
-            xmlWriter.WriteEndElement();
-             xmlWriter.WriteStartElement("Modell");      
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndElement();
-
-
-            // bis hier Baum
-            xmlWriter.WriteStartElement("Immobile");
-            xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
-            xmlWriter.WriteAttributeString("ImmoIdx", "2"); // hier hochzählen
-            xmlWriter.WriteAttributeString("TreeShake", "2");
-            xmlWriter.WriteStartElement("Dreibein");
-            xmlWriter.WriteStartElement("Vektor");
-            xmlWriter.WriteAttributeString("x", "3930");  // hier Koordinaten und Höhe
-            xmlWriter.WriteAttributeString("y", "-7056");
-            xmlWriter.WriteAttributeString("z", "24367");
-            xmlWriter.WriteString("Pos");
-            xmlWriter.WriteEndElement();
-
-
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteStartElement("Modell");
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndElement();
-            // bis hier Baum
-            xmlWriter.WriteEndElement();
-
+            }
            
+            xmlWriter.WriteEndElement();
             xmlWriter.WriteStartElement("Schandlaft");
             xmlWriter.WriteAttributeString("extX", breite.ToString(CultureInfo.CurrentCulture));
             xmlWriter.WriteAttributeString("extY", höhe.ToString(CultureInfo.CurrentCulture));
