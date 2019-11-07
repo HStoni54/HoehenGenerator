@@ -23,7 +23,7 @@
                 <Button x:Name="Weiter" Content="Weiter" HorizontalAlignment="Left" Margin="18,348,0,0" VerticalAlignment="Top" Width="87" IsEnabled="False" Click="Weiter_Click" ToolTip="Der nächste Schritt"/>
                 <Label x:Name="Breite" Content="Breite:" HorizontalAlignment="Left" Margin="18,30,0,0" VerticalAlignment="Top" Width="87" />
                 <TextBox x:Name="breite" HorizontalAlignment="Left" Margin="18,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" ToolTip="Breite der Anlage" HorizontalContentAlignment="Right"/>
-                <Label x:Name="Höhe" Content="Höhe:" HorizontalAlignment="Left" Margin="18,74,0,0" VerticalAlignment="Top" Width="87" />
+                <Label x:Name="Höhe" Content="Länge:" HorizontalAlignment="Left" Margin="18,74,0,0" VerticalAlignment="Top" Width="87" />
                 <TextBox x:Name="höhe" HorizontalAlignment="Left"  Margin="18,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" ToolTip="Höhe der Anlage" HorizontalContentAlignment="Right"/>
                 <Label x:Name="Fläche" Content="Fläche:" HorizontalAlignment="Left" Margin="18,118,0,0" VerticalAlignment="Top" Width="87" />
                 <TextBox x:Name="fläche" HorizontalAlignment="Left"  Margin="18,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" ToolTip="Fläche der Anlage" HorizontalContentAlignment="Right"/>
@@ -127,6 +127,11 @@
                 <Button x:Name="btnRasterdichte8" Content="800.000" Grid.Column="1" HorizontalAlignment="Left" Margin="262,243,0,0" VerticalAlignment="Top" Width="60" Click="btnRasterdichte8_Click"/>
                 <Button x:Name="btnRasterdichte10" Content="1.000.000" Grid.Column="1" HorizontalAlignment="Left" Margin="327,243,0,0" VerticalAlignment="Top" Width="60" Click="btnRasterdichte10_Click"/>
                 <Button x:Name="btnRasterdichte50" Content="5.000.000" Grid.Column="1" HorizontalAlignment="Left" Margin="392,243,0,0" VerticalAlignment="Top" Width="60" Click="btnRasterdichte50_Click"/>
+                <RadioButton x:Name="rbBaum" Content="Bäume" Grid.Column="1" HorizontalAlignment="Left" Margin="262,296,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                <RadioButton x:Name="rbPfosten" Content="Pfosten" Grid.Column="1" HorizontalAlignment="Left" Margin="262,311,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label17" Content="Markierungen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,270,0,0" VerticalAlignment="Top"/>
+                <Slider x:Name="slZoom" Grid.Column="1" HorizontalAlignment="Left" Margin="350,296,0,0" VerticalAlignment="Top" Width="102" Minimum="1" Maximum="50" AutoToolTipPlacement="BottomRight" Value="20"/>
+                <Label x:Name="label18" Content="Vergrößerung" Grid.Column="1" HorizontalAlignment="Left" Margin="351,272,0,0" VerticalAlignment="Top"/>
             </Grid>
         </TabItem>
 

@@ -13,8 +13,10 @@ namespace HoehenGenerator
         private double drasterdichte;
         private readonly bool Ok;
         int[,] baeume;
+        bool pfahl;
+        int zoom;
 
-        public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte,int[,] baeume)
+        public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte, int[,] baeume, bool pfahl, int zoom = 20)
         {
             this.path = path;
             this.anlagenname = anlagenname;
@@ -23,6 +25,8 @@ namespace HoehenGenerator
             this.breite = breite;
             this.rasterdichte = rasterdichte;
             Ok = SchreibeFile();
+            this.pfahl = pfahl;
+            this.zoom = zoom;
         }
 
         public bool SchreibeFile()
@@ -37,36 +41,42 @@ namespace HoehenGenerator
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("sutrackp");
             xmlWriter.WriteStartElement("Gebaeudesammlung");
-            xmlWriter.WriteAttributeString("GebaudesammlungID", "5");
-            for (int i = 0; i < baeume.Length/3; i++)
+            if (pfahl)
+                xmlWriter.WriteAttributeString("GebaudesammlungID", "4");
+            else
+                xmlWriter.WriteAttributeString("GebaudesammlungID", "5");
+            for (int i = 0; i < baeume.Length / 3; i++)
             {
                 xmlWriter.WriteStartElement("Immobile");
-                xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
+                if (pfahl)
+                    xmlWriter.WriteAttributeString("gsbname", @"\Immobilien\Verkehr\Verkehrszeichen\Leitpfosten_Einzel_RG.3dm");
+                else
+                    xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
                 xmlWriter.WriteAttributeString("ImmoIdx", (i + 1).ToString()); // hier hochzählen
                 xmlWriter.WriteAttributeString("TreeShake", "2");
                 xmlWriter.WriteStartElement("Dreibein");
                 xmlWriter.WriteStartElement("Vektor");
-                xmlWriter.WriteAttributeString("x", baeume[i,0].ToString());  // hier Koordinaten und Höhe
-                xmlWriter.WriteAttributeString("y", baeume[i,1].ToString());
+                xmlWriter.WriteAttributeString("x", baeume[i, 0].ToString());  // hier Koordinaten und Höhe
+                xmlWriter.WriteAttributeString("y", baeume[i, 1].ToString());
                 xmlWriter.WriteAttributeString("z", baeume[i, 2].ToString());
                 xmlWriter.WriteString("Pos");
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("Vektor");
-                xmlWriter.WriteAttributeString("x", "20");  // hier Koordinaten und Höhe
+                xmlWriter.WriteAttributeString("x", zoom.ToString());  // hier Koordinaten und Höhe
                 xmlWriter.WriteAttributeString("y", "0");
                 xmlWriter.WriteAttributeString("z", "0");
-                xmlWriter.WriteString("Ditr");
+                xmlWriter.WriteString("Dir");
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("Vektor");
                 xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
-                xmlWriter.WriteAttributeString("y", "20");
+                xmlWriter.WriteAttributeString("y", zoom.ToString());
                 xmlWriter.WriteAttributeString("z", "0");
                 xmlWriter.WriteString("Nor");
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("Vektor");
                 xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
                 xmlWriter.WriteAttributeString("y", "0");
-                xmlWriter.WriteAttributeString("z", "20");
+                xmlWriter.WriteAttributeString("z", zoom.ToString());
                 xmlWriter.WriteString("Bin");
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndElement();
@@ -75,7 +85,7 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndElement();
 
             }
-           
+
             xmlWriter.WriteEndElement();
             xmlWriter.WriteStartElement("Schandlaft");
             xmlWriter.WriteAttributeString("extX", breite.ToString(CultureInfo.CurrentCulture));
