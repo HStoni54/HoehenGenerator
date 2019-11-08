@@ -17,7 +17,8 @@ namespace HoehenGenerator
             Dateiname = dateiname;
         }
 
-        public void Speichern(Bitmap bitmap, string dateiname)
+        //public void Speichern(Bitmap bitmap, string dateiname)
+        public void Speichern(string dateiname)
         {
             try
             {

@@ -63,7 +63,7 @@ namespace HoehenGenerator
         private readonly ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
         private readonly ConcurrentQueue<ZeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<ZeichePunkteAufCanvas>();
         private readonly ConcurrentQueue<ClZeichneMatrix> clZeichneMatrices = new ConcurrentQueue<ClZeichneMatrix>();
-        ConcurrentQueue<ClGeneriereLeerHGTs> ClGeneriereLeerHGTs = new ConcurrentQueue<ClGeneriereLeerHGTs>();
+        private readonly ConcurrentQueue<ClGeneriereLeerHGTs> ClGeneriereLeerHGTs = new ConcurrentQueue<ClGeneriereLeerHGTs>();
         private ZwischenspeicherHgt ZwspeicherHgt;
         private double maximaleEEPHöhe;
         private double minimaleEEPHöhe;
@@ -71,10 +71,10 @@ namespace HoehenGenerator
         private double ausgleichfaktor = 1.0;
         private double zahlScalierungEEPBreite = 1.0;
         private double zahlScalierungEEPHöhe = 1.0;
-        public int[,] baeume;
-        int downloadcount = 0;
-        bool pfahl = false; 
-        int zoom = 20;
+        private int[,] baeume;
+        private int downloadcount = 0;
+        private bool pfahl = false;
+        private int zoom = 20;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -658,7 +658,7 @@ namespace HoehenGenerator
         private void ZeichneRechteck(PointCollection punkte)
         {
             Polyline rechteckpunkte = new Polyline();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double maxLänge, out double minBreite, out double maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out  minLänge, out  maxLänge, out  minBreite, out  maxBreite, out double Größe);
             double flaeche2 = hoehe2 * breite2;
             fläche.Text = Math.Round(flaeche2, 2).ToString(CultureInfo.CurrentCulture) + " km²";
             höhe.Text = Math.Round(hoehe2, 2).ToString(CultureInfo.CurrentCulture) + " km";
@@ -837,14 +837,14 @@ namespace HoehenGenerator
         }
 
 
-        private void ZeichnePolygon(PointCollection punkte, bool ishgtwert = false)
+        private void ZeichnePolygon(PointCollection punkte)
         {
 
 
             Polyline polypunkte = new Polyline();
             //Polygon polypunkte = new Polygon();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
-            double flaeche2 = hoehe2 * breite2;
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out  hoehe2, out  breite2, out  minLänge, out  minBreite, out  maxLänge, out  maxBreite, out double Größe);
+            //double flaeche2 = hoehe2 * breite2;
             PointCollection canvaspunkte = new PointCollection();
             //Zeichenfläche.Children.Clear();
             for (int i = 0; i < punkte.Count; i++)
@@ -864,7 +864,7 @@ namespace HoehenGenerator
         private void ZeichnePunkte(PointCollection punkte)
         {
 
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out  hoehe2, out  breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
             for (int i = 0; i < punkte.Count; i++)
             {
                 Ellipse elli = new Ellipse
@@ -1625,8 +1625,8 @@ namespace HoehenGenerator
         private static string[] FindeZipFiles(string value)
         {
             double viewDimension = 1800.0 / 360.0;
-            string lonName = "";
-            string latName = "";
+            string lonName ;
+            string latName ;
             string[] vs = value.Split(',');
 
             int l = int.Parse(vs[0], CultureInfo.CurrentCulture);
@@ -2024,7 +2024,7 @@ namespace HoehenGenerator
             lfma.Clear();
             //string[] vs = HGTFiles.Text.Split('\n');
             List<int> aufl = new List<int>();
-            bool nurdreiZoll = false;
+            //bool nurdreiZoll = false;
             foreach (string item in lbHgtFiles.Items)
             {
 
@@ -2035,9 +2035,9 @@ namespace HoehenGenerator
 
                 }
             }
-            int aufl1 = aufl.Max();
-            if (aufl1 == 3)
-                nurdreiZoll = true;
+            //int aufl1 = aufl.Max();
+            //if (aufl1 == 3)
+            //    nurdreiZoll = true;
 
             lfma.Clear();
             foreach (string item in lbHgtFiles.Items)
@@ -2045,7 +2045,7 @@ namespace HoehenGenerator
 
                 if (item.Length > 0)
                 {
-                    fma = FindeErsteDatei(item, nurdreiZoll);
+                    fma = FindeErsteDatei(item);
                     if (fma.Auflösung > 0)
                     {
                         fma.Auflösung = fma.Auflösung;
@@ -2064,7 +2064,7 @@ namespace HoehenGenerator
             ZeichneMatrix(lfma);
         }
 
-        private Filemitauflösung FindeErsteDatei(string item, bool nurdreizoll = false)
+        private Filemitauflösung FindeErsteDatei(string item)
         {
             Filemitauflösung fma = new Filemitauflösung("", 0);
             foreach (string verzeichnis in directorys)
@@ -2076,9 +2076,8 @@ namespace HoehenGenerator
                 if (verzeichnis.Length > 0)
                 {
                     string a = verzeichnis.Substring(verzeichnis.Length - 1);
-                    int j;
 
-                    bool success = int.TryParse(a, out j);
+                    bool success = int.TryParse(a, out int j);
                     if (success) i = j;
 
 
@@ -2277,7 +2276,8 @@ namespace HoehenGenerator
         {
             SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
 
-            speicherBild.Speichern(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
+            //speicherBild.Speichern(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
+            speicherBild.Speichern(anlagenpfad + "\\" + bitmapnamen);
         }
 
         private void GeneriereAnlage_GotFocus(object sender, RoutedEventArgs e)
@@ -2466,7 +2466,7 @@ namespace HoehenGenerator
 
         }
 
-        private void btnRasterdichte8_Click(object sender, RoutedEventArgs e)
+        private void BtnRasterdichte8_Click(object sender, RoutedEventArgs e)
         {
             zahltbRasterdichte = (int)Math.Sqrt(800000.0 / zahlbreiteDerAnlage / zahltbHöheDerAnlage);
             lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString(CultureInfo.CurrentCulture);
@@ -2476,7 +2476,7 @@ namespace HoehenGenerator
             //AnlagewerteAufTabAnzeigen();
         }
 
-        private void btnRasterdichte10_Click(object sender, RoutedEventArgs e)
+        private void BtnRasterdichte10_Click(object sender, RoutedEventArgs e)
         {
             zahltbRasterdichte = (int)Math.Sqrt(1000000.0 / zahlbreiteDerAnlage / zahltbHöheDerAnlage);
             lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString(CultureInfo.CurrentCulture);
@@ -2485,7 +2485,7 @@ namespace HoehenGenerator
             //AnlagewerteAufTabAnzeigen();
         }
 
-        private void btnRasterdichte50_Click(object sender, RoutedEventArgs e)
+        private void BtnRasterdichte50_Click(object sender, RoutedEventArgs e)
         {
             zahltbRasterdichte = (int)Math.Sqrt(5000000.0 / zahlbreiteDerAnlage / zahltbHöheDerAnlage);
             lbKnotenAktuell.Content = ((int)(zahlbreiteDerAnlage * zahltbHöheDerAnlage * zahltbRasterdichte * zahltbRasterdichte)).ToString(CultureInfo.CurrentCulture);

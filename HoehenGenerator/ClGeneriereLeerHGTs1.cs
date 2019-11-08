@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class ClGeneriereLeerHGTs
+    internal class ClGeneriereLeerHGTs
     {
-        string HgtDateiname;
+        private string HgtDateiname;
 
         public ClGeneriereLeerHGTs(string hgtDateiname)
         {

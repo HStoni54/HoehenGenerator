@@ -27,16 +27,16 @@ namespace HoehenGenerator
 
         private void BestimmePunkte()
         {
-            hgtlinksoben = BestimmeHgtFile(linksoben.Lon - 0.02, linksoben.Lat + 0.02, "lo");
-            hgtlinksunten = BestimmeHgtFile(linksunten.Lon - 0.02, linksunten.Lat - 0.02, "lu");
-            hgtrechtsoben = BestimmeHgtFile(rechtsoben.Lon + 0.02, rechtsoben.Lat + 0.02, "ro");
-            hgtrechtsunten = BestimmeHgtFile(rechtsunten.Lon + 0.02, rechtsunten.Lat - 0.02, "ru");
+            hgtlinksoben = BestimmeHgtFile(linksoben.Lon - 0.02, linksoben.Lat + 0.02);
+            hgtlinksunten = BestimmeHgtFile(linksunten.Lon - 0.02, linksunten.Lat - 0.02);
+            hgtrechtsoben = BestimmeHgtFile(rechtsoben.Lon + 0.02, rechtsoben.Lat + 0.02);
+            hgtrechtsunten = BestimmeHgtFile(rechtsunten.Lon + 0.02, rechtsunten.Lat - 0.02);
         }
 
-        private HgtmitKoordinaten BestimmeHgtFile(double lon, double lat, string v)
+        private HgtmitKoordinaten BestimmeHgtFile(double lon, double lat)
         {
             string hgt;
-            int lat1 = 0, lon1 = 0;
+            int lat1 , lon1 ;
             int lat2 = (int)lat;
             int lon2 = (int)lon;
             lat1 = (int)((lat - (int)lat) * 3600 / auflösung);
@@ -59,7 +59,7 @@ namespace HoehenGenerator
             {
                 if (lon2 >= 180)
                 {
-                    lon2 = lon2 - 360;
+                    lon2 -= 360;
                     hgt = hgt + "W" + (-lon2).ToString("D3", CultureInfo.CurrentCulture);
                 }
                 else

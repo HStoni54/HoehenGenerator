@@ -108,25 +108,25 @@ namespace HoehenGenerator
             return A * Math.Pow(fracy, 3) + B * Math.Pow(fracy, 2) + C * fracy + D;
 
         }
-        private double BerechneHöhe(GeoPunkt geoPunkt)
-        {
-            // TODO: richtige Interpolation einführen Überprüfung Reihenfolge der Rückgabewerte
+        //private double BerechneHöhe(GeoPunkt geoPunkt)
+        //{
+        //    // TODO: richtige Interpolation einführen Überprüfung Reihenfolge der Rückgabewerte
 
 
-            int wertLat = (int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0);
-            int wertLon = (int)((geoPunkt.Lon - linksunten.Lon) / auflösung * 3600.0);
-            if (wertLat < 0)
-                wertLat = 0;
-            if (wertLon < 0)
-                wertLon = 0;
-            if (wertLon > anzahlLat - 1)
-                wertLon = anzahlLat - 1;
-            if (wertLat > anzahlLon - 1)
-                wertLat = anzahlLon - 1;
+        //    int wertLat = (int)((geoPunkt.Lat - linksunten.Lat) / auflösung * 3600.0);
+        //    int wertLon = (int)((geoPunkt.Lon - linksunten.Lon) / auflösung * 3600.0);
+        //    if (wertLat < 0)
+        //        wertLat = 0;
+        //    if (wertLon < 0)
+        //        wertLon = 0;
+        //    if (wertLon > anzahlLat - 1)
+        //        wertLon = anzahlLat - 1;
+        //    if (wertLat > anzahlLon - 1)
+        //        wertLat = anzahlLon - 1;
 
-            // throw new NotImplementedException();
-            return höhen[anzahlLon - wertLat, wertLon];
-        }
+        //    // throw new NotImplementedException();
+        //    return höhen[anzahlLon - wertLat, wertLon];
+        //}
         public void LeseSpeicherEin(VierEcken vierEcken, List<FileMitEckKoordinaten> fileMitEcks)
         {
             bool zweiReihen = true;
@@ -163,7 +163,7 @@ namespace HoehenGenerator
         private void LeseEin(VierEcken hgtname, string v, string pfad, FileMitEckKoordinaten fileMitEcks)
         {
             HGTFile hGTFile;
-            short[,] daten;
+            //short[,] daten;
 
 
             switch (v)
@@ -172,20 +172,7 @@ namespace HoehenGenerator
 
                 case "lu":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
-                    //daten = hGTFile.LeseDaten();
-                    //daten = hGTFile.HgtDaten;
-                    // 
-                    /* beginn und ende im HgtFile -> steht im File also vorher auslesen
-                     * Anzahl ergibt sich daraus
-                     * Beginn oder Ende  im Datenfile das einzige, was sich ändert
-                     * 
-                     * Ich habe mal wieder Lat und Lon vertauscht
-                     * 
-                     * Hier stimmt etwas noch nicht,  es werden falsche Zahlen ausgelesen 
-                     *  
-                     *  TODO: wenn anderer Quadrant Werte falsch
-                     *  Nur beim Überschreiten Nullmeridian oder Äquator
-                     */
+        
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
@@ -194,24 +181,18 @@ namespace HoehenGenerator
 
                         }
                     }
-                    short test = hGTFile.HgtDaten[1200, 1200];
-                    //     MessageBox.Show("Zweig lu");
-                    break;
+                    //short test = hGTFile.HgtDaten[1200, 1200];
+                     break;
                 case "lo":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
-                    //daten = hGTFile.HgtDaten; reihen und Spalten vertauschen
-                    // 
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1] + 1; i++)
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
                         {
-                            //höhen[AnzahlLon + j - fileMitEcks.Rechtsoben[0], i - fileMitEcks.Linksunten[1]] = hGTFile.HgtDaten[i, j];
                             höhen[j - fileMitEcks.Linksunten[0], AnzahlLat - 1 + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }
-                    // 
-                    //  MessageBox.Show("Zweig lo");
-                    break;
+                     break;
                 case "ru":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsunten.Name + ".hgt");
                     //daten = hGTFile.HgtDaten;
@@ -251,7 +232,7 @@ namespace HoehenGenerator
 
             }
             //MessageBox.Show("Einlesen von " + hgtname.Name + "Lage: " + v + " Verzeichnis: " + pfad);
-            daten = null;
+            //daten = null;
         }
 
 
