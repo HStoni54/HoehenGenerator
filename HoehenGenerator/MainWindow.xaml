@@ -132,6 +132,9 @@
                 <Label x:Name="label17" Content="Markierungen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,270,0,0" VerticalAlignment="Top"/>
                 <Slider x:Name="slZoom" Grid.Column="1" HorizontalAlignment="Left" Margin="350,296,0,0" VerticalAlignment="Top" Width="102" Minimum="1" Maximum="50" AutoToolTipPlacement="BottomRight" Value="20"/>
                 <Label x:Name="label18" Content="Vergrößerung" Grid.Column="1" HorizontalAlignment="Left" Margin="351,272,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label19" Content="Drehung der Anlage" Grid.Column="1" HorizontalAlignment="Left" Margin="11,298,0,0" VerticalAlignment="Top" />
+                <Label x:Name="lbDrehung" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="133,298,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label20" Content="im Uhrzeigersinn" Grid.Column="1" HorizontalAlignment="Left" Margin="11,324,0,0" VerticalAlignment="Top"/>
             </Grid>
         </TabItem>
 

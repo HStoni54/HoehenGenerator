@@ -2283,7 +2283,7 @@ namespace HoehenGenerator
         private void GeneriereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
-
+            lbDrehung.Content = winkel.ToString("N0", CultureInfo.CurrentCulture) + " Grad";
             tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
             tbRasterDichte.Text = zahltbRasterdichte.ToString("N0", CultureInfo.CurrentCulture);
