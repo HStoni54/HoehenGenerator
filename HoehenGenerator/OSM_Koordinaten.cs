@@ -15,6 +15,7 @@ namespace HoehenGenerator
         private int osmlänge;
         private int kachelhöhe;
         private int kachelbreite;
+        private string dateiname;
 
         public OSM_Koordinaten(GeoPunkt geoPunkt)
         {
@@ -32,7 +33,11 @@ namespace HoehenGenerator
         public int Osmauflösung { get => osmauflösung; set => osmauflösung = value; }
         public int Kachelhöhe { get => kachelhöhe; set => kachelhöhe = value; }
         public int Kachelbreite { get => kachelbreite; set => kachelbreite = value; }
-
+        public void BerechneOSMKachel(GeoPunkt geoPunkt, int osmauflösung)
+        {
+            this.geoPunkt = geoPunkt;
+            BerechneOSMKachel(osmauflösung);
+        }
         public void BerechneOSMKachel(int osmauflösung)
         {
             this.osmauflösung = osmauflösung;
@@ -42,10 +47,11 @@ namespace HoehenGenerator
 
         public void BerechneOSMKachel()
         {
-            osmbreite = (int)(90 - geoPunkt.Lat)/180*kachelanzahl;
-            osmlänge = (int)(180 - geoPunkt.Lon)/360*kachelanzahl;
-
-
+            osmbreite = (int)((((90 - geoPunkt.Lat) / 180 * kachelanzahl) + 540) % 180); // TODO negative Werte, oder zu groß abfangen!!
+            osmlänge = (int)((((180 - geoPunkt.Lon) / 360 * kachelanzahl) + 720) % 360);
+            kachelbreite = (int)(((90 - geoPunkt.Lat) / 180 * kachelanzahl * 512) % 512);
+            kachelhöhe = (int)(((180 - geoPunkt.Lon) / 360 * kachelanzahl * 512) % 512);
+            dateiname = osmauflösung.ToString() + "_" + osmbreite.ToString() + "_" + osmlänge.ToString(); // TODO IFormatprovider einsetzen
         }
     }
 }
