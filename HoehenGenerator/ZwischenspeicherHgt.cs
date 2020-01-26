@@ -63,6 +63,8 @@ namespace HoehenGenerator
             double doLon = (zwischenwert) / auflösung * 3600.0;
             int wertLat = (int)doLat;
             int wertLon = (int)doLon;
+            //double restLat = wertLat - doLat;
+            //double restLon = wertLon - doLon;
             double restLat = doLat - wertLat;
             double restLon = doLon - wertLon;
 
@@ -85,9 +87,9 @@ namespace HoehenGenerator
                         istLat = anzahlLat - 1;
 
                     ndata[Y, X] = höhen[istLon, istLat];
-                    if (ndata[Y, X] == 0)
+                    if (ndata[Y, X] <= 0)
                     {
-
+                        //
                     }
                 }
             double x1 = CubicPolate(ndata[0, 0], ndata[1, 0], ndata[2, 0], ndata[3, 0], restLat);
@@ -96,6 +98,10 @@ namespace HoehenGenerator
             double x4 = CubicPolate(ndata[0, 3], ndata[1, 3], ndata[2, 3], ndata[3, 3], restLat);
 
             double y1 = CubicPolate(x1, x2, x3, x4, restLon);
+            if (y1 <= 0 )
+                {
+                bool kleinernull = true;
+            }
             return y1;
         }
         private static double CubicPolate(double v0, double v1, double v2, double v3, double fracy)
