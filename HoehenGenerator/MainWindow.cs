@@ -2257,6 +2257,10 @@ namespace HoehenGenerator
                         {
 
                         }
+                        if (eephöhe >= 110000)
+                        {
+                            eephöhe = 109999;
+                        }
                         int r1 = eephöhe % 256;
                         int g1 = (eephöhe / 256) % 256;
                         int b1 = (eephöhe / 256 / 256) % 256;
