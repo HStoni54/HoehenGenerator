@@ -48,10 +48,10 @@ namespace HoehenGenerator
 
         public void BerechneOSMKachel()
         {
-            osmbreite = (int)((((90 - geoPunkt.Lat) / 180 * kachelanzahl) + 540) % 180); // TODO negative Werte, oder zu groß abfangen!!
-            osmlänge = (int)((((180 - geoPunkt.Lon) / 360 * kachelanzahl) + 720) % 360);
+            osmbreite = (int)((((90 - geoPunkt.Lat ) )/ 180 * kachelanzahl) ); // TODO Breite-Werte stimmen nicht
+            osmlänge = (int)((((180 + geoPunkt.Lon ) ) / 360 * kachelanzahl) );
             kachelbreite = (int)(((90 - geoPunkt.Lat) / 180 * kachelanzahl * 512) % 512);
-            kachelhöhe = (int)(((180 - geoPunkt.Lon) / 360 * kachelanzahl * 512) % 512);
+            kachelhöhe = (int)(((180 + geoPunkt.Lon) / 360 * kachelanzahl * 512) % 512);
             dateiname = osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture); // TODO IFormatprovider einsetzen
         }
     }

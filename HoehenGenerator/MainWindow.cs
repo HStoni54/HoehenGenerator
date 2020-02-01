@@ -2506,6 +2506,16 @@ namespace HoehenGenerator
             //AnlagewerteAufTabAnzeigen();
         }
 
+        private void osmDaten_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 19; i <= 19; i++) //TODO: Testschleife für OSM entfernen
+            {
+                OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, i);
+                oSM_Fileliste.OSM_LadeFiles();
+            }
+
+        }
+
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierungEEPHöhe.Text, out double test))

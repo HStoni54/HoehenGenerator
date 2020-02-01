@@ -86,7 +86,7 @@
                 <Button x:Name="btnAnlagenDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="80" Click="BtnAnlagenDirectory_Click" Height="20"/>
                 <Label x:Name="label2" Content="Anlagenname" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" FontSize="11" Height="25"/>
                 <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="Neue Anlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="TbAnlagenname_TextChanged"/>
-                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
                 <Label x:Name="label3" Content="Knotenzahl:" Grid.Column="1" HorizontalAlignment="Left" Margin="237,16,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="237,124,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
                 <Label x:Name="label6" Content="Anlagengröße" Grid.Column="1" HorizontalAlignment="Left" Margin="237,43,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
@@ -135,6 +135,7 @@
                 <Label x:Name="label19" Content="Drehung der Anlage" Grid.Column="1" HorizontalAlignment="Left" Margin="11,298,0,0" VerticalAlignment="Top" />
                 <Label x:Name="lbDrehung" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="133,298,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label20" Content="im Uhrzeigersinn" Grid.Column="1" HorizontalAlignment="Left" Margin="11,324,0,0" VerticalAlignment="Top"/>
+                <Button x:Name="osmDaten" Content="OSM-Daten" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="osmDaten_Click"/>
             </Grid>
         </TabItem>
 

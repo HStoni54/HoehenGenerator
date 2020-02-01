@@ -122,6 +122,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HgtmitKoordinaten.cs" />
     <Compile Include="LadeDateien.cs" />
+    <Compile Include="OSM_Fileliste.cs" />
     <Compile Include="OSM_Koordinaten.cs" />
     <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
