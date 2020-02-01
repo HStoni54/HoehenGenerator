@@ -48,7 +48,19 @@ namespace HoehenGenerator
 
         public void BerechneOSMKachel()
         {
-            osmbreite = (int)((((90 - geoPunkt.Lat ) )/ 180 * kachelanzahl) ); // TODO Breite-Werte stimmen nicht
+            osmbreite = (int)((((90 - geoPunkt.Lat ) )/ 180 * kachelanzahl) ); // TODO Breite-Werte stimmen nicht 85.0511 arctan(sinh(pi))
+    //    Reproject the coordinates to the Mercator projection (from EPSG:4326 to EPSG:3857):
+    //        x = lon
+    //    y = arsinh(tan(lat)) = log[tan(lat) + sec(lat)]
+
+    //    (lat and lon are in radians)
+
+    //Transform range of x and y to 0 – 1 and shift origin to top left corner:
+    //        x = [1 + (x / π)] / 2
+    //    y = [1 − (y / π)] / 2
+    //Calculate the number of tiles across the map, n, using 2zoom
+    //Multiply x and y by n.Round results down to give tilex and tiley.
+
             osmlänge = (int)((((180 + geoPunkt.Lon ) ) / 360 * kachelanzahl) );
             kachelbreite = (int)(((90 - geoPunkt.Lat) / 180 * kachelanzahl * 512) % 512);
             kachelhöhe = (int)(((180 + geoPunkt.Lon) / 360 * kachelanzahl * 512) % 512);
