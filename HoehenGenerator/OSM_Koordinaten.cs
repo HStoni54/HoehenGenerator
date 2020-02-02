@@ -77,7 +77,7 @@ namespace HoehenGenerator
             //kachelhöhe = (int)(((180 + geoPunkt.Lon) / 360 * kachelanzahl * 512) % 512);
             kachelbreite = (int)(Kachell * 512);
             kachelhöhe = (int)(Kachelb * 512);
-            dateiname = osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture); // TODO IFormatprovider einsetzen
+            dateiname = "OSM_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture)+ ".png"; 
         }
     }
 }

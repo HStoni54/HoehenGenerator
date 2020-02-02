@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +28,15 @@ namespace HoehenGenerator
             osmlinksunten = new OSM_Koordinaten(this.geolinksunten, this.auflösung);
             osmlinksunten.BerechneOSMKachel();
         }
-        public void OSM_LadeFiles()
+        public void OSM_LadeFiles(int osmauflösung)
         {
             for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
             {
                 for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
                 {
                     //TODO: hier die Ladeprozedur einschieben
+                    string dateiname = "OSM_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + i.ToString(CultureInfo.CurrentCulture) + "_" + j.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
+
                 }
             }
         }
