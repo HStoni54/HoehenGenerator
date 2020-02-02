@@ -75,6 +75,8 @@ namespace HoehenGenerator
         private int downloadcount = 0;
         private bool pfahl = false;
         private int zoom = 20;
+        private string pfad;
+       
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -348,7 +350,7 @@ namespace HoehenGenerator
             {
                 coordinaten = "";
                 string vName = ofd.FileName;
-                string pfad = System.IO.Path.GetDirectoryName(vName);
+                pfad = System.IO.Path.GetDirectoryName(vName);
                 if (!Directory.Exists(pfad + "\\HGT"))
 
                     try
@@ -2512,7 +2514,7 @@ namespace HoehenGenerator
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
                 OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
-                oSM_Fileliste.OSM_LadeFiles(auflösung, "OSM");
+                oSM_Fileliste.OSM_LadeFiles(auflösung, "OSM",pfad);
             //}
 
         }

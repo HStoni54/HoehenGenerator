@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HoehenGenerator
 {
@@ -28,8 +30,24 @@ namespace HoehenGenerator
             osmlinksunten = new OSM_Koordinaten(this.geolinksunten, this.auflösung);
             osmlinksunten.BerechneOSMKachel();
         }
-        public void OSM_LadeFiles(int osmauflösung, string osmtyp) // TODO: Datumsgrenze
+        public void OSM_LadeFiles(int osmauflösung, string osmtyp, string pfad) // TODO: Datumsgrenze
         {
+            if (!Directory.Exists(pfad + "\\"+ osmtyp))
+
+                try
+                {
+
+                    Directory.CreateDirectory(pfad + "\\" + osmtyp);
+                }
+                catch (Exception)
+                {
+
+                    MessageBox.Show("Kann Directory für OSM-Dateien nicht erstellen!\n"
+                        + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
+                        + "\"" + pfad + "\"");
+
+                }
+
             for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
             {
                 for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
