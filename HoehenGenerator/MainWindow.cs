@@ -2512,7 +2512,7 @@ namespace HoehenGenerator
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
                 OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
-                oSM_Fileliste.OSM_LadeFiles(auflösung);
+                oSM_Fileliste.OSM_LadeFiles(auflösung, "OSM");
             //}
 
         }

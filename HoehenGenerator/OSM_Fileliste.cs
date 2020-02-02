@@ -28,14 +28,14 @@ namespace HoehenGenerator
             osmlinksunten = new OSM_Koordinaten(this.geolinksunten, this.auflösung);
             osmlinksunten.BerechneOSMKachel();
         }
-        public void OSM_LadeFiles(int osmauflösung)
+        public void OSM_LadeFiles(int osmauflösung, string osmtyp) // TODO: Datumsgrenze
         {
             for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
             {
                 for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
                 {
                     //TODO: hier die Ladeprozedur einschieben
-                    string dateiname = "OSM_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + i.ToString(CultureInfo.CurrentCulture) + "_" + j.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
+                    string dateiname = osmtyp + "_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + i.ToString(CultureInfo.CurrentCulture) + "_" + j.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
 
                 }
             }
