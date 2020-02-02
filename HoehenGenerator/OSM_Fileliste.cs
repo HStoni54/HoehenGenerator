@@ -54,6 +54,7 @@ namespace HoehenGenerator
                 {
                     //TODO: hier die Ladeprozedur einschieben
                     string dateiname = osmtyp + "_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + i.ToString(CultureInfo.CurrentCulture) + "_" + j.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
+                    string dateinamekomplett = pfad + "\\" + osmtyp + "\\" + dateiname;
 
                 }
             }

@@ -1327,7 +1327,7 @@ namespace HoehenGenerator
             {
 
                 MessageBox.Show("Fehler! Kann Datei: " + v +
-                   " nicht downloaden!\nBitte überprüfen Sie Ihre Internezverbindung");
+                   " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
                 ergebnis = false;
             }
 
