@@ -2510,7 +2510,7 @@ namespace HoehenGenerator
 
         private void osmDaten_Click(object sender, RoutedEventArgs e)
         {
-            int auflösung = (int)Math.Log(40030 * zahltbRasterdichte / 512, 2);
+            int auflösung = (int)Math.Log(40030 * zahltbRasterdichte / 256, 2);
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
                 OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);

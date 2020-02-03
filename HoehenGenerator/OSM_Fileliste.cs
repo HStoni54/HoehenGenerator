@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -56,9 +57,34 @@ namespace HoehenGenerator
                     string dateiname = osmtyp + "_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + i.ToString(CultureInfo.CurrentCulture) + "_" + j.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
                     string dateinamekomplett = pfad + "\\" + osmtyp + "\\" + dateiname;
                     string downloadname = "https://" + "a" + ".tile.openstreetmap.de/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + j.ToString(CultureInfo.CurrentCulture) + "/" + i.ToString(CultureInfo.CurrentCulture) + ".png";
+                    //string downloadname = "https://" + "a" + ".tile.openstreetmap.org/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + j.ToString(CultureInfo.CurrentCulture) + "/" + i.ToString(CultureInfo.CurrentCulture) + ".png";
+                    LadeOSMDateien(downloadname,dateinamekomplett);
 
                 }
             }
+        }
+
+        private static bool LadeOSMDateien(string v, string zielname)
+        {
+            bool ergebnis = true;
+            WebClient webClient = new WebClient()
+            {
+                Encoding = Encoding.UTF8
+            };
+            try
+            {
+                webClient.DownloadFile(v, zielname);
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Fehler! Kann Datei: " + v +
+                   " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
+                ergebnis = false;
+            }
+
+            webClient.Dispose();
+            return ergebnis;
         }
     }
 }
