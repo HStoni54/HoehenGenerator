@@ -351,6 +351,22 @@ namespace HoehenGenerator
                 coordinaten = "";
                 string vName = ofd.FileName;
                 pfad = System.IO.Path.GetDirectoryName(vName);
+                if (!Directory.Exists(pfad + "\\OSM"))
+
+                    try
+                    {
+
+                        Directory.CreateDirectory(pfad + "\\OSM");
+                    }
+                    catch (Exception)
+                    {
+
+                        MessageBox.Show("Kann Directory für OSM-Dateien nicht erstellen!\n"
+                            + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
+                            + "\"" + pfad + "\"");
+
+                    }
+
                 if (!Directory.Exists(pfad + "\\HGT"))
 
                     try
@@ -1319,6 +1335,8 @@ namespace HoehenGenerator
             {
                 Encoding = Encoding.UTF8
             };
+            webClient.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+
             try
             {
                 webClient.DownloadFile(v, zielname);
