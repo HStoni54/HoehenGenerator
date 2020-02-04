@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,36 +14,43 @@ namespace HoehenGenerator
     {
         Color pixelColor;
         String bilddateiname;
-        String neuerbildname;
+        String pngbildname;
+        String bmpbildname;
+        String pfad;
         Bitmap ausgangsbild;
         Bitmap bearbeitungsbild;
         Rectangle rechteck;
-        double osmhöhe;
-        double osmbreite;
+        double doubleosmbreite;
+        double doubleosmlänge;
         int bildbreite;
         int bildhöhe;
         PixelFormat pixelFormat = PixelFormat.Format24bppRgb;
 
-        public ErmittleBitFarbeAusBitmap(string bilddateiname, double osmhöhe, double osmbreite)
+        public ErmittleBitFarbeAusBitmap(OSM_Koordinaten oSM_Koordinaten, string osmpfad)
         {
-            this.bilddateiname = bilddateiname;
-            this.osmhöhe = osmhöhe;
-            this.osmbreite = osmbreite;
-            if (this.bilddateiname.EndsWith(".png", true, CultureInfo.CurrentCulture))
+            bilddateiname = oSM_Koordinaten.Dateiname;
+            doubleosmbreite = oSM_Koordinaten.Kachelb;
+            doubleosmlänge = oSM_Koordinaten.Kachell;
+            this.pfad = osmpfad;
+           
+            pngbildname = bilddateiname + ".png";
+            bmpbildname = bilddateiname + ".bmp";
+            if (!File.Exists(pngbildname))
+                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung,"OSM", osmpfad,oSM_Koordinaten.Osmbreite,oSM_Koordinaten.Osmlänge);
+            if (!File.Exists(bmpbildname))
                 WandleBildUm();
-            else if (this.bilddateiname.EndsWith(".bmp", true, CultureInfo.CurrentCulture))
-                neuerbildname = bilddateiname;
+            
         }
 
         private void WandleBildUm()
         {
-            ausgangsbild = new Bitmap(bilddateiname);
+            ausgangsbild = new Bitmap(pngbildname);
             bildbreite = ausgangsbild.Width;
             bildhöhe = ausgangsbild.Height;
             rechteck = new Rectangle(0, 0, bildbreite, bildhöhe);
             bearbeitungsbild = ausgangsbild.Clone(rechteck, pixelFormat);
-            neuerbildname = bilddateiname.Substring(0, bilddateiname.Length - 4) + ".bmp";
-            bearbeitungsbild.Save(neuerbildname, ImageFormat.Bmp);
+       
+            bearbeitungsbild.Save(bmpbildname, ImageFormat.Bmp);
 
         }
 

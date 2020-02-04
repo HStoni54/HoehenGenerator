@@ -14,8 +14,8 @@ namespace HoehenGenerator
         private int kachelanzahl;
         private int osmbreite;
         private int osmlänge;
-        private int kachelhöhe;
         private int kachelbreite;
+        private int kachellänge;
         private double kachell;
         private double kachelb;
         private string dateiname;
@@ -27,17 +27,19 @@ namespace HoehenGenerator
 
         public OSM_Koordinaten(GeoPunkt geoPunkt, int osmauflösung) : this(geoPunkt)
         {
-            this.osmauflösung = osmauflösung;
-            kachelanzahl = (int)Math.Pow(2, this.osmauflösung);
+            this.Osmauflösung = osmauflösung;
+            kachelanzahl = (int)Math.Pow(2, this.Osmauflösung);
         }
 
         public int Osmbreite { get => osmbreite; set => osmbreite = value; }
         public int Osmlänge { get => osmlänge; set => osmlänge = value; }
         public int Osmauflösung { get => osmauflösung; set => osmauflösung = value; }
-        public int Kachelhöhe { get => kachelhöhe; set => kachelhöhe = value; }
         public int Kachelbreite { get => kachelbreite; set => kachelbreite = value; }
+        public int Kachellänge { get => kachellänge; set => kachellänge = value; }
         public double Kachell { get => kachell; set => kachell = value; }
         public double Kachelb { get => kachelb; set => kachelb = value; }
+        public string Dateiname { get => dateiname; set => dateiname = value; }
+       
 
         public void BerechneOSMKachel(GeoPunkt geoPunkt, int osmauflösung)
         {
@@ -46,8 +48,8 @@ namespace HoehenGenerator
         }
         public void BerechneOSMKachel(int osmauflösung)
         {
-            this.osmauflösung = osmauflösung;
-            kachelanzahl = (int)Math.Pow(2, this.osmauflösung);
+            this.Osmauflösung = osmauflösung;
+            kachelanzahl = (int)Math.Pow(2, this.Osmauflösung);
             BerechneOSMKachel();
         }
 
@@ -71,13 +73,13 @@ namespace HoehenGenerator
             double osml = (180 + geoPunkt.Lon) / 360 * kachelanzahl;
             osmlänge = (int)osml;
             osmbreite = (int)osmb;
-            Kachelb = osmb - osmbreite;
-            Kachell = osml - osmlänge;
+            kachelb = osmb - osmbreite;
+            kachell = osml - osmlänge;
             //kachelbreite = (int)(((90 - geoPunkt.Lat) / 180 * kachelanzahl * 512) % 512);
             //kachelhöhe = (int)(((180 + geoPunkt.Lon) / 360 * kachelanzahl * 512) % 512);
-            kachelbreite = (int)(Kachell * 512);
-            kachelhöhe = (int)(Kachelb * 512);
-            dateiname = "OSM_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture)+ ".png"; 
+            kachellänge = (int)(kachell * 512);
+            kachelbreite = (int)(kachelb * 512);
+            dateiname = "OSM_" + Osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture); 
         }
     }
 }

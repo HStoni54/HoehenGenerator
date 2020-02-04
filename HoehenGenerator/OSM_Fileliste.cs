@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -48,33 +50,51 @@ namespace HoehenGenerator
                         + "\"" + pfad + "\"");
 
                 }
+             string osmpfad = pfad + "\\" + osmtyp + "\\";
 
             for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
             {
                 for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
                 {
                     //TODO: hier die Ladeprozedur einschieben
-                    HoleOsmDaten(osmauflösung, osmtyp, pfad, i, j);
+                    HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
 
                 }
             }
         }
 
-        private static void HoleOsmDaten(int osmauflösung, string osmtyp, string pfad, int osmbreite, int osmlänge)
+        public static void HoleOsmDaten(int osmauflösung, string osmtyp, string osmpfad, int osmbreite, int osmlänge)
         {
             string dateiname = osmtyp + "_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
-            string dateinamekomplett = pfad + "\\" + osmtyp + "\\" + dateiname;
+            string dateinamekomplett = osmpfad +  "\\" + dateiname;
             string downloadname = "https://" + "a" + ".tile.openstreetmap.de/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
             //string downloadname = "https://" + "a" + ".tile.openstreetmap.org/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
             if (!File.Exists(dateinamekomplett))
             {
                 LadeOSMDateien(downloadname, dateinamekomplett);
-
+              
 
             }
+            WandleBildInBmp(dateinamekomplett);
         }
 
-        private static bool LadeOSMDateien(string v, string zielname)
+        private static void WandleBildInBmp(string dateinamekomplett)
+        {
+            string dateinameneu = dateinamekomplett.Substring(0, dateinamekomplett.Length - 4) + ".bmp";
+            if (!File.Exists(dateinameneu))
+            {
+                Bitmap ausgangsbild = new Bitmap(dateinamekomplett);
+                int bildbreite = ausgangsbild.Width;
+                int bildhöhe = ausgangsbild.Height;
+                Rectangle rechteck = new Rectangle(0, 0, bildbreite, bildhöhe);
+                Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, PixelFormat.Format24bppRgb);
+
+                bearbeitungsbild.Save(dateinameneu, ImageFormat.Bmp);
+            }
+
+        }
+
+        public static bool LadeOSMDateien(string v, string zielname)
         {
             bool ergebnis = true;
             WebClient webClient = new WebClient()
