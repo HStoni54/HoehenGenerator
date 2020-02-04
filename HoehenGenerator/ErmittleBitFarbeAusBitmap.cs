@@ -26,7 +26,7 @@ namespace HoehenGenerator
         int bildhöhe;
         PixelFormat pixelFormat = PixelFormat.Format24bppRgb;
 
-        public ErmittleBitFarbeAusBitmap(OSM_Koordinaten oSM_Koordinaten, string osmpfad)
+        public  ErmittleBitFarbeAusBitmap(OSM_Koordinaten oSM_Koordinaten, string osmpfad)
         {
             bilddateiname = oSM_Koordinaten.Dateiname;
             doubleosmbreite = oSM_Koordinaten.Kachelb;
@@ -36,10 +36,11 @@ namespace HoehenGenerator
             pngbildname = bilddateiname + ".png";
             bmpbildname = bilddateiname + ".bmp";
             if (!File.Exists(pngbildname))
-                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung,"OSM", osmpfad,oSM_Koordinaten.Osmbreite,oSM_Koordinaten.Osmlänge);
+                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung,"OSM", pfad,oSM_Koordinaten.Osmbreite,oSM_Koordinaten.Osmlänge);
             if (!File.Exists(bmpbildname))
                 WandleBildUm();
-            
+            bearbeitungsbild = new Bitmap(bmpbildname);
+            pixelColor = bearbeitungsbild.GetPixel((int)(bearbeitungsbild.Height * oSM_Koordinaten.Kachelb), (int)(bearbeitungsbild.Width * oSM_Koordinaten.Kachell));
         }
 
         private void WandleBildUm()
