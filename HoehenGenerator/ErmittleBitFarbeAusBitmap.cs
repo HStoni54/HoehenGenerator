@@ -36,9 +36,16 @@ namespace HoehenGenerator
             pngbildname = bilddateiname + ".png";
             bmpbildname = bilddateiname + ".bmp";
             if (!File.Exists(pngbildname))
-                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung,"OSM", pfad,oSM_Koordinaten.Osmbreite,oSM_Koordinaten.Osmlänge);
+            {
+                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, "OSM", pfad, oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
+                System.Threading.Thread.Sleep(1000);
+            }
             if (!File.Exists(bmpbildname))
+            {
                 WandleBildUm();
+                System.Threading.Thread.Sleep(1000);
+  
+            }
             bearbeitungsbild = new Bitmap(bmpbildname);
             pixelColor = bearbeitungsbild.GetPixel( (int)(bearbeitungsbild.Width * oSM_Koordinaten.Kachell),(int)(bearbeitungsbild.Height * oSM_Koordinaten.Kachelb));
         }
