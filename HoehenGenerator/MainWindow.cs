@@ -76,6 +76,7 @@ namespace HoehenGenerator
         private bool pfahl = false;
         private int zoom = 20;
         private string pfad;
+
        
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
@@ -2295,6 +2296,55 @@ namespace HoehenGenerator
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
             }
 
+            else if (bitmapnamen.EndsWith("F.bmp", StringComparison.CurrentCulture))
+            {
+                Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
+                GeoPunkt tempPunkt;
+                GeoPunkt temppunkt1;
+                int auflösung = (int)Math.Log(40030 * zahltbRasterdichte / 256, 2);
+
+                System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
+                for (int i = 0; i < höhe; i++)
+                    for (int j = 0; j < breite; j++)
+                    {
+                        tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
+                        temppunkt1 = DrehePunkt(tempPunkt, drehung);
+                        OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(temppunkt1, auflösung);
+                        oSM_Koordinaten.BerechneOSMKachel();
+                        string osmpfad = pfad + "\\OSM\\";
+                        ErmittleBitFarbeAusBitmap ermittleBitFarbeAusBitmap = new ErmittleBitFarbeAusBitmap(oSM_Koordinaten, osmpfad);
+                        colors1[i, j] = ermittleBitFarbeAusBitmap.PixelColor;
+                        //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                        //if (abshöhe == 0)
+                        //{
+
+                        //};
+                        //double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
+                        ////if (abshöhe2 < 0)
+                        ////{
+                        ////    int c;
+                        ////}
+                        //int eephöhe = (int)(abshöhe2 * 100) + 10000;
+                        //if (eephöhe < 0)
+                        //    eephöhe = 0;
+                        //if (eephöhe == 0)
+                        //{
+
+                        //}
+                        //if (eephöhe >= 110000)
+                        //{
+                        //    eephöhe = 109999;
+                        //}
+                        //int r1 = eephöhe % 256;
+                        //int g1 = (eephöhe / 256) % 256;
+                        //int b1 = (eephöhe / 256 / 256) % 256;
+
+
+
+                        //colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
+                    }
+                zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
+            }
             else
 
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors);

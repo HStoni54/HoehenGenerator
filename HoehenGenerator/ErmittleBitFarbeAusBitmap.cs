@@ -28,7 +28,7 @@ namespace HoehenGenerator
 
         public  ErmittleBitFarbeAusBitmap(OSM_Koordinaten oSM_Koordinaten, string osmpfad)
         {
-            bilddateiname = oSM_Koordinaten.Dateiname;
+            bilddateiname = osmpfad + oSM_Koordinaten.Dateiname;
             doubleosmbreite = oSM_Koordinaten.Kachelb;
             doubleosmlänge = oSM_Koordinaten.Kachell;
             this.pfad = osmpfad;
@@ -40,7 +40,7 @@ namespace HoehenGenerator
             if (!File.Exists(bmpbildname))
                 WandleBildUm();
             bearbeitungsbild = new Bitmap(bmpbildname);
-            pixelColor = bearbeitungsbild.GetPixel((int)(bearbeitungsbild.Height * oSM_Koordinaten.Kachelb), (int)(bearbeitungsbild.Width * oSM_Koordinaten.Kachell));
+            pixelColor = bearbeitungsbild.GetPixel( (int)(bearbeitungsbild.Width * oSM_Koordinaten.Kachell),(int)(bearbeitungsbild.Height * oSM_Koordinaten.Kachelb));
         }
 
         private void WandleBildUm()
