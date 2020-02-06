@@ -76,8 +76,8 @@ namespace HoehenGenerator
         private bool pfahl = false;
         private int zoom = 20;
         private string pfad;
-
-       
+        private string pngbildname;
+        private string bmpbildname;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -2304,6 +2304,8 @@ namespace HoehenGenerator
                 int auflösung = (int)Math.Log(40030 * zahltbRasterdichte / 256, 2);
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
+                String bilddateiname = "";
+                System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(2,2);
                 for (int i = 0; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
                     {
@@ -2311,38 +2313,38 @@ namespace HoehenGenerator
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
                         OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(temppunkt1, auflösung);
                         oSM_Koordinaten.BerechneOSMKachel();
-                        string osmpfad = pfad + "\\OSM\\";
-                        ErmittleBitFarbeAusBitmap ermittleBitFarbeAusBitmap = new ErmittleBitFarbeAusBitmap(oSM_Koordinaten, osmpfad);
-                        colors1[i, j] = ermittleBitFarbeAusBitmap.PixelColor;
-                        //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
-                        //if (abshöhe == 0)
-                        //{
+                        string osmpfad = pfad + "\\OSM\\" + oSM_Koordinaten.Dateiname;
+                        if (osmpfad != bilddateiname)
+                        {
+                            bitmap1.Dispose();
+                            bilddateiname = osmpfad;
+                            pngbildname = bilddateiname + ".png";
+                             bmpbildname = bilddateiname + ".bmp";
+                            if (!File.Exists(pngbildname))
+                            {
+                                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, "OSM", pfad, oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
+                                System.Threading.Thread.Sleep(1000);
+                            }
+                            if (!File.Exists(bmpbildname))
+                            {
+                                WandleBildUm();
+                                System.Threading.Thread.Sleep(1000);
 
-                        //};
-                        //double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
-                        ////if (abshöhe2 < 0)
-                        ////{
-                        ////    int c;
-                        ////}
-                        //int eephöhe = (int)(abshöhe2 * 100) + 10000;
-                        //if (eephöhe < 0)
-                        //    eephöhe = 0;
-                        //if (eephöhe == 0)
-                        //{
-
-                        //}
-                        //if (eephöhe >= 110000)
-                        //{
-                        //    eephöhe = 109999;
-                        //}
-                        //int r1 = eephöhe % 256;
-                        //int g1 = (eephöhe / 256) % 256;
-                        //int b1 = (eephöhe / 256 / 256) % 256;
+                            }
+                            bitmap1 = new System.Drawing.Bitmap(bmpbildname);
+                            
+                        }
 
 
+                        colors1[i, j] = bitmap1.GetPixel((int)(bitmap1.Width * oSM_Koordinaten.Kachell), (int)(bitmap1.Height * oSM_Koordinaten.Kachelb));
 
-                        //colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
+
+                        //ErmittleBitFarbeAusBitmap ermittleBitFarbeAusBitmap = new ErmittleBitFarbeAusBitmap(oSM_Koordinaten, osmpfad);
+                        //colors1[i, j] = ermittleBitFarbeAusBitmap.PixelColor;
+                        //ermittleBitFarbeAusBitmap.Dispose();
+      
                     }
+                bitmap1.Dispose();
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
             }
             else
@@ -2354,7 +2356,19 @@ namespace HoehenGenerator
             SpeicherEEPBitMap(bitmapnamen, zeichneBitMap);
         }
 
+        private void WandleBildUm()
+        {
+            System.Drawing.Bitmap ausgangsbild = new System.Drawing.Bitmap(pngbildname);
+            int bildbreite = ausgangsbild.Width;
+            int bildhöhe = ausgangsbild.Height;
+            System.Drawing.Rectangle rechteck = new System.Drawing.Rectangle(0, 0, bildbreite, bildhöhe);
+            System.Drawing.Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
+            bearbeitungsbild.Save(bmpbildname, System.Drawing.Imaging.ImageFormat.Bmp);
+            bearbeitungsbild.Dispose();
+            ausgangsbild.Dispose();
+
+        }
 
         private void SpeicherEEPBitMap(string bitmapnamen, ZeichneBitMap zeichneBitMap)
         {

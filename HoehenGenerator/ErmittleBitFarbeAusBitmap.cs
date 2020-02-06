@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class ErmittleBitFarbeAusBitmap 
+    class ErmittleBitFarbeAusBitmap : IDisposable
     {
         Color pixelColor;
         String bilddateiname;
@@ -67,6 +67,10 @@ namespace HoehenGenerator
 
         public Color PixelColor { get => pixelColor; set => pixelColor = value; }
 
-       
+        public void Dispose()
+        {
+            bearbeitungsbild.Dispose();
+            ausgangsbild.Dispose();
+        }
     }
 }
