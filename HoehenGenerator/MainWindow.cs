@@ -2322,7 +2322,7 @@ namespace HoehenGenerator
                              bmpbildname = bilddateiname + ".bmp";
                             if (!File.Exists(pngbildname))
                             {
-                                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, "OSM", pfad, oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
+                                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, "OSM", pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
                                 System.Threading.Thread.Sleep(1000);
                             }
                             if (!File.Exists(bmpbildname))
