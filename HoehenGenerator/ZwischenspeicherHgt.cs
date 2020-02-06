@@ -98,10 +98,10 @@ namespace HoehenGenerator
             double x4 = CubicPolate(ndata[0, 3], ndata[1, 3], ndata[2, 3], ndata[3, 3], restLat);
 
             double y1 = CubicPolate(x1, x2, x3, x4, restLon);
-            if (y1 <= 0 )
-                {
-                bool kleinernull = true;
-            }
+            //if (y1 <= 0 )
+            //    {
+            //    bool kleinernull = true;
+            //}
             return y1;
         }
         private static double CubicPolate(double v0, double v1, double v2, double v3, double fracy)

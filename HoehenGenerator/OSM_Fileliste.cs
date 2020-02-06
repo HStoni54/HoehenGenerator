@@ -20,8 +20,8 @@ namespace HoehenGenerator
 
         private OSM_Koordinaten osmrechtsoben;
         private OSM_Koordinaten osmlinksunten;
-        private int anzahlhoch;
-        private int anzahlbreit;
+        //private int anzahlhoch;
+        //private int anzahlbreit;
 
         public OSM_Fileliste(GeoPunkt georechtsoben, GeoPunkt geolinksunten, int auflösung)
         {

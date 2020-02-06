@@ -2047,7 +2047,7 @@ namespace HoehenGenerator
             lfma.Clear();
             //string[] vs = HGTFiles.Text.Split('\n');
             List<int> aufl = new List<int>();
-            bool nurdreiZoll = false;
+            //bool nurdreiZoll = false;
             foreach (string item in lbHgtFiles.Items)
             {
 
@@ -2061,7 +2061,7 @@ namespace HoehenGenerator
             int aufl1 = aufl.Max();
             if (aufl1 != 1)
             {
-                nurdreiZoll = true;
+                //nurdreiZoll = true;
                 use1zoll = false;
                 einZoll.IsChecked = false;
                 einZoll.IsEnabled = false;
