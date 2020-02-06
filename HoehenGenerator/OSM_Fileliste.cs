@@ -90,6 +90,7 @@ namespace HoehenGenerator
                 Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, PixelFormat.Format24bppRgb);
 
                 bearbeitungsbild.Save(dateinameneu, ImageFormat.Bmp);
+                ausgangsbild.Dispose();
             }
 
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class ErmittleBitFarbeAusBitmap
+    class ErmittleBitFarbeAusBitmap 
     {
         Color pixelColor;
         String bilddateiname;
@@ -26,7 +26,7 @@ namespace HoehenGenerator
         int bildhöhe;
         PixelFormat pixelFormat = PixelFormat.Format24bppRgb;
 
-        public  ErmittleBitFarbeAusBitmap(OSM_Koordinaten oSM_Koordinaten, string osmpfad)
+        public  ErmittleBitFarbeAusBitmap(OSM_Koordinaten oSM_Koordinaten, string osmpfad) 
         {
             bilddateiname = osmpfad + oSM_Koordinaten.Dateiname;
             doubleosmbreite = oSM_Koordinaten.Kachelb;
@@ -48,6 +48,7 @@ namespace HoehenGenerator
             }
             bearbeitungsbild = new Bitmap(bmpbildname);
             pixelColor = bearbeitungsbild.GetPixel( (int)(bearbeitungsbild.Width * oSM_Koordinaten.Kachell),(int)(bearbeitungsbild.Height * oSM_Koordinaten.Kachelb));
+            bearbeitungsbild.Dispose();
         }
 
         private void WandleBildUm()
@@ -59,9 +60,13 @@ namespace HoehenGenerator
             bearbeitungsbild = ausgangsbild.Clone(rechteck, pixelFormat);
        
             bearbeitungsbild.Save(bmpbildname, ImageFormat.Bmp);
+            bearbeitungsbild.Dispose();
+            ausgangsbild.Dispose();
 
         }
 
         public Color PixelColor { get => pixelColor; set => pixelColor = value; }
+
+       
     }
 }
