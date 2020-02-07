@@ -86,7 +86,11 @@ namespace HoehenGenerator
 
             }
 
-            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndElement(); 
+          
+            //xmlWriter.WriteStartElement("Weather");
+            //xmlWriter.WriteAttributeString("bSun", "0");
+            //xmlWriter.WriteEndElement();
             xmlWriter.WriteStartElement("Schandlaft");
             xmlWriter.WriteAttributeString("extX", breite.ToString(CultureInfo.CurrentCulture));
             xmlWriter.WriteAttributeString("extY", höhe.ToString(CultureInfo.CurrentCulture));
@@ -98,6 +102,7 @@ namespace HoehenGenerator
             xmlWriter.WriteAttributeString("TextureScaleFile", "\\" + anlagenname + "S.bmp");
 
             xmlWriter.WriteEndElement();
+
             xmlWriter.WriteStartElement("Beschreibung");
             xmlWriter.WriteString("Diese Anlage wurde mit dem Höhengenerator erstellt.\nDie Anlagendatei wurde nur mit minimalen Angaben gefüllt.\nZum automatischen Vervollständigen der Angaben die Anlage einmal mit EEP neu speichern.\n\nGruß Holger(HStoni54)");
             xmlWriter.WriteEndElement();

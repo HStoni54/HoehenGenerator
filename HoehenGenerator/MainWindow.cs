@@ -2189,7 +2189,8 @@ namespace HoehenGenerator
                 System.Drawing.Color.FromArgb(255, 200, 200, 200),
                 System.Drawing.Color.FromArgb(255, 16, 39, 0),
                 System.Drawing.Color.FromArgb(255,0,0,1),
-                System.Drawing.Color.FromArgb(255, 0, 0, 100) };
+                System.Drawing.Color.FromArgb(255, 1, 12, 75) };
+
 
             System.Drawing.Imaging.PixelFormat pixelFormat = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
 
