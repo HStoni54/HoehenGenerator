@@ -54,11 +54,31 @@ namespace HoehenGenerator
 
             for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
             {
-                for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
+                if (osmlinksunten.Osmlänge <= osmrechtsoben.Osmlänge)
                 {
-                    //TODO: hier die Ladeprozedur einschieben
-                    HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
+                    for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
+                    {
+                        //TODO: hier die Ladeprozedur einschieben
+                        HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
 
+                    }
+                }
+                else
+                {
+                    int kachelanzahl = (int)Math.Pow(2, osmauflösung);
+
+                    for (int j = osmlinksunten.Osmlänge; j < kachelanzahl; j++)
+                    {
+                        //TODO: hier die Ladeprozedur einschieben
+                        HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
+
+                    }
+                    for (int j = 0; j <= osmrechtsoben.Osmlänge; j++)
+                    {
+                        //TODO: hier die Ladeprozedur einschieben
+                        HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
+
+                    }
                 }
             }
         }
@@ -71,7 +91,21 @@ namespace HoehenGenerator
             //string downloadname = "https://" + "a" + ".tile.openstreetmap.org/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
             if (!File.Exists(dateinamekomplett))
             {
-                LadeOSMDateien(downloadname, dateinamekomplett);
+                if (!LadeOSMDateien(downloadname, dateinamekomplett))
+                {
+                    Color color = Color.FromArgb(255, 16, 39, 0);
+                    Bitmap dummy = new Bitmap(256, 256);
+                    for (int i = 0; i < dummy.Height; i++)
+                        for (int j = 0; j < dummy.Width; j++)
+                        {
+                            dummy.SetPixel(i, j, color);
+                        }
+                    {
+
+                    }
+                    dummy.Save(dateinamekomplett);
+                    dummy.Dispose();
+                }
               
 
             }
@@ -114,8 +148,8 @@ namespace HoehenGenerator
             catch (Exception)
             {
 
-                MessageBox.Show("Fehler! Kann Datei: " + v +
-                   " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
+                //MessageBox.Show("Fehler! Kann Datei: " + v +
+                //   " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
                 ergebnis = false;
             }
 
