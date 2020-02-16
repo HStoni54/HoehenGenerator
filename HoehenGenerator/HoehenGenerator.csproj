@@ -121,6 +121,7 @@
     <Compile Include="FileMitEckKoordinaten.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HgtmitKoordinaten.cs" />
+    <Compile Include="HGTReader.cs" />
     <Compile Include="LadeDateien.cs" />
     <Compile Include="OSM_Fileliste.cs" />
     <Compile Include="OSM_Koordinaten.cs" />

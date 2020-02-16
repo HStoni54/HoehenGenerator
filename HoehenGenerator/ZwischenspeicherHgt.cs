@@ -12,6 +12,7 @@ namespace HoehenGenerator
         private GeoPunkt rechtsunten;
         private GeoPunkt rechtsoben;
         private int anzahlLat, anzahlLon;
+        
 
         public ZwischenspeicherHgt(GeoPunkt linksunten, int anzahlLon, int anzahlLat, int auflösung)
         {
@@ -250,6 +251,404 @@ namespace HoehenGenerator
         public int AnzahlLon { get => anzahlLon; set => anzahlLon = value; }
         internal GeoPunkt Linksunten { get => linksunten; set => linksunten = value; }
 
+
+        private double[,] eleArray = new double[4,4];
+        private HGTReader[][] readers;
+        private int lastRow = -1;
+
+
+        /**
+         * Fill 16 values of HGT near required coordinates
+         * can use HGTreaders near the current one
+         */
+        private bool fillArray(HGTReader rdr, int row, int col, int xLeft, int yBottom)
+        {
+            int res = rdr.getRes();
+            int minX = 0;
+            int minY = 0;
+            int maxX = 3;
+            int maxY = 3;
+            bool inside = true;
+
+            // check borders
+            if (xLeft == 0)
+            {
+                if (col <= 0)
+                    return false;
+                minX = 1;
+                inside = false;
+            }
+            else if (xLeft == res - 1)
+            {
+                if (col + 1 >= readers[0].Length)
+                    return false;
+                maxX = 2;
+                inside = false;
+            }
+            if (yBottom == 0)
+            {
+                if (row <= 0)
+                    return false;
+                minY = 1;
+                inside = false;
+            }
+            else if (yBottom == res - 1)
+            {
+                if (row + 1 >= readers.Length)
+                    return false;
+                maxY = 2;
+                inside = false;
+            }
+
+            // fill data from current reader
+            short h;
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    h = rdr.ele(xLeft + x - 1, yBottom + y - 1);
+                    if (h == HGTReader.UNDEF)
+                        return false;
+                    eleArray[x,y] = h;
+                }
+            }
+
+            if (inside) // no need to check borders again
+                return true;
+
+            // fill data from adjacent readers, down and up
+            if (xLeft > 0 && xLeft < res - 1)
+            {
+                if (yBottom == 0)
+                { // bottom edge
+                    HGTReader rdrBB = prepReader(res, row - 1, col);
+                    if (rdrBB == null)
+                        return false;
+                    for (int x = 0; x <= 3; x++)
+                    {
+                        h = rdrBB.ele(xLeft + x - 1, res - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[x,0] = h;
+                    }
+                }
+                else if (yBottom == res - 1)
+                { // top edge
+                    HGTReader rdrTT = prepReader(res, row + 1, col);
+                    if (rdrTT == null)
+                        return false;
+                    for (int x = 0; x <= 3; x++)
+                    {
+                        h = rdrTT.ele(xLeft + x - 1, 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[x,3] = h;
+                    }
+                }
+            }
+
+            // fill data from adjacent readers, left and right
+            if (yBottom > 0 && yBottom < res - 1)
+            {
+                if (xLeft == 0)
+                { // left edgge
+                    HGTReader rdrLL = prepReader(res, row, col - 1);
+                    if (rdrLL == null)
+                        return false;
+                    for (int y = 0; y <= 3; y++)
+                    {
+                        h = rdrLL.ele(res - 1, yBottom + y - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[0,y] = h;
+                    }
+                }
+                else if (xLeft == res - 1)
+                { // right edge
+                    HGTReader rdrRR = prepReader(res, row, col + 1);
+                    if (rdrRR == null)
+                        return false;
+                    for (int y = 0; y <= 3; y++)
+                    {
+                        h = rdrRR.ele(1, yBottom + y - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[3,y] = h;
+                    }
+                }
+            }
+
+            // fill data from adjacent readers, corners
+            if (xLeft == 0)
+            {
+                if (yBottom == 0)
+                { // left bottom corner
+                    HGTReader rdrLL = prepReader(res, row, col - 1);
+                    if (rdrLL == null)
+                        return false;
+                    for (int y = 1; y <= 3; y++)
+                    {
+                        h = rdrLL.ele(res - 1, yBottom + y - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[0,y] = h;
+                    }
+
+                    HGTReader rdrBB = prepReader(res, row - 1, col);
+                    if (rdrBB == null)
+                        return false;
+                    for (int x = 1; x <= 3; x++)
+                    {
+                        h = rdrBB.ele(xLeft + x - 1, res - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[x,0] = h;
+                    }
+
+                    HGTReader rdrLB = prepReader(res, row - 1, col - 1);
+                    if (rdrLB == null)
+                        return false;
+                    h = rdrLB.ele(res - 1, res - 1);
+                    if (h == HGTReader.UNDEF)
+                        return false;
+                    eleArray[0,0] = h;
+                }
+                else if (yBottom == res - 1)
+                { // left top corner
+                    HGTReader rdrLL = prepReader(res, row, col - 1);
+                    if (rdrLL == null)
+                        return false;
+                    for (int y = 0; y <= 2; y++)
+                    {
+                        h = rdrLL.ele(res - 1, yBottom + y - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[0,y] = h;
+                    }
+
+                    HGTReader rdrTT = prepReader(res, row + 1, col);
+                    if (rdrTT == null)
+                        return false;
+                    for (int x = 1; x <= 3; x++)
+                    {
+                        h = rdrTT.ele(xLeft + x - 1, 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[x,3] = h;
+                    }
+
+                    HGTReader rdrLT = prepReader(res, row + 1, col - 1);
+                    if (rdrLT == null)
+                        return false;
+                    h = rdrLT.ele(res - 1, 1);
+                    if (h == HGTReader.UNDEF)
+                        return false;
+                    eleArray[0,3] = h;
+                }
+            }
+            else if (xLeft == res - 1)
+            {
+                if (yBottom == 0)
+                { // right bottom corner
+                    HGTReader rdrRR = prepReader(res, row, col + 1);
+                    if (rdrRR == null)
+                        return false;
+                    for (int y = 1; y <= 3; y++)
+                    {
+                        h = rdrRR.ele(1, yBottom + y - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[3,y] = h;
+                    }
+
+                    HGTReader rdrBB = prepReader(res, row - 1, col);
+                    if (rdrBB == null)
+                        return false;
+                    for (int x = 0; x <= 2; x++)
+                    {
+                        h = rdrBB.ele(xLeft + x - 1, res - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[x,0] = h;
+                    }
+
+                    HGTReader rdrRB = prepReader(res, row - 1, col + 1);
+                    if (rdrRB == null)
+                        return false;
+                    h = rdrRB.ele(1, res - 1);
+                    if (h == HGTReader.UNDEF)
+                        return false;
+                    eleArray[3,0] = h;
+                }
+                else if (yBottom == res - 1)
+                { // right top corner
+                    HGTReader rdrRR = prepReader(res, row, col + 1);
+                    if (rdrRR == null)
+                        return false;
+                    for (int y = 0; y <= 2; y++)
+                    {
+                        h = rdrRR.ele(1, yBottom + y - 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[3,y] = h;
+                    }
+
+                    HGTReader rdrTT = prepReader(res, row + 1, col);
+                    if (rdrTT == null)
+                        return false;
+                    for (int x = 0; x <= 2; x++)
+                    {
+                        h = rdrTT.ele(xLeft + x - 1, 1);
+                        if (h == HGTReader.UNDEF)
+                            return false;
+                        eleArray[x,3] = h;
+                    }
+
+                    HGTReader rdrRT = prepReader(res, row + 1, col + 1);
+                    if (rdrRT == null)
+                        return false;
+                    h = rdrRT.ele(1, 1);
+                    if (h == HGTReader.UNDEF)
+                        return false;
+                    eleArray[3,3] = h;
+                }
+            }
+
+            // all 16 values present
+            return true;
+        }
+
+
+        /**
+ * 
+ */
+        private HGTReader prepReader(int res, int row, int col)
+        {
+            if (row >= readers.Length)
+            {
+                //log.error("invalid array index for row", row);
+                return null;
+            }
+            if (col >= readers[row].Length)
+            {
+                //log.error("invalid array index for col", row);
+                return null;
+            }
+            HGTReader rdr = readers[row][col];
+
+            if (rdr == null)
+            {
+                //statRdrNull++;
+                return null;
+            }
+
+            // do not use if different resolution
+            if (res != rdr.getRes())
+            {
+                //statRdrRes++;
+                return null;
+            }
+
+            rdr.prepRead();
+            if (row > lastRow)
+                lastRow = row;
+
+            return rdr;
+        }
+
+
+        /**
+         * Interpolate the height of point p from the 4 closest values in the hgt matrix.
+         * Bilinear interpolation with single node restore
+         * @param qx value from 0 .. 1 gives relative x position in matrix 
+         * @param qy value from 0 .. 1 gives relative y position in matrix
+         * @param hlt height left top
+         * @param hrt height right top
+         * @param hrb height right bottom
+         * @param hlb height left bottom
+         * @return the interpolated height
+         */
+
+        private short interpolatedHeight(double qx, double qy, int hlt, int hrt, int hrb, int hlb)
+        {
+            // extrapolate single node height if requested point is not near
+            // for multiple missing nodes, return the height of the neares node
+            if (hlb == HGTReader.UNDEF)
+            {
+                if (hrb == HGTReader.UNDEF || hlt == HGTReader.UNDEF || hrt == HGTReader.UNDEF)
+                {
+                    if (hrt != HGTReader.UNDEF && hlt != HGTReader.UNDEF && qy > 0.5D)  //top edge
+                        return (short)Math.Round((1.0D - qx) * hlt + qx * hrt);
+                    if (hrt != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qx > 0.5D)  //right edge
+                        return (short)Math.Round((1.0D - qy) * hrb + qy * hrt);
+                    //if (hlt != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qx + qy > 0.5D && gx + qy < 1.5D)	//diagonal
+                    // nearest value
+                    return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
+                }
+                if (qx + qy < 0.4D) // point is near missing value
+                    return HGTReader.UNDEF;
+                hlb = hlt + hrb - hrt;
+            }
+            else if (hrt == HGTReader.UNDEF)
+            {
+                if (hlb == HGTReader.UNDEF || hrb == HGTReader.UNDEF || hlt == HGTReader.UNDEF)
+                {
+                    if (hlb != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qy < 0.5D)  //lower edge
+                        return (short)Math.Round((1.0D - qx) * hlb + qx * hrb);
+                    if (hlb != HGTReader.UNDEF && hlt != HGTReader.UNDEF && qx < 0.5D)  //left edge
+                        return (short)Math.Round((1.0D - qy) * hlb + qy * hlt);
+                    //if (hlt != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qx + qy > 0.5D && gx + qy < 1.5D)	//diagonal
+                    // nearest value
+                    return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
+                }
+                if (qx + qy > 1.6D) // point is near missing value
+                    return HGTReader.UNDEF;
+                hrt = hlt + hrb - hlb;
+            }
+            else if (hrb == HGTReader.UNDEF)
+            {
+                if (hlb == HGTReader.UNDEF || hlt == HGTReader.UNDEF || hrt == HGTReader.UNDEF)
+                {
+                    if (hlt != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qy > 0.5D)  //top edge
+                        return (short)Math.Round((1.0D - qx) * hlt + qx * hrt);
+                    if (hlt != HGTReader.UNDEF && hlb != HGTReader.UNDEF && qx < 0.5D)  //left edge
+                        return (short)Math.Round((1.0D - qy) * hlb + qy * hlt);
+                    //if (hlb != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qy > qx - 0.5D && qy < qx + 0.5D)	//diagonal
+                    // nearest value
+                    return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
+                }
+                if (qy < qx - 0.4D) // point is near missing value 
+                    return HGTReader.UNDEF;
+                hrb = hlb + hrt - hlt;
+            }
+            else if (hlt == HGTReader.UNDEF)
+            {
+                if (hlb == HGTReader.UNDEF || hrb == HGTReader.UNDEF || hrt == HGTReader.UNDEF)
+                {
+                    if (hrb != HGTReader.UNDEF && hlb != HGTReader.UNDEF && qy < 0.5D)  //lower edge
+                        return (short)Math.Round((1.0D - qx) * hlb + qx * hrb);
+                    if (hrb != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qx > 0.5D)  //right edge
+                        return (short)Math.Round((1.0D - qy) * hrb + qy * hrt);
+                    //if (hlb != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qy > qx - 0.5D && qy < qx + 0.5D)	//diagonal
+                    // nearest value
+                    return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
+                }
+                if (qy > qx + 0.6D) // point is near missing value
+                    return HGTReader.UNDEF;
+                hlt = hlb + hrt - hrb;
+                // bilinera interpolation
+            }
+            double hxt = (1.0D - qx) * hlt + qx * hrt;
+            double hxb = (1.0D - qx) * hlb + qx * hrb;
+            return (short)Math.Round((1.0D - qy) * hxb + qy * hxt);
+
+        }
+
+        /**
+        * Cubic interpolation for 4 points, taken from http://www.paulinternet.nl/?page=bicubic
+        * Uses Catmull–Rom spline.
+        * @author Paul Breeuwsma
+        */
         private static double cubicInterpolation(double[] p, double qx)
         {
             return p[1] + 0.5 * qx * (p[2] - p[0] + qx * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2] - p[3] + qx * (3.0 * (p[1] - p[2]) + p[3] - p[0])));
