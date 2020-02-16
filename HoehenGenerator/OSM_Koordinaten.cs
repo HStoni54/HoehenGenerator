@@ -39,7 +39,7 @@ namespace HoehenGenerator
         public double Kachell { get => kachell; set => kachell = value; }
         public double Kachelb { get => kachelb; set => kachelb = value; }
         public string Dateiname { get => dateiname; set => dateiname = value; }
-       
+
 
         public void BerechneOSMKachel(GeoPunkt geoPunkt, int osmauflösung)
         {
@@ -69,7 +69,7 @@ namespace HoehenGenerator
             //Multiply x and y by n.Round results down to give tilex and tiley.
             //double y = Math.Log(Math.Tan(geoPunkt.Lat * Math.PI / 180) + 1 / Math.Cos(geoPunkt.Lat * Math.PI / 180));
             //y = (1 - (y / Math.PI)) / 2;
-            double osmb = (1 - (Math.Log(Math.Tan(geoPunkt.Lat * Math.PI / 180) + 1/Math.Cos(geoPunkt.Lat * Math.PI / 180)))/Math.PI)/2 * kachelanzahl;
+            double osmb = (1 - (Math.Log(Math.Tan(geoPunkt.Lat * Math.PI / 180) + 1 / Math.Cos(geoPunkt.Lat * Math.PI / 180))) / Math.PI) / 2 * kachelanzahl;
             double osml = (180 + geoPunkt.Lon) % 360 / 360 * kachelanzahl;
             osmlänge = (int)osml;
             osmbreite = (int)osmb;
@@ -79,7 +79,7 @@ namespace HoehenGenerator
             //kachelhöhe = (int)(((180 + geoPunkt.Lon) / 360 * kachelanzahl * 512) % 512);
             kachellänge = (int)(kachell * 512);
             kachelbreite = (int)(kachelb * 512);
-            dateiname = "OSM_" + Osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture); 
+            dateiname = "OSM_" + Osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture);
         }
     }
 }

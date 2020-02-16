@@ -178,7 +178,7 @@ namespace HoehenGenerator
 
                 case "lu":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksunten.Name + ".hgt");
-        
+
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1]; i++)
                     {
                         for (int j = fileMitEcks.Linksunten[0]; j < fileMitEcks.Rechtsoben[0]; j++)
@@ -188,7 +188,7 @@ namespace HoehenGenerator
                         }
                     }
                     //short test = hGTFile.HgtDaten[1200, 1200];
-                     break;
+                    break;
                 case "lo":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtlinksoben.Name + ".hgt");
                     for (int i = fileMitEcks.Linksunten[1]; i < fileMitEcks.Rechtsoben[1] + 1; i++)
@@ -198,7 +198,7 @@ namespace HoehenGenerator
                             höhen[j - fileMitEcks.Linksunten[0], AnzahlLat - 1 + i - fileMitEcks.Rechtsoben[1]] = hGTFile.HgtDaten[i, j];
                         }
                     }
-                     break;
+                    break;
                 case "ru":
                     hGTFile = new HGTFile(auflösung, pfad + "\\" + hgtname.Hgtrechtsunten.Name + ".hgt");
                     //daten = hGTFile.HgtDaten;
@@ -249,5 +249,29 @@ namespace HoehenGenerator
         public int AnzahlLat { get => anzahlLat; set => anzahlLat = value; }
         public int AnzahlLon { get => anzahlLon; set => anzahlLon = value; }
         internal GeoPunkt Linksunten { get => linksunten; set => linksunten = value; }
+
+        private static double cubicInterpolation(double[] p, double qx)
+        {
+            return p[1] + 0.5 * qx * (p[2] - p[0] + qx * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2] - p[3] + qx * (3.0 * (p[1] - p[2]) + p[3] - p[0])));
+        }
+
+        /**
+         * Bicubic interpolation for 4x4 points, taken from http://www.paulinternet.nl/?page=bicubic
+         * @author Paul Breeuwsma
+         * @param p 4x4 matrix -1,0,1,2 * -1,0,1,2 with given values  
+         * @param qx value from 0 .. 1 gives relative x position in matrix 
+         * @param qy value from 0 .. 1 gives relative y position in matrix
+         */
+        private static double bicubicInterpolation(double[][] p, double qx, double qy)
+        {
+            double[] arr = new double[4];
+
+            arr[0] = cubicInterpolation(p[0], qy);
+            arr[1] = cubicInterpolation(p[1], qy);
+            arr[2] = cubicInterpolation(p[2], qy);
+            arr[3] = cubicInterpolation(p[3], qy);
+            return cubicInterpolation(arr, qx);
+        }
+
     }
 }

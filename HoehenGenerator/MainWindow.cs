@@ -167,8 +167,8 @@ namespace HoehenGenerator
                                     //for (int k = 0; k < 2; k++)
                                     //{
                                     stream.WriteByte((byte)128);
-                                        stream.WriteByte((byte)0);
-                                        
+                                    stream.WriteByte((byte)0);
+
 
                                     //}
                                 }
@@ -679,7 +679,7 @@ namespace HoehenGenerator
         private void ZeichneRechteck(PointCollection punkte)
         {
             Polyline rechteckpunkte = new Polyline();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out  minLänge, out  maxLänge, out  minBreite, out  maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite, out double Größe);
             double flaeche2 = hoehe2 * breite2;
             fläche.Text = Math.Round(flaeche2, 2).ToString(CultureInfo.CurrentCulture) + " km²";
             höhe.Text = Math.Round(hoehe2, 2).ToString(CultureInfo.CurrentCulture) + " km";
@@ -864,7 +864,7 @@ namespace HoehenGenerator
 
             Polyline polypunkte = new Polyline();
             //Polygon polypunkte = new Polygon();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out  hoehe2, out  breite2, out  minLänge, out  minBreite, out  maxLänge, out  maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
             //double flaeche2 = hoehe2 * breite2;
             PointCollection canvaspunkte = new PointCollection();
             //Zeichenfläche.Children.Clear();
@@ -885,7 +885,7 @@ namespace HoehenGenerator
         private void ZeichnePunkte(PointCollection punkte)
         {
 
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out  hoehe2, out  breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
             for (int i = 0; i < punkte.Count; i++)
             {
                 Ellipse elli = new Ellipse
@@ -924,10 +924,10 @@ namespace HoehenGenerator
             minimaleHöhe = punkte.Min(x => x.Höhe);
             if (minimaleHöhe == short.MinValue)
                 minimaleHöhe = 0;
-           maximaleHöhe = punkte.Max(x => x.Höhe);
+            maximaleHöhe = punkte.Max(x => x.Höhe);
             if (maximaleHöhe == short.MinValue)
                 maximaleHöhe = 0;
-             double höhendifferenz = maximaleHöhe - minimaleHöhe;
+            double höhendifferenz = maximaleHöhe - minimaleHöhe;
             //double punktgröße = 5;
             double punktgröße = Math.Round(Math.Sqrt(GrößeH * GrößeB / punkte.Count) + 1) * 1.5;
             for (int i = 0; i < punkte.Count; i += 1)
@@ -1653,8 +1653,8 @@ namespace HoehenGenerator
         private static string[] FindeZipFiles(string value)
         {
             double viewDimension = 1800.0 / 360.0;
-            string lonName ;
-            string latName ;
+            string lonName;
+            string latName;
             string[] vs = value.Split(',');
 
             int l = int.Parse(vs[0], CultureInfo.CurrentCulture);
@@ -1991,7 +1991,7 @@ namespace HoehenGenerator
                             {
                                 if (maximaleHöhe < geoPunkt1.Höhe)
                                     maximaleHöhe = geoPunkt1.Höhe;
-                                if (minimaleHöhe > geoPunkt1.Höhe 
+                                if (minimaleHöhe > geoPunkt1.Höhe
                                     && geoPunkt1.Höhe != -32768
                                     )
                                     minimaleHöhe = geoPunkt1.Höhe;
@@ -2075,8 +2075,8 @@ namespace HoehenGenerator
                 einZoll.IsEnabled = false;
                 GeneriereDirString();
             }
-               
-                
+
+
 
             lfma.Clear();
             foreach (string item in lbHgtFiles.Items)
@@ -2217,7 +2217,7 @@ namespace HoehenGenerator
                 pfahl = true;
             zoom = (int)slZoom.Value;
 
-            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume,pfahl,zoom);
+            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl, zoom);
 
         }
 
@@ -2314,7 +2314,7 @@ namespace HoehenGenerator
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
                 String bilddateiname = "";
-                System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(2,2);
+                System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(2, 2);
                 for (int i = 0; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
                     {
@@ -2330,7 +2330,7 @@ namespace HoehenGenerator
                             pngbildname = bilddateiname + ".png";
                             bmpbildname = bilddateiname + ".bmp";
                             if (!File.Exists(bmpbildname))
-                            {                         
+                            {
                                 if (!File.Exists(pngbildname))
                                 {
                                     OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, "OSM", pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
@@ -2342,7 +2342,7 @@ namespace HoehenGenerator
 
                             }
                             bitmap1 = new System.Drawing.Bitmap(bmpbildname);
-                            
+
                         }
 
 
@@ -2352,7 +2352,7 @@ namespace HoehenGenerator
                         //ErmittleBitFarbeAusBitmap ermittleBitFarbeAusBitmap = new ErmittleBitFarbeAusBitmap(oSM_Koordinaten, osmpfad);
                         //colors1[i, j] = ermittleBitFarbeAusBitmap.PixelColor;
                         //ermittleBitFarbeAusBitmap.Dispose();
-      
+
                     }
                 bitmap1.Dispose();
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
@@ -2607,8 +2607,8 @@ namespace HoehenGenerator
             int auflösung = (int)Math.Log(40030 * zahltbRasterdichte / 256, 2);
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
-                OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
-                oSM_Fileliste.OSM_LadeFiles(auflösung, "OSM",pfad);
+            OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
+            oSM_Fileliste.OSM_LadeFiles(auflösung, "OSM", pfad);
             //}
 
         }

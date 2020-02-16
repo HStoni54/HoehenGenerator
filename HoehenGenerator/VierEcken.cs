@@ -36,7 +36,7 @@ namespace HoehenGenerator
         private HgtmitKoordinaten BestimmeHgtFile(double lon, double lat)
         {
             string hgt;
-            int lat1 , lon1 ;
+            int lat1, lon1;
             int lat2 = (int)lat;
             int lon2 = (int)lon;
             lat1 = (int)((lat - (int)lat) * 3600 / auflösung);

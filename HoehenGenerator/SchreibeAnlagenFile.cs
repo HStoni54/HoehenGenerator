@@ -86,8 +86,8 @@ namespace HoehenGenerator
 
             }
 
-            xmlWriter.WriteEndElement(); 
-          
+            xmlWriter.WriteEndElement();
+
             //xmlWriter.WriteStartElement("Weather");
             //xmlWriter.WriteAttributeString("bSun", "0");
             //xmlWriter.WriteEndElement();
