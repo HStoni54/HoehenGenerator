@@ -164,11 +164,13 @@ namespace HoehenGenerator
                             {
                                 for (int j = 0; j < 1201; j++)
                                 {
-                                    for (int k = 0; k < 2; k++)
-                                    {
+                                    //for (int k = 0; k < 2; k++)
+                                    //{
+                                    stream.WriteByte((byte)128);
                                         stream.WriteByte((byte)0);
+                                        
 
-                                    }
+                                    //}
                                 }
                             }
                             stream.Close();
@@ -920,8 +922,12 @@ namespace HoehenGenerator
             //Color[] colors = new Color[punkte.Count];
 
             minimaleHöhe = punkte.Min(x => x.Höhe);
-            maximaleHöhe = punkte.Max(x => x.Höhe);
-            double höhendifferenz = maximaleHöhe - minimaleHöhe;
+            if (minimaleHöhe == short.MinValue)
+                minimaleHöhe = 0;
+           maximaleHöhe = punkte.Max(x => x.Höhe);
+            if (maximaleHöhe == short.MinValue)
+                maximaleHöhe = 0;
+             double höhendifferenz = maximaleHöhe - minimaleHöhe;
             //double punktgröße = 5;
             double punktgröße = Math.Round(Math.Sqrt(GrößeH * GrößeB / punkte.Count) + 1) * 1.5;
             for (int i = 0; i < punkte.Count; i += 1)
@@ -1985,11 +1991,13 @@ namespace HoehenGenerator
                             {
                                 if (maximaleHöhe < geoPunkt1.Höhe)
                                     maximaleHöhe = geoPunkt1.Höhe;
-                                if (minimaleHöhe > geoPunkt1.Höhe && geoPunkt1.Höhe != -32768)
+                                if (minimaleHöhe > geoPunkt1.Höhe 
+                                    && geoPunkt1.Höhe != -32768
+                                    )
                                     minimaleHöhe = geoPunkt1.Höhe;
 
-                                if (geoPunkt1.Höhe != -32768)
-                                    geoPunkts.Add(geoPunkt1);
+                                //if (geoPunkt1.Höhe != -32768)
+                                geoPunkts.Add(geoPunkt1);
                                 pu[0] = i;
                                 pu_i = i;
                                 pu[1] = j;
