@@ -252,9 +252,87 @@ namespace HoehenGenerator
         internal GeoPunkt Linksunten { get => linksunten; set => linksunten = value; }
 
 
-        private double[,] eleArray = new double[4,4];
+        private double[][] eleArray = new double[4][];
         private HGTReader[][] readers;
         private int lastRow = -1;
+        private int minLat32;
+        private int minLon32;
+        protected  static double FACTOR = 45.0d / (1 << 29);
+        private short outsidePolygonHeight = HGTReader.UNDEF;
+        short h = HGTReader.UNDEF;
+
+        private bool useComplexInterpolation = true;
+
+        /**
+         * Return elevation in meter for a point given in DEM units (32 bit res).
+         * @param lat32
+         * @param lon32
+         * @return height in m or Short.MIN_VALUE if value is invalid 
+         */
+        protected short getElevation(int lat32, int lon32)
+        {
+            int row = (int)((lat32 - minLat32) * FACTOR);
+            int col = (int)((lon32 - minLon32) * FACTOR);
+
+            HGTReader rdr = readers[row][col];
+            if (rdr == null)
+            {
+                // no reader : ocean or missing file
+                return outsidePolygonHeight;
+            }
+            int res = rdr.getRes();
+            rdr.prepRead();
+            if (res <= 0)
+                return 0; // assumed to be an area in the ocean
+            lastRow = row;
+
+            double scale = res * FACTOR;
+
+            double y1 = (lat32 - minLat32) * scale - row * res;
+            double x1 = (lon32 - minLon32) * scale - col * res;
+            int xLeft = (int)x1;
+            int yBottom = (int)y1;
+            double qx = x1 - xLeft;
+            double qy = y1 - yBottom;
+
+  
+        //statPoints++;
+            if (useComplexInterpolation)
+            {
+                // bicubic (Catmull-Rom) interpolation with 16 points
+                bool filled = fillArray(rdr, row, col, xLeft, yBottom);
+                if (filled)
+                {
+                    h = (short)Math.Round(bicubicInterpolation(eleArray, qx, qy));
+                    //statBicubic++;
+                }
+            }
+
+            if (h == HGTReader.UNDEF)
+            {
+                // use bilinear interpolation if bicubic not available
+                int xRight = xLeft + 1;
+                int yTop = yBottom + 1;
+
+                int hLT = rdr.ele(xLeft, yTop);
+                int hRT = rdr.ele(xRight, yTop);
+                int hLB = rdr.ele(xLeft, yBottom);
+                int hRB = rdr.ele(xRight, yBottom);
+
+                h = interpolatedHeight(qx, qy, hLT, hRT, hRB, hLB);
+                //statBilinear++;
+                //if (h == HGTReader.UNDEF) statVoid++;
+            }
+
+            //if (h == HGTReader.UNDEF && log.isLoggable(Level.WARNING))
+            //{
+            //    double lon = lon32 * FACTOR;
+            //    double lat = lat32 * FACTOR;
+            //    Coord c = new Coord(lat, lon);
+            //    log.warn("height interpolation returns void at", c.toDegreeString());
+            //}
+            return h;
+        }
 
 
         /**
@@ -309,7 +387,7 @@ namespace HoehenGenerator
                     h = rdr.ele(xLeft + x - 1, yBottom + y - 1);
                     if (h == HGTReader.UNDEF)
                         return false;
-                    eleArray[x,y] = h;
+                    eleArray[x][y] = h;
                 }
             }
 
@@ -329,7 +407,7 @@ namespace HoehenGenerator
                         h = rdrBB.ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[x,0] = h;
+                        eleArray[x][0] = h;
                     }
                 }
                 else if (yBottom == res - 1)
@@ -342,7 +420,7 @@ namespace HoehenGenerator
                         h = rdrTT.ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[x,3] = h;
+                        eleArray[x][3] = h;
                     }
                 }
             }
@@ -360,7 +438,7 @@ namespace HoehenGenerator
                         h = rdrLL.ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[0,y] = h;
+                        eleArray[0][y] = h;
                     }
                 }
                 else if (xLeft == res - 1)
@@ -373,7 +451,7 @@ namespace HoehenGenerator
                         h = rdrRR.ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[3,y] = h;
+                        eleArray[3][y] = h;
                     }
                 }
             }
@@ -391,7 +469,7 @@ namespace HoehenGenerator
                         h = rdrLL.ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[0,y] = h;
+                        eleArray[0][y] = h;
                     }
 
                     HGTReader rdrBB = prepReader(res, row - 1, col);
@@ -402,7 +480,7 @@ namespace HoehenGenerator
                         h = rdrBB.ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[x,0] = h;
+                        eleArray[x][0] = h;
                     }
 
                     HGTReader rdrLB = prepReader(res, row - 1, col - 1);
@@ -411,7 +489,7 @@ namespace HoehenGenerator
                     h = rdrLB.ele(res - 1, res - 1);
                     if (h == HGTReader.UNDEF)
                         return false;
-                    eleArray[0,0] = h;
+                    eleArray[0][0] = h;
                 }
                 else if (yBottom == res - 1)
                 { // left top corner
@@ -423,7 +501,7 @@ namespace HoehenGenerator
                         h = rdrLL.ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[0,y] = h;
+                        eleArray[0][y] = h;
                     }
 
                     HGTReader rdrTT = prepReader(res, row + 1, col);
@@ -434,7 +512,7 @@ namespace HoehenGenerator
                         h = rdrTT.ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[x,3] = h;
+                        eleArray[x][3] = h;
                     }
 
                     HGTReader rdrLT = prepReader(res, row + 1, col - 1);
@@ -443,7 +521,7 @@ namespace HoehenGenerator
                     h = rdrLT.ele(res - 1, 1);
                     if (h == HGTReader.UNDEF)
                         return false;
-                    eleArray[0,3] = h;
+                    eleArray[0][3] = h;
                 }
             }
             else if (xLeft == res - 1)
@@ -458,7 +536,7 @@ namespace HoehenGenerator
                         h = rdrRR.ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[3,y] = h;
+                        eleArray[3][y] = h;
                     }
 
                     HGTReader rdrBB = prepReader(res, row - 1, col);
@@ -469,7 +547,7 @@ namespace HoehenGenerator
                         h = rdrBB.ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[x,0] = h;
+                        eleArray[x][0] = h;
                     }
 
                     HGTReader rdrRB = prepReader(res, row - 1, col + 1);
@@ -478,7 +556,7 @@ namespace HoehenGenerator
                     h = rdrRB.ele(1, res - 1);
                     if (h == HGTReader.UNDEF)
                         return false;
-                    eleArray[3,0] = h;
+                    eleArray[3][0] = h;
                 }
                 else if (yBottom == res - 1)
                 { // right top corner
@@ -490,7 +568,7 @@ namespace HoehenGenerator
                         h = rdrRR.ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[3,y] = h;
+                        eleArray[3][y] = h;
                     }
 
                     HGTReader rdrTT = prepReader(res, row + 1, col);
@@ -501,7 +579,7 @@ namespace HoehenGenerator
                         h = rdrTT.ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
                             return false;
-                        eleArray[x,3] = h;
+                        eleArray[x][3] = h;
                     }
 
                     HGTReader rdrRT = prepReader(res, row + 1, col + 1);
@@ -510,7 +588,7 @@ namespace HoehenGenerator
                     h = rdrRT.ele(1, 1);
                     if (h == HGTReader.UNDEF)
                         return false;
-                    eleArray[3,3] = h;
+                    eleArray[3][3] = h;
                 }
             }
 

@@ -11,7 +11,7 @@ namespace HoehenGenerator
     {
         private int res;
         public static short UNDEF = short.MinValue;
-        bool read;
+        private bool read = false;
         public string path;
         private long count;
         private short[] buffer;
