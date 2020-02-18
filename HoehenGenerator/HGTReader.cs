@@ -21,7 +21,7 @@ namespace HoehenGenerator
         {
 
         }
-        public int getRes()
+        public int GetRes()
         {
             return res;
         }
@@ -32,11 +32,11 @@ namespace HoehenGenerator
          * @param y index for row north to south
          * @return the elevation value stored in the file or 0 if 
          */
-        public short ele(int x, int y)
+        public short Ele(int x, int y)
         {
             if (!read && path != null)
             {
-                prepRead();
+                PrepRead();
             }
             if (buffer == null)
                 return 0;
@@ -50,7 +50,7 @@ namespace HoehenGenerator
             else return 0;
         }
 
-        public void prepRead()
+        public void PrepRead()
         {
             if (!read && path != null)
             {

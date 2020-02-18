@@ -269,7 +269,7 @@ namespace HoehenGenerator
          * @param lon32
          * @return height in m or Short.MIN_VALUE if value is invalid 
          */
-        protected short getElevation(int lat32, int lon32)
+        protected short GetElevation(int lat32, int lon32)
         {
             int row = (int)((lat32 - minLat32) * FACTOR);
             int col = (int)((lon32 - minLon32) * FACTOR);
@@ -280,8 +280,8 @@ namespace HoehenGenerator
                 // no reader : ocean or missing file
                 return outsidePolygonHeight;
             }
-            int res = rdr.getRes();
-            rdr.prepRead();
+            int res = rdr.GetRes();
+            rdr.PrepRead();
             if (res <= 0)
                 return 0; // assumed to be an area in the ocean
             lastRow = row;
@@ -300,10 +300,10 @@ namespace HoehenGenerator
             if (useComplexInterpolation)
             {
                 // bicubic (Catmull-Rom) interpolation with 16 points
-                bool filled = fillArray(rdr, row, col, xLeft, yBottom);
+                bool filled = FillArray(rdr, row, col, xLeft, yBottom);
                 if (filled)
                 {
-                    h = (short)Math.Round(bicubicInterpolation(eleArray, qx, qy));
+                    h = (short)Math.Round(BicubicInterpolation(eleArray, qx, qy));
                     //statBicubic++;
                 }
             }
@@ -314,12 +314,12 @@ namespace HoehenGenerator
                 int xRight = xLeft + 1;
                 int yTop = yBottom + 1;
 
-                int hLT = rdr.ele(xLeft, yTop);
-                int hRT = rdr.ele(xRight, yTop);
-                int hLB = rdr.ele(xLeft, yBottom);
-                int hRB = rdr.ele(xRight, yBottom);
+                int hLT = rdr.Ele(xLeft, yTop);
+                int hRT = rdr.Ele(xRight, yTop);
+                int hLB = rdr.Ele(xLeft, yBottom);
+                int hRB = rdr.Ele(xRight, yBottom);
 
-                h = interpolatedHeight(qx, qy, hLT, hRT, hRB, hLB);
+                h = InterpolatedHeight(qx, qy, hLT, hRT, hRB, hLB);
                 //statBilinear++;
                 //if (h == HGTReader.UNDEF) statVoid++;
             }
@@ -339,9 +339,9 @@ namespace HoehenGenerator
          * Fill 16 values of HGT near required coordinates
          * can use HGTreaders near the current one
          */
-        private bool fillArray(HGTReader rdr, int row, int col, int xLeft, int yBottom)
+        private bool FillArray(HGTReader rdr, int row, int col, int xLeft, int yBottom)
         {
-            int res = rdr.getRes();
+            int res = rdr.GetRes();
             int minX = 0;
             int minY = 0;
             int maxX = 3;
@@ -384,7 +384,7 @@ namespace HoehenGenerator
             {
                 for (int y = minY; y <= maxY; y++)
                 {
-                    h = rdr.ele(xLeft + x - 1, yBottom + y - 1);
+                    h = rdr.Ele(xLeft + x - 1, yBottom + y - 1);
                     if (h == HGTReader.UNDEF)
                         return false;
                     eleArray[x][y] = h;
@@ -399,12 +399,12 @@ namespace HoehenGenerator
             {
                 if (yBottom == 0)
                 { // bottom edge
-                    HGTReader rdrBB = prepReader(res, row - 1, col);
+                    HGTReader rdrBB = PrepReader(res, row - 1, col);
                     if (rdrBB == null)
                         return false;
                     for (int x = 0; x <= 3; x++)
                     {
-                        h = rdrBB.ele(xLeft + x - 1, res - 1);
+                        h = rdrBB.Ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[x][0] = h;
@@ -412,12 +412,12 @@ namespace HoehenGenerator
                 }
                 else if (yBottom == res - 1)
                 { // top edge
-                    HGTReader rdrTT = prepReader(res, row + 1, col);
+                    HGTReader rdrTT = PrepReader(res, row + 1, col);
                     if (rdrTT == null)
                         return false;
                     for (int x = 0; x <= 3; x++)
                     {
-                        h = rdrTT.ele(xLeft + x - 1, 1);
+                        h = rdrTT.Ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[x][3] = h;
@@ -430,12 +430,12 @@ namespace HoehenGenerator
             {
                 if (xLeft == 0)
                 { // left edgge
-                    HGTReader rdrLL = prepReader(res, row, col - 1);
+                    HGTReader rdrLL = PrepReader(res, row, col - 1);
                     if (rdrLL == null)
                         return false;
                     for (int y = 0; y <= 3; y++)
                     {
-                        h = rdrLL.ele(res - 1, yBottom + y - 1);
+                        h = rdrLL.Ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[0][y] = h;
@@ -443,12 +443,12 @@ namespace HoehenGenerator
                 }
                 else if (xLeft == res - 1)
                 { // right edge
-                    HGTReader rdrRR = prepReader(res, row, col + 1);
+                    HGTReader rdrRR = PrepReader(res, row, col + 1);
                     if (rdrRR == null)
                         return false;
                     for (int y = 0; y <= 3; y++)
                     {
-                        h = rdrRR.ele(1, yBottom + y - 1);
+                        h = rdrRR.Ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[3][y] = h;
@@ -461,64 +461,64 @@ namespace HoehenGenerator
             {
                 if (yBottom == 0)
                 { // left bottom corner
-                    HGTReader rdrLL = prepReader(res, row, col - 1);
+                    HGTReader rdrLL = PrepReader(res, row, col - 1);
                     if (rdrLL == null)
                         return false;
                     for (int y = 1; y <= 3; y++)
                     {
-                        h = rdrLL.ele(res - 1, yBottom + y - 1);
+                        h = rdrLL.Ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[0][y] = h;
                     }
 
-                    HGTReader rdrBB = prepReader(res, row - 1, col);
+                    HGTReader rdrBB = PrepReader(res, row - 1, col);
                     if (rdrBB == null)
                         return false;
                     for (int x = 1; x <= 3; x++)
                     {
-                        h = rdrBB.ele(xLeft + x - 1, res - 1);
+                        h = rdrBB.Ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[x][0] = h;
                     }
 
-                    HGTReader rdrLB = prepReader(res, row - 1, col - 1);
+                    HGTReader rdrLB = PrepReader(res, row - 1, col - 1);
                     if (rdrLB == null)
                         return false;
-                    h = rdrLB.ele(res - 1, res - 1);
+                    h = rdrLB.Ele(res - 1, res - 1);
                     if (h == HGTReader.UNDEF)
                         return false;
                     eleArray[0][0] = h;
                 }
                 else if (yBottom == res - 1)
                 { // left top corner
-                    HGTReader rdrLL = prepReader(res, row, col - 1);
+                    HGTReader rdrLL = PrepReader(res, row, col - 1);
                     if (rdrLL == null)
                         return false;
                     for (int y = 0; y <= 2; y++)
                     {
-                        h = rdrLL.ele(res - 1, yBottom + y - 1);
+                        h = rdrLL.Ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[0][y] = h;
                     }
 
-                    HGTReader rdrTT = prepReader(res, row + 1, col);
+                    HGTReader rdrTT = PrepReader(res, row + 1, col);
                     if (rdrTT == null)
                         return false;
                     for (int x = 1; x <= 3; x++)
                     {
-                        h = rdrTT.ele(xLeft + x - 1, 1);
+                        h = rdrTT.Ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[x][3] = h;
                     }
 
-                    HGTReader rdrLT = prepReader(res, row + 1, col - 1);
+                    HGTReader rdrLT = PrepReader(res, row + 1, col - 1);
                     if (rdrLT == null)
                         return false;
-                    h = rdrLT.ele(res - 1, 1);
+                    h = rdrLT.Ele(res - 1, 1);
                     if (h == HGTReader.UNDEF)
                         return false;
                     eleArray[0][3] = h;
@@ -528,64 +528,64 @@ namespace HoehenGenerator
             {
                 if (yBottom == 0)
                 { // right bottom corner
-                    HGTReader rdrRR = prepReader(res, row, col + 1);
+                    HGTReader rdrRR = PrepReader(res, row, col + 1);
                     if (rdrRR == null)
                         return false;
                     for (int y = 1; y <= 3; y++)
                     {
-                        h = rdrRR.ele(1, yBottom + y - 1);
+                        h = rdrRR.Ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[3][y] = h;
                     }
 
-                    HGTReader rdrBB = prepReader(res, row - 1, col);
+                    HGTReader rdrBB = PrepReader(res, row - 1, col);
                     if (rdrBB == null)
                         return false;
                     for (int x = 0; x <= 2; x++)
                     {
-                        h = rdrBB.ele(xLeft + x - 1, res - 1);
+                        h = rdrBB.Ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[x][0] = h;
                     }
 
-                    HGTReader rdrRB = prepReader(res, row - 1, col + 1);
+                    HGTReader rdrRB = PrepReader(res, row - 1, col + 1);
                     if (rdrRB == null)
                         return false;
-                    h = rdrRB.ele(1, res - 1);
+                    h = rdrRB.Ele(1, res - 1);
                     if (h == HGTReader.UNDEF)
                         return false;
                     eleArray[3][0] = h;
                 }
                 else if (yBottom == res - 1)
                 { // right top corner
-                    HGTReader rdrRR = prepReader(res, row, col + 1);
+                    HGTReader rdrRR = PrepReader(res, row, col + 1);
                     if (rdrRR == null)
                         return false;
                     for (int y = 0; y <= 2; y++)
                     {
-                        h = rdrRR.ele(1, yBottom + y - 1);
+                        h = rdrRR.Ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[3][y] = h;
                     }
 
-                    HGTReader rdrTT = prepReader(res, row + 1, col);
+                    HGTReader rdrTT = PrepReader(res, row + 1, col);
                     if (rdrTT == null)
                         return false;
                     for (int x = 0; x <= 2; x++)
                     {
-                        h = rdrTT.ele(xLeft + x - 1, 1);
+                        h = rdrTT.Ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
                             return false;
                         eleArray[x][3] = h;
                     }
 
-                    HGTReader rdrRT = prepReader(res, row + 1, col + 1);
+                    HGTReader rdrRT = PrepReader(res, row + 1, col + 1);
                     if (rdrRT == null)
                         return false;
-                    h = rdrRT.ele(1, 1);
+                    h = rdrRT.Ele(1, 1);
                     if (h == HGTReader.UNDEF)
                         return false;
                     eleArray[3][3] = h;
@@ -600,7 +600,7 @@ namespace HoehenGenerator
         /**
  * 
  */
-        private HGTReader prepReader(int res, int row, int col)
+        private HGTReader PrepReader(int res, int row, int col)
         {
             if (row >= readers.Length)
             {
@@ -621,13 +621,13 @@ namespace HoehenGenerator
             }
 
             // do not use if different resolution
-            if (res != rdr.getRes())
+            if (res != rdr.GetRes())
             {
                 //statRdrRes++;
                 return null;
             }
 
-            rdr.prepRead();
+            rdr.PrepRead();
             if (row > lastRow)
                 lastRow = row;
 
@@ -647,7 +647,7 @@ namespace HoehenGenerator
          * @return the interpolated height
          */
 
-        private short interpolatedHeight(double qx, double qy, int hlt, int hrt, int hrb, int hlb)
+        private short InterpolatedHeight(double qx, double qy, int hlt, int hrt, int hrb, int hlb)
         {
             // extrapolate single node height if requested point is not near
             // for multiple missing nodes, return the height of the neares node
@@ -727,7 +727,7 @@ namespace HoehenGenerator
         * Uses Catmull–Rom spline.
         * @author Paul Breeuwsma
         */
-        private static double cubicInterpolation(double[] p, double qx)
+        private static double CubicInterpolation(double[] p, double qx)
         {
             return p[1] + 0.5 * qx * (p[2] - p[0] + qx * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2] - p[3] + qx * (3.0 * (p[1] - p[2]) + p[3] - p[0])));
         }
@@ -739,15 +739,15 @@ namespace HoehenGenerator
          * @param qx value from 0 .. 1 gives relative x position in matrix 
          * @param qy value from 0 .. 1 gives relative y position in matrix
          */
-        private static double bicubicInterpolation(double[][] p, double qx, double qy)
+        private static double BicubicInterpolation(double[][] p, double qx, double qy)
         {
             double[] arr = new double[4];
 
-            arr[0] = cubicInterpolation(p[0], qy);
-            arr[1] = cubicInterpolation(p[1], qy);
-            arr[2] = cubicInterpolation(p[2], qy);
-            arr[3] = cubicInterpolation(p[3], qy);
-            return cubicInterpolation(arr, qx);
+            arr[0] = CubicInterpolation(p[0], qy);
+            arr[1] = CubicInterpolation(p[1], qy);
+            arr[2] = CubicInterpolation(p[2], qy);
+            arr[3] = CubicInterpolation(p[3], qy);
+            return CubicInterpolation(arr, qx);
         }
 
     }
