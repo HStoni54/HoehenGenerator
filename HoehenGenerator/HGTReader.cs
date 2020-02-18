@@ -15,12 +15,43 @@ namespace HoehenGenerator
         public string path;
         private long count;
         private short[] buffer;
+        public string fileName;
 
-
-        public HGTReader(int lat, int lon, string dirsWithHGT)
+        public HGTReader(int lat, int lon, string hgtPath, string[] hgtDirectorys)
         {
+            string baseName = string.Format("%s%02d%s%03d",lat < 0 ? "S" : "N", lat < 0 ? -lat : lat,lon < 0 ? "W" : "E", lon < 0 ? -lon : lon);
+
+            String[] dirs = hgtDirectorys;
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                if (dirs[i].Length > 0 && dirs[i] != "noHGT")
+                dirs[i] = hgtPath + "\\" + dirs[i];
+            }
+            fileName = baseName + ".hgt";
+            String fName;
+            foreach (string dir in dirs)
+            {
+                if (dir.Length > 0)
+                {
+                    fName = dir + "\\" + fileName;
+                    FileStream fis = File.OpenRead(fName);
+                    try
+                    {
+                        res = CalcRes(fis.Length);
+                        if (res >= 0)
+                            path = fName;
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    fis.Dispose();
+                };
+            }
 
         }
+
         public int GetRes()
         {
             return res;
@@ -80,6 +111,35 @@ namespace HoehenGenerator
 
 
             }
+        }
+
+        /**
+        * calculate the resolution of the hgt file. size should be exactly 2 * (res+1) * (res+1) 
+        * @param size number of bytes
+        * @param fname file name (for error possible message)
+        * @return resolution (typically 1200 for 3'' or 3600 for 1'')
+        */
+        private int CalcRes(long size)
+        {
+            long numVals = (long)Math.Sqrt(size / 2);
+            if (2 * numVals * numVals == size)
+                return (int)(numVals - 1);
+            //log.error("file", fname, "has unexpected size", size, "and is ignored");
+            return -1;
+        }
+
+        /**
+         * Return memory to GC. 
+        * @return true if heap memory was freed.
+        */
+
+        public bool FreeBuf()
+        {
+            if (buffer == null)
+                return false;
+            buffer = null;
+            read = false;
+            return true;
         }
 
     }
