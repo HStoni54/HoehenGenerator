@@ -120,6 +120,7 @@
     <Compile Include="ClZeichneMatrix.cs" />
     <Compile Include="FileMitEckKoordinaten.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HGTConverter.cs" />
     <Compile Include="HgtmitKoordinaten.cs" />
     <Compile Include="HGTReader.cs" />
     <Compile Include="LadeDateien.cs" />
