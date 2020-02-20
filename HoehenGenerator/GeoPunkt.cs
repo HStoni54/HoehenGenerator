@@ -28,23 +28,23 @@ namespace HoehenGenerator
 
         private const double radius = 6371.0; //km
 
-        public static double bogen(double winkelInGrad)
+        public static double Bogen(double winkelInGrad)
         {
             return winkelInGrad / 180.0 * Math.PI;
         }
 
-        private static double grad(double BogenInGrad)
+        private static double Grad(double BogenInGrad)
         {
             return BogenInGrad * 180.0 / Math.PI;
         }
-        public double Xgeo // nach Greanwitch
-        { get { return radius * Math.Cos(bogen(Lat)) * Math.Cos(bogen(Lon)); } }
+        public double Xgeo // nach Greenwich
+        { get { return radius * Math.Cos(Bogen(Lat)) * Math.Cos(Bogen(Lon)); } }
 
         public double Ygeo  // zur Seite
-        { get { return radius * Math.Cos(bogen(Lat)) * Math.Sin(bogen(Lon)); } }
+        { get { return radius * Math.Cos(Bogen(Lat)) * Math.Sin(Bogen(Lon)); } }
 
         public double Zgeo // zum Nordpol
-        { get { return radius * Math.Sin(bogen(Lat)); } }
+        { get { return radius * Math.Sin(Bogen(Lat)); } }
 
         public double Entfernung { get => entfernung; set => entfernung = value; }
 
@@ -57,7 +57,7 @@ namespace HoehenGenerator
         {
             if (Math.Abs(Z) <= radius)
             {
-                lat = grad(Math.Asin(Z / radius));
+                lat = Grad(Math.Asin(Z / radius));
 
             }
             else if (Z > 0)
@@ -69,8 +69,8 @@ namespace HoehenGenerator
 
             if (Math.Abs(lat) != 90)
             {
-                lon = grad(Math.Acos(X / radius / Math.Cos(bogen(lat))));
-                if (Math.Asin(Y / radius / Math.Cos(bogen(lat))) < 0)
+                lon = Grad(Math.Acos(X / radius / Math.Cos(Bogen(lat))));
+                if (Math.Asin(Y / radius / Math.Cos(Bogen(lat))) < 0)
                 {
                     lon = -lon;
                 }

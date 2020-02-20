@@ -13,18 +13,108 @@ namespace HoehenGenerator
         private int lastRow = -1;
         private int minLat32;
         private int minLon32;
+        private int res;
         protected static double FACTOR = 45.0d / (1 << 29);
         private short outsidePolygonHeight = HGTReader.UNDEF;
         short h = HGTReader.UNDEF;
 
+        private InterpolationMethod interpolationMethod = InterpolationMethod.Bicubic;
+
+        public enum InterpolationMethod
+        {
+            /** faster, smoothing, less precise */
+            Bilinear,
+            /** slower, higher precision */
+            Bicubic,
+            /** bicubic for high resolution, else bilinear */
+            Automatic
+        };
+  
         private bool useComplexInterpolation = true;
 
+        public static int ToMapUnit(double l)
+        {
+            double DELTA = 360.0D / (1 << 24) / 2; //Correct rounding
+            if (l > 0)
+                return (int)((l + DELTA) * (1 << 24) / 360);
+            else
+                return (int)((l - DELTA) * (1 << 24) / 360);
+        }
+
         /**
-         * Return elevation in meter for a point given in DEM units (32 bit res).
-         * @param lat32
-         * @param lon32
-         * @return height in m or Short.MIN_VALUE if value is invalid 
+         * Class to extract elevation information from SRTM files in hgt format.
+         * @param path a comma separated list of directories which may contain *.hgt files.
+         * @param bbox the bounding box of the tile for which the DEM information is needed.
+         * @param demPolygonMapUnits optional bounding polygon which describes the area for 
+         * which elevation should be read from hgt files.
+         * @param interpolationMethod 
          */
+        public HGTConverter(string hgtpath, string[] directorys, GeoPunkt linksunten, GeoPunkt rechtsoben)
+        {
+            // make bigger box for interpolation or aligning of areas
+            int minLat = (int)Math.Floor(linksunten.Lat);
+            int minLon = (int)Math.Floor(linksunten.Lon);
+            int maxLat = (int)Math.Ceiling(rechtsoben.Lat);
+            int maxLon = (int)Math.Ceiling(rechtsoben.Lon);
+
+            if (minLat < -90) minLat = -90;
+            if (maxLat > 90) maxLat = 90;
+            if (minLon < -180) minLon = -180;
+            if (maxLon > 180) maxLon = 180;
+
+            minLat32 = ToMapUnit(minLat) * 256;
+            minLon32 = ToMapUnit(minLon) * 256;
+            // create matrix of readers 
+            int dimLat = maxLat - minLat;
+            int dimLon = maxLon - minLon;
+            readers = new HGTReader[dimLat][];
+            for (int i = 0; i < dimLat; i++)
+            {
+                readers[i] = new HGTReader[dimLon];
+            }
+           
+            //demArea = demPolygonMapUnits;
+            int maxRes = -1;
+            for (int row = 0; row < dimLat; row++)
+            {
+                int lat = row + minLat;
+                for (int col = 0; col < dimLon; col++)
+                {
+                    int lon = col + minLon;
+                    //Area rdrBbox = new Area(lat, lon, lat + 1.0, lon + 1.0);
+                    //int testMode = intersectsPoly(rdrBbox);
+                    //if (testMode != 0)
+                    //{
+                        HGTReader rdr = new HGTReader(lat, lon, hgtpath, directorys);
+                        readers[row][col] = rdr;
+                        maxRes = Math.Max(maxRes, rdr.GetRes());
+                    //}
+                }
+            }
+            res = maxRes; // we use the highest available res
+            return;
+        }
+
+        /**
+          * Allows to change the interpolation method for complex interpolations.
+          * @param interpolationMethod
+          */
+        public void SetInterpolationMethod(InterpolationMethod interpolationMethod)
+        {
+            this.interpolationMethod = interpolationMethod;
+            useComplexInterpolation = (interpolationMethod != InterpolationMethod.Bilinear);
+        }
+        /**
+           * Return elevation in meter for a point given in DEM units (32 bit res).
+           * @param lat32
+           * @param lon32
+           * @return height in m or Short.MIN_VALUE if value is invalid 
+           */
+
+            protected short GetHoehe(GeoPunkt geoPunkt)
+        {
+            return GetElevation(ToMapUnit(geoPunkt.Lat) * 256, ToMapUnit(geoPunkt.Lon) * 256);
+        }
         protected short GetElevation(int lat32, int lon32)
         {
             int row = (int)((lat32 - minLat32) * FACTOR);

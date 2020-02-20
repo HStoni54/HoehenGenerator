@@ -591,12 +591,12 @@ namespace HoehenGenerator
             //double[] Ri3 = new double[4] { 0, 0, 1, 0 };
             //double[] Ri4 = new double[4] { 0, 0, 0, 1 };
 
-            double cosalpha = Math.Cos(GeoPunkt.bogen(alpha));
-            double sinalpha = Math.Sin(GeoPunkt.bogen(alpha));
-            double cosbeta = Math.Cos(GeoPunkt.bogen(beta));
-            double sinbeta = Math.Sin(GeoPunkt.bogen(beta));
-            double cosphi = Math.Cos(GeoPunkt.bogen(phi));
-            double sinphi = Math.Sin(GeoPunkt.bogen(phi));
+            double cosalpha = Math.Cos(GeoPunkt.Bogen(alpha));
+            double sinalpha = Math.Sin(GeoPunkt.Bogen(alpha));
+            double cosbeta = Math.Cos(GeoPunkt.Bogen(beta));
+            double sinbeta = Math.Sin(GeoPunkt.Bogen(beta));
+            double cosphi = Math.Cos(GeoPunkt.Bogen(phi));
+            double sinphi = Math.Sin(GeoPunkt.Bogen(phi));
 
             Matrix R1 = new Matrix(4, 4);
             Matrix R2 = new Matrix(4, 4);
