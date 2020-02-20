@@ -8,7 +8,7 @@ namespace HoehenGenerator
 {
     class HGTConverter
     {
-        private double[][] eleArray = new double[4][];
+        private double[][] eleArray;
         private HGTReader[][] readers;
         private int lastRow = -1;
         private int minLat32;
@@ -56,6 +56,11 @@ namespace HoehenGenerator
             int minLon = (int)Math.Floor(linksunten.Lon);
             int maxLat = (int)Math.Ceiling(rechtsoben.Lat);
             int maxLon = (int)Math.Ceiling(rechtsoben.Lon);
+            eleArray = new double[4][];
+            for (int i = 0; i < eleArray[i].Length; i++)
+            {
+                eleArray[i] = new double[4];
+            }
 
             if (minLat < -90) minLat = -90;
             if (maxLat > 90) maxLat = 90;
