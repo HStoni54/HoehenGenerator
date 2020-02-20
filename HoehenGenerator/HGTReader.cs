@@ -19,13 +19,13 @@ namespace HoehenGenerator
 
         public HGTReader(int lat, int lon, string hgtPath, string[] hgtDirectorys)
         {
-            string baseName = string.Format("%s%02d%s%03d",lat < 0 ? "S" : "N", lat < 0 ? -lat : lat,lon < 0 ? "W" : "E", lon < 0 ? -lon : lon);
+            string baseName = string.Format("%s%02d%s%03d", lat < 0 ? "S" : "N", lat < 0 ? -lat : lat, lon < 0 ? "W" : "E", lon < 0 ? -lon : lon);
 
             String[] dirs = hgtDirectorys;
             for (int i = 0; i < dirs.Length; i++)
             {
                 if (dirs[i].Length > 0 && dirs[i] != "noHGT")
-                dirs[i] = hgtPath + "\\" + dirs[i];
+                    dirs[i] = hgtPath + "\\" + dirs[i];
             }
             fileName = baseName + ".hgt";
             String fName;
@@ -96,8 +96,8 @@ namespace HoehenGenerator
                 //{
                 byte[] vs = new byte[2];
                 FileStream fs = File.OpenRead(path);
-                buffer = new short[fs.Length/2];
-                for (int i = 0; i < fs.Length/2; i++)
+                buffer = new short[fs.Length / 2];
+                for (int i = 0; i < fs.Length / 2; i++)
 
                 {
                     vs[1] = (byte)fs.ReadByte();

@@ -29,7 +29,7 @@ namespace HoehenGenerator
             /** bicubic for high resolution, else bilinear */
             Automatic
         };
-  
+
         private bool useComplexInterpolation = true;
 
         public static int ToMapUnit(double l)
@@ -72,7 +72,7 @@ namespace HoehenGenerator
             {
                 readers[i] = new HGTReader[dimLon];
             }
-           
+
             //demArea = demPolygonMapUnits;
             int maxRes = -1;
             for (int row = 0; row < dimLat; row++)
@@ -85,9 +85,9 @@ namespace HoehenGenerator
                     //int testMode = intersectsPoly(rdrBbox);
                     //if (testMode != 0)
                     //{
-                        HGTReader rdr = new HGTReader(lat, lon, hgtpath, directorys);
-                        readers[row][col] = rdr;
-                        maxRes = Math.Max(maxRes, rdr.GetRes());
+                    HGTReader rdr = new HGTReader(lat, lon, hgtpath, directorys);
+                    readers[row][col] = rdr;
+                    maxRes = Math.Max(maxRes, rdr.GetRes());
                     //}
                 }
             }
@@ -111,7 +111,7 @@ namespace HoehenGenerator
            * @return height in m or Short.MIN_VALUE if value is invalid 
            */
 
-            protected short GetHoehe(GeoPunkt geoPunkt)
+        protected short GetHoehe(GeoPunkt geoPunkt)
         {
             return GetElevation(ToMapUnit(geoPunkt.Lat) * 256, ToMapUnit(geoPunkt.Lon) * 256);
         }

@@ -12,7 +12,7 @@ namespace HoehenGenerator
         private GeoPunkt rechtsunten;
         private GeoPunkt rechtsoben;
         private int anzahlLat, anzahlLon;
-        
+
 
         public ZwischenspeicherHgt(GeoPunkt linksunten, int anzahlLon, int anzahlLat, int auflösung)
         {
@@ -252,6 +252,6 @@ namespace HoehenGenerator
         internal GeoPunkt Linksunten { get => linksunten; set => linksunten = value; }
 
 
- 
+
     }
 }
