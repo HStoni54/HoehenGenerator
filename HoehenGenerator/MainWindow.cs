@@ -2189,15 +2189,15 @@ namespace HoehenGenerator
         }
         private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
-            string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
+            string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp",  anlagenname + "H.bmp",  anlagenname + "S.bmp", anlagenname + "T.bmp" };
             int höhe = (int)(zahltbHöheDerAnlage * zahltbRasterdichte);
             int breite = (int)(zahlbreiteDerAnlage * zahltbRasterdichte);
             int rasterdichte = zahltbRasterdichte;
             System.Drawing.Color[] colors = { System.Drawing.Color.FromArgb(255,0, 100, 0) ,
                 System.Drawing.Color.FromArgb(255, 200, 200, 200),
-                System.Drawing.Color.FromArgb(255, 16, 39, 0),
-                System.Drawing.Color.FromArgb(255,0,0,1),
-                System.Drawing.Color.FromArgb(255, 1, 12, 75) };
+               System.Drawing.Color.FromArgb(255, 16, 39, 0),
+               System.Drawing.Color.FromArgb(255,0,0,1),
+               System.Drawing.Color.FromArgb(255,1, 12, 75) };
 
 
             System.Drawing.Imaging.PixelFormat pixelFormat = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
@@ -2259,20 +2259,66 @@ namespace HoehenGenerator
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(breite, höhe, pixelFormat);
             ZeichneBitMap zeichneBitMap;
+            //if (bitmapnamen.EndsWith("H.bmp", StringComparison.CurrentCulture) && ZwspeicherHgt != null)
+            //{
+            //    Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
+            //    GeoPunkt tempPunkt;
+            //    GeoPunkt temppunkt1;
+
+
+            //    System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
+            //    for (int i = 0; i < höhe; i++)
+            //        for (int j = 0; j < breite; j++)
+            //        {
+            //            tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
+            //            temppunkt1 = DrehePunkt(tempPunkt, drehung);
+            //            double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+            //            if (abshöhe == 0)
+            //            {
+
+            //            };
+            //            double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
+            //            //if (abshöhe2 < 0)
+            //            //{
+            //            //    int c;
+            //            //}
+            //            int eephöhe = (int)(abshöhe2 * 100) + 10000;
+            //            if (eephöhe < 0)
+            //                eephöhe = 0;
+            //            if (eephöhe == 0)
+            //            {
+
+            //            }
+            //            if (eephöhe >= 110000)
+            //            {
+            //                eephöhe = 109999;
+            //            }
+            //            int r1 = eephöhe % 256;
+            //            int g1 = (eephöhe / 256) % 256;
+            //            int b1 = (eephöhe / 256 / 256) % 256;
+
+
+
+            //            colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
+            //        }
+
+            //    zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
+            //}
             if (bitmapnamen.EndsWith("H.bmp", StringComparison.CurrentCulture) && ZwspeicherHgt != null)
             {
+                System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
+                HGTConverter hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
+                zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
-
-
-                System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
                 for (int i = 0; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
                     {
                         tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                        double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                        //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                        double abshöhe = hGTConverter.GetHoehe(temppunkt1);
                         if (abshöhe == 0)
                         {
 
@@ -2282,7 +2328,7 @@ namespace HoehenGenerator
                         //{
                         //    int c;
                         //}
-                        int eephöhe = (int)(abshöhe2 * 100) + 10000;
+                        int eephöhe = (int)Math.Round((abshöhe2 * 100) + 10000);
                         if (eephöhe < 0)
                             eephöhe = 0;
                         if (eephöhe == 0)
@@ -2303,7 +2349,11 @@ namespace HoehenGenerator
                     }
 
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
+
+
+
             }
+
 
             else if (bitmapnamen.EndsWith("F.bmp", StringComparison.CurrentCulture))
             {
@@ -2364,6 +2414,7 @@ namespace HoehenGenerator
             zeichneBitMap.FülleBitmap();
 
             SpeicherEEPBitMap(bitmapnamen, zeichneBitMap);
+            bitmap.Dispose();
         }
 
         private void WandleBildUm()

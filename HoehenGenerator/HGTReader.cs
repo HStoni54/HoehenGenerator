@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,19 +20,26 @@ namespace HoehenGenerator
 
         public HGTReader(int lat, int lon, string hgtPath, string[] hgtDirectorys)
         {
-            string baseName = string.Format("%s%02d%s%03d", lat < 0 ? "S" : "N", lat < 0 ? -lat : lat, lon < 0 ? "W" : "E", lon < 0 ? -lon : lon);
+            string nordsued = lat < 0 ? "S" : "N";
+            string ostwest = lon < 0 ? "W" : "E";
+            int lat1 = lat < 0 ? -lat : lat;
+            int lon1 = lon < 0 ? -lon : lon;
+            string baseName =  nordsued + lat1.ToString("D2",CultureInfo.CurrentCulture) + ostwest + lon1.ToString("D3",CultureInfo.CurrentCulture);
+            //string baseName = string.Format(CultureInfo.CurrentCulture,"%s%02d%s%03d", basename1 );
 
-            String[] dirs = hgtDirectorys;
+            string[] dirs = hgtDirectorys;
+            string[] dirs1 = new string[dirs.Length];
             for (int i = 0; i < dirs.Length; i++)
             {
                 if (dirs[i].Length > 0 && dirs[i] != "noHGT")
-                    dirs[i] = hgtPath + "\\" + dirs[i];
+                    dirs1[i] = hgtPath + "\\" + dirs[i];
+                else dirs1[i] = "";
             }
             fileName = baseName + ".hgt";
-            String fName;
-            foreach (string dir in dirs)
+            string fName;
+            foreach (string dir in dirs1)
             {
-                if (dir.Length > 0)
+                if (dir.Length > 0   && dir != "noHGT")
                 {
                     fName = dir + "\\" + fileName;
                     FileStream fis = File.OpenRead(fName);
@@ -76,7 +84,7 @@ namespace HoehenGenerator
 
 
                 count++;
-                return buffer[(2 * ((res - y) * (res + 1) + x))];
+                return buffer[( ((res - y) * (res + 1) + x))];
             }
             else return 0;
         }

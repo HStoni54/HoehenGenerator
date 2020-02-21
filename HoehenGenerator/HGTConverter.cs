@@ -16,7 +16,7 @@ namespace HoehenGenerator
         private int res;
         protected static double FACTOR = 45.0d / (1 << 29);
         private short outsidePolygonHeight = HGTReader.UNDEF;
-        short h = HGTReader.UNDEF;
+        double h = HGTReader.UNDEF;
 
         private InterpolationMethod interpolationMethod = InterpolationMethod.Bicubic;
 
@@ -57,7 +57,7 @@ namespace HoehenGenerator
             int maxLat = (int)Math.Ceiling(rechtsoben.Lat);
             int maxLon = (int)Math.Ceiling(rechtsoben.Lon);
             eleArray = new double[4][];
-            for (int i = 0; i < eleArray[i].Length; i++)
+            for (int i = 0; i < eleArray.Length; i++)
             {
                 eleArray[i] = new double[4];
             }
@@ -116,11 +116,11 @@ namespace HoehenGenerator
            * @return height in m or Short.MIN_VALUE if value is invalid 
            */
 
-        protected short GetHoehe(GeoPunkt geoPunkt)
+        public double GetHoehe(GeoPunkt geoPunkt)
         {
             return GetElevation(ToMapUnit(geoPunkt.Lat) * 256, ToMapUnit(geoPunkt.Lon) * 256);
         }
-        protected short GetElevation(int lat32, int lon32)
+        protected double GetElevation(int lat32, int lon32)
         {
             int row = (int)((lat32 - minLat32) * FACTOR);
             int col = (int)((lon32 - minLon32) * FACTOR);
@@ -154,7 +154,7 @@ namespace HoehenGenerator
                 bool filled = FillArray(rdr, row, col, xLeft, yBottom);
                 if (filled)
                 {
-                    h = (short)Math.Round(BicubicInterpolation(eleArray, qx, qy));
+                    h = BicubicInterpolation(eleArray, qx, qy);
                     //statBicubic++;
                 }
             }
@@ -498,7 +498,7 @@ namespace HoehenGenerator
          * @return the interpolated height
          */
 
-        private short InterpolatedHeight(double qx, double qy, int hlt, int hrt, int hrb, int hlb)
+        private double InterpolatedHeight(double qx, double qy, int hlt, int hrt, int hrb, int hlb)
         {
             // extrapolate single node height if requested point is not near
             // for multiple missing nodes, return the height of the neares node
@@ -567,9 +567,9 @@ namespace HoehenGenerator
                 hlt = hlb + hrt - hrb;
                 // bilinera interpolation
             }
-            double hxt = (1.0D - qx) * hlt + qx * hrt;
+            double hxt = (1.0D - qx) * hlt + (qx * hrt);
             double hxb = (1.0D - qx) * hlb + qx * hrb;
-            return (short)Math.Round((1.0D - qy) * hxb + qy * hxt);
+            return Math.Round(((1.0D - qy) * hxb) + qy * hxt);
 
         }
 
