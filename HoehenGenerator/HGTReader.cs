@@ -24,7 +24,7 @@ namespace HoehenGenerator
             string ostwest = lon < 0 ? "W" : "E";
             int lat1 = lat < 0 ? -lat : lat;
             int lon1 = lon < 0 ? -lon : lon;
-            string baseName =  nordsued + lat1.ToString("D2",CultureInfo.CurrentCulture) + ostwest + lon1.ToString("D3",CultureInfo.CurrentCulture);
+            string baseName = nordsued + lat1.ToString("D2", CultureInfo.CurrentCulture) + ostwest + lon1.ToString("D3", CultureInfo.CurrentCulture);
             //string baseName = string.Format(CultureInfo.CurrentCulture,"%s%02d%s%03d", basename1 );
 
             string[] dirs = hgtDirectorys;
@@ -39,22 +39,25 @@ namespace HoehenGenerator
             string fName;
             foreach (string dir in dirs1)
             {
-                if (dir.Length > 0   && dir != "noHGT")
+                if (dir.Length > 0 && dir != "noHGT")
                 {
                     fName = dir + "\\" + fileName;
-                    FileStream fis = File.OpenRead(fName);
-                    try
+                    if (File.Exists(fName))
                     {
-                        res = CalcRes(fis.Length);
-                        if (res >= 0)
-                            path = fName;
-                    }
-                    catch (Exception)
-                    {
+                        FileStream fis = File.OpenRead(fName);
+                        try
+                        {
+                            res = CalcRes(fis.Length);
+                            if (res >= 0)
+                                path = fName;
+                        }
+                        catch (Exception)
+                        {
 
-                        throw;
+                            throw;
+                        }
+                        fis.Dispose();
                     }
-                    fis.Dispose();
                 };
             }
 
@@ -84,7 +87,7 @@ namespace HoehenGenerator
 
 
                 count++;
-                return buffer[( ((res - y) * (res + 1) + x))];
+                return buffer[(((res - y) * (res + 1) + x))];
             }
             else return 0;
         }

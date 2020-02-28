@@ -78,6 +78,7 @@ namespace HoehenGenerator
         private string pfad;
         private string pngbildname;
         private string bmpbildname;
+        HGTConverter hGTConverter;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -910,6 +911,20 @@ namespace HoehenGenerator
             //Canvas.SetLeft(elli2, GrößeB / (maxLänge - minLänge) * ((maxLänge - minLänge) / 2) - 2.5);
             //Canvas.SetBottom(elli2, GrößeH / (maxBreite - minBreite) * ((maxBreite - minBreite) / 2) - 2.5);
 
+        }
+
+        private void FülleAnzeigeFläche()
+        {
+            
+            AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
+            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (winkel));
+            for (int i = 0; i < (int)GrößeH; i++)
+            {
+                for (int j = 0; j < GrößeB; j++)
+                {
+
+                }
+            }
         }
         private void ZeichnePunkte(List<GeoPunkt> punkte)
         {
@@ -2042,6 +2057,8 @@ namespace HoehenGenerator
         private void Einlesen_Click(object sender, RoutedEventArgs e)
         {
 
+            hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
+            FülleAnzeigeFläche();
             clZeichneMatrices.Enqueue(new ClZeichneMatrix("mach hin"));
             // LeseEinUndMachWeiter();
 
@@ -2307,7 +2324,7 @@ namespace HoehenGenerator
             if (bitmapnamen.EndsWith("H.bmp", StringComparison.CurrentCulture) && ZwspeicherHgt != null)
             {
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                HGTConverter hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
+                hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
                 GeoPunkt tempPunkt;
