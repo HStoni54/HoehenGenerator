@@ -2385,7 +2385,7 @@ namespace HoehenGenerator
 
             //    zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
             //}
-            if (bitmapnamen.EndsWith("H.bmp", StringComparison.CurrentCulture) && ZwspeicherHgt != null)
+            if (bitmapnamen.EndsWith("H.bmp", StringComparison.CurrentCulture) && hGTConverter != null)
             {
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
                 //hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
