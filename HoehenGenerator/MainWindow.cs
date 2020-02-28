@@ -917,14 +917,75 @@ namespace HoehenGenerator
         {
             
             AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
-            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (winkel));
+            Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (-winkel));
+            GeoPunkt tempPunkt;
+            //double lat=0;
+            //double lon=0;
+            GeoPunkt temppunkt1;
             for (int i = 0; i < (int)GrößeH; i++)
             {
                 for (int j = 0; j < GrößeB; j++)
                 {
 
+                    tempPunkt = new GeoPunkt((double)j / (double)GrößeB * (maxLänge - minLänge) + minLänge, (double)i / (double)GrößeH * (maxBreite - minBreite) + minBreite);
+                    temppunkt1 = DrehePunkt(tempPunkt, drehung);
+                    //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                    double abshöhe = hGTConverter.GetHoehe(temppunkt1);
+                    if (maximaleHöhe < abshöhe)
+                        maximaleHöhe = abshöhe;
+                    if (minimaleHöhe > abshöhe
+                        && abshöhe != -32768
+                        )
+                        minimaleHöhe = abshöhe;
+                    double höhendifferenz = maximaleHöhe - minimaleHöhe;
+
+                    if (abshöhe == 0)
+                    {
+
+                    };
+                    //double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
+                    //if (abshöhe2 < 0)
+                    //{
+                    //    int c;
+                    //}
+                    int eephöhe = (int)Math.Round((abshöhe * 100) + 10000);
+                    if (eephöhe < 0)
+                        eephöhe = 0;
+                    if (eephöhe == 0)
+                    {
+
+                    }
+                    if (eephöhe >= 110000)
+                    {
+                        eephöhe = 109999;
+                    }
+                    int r1 = eephöhe % 256;
+                    int g1 = (eephöhe / 256) % 256;
+                    int b1 = (eephöhe / 256 / 256) % 256;
+                    byte höhe1 = (byte)(((abshöhe - minimaleHöhe) * 100 + 1000) / (höhendifferenz + 10) / 100 * 256 - 1);
+
+                    b1 = höhe1;
+                    r1 = b1;
+                    g1 = b1;
+                    //b1 = 0;
+                    byte r = (byte)r1;
+                    byte g = (byte)g1;
+                    byte b = (byte)b1; 
+                    SolidColorBrush mySolidColorBrush = new SolidColorBrush
+                    {
+                        Color = Color.FromRgb(r, g, b)
+                    };
+
+                    if(( i % 5 == 0) && (j % 5 == 0 ))
+                    punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
+
+                    //colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
                 }
             }
+            tbMaxhöhe.Text = maximaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
+            tbMinHöhe.Text = minimaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
+            btWeiter3.IsEnabled = true;
+
         }
         private void ZeichnePunkte(List<GeoPunkt> punkte)
         {
@@ -2058,8 +2119,9 @@ namespace HoehenGenerator
         {
 
             hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
+            hGTConverter.SetInterpolationMethod(HGTConverter.InterpolationMethod.Bicubic);
             FülleAnzeigeFläche();
-            clZeichneMatrices.Enqueue(new ClZeichneMatrix("mach hin"));
+            //clZeichneMatrices.Enqueue(new ClZeichneMatrix("mach hin"));
             // LeseEinUndMachWeiter();
 
         }
@@ -2248,7 +2310,9 @@ namespace HoehenGenerator
             {
                 tempPunkt = new GeoPunkt(punkte[i].X, punkte[i].Y);
                 temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
+                double abshöhe = hGTConverter.GetHoehe(temppunkt1);
+
+                //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
 
                 double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
                 //if (abshöhe2 < 0)
@@ -2324,7 +2388,7 @@ namespace HoehenGenerator
             if (bitmapnamen.EndsWith("H.bmp", StringComparison.CurrentCulture) && ZwspeicherHgt != null)
             {
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
+                //hGTConverter = new HGTConverter(hgtPfad, directorys, hgtlinksunten, hgtrechtsoben);
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
                 GeoPunkt tempPunkt;
