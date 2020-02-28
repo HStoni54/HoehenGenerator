@@ -17,7 +17,8 @@ namespace HoehenGenerator
         protected static double FACTOR = 45.0d / (1 << 29);
         private short outsidePolygonHeight = HGTReader.UNDEF;
         double h = HGTReader.UNDEF;
-
+        public int maxhöhe = Int32.MinValue;
+        public int minhöhe = Int32.MaxValue;
         private InterpolationMethod interpolationMethod = InterpolationMethod.Bicubic;
 
         public enum InterpolationMethod
@@ -116,6 +117,7 @@ namespace HoehenGenerator
            * @return height in m or Short.MIN_VALUE if value is invalid 
            */
 
+ 
         public double GetHoehe(GeoPunkt geoPunkt)
         {
             return GetElevation(ToMapUnit(geoPunkt.Lat) * 256, ToMapUnit(geoPunkt.Lon) * 256);
@@ -159,16 +161,25 @@ namespace HoehenGenerator
                 }
             }
 
-            if (h == HGTReader.UNDEF)
+            if (h == HGTReader.UNDEF || !useComplexInterpolation)
             {
                 // use bilinear interpolation if bicubic not available
                 int xRight = xLeft + 1;
                 int yTop = yBottom + 1;
 
                 int hLT = rdr.Ele(xLeft, yTop);
+                maxhöhe = Math.Max(maxhöhe, hLT);
+                minhöhe = Math.Min(minhöhe, hLT);
                 int hRT = rdr.Ele(xRight, yTop);
+                maxhöhe = Math.Max(maxhöhe, hRT);
+                minhöhe = Math.Min(minhöhe, hRT);
                 int hLB = rdr.Ele(xLeft, yBottom);
+                maxhöhe = Math.Max(maxhöhe, hLB);
+                minhöhe = Math.Min(minhöhe, hLB);
                 int hRB = rdr.Ele(xRight, yBottom);
+                maxhöhe = Math.Max(maxhöhe, hRB);
+                minhöhe = Math.Min(minhöhe, hRB);
+
 
                 h = InterpolatedHeight(qx, qy, hLT, hRT, hRB, hLB);
                 //statBilinear++;
