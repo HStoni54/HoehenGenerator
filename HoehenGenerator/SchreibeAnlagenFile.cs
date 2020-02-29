@@ -51,7 +51,7 @@ namespace HoehenGenerator
                 if (pfahl)
                     xmlWriter.WriteAttributeString("gsbname", @"\Immobilien\Verkehr\Verkehrszeichen\Leitpfosten_Einzel_RG.3dm");
                 else
-                    xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Nadel_Baum_02.3dm");
+                    xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Kopfweide_10m_AM1.3dm");
                 xmlWriter.WriteAttributeString("ImmoIdx", (i + 1).ToString(CultureInfo.CurrentCulture)); // hier hochzählen
                 xmlWriter.WriteAttributeString("TreeShake", "2");
                 xmlWriter.WriteStartElement("Dreibein");

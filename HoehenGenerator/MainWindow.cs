@@ -85,6 +85,12 @@ namespace HoehenGenerator
         public MainWindow()
         {
             InitializeComponent();
+            //string progname = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+        
+          
+            //string teststring = System.Reflection.Assembly.GetExecutingAssembly().GetName().
+            //string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
+            
             Title = "Höhengenerator für EEP";
 
 
@@ -136,7 +142,7 @@ namespace HoehenGenerator
             }
 
         }
-
+  
         private void GeneriereLeerHGTs()
         {
             while (true)
