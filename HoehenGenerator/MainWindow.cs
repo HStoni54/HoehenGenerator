@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -86,12 +87,12 @@ namespace HoehenGenerator
         {
             InitializeComponent();
             //string progname = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-        
-          
+
+
             //string teststring = System.Reflection.Assembly.GetExecutingAssembly().GetName().
-            //string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
-            
-            Title = "Höhengenerator für EEP";
+            string version = "1.1.2.8";
+
+            Title = "Höhengenerator für EEP Version " + version ;
 
 
             Thread thrHoleDateien = new Thread(HoleDateien)
@@ -142,7 +143,31 @@ namespace HoehenGenerator
             }
 
         }
-  
+
+        //private static string VersionNr()
+        //{
+        //    Assembly asm = Assembly.GetExecutingAssembly();
+        //    AssemblyName asmName = asm.GetName();
+
+        //    object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
+        //    string productName = String.Empty;
+
+        //    if (attribs.Length > 0)
+        //    {
+        //        AssemblyProductAttribute asmProduct = attribs[0] as AssemblyProductAttribute;
+        //        productName = asmProduct.Product.ToString();
+        //    }
+
+        //    string vers = String.Format("{0} - Version: {1}.{2}.{3} Build: {4}",
+        //        productName,
+        //        asmName.Version.Major.ToString(),
+        //        asmName.Version.Minor.ToString(),
+        //        asmName.Version.Build.ToString(),
+        //        asmName.Version.Revision.ToString());
+
+        //    return (vers);
+        //}
+
         private void GeneriereLeerHGTs()
         {
             while (true)
