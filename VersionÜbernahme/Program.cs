@@ -28,6 +28,7 @@ namespace VersionÜbernahme
                 SucheVersion(proj);
                 char[] charsToTrim = { '\n', ' ', '\t' };
                 revision = revision.Trim(charsToTrim);
+                version = version.Trim(charsToTrim);
                 version = version.Remove(version.LastIndexOf("."));
                 version = version + "." + revision;
             }
