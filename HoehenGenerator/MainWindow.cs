@@ -80,6 +80,7 @@ namespace HoehenGenerator
         private string pngbildname;
         private string bmpbildname;
         HGTConverter hGTConverter;
+        //string version = "1.1.2.9";
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -90,9 +91,12 @@ namespace HoehenGenerator
 
 
             //string teststring = System.Reflection.Assembly.GetExecutingAssembly().GetName().
-            string version = "1.1.2.8";
+ 
 
-            Title = "Höhengenerator für EEP Version " + version ;
+            //Assembly.GetExecutingAssembly().GetName().Version = new Version(version);
+
+            Title = "Höhengenerator für EEP " + VersionNr();
+            //Title = "Höhengenerator für EEP Version " + version;
 
 
             Thread thrHoleDateien = new Thread(HoleDateien)
@@ -144,29 +148,30 @@ namespace HoehenGenerator
 
         }
 
-        //private static string VersionNr()
-        //{
-        //    Assembly asm = Assembly.GetExecutingAssembly();
-        //    AssemblyName asmName = asm.GetName();
+        private static string VersionNr()
+        {
+            Assembly asm = Assembly.GetExecutingAssembly();
+            AssemblyName asmName = asm.GetName();
+            string Fullname = asm.FullName;
+            object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
+            string productName = String.Empty;
 
-        //    object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
-        //    string productName = String.Empty;
+            if (attribs.Length > 0)
+            {
+                AssemblyProductAttribute asmProduct = attribs[0] as AssemblyProductAttribute;
+                productName = asmProduct.Product.ToString(CultureInfo.CurrentCulture);
+            }
 
-        //    if (attribs.Length > 0)
-        //    {
-        //        AssemblyProductAttribute asmProduct = attribs[0] as AssemblyProductAttribute;
-        //        productName = asmProduct.Product.ToString();
-        //    }
+            string vers = string.Format(CultureInfo.CurrentCulture ," - Version: {0}.{1}.{2} Build: {3}",
+                //productName,
+                asmName.Version.Major.ToString(CultureInfo.CurrentCulture),
+                asmName.Version.Minor.ToString(CultureInfo.CurrentCulture),
+                asmName.Version.Build.ToString(CultureInfo.CurrentCulture),
+                asmName.Version.Revision.ToString(CultureInfo.CurrentCulture));
 
-        //    string vers = String.Format("{0} - Version: {1}.{2}.{3} Build: {4}",
-        //        productName,
-        //        asmName.Version.Major.ToString(),
-        //        asmName.Version.Minor.ToString(),
-        //        asmName.Version.Build.ToString(),
-        //        asmName.Version.Revision.ToString());
-
-        //    return (vers);
-        //}
+            return vers;
+            //return Fullname;
+        }
 
         private void GeneriereLeerHGTs()
         {
