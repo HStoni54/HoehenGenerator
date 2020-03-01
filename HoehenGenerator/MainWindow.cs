@@ -91,11 +91,12 @@ namespace HoehenGenerator
 
 
             //string teststring = System.Reflection.Assembly.GetExecutingAssembly().GetName().
- 
+
 
             //Assembly.GetExecutingAssembly().GetName().Version = new Version(version);
-
+            //AssemblyInformationalVersionAttribute versionAttribute = new AssemblyInformationalVersionAttribute("1.1.2.9");
             Title = "Höhengenerator für EEP " + VersionNr();
+            //Title = "Höhengenerator für EEP " + versionAttribute.InformationalVersion;
             //Title = "Höhengenerator für EEP Version " + version;
 
 
