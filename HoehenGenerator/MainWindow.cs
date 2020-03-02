@@ -2607,7 +2607,7 @@ namespace HoehenGenerator
             int bildbreite = ausgangsbild.Width;
             int bildhöhe = ausgangsbild.Height;
             System.Drawing.Rectangle rechteck = new System.Drawing.Rectangle(0, 0, bildbreite, bildhöhe);
-            System.Drawing.Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            System.Drawing.Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, System.Drawing.Imaging.PixelFormat.Format24bppRgb); //TODO: statt Clone Scalieren
 
             bearbeitungsbild.Save(bmpbildname, System.Drawing.Imaging.ImageFormat.Bmp);
             bearbeitungsbild.Dispose();
