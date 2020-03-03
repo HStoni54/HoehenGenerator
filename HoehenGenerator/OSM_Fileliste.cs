@@ -109,15 +109,16 @@ namespace HoehenGenerator
 
 
             }
-            WandleBildInBmp(dateinamekomplett);
+            //WandleBildInBmp(dateinamekomplett,osmauflösung);
         }
 
-        private static void WandleBildInBmp(string dateinamekomplett)
+        private static void WandleBildInBmp(string dateinamekomplett,int osmauflösung)
         {
             string dateinameneu = dateinamekomplett.Substring(0, dateinamekomplett.Length - 4) + ".bmp";
             if (!File.Exists(dateinameneu))
             {
                 Bitmap ausgangsbild = new Bitmap(dateinamekomplett);
+
                 int bildbreite = ausgangsbild.Width;
                 int bildhöhe = ausgangsbild.Height;
                 Rectangle rechteck = new Rectangle(0, 0, bildbreite, bildhöhe);

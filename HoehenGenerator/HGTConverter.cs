@@ -509,7 +509,7 @@ namespace HoehenGenerator
          * @return the interpolated height
          */
 
-        private double InterpolatedHeight(double qx, double qy, int hlt, int hrt, int hrb, int hlb)
+        private static double InterpolatedHeight(double qx, double qy, int hlt, int hrt, int hrb, int hlb)
         {
             // extrapolate single node height if requested point is not near
             // for multiple missing nodes, return the height of the neares node

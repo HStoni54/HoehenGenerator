@@ -81,6 +81,7 @@ namespace HoehenGenerator
         private string bmpbildname;
         HGTConverter hGTConverter;
         //string version = "1.1.2.9";
+        int auflösung;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -2544,7 +2545,7 @@ namespace HoehenGenerator
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
-                int auflösung = (int)Math.Log(40030 * zahltbRasterdichte / 256, 2);
+                auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat/180*Math.PI)/ 256, 2));
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
                 String bilddateiname = "";
@@ -2604,10 +2605,15 @@ namespace HoehenGenerator
         private void WandleBildUm()
         {
             System.Drawing.Bitmap ausgangsbild = new System.Drawing.Bitmap(pngbildname);
-            int bildbreite = ausgangsbild.Width;
-            int bildhöhe = ausgangsbild.Height;
-            System.Drawing.Rectangle rechteck = new System.Drawing.Rectangle(0, 0, bildbreite, bildhöhe);
-            System.Drawing.Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, System.Drawing.Imaging.PixelFormat.Format24bppRgb); //TODO: statt Clone Scalieren
+            double osmpunkte = 256/(40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat/180*Math.PI));
+            //int bildbreite = ausgangsbild.Width;
+            //int bildhöhe = ausgangsbild.Height;
+            int bildbreite = ausgangsbild.Width * zahltbRasterdichte /(int)osmpunkte;
+            int bildhöhe = ausgangsbild.Height  * zahltbRasterdichte/ (int)osmpunkte;
+            //System.Drawing.Rectangle rechteck = new System.Drawing.Rectangle(0, 0, bildbreite, bildhöhe);
+            //System.Drawing.Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, System.Drawing.Imaging.PixelFormat.Format24bppRgb); //TODO: statt Clone Scalieren
+            System.Drawing.Bitmap bearbeitungsbild = new System.Drawing.Bitmap(ausgangsbild,bildbreite,bildhöhe); //TODO: statt Clone Scalieren
+
 
             bearbeitungsbild.Save(bmpbildname, System.Drawing.Imaging.ImageFormat.Bmp);
             bearbeitungsbild.Dispose();
@@ -2839,7 +2845,7 @@ namespace HoehenGenerator
 
         private void osmDaten_Click(object sender, RoutedEventArgs e)
         {
-            int auflösung = (int)Math.Log(40030 * zahltbRasterdichte / 256, 2);
+            auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
             OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
