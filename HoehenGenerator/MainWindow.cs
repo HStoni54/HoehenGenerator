@@ -973,64 +973,15 @@ namespace HoehenGenerator
 
                     tempPunkt = new GeoPunkt((double)j / (double)GrößeB * (maxLänge - minLänge) + minLänge, (double)i / (double)GrößeH * (maxBreite - minBreite) + minBreite);
                     temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                    //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
                     double abshöhe = hGTConverter.GetHoehe(temppunkt1);
-                    //if (maximaleHöhe < abshöhe)
-                    //    maximaleHöhe = abshöhe;
-                    //if (minimaleHöhe > abshöhe
-                    //    && abshöhe != -32768
-                    //    )
-                    //    minimaleHöhe = abshöhe;
- 
-                    //if (abshöhe == 0)
-                    //{
-
-                    //};
-                    ////double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
-                    ////if (abshöhe2 < 0)
-                    ////{
-                    ////    int c;
-                    ////}
-                    //int eephöhe = (int)Math.Round((abshöhe * 100) + 10000);
-                    //if (eephöhe < 0)
-                    //    eephöhe = 0;
-                    //if (eephöhe == 0)
-                    //{
-
-                    //}
-                    //if (eephöhe >= 110000)
-                    //{
-                    //    eephöhe = 109999;
-                    //}
-                    //int r1 = eephöhe % 256;
-                    //int g1 = (eephöhe / 256) % 256;
-                    //int b1 = (eephöhe / 256 / 256) % 256;
-                    //byte höhe1 = (byte)(((abshöhe - minimaleHöhe) * 100 + 1000) / (höhendifferenz + 10) / 100 * 256 - 1);
-
-                    //b1 = höhe1;
-                    //r1 = b1;
-                    //g1 = b1;
-                    ////b1 = 0;
-                    //byte r = (byte)r1;
-                    //byte g = (byte)g1;
-                    //byte b = (byte)b1;
-                    //SolidColorBrush mySolidColorBrush = new SolidColorBrush
-                    //{
-                    //    Color = Color.FromRgb(r, g, b)
-                    //};
-
-                    //if ((i % 5 == 0) && (j % 5 == 0))
-                    //    punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
-
-                    //colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
+    
                 }
             }
             maximaleHöhe = hGTConverter.maxhöhe + 1;
             minimaleHöhe = hGTConverter.minhöhe;
 
             höhendifferenz = maximaleHöhe - minimaleHöhe;
-            //hGTConverter.SetInterpolationMethod(HGTConverter.InterpolationMethod.Automatic);
-
+  
             for (int i = 0; i < (int)GrößeH; i++)
             {
                 for (int j = 0; j < GrößeB; j++)
@@ -1038,26 +989,8 @@ namespace HoehenGenerator
 
                     tempPunkt = new GeoPunkt((double)j / (double)GrößeB * (maxLänge - minLänge) + minLänge, (double)i / (double)GrößeH * (maxBreite - minBreite) + minBreite);
                     temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                    //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
                     double abshöhe = hGTConverter.GetHoehe(temppunkt1);
-                    //if (maximaleHöhe < abshöhe)
-                    //    maximaleHöhe = abshöhe;
-                    //if (minimaleHöhe > abshöhe
-                    //    && abshöhe != -32768
-                    //    )
-                    //    minimaleHöhe = abshöhe;
-                    //double höhendifferenz = maximaleHöhe - minimaleHöhe;
-
-                    //if (abshöhe == 0)
-                    //{
-
-                    //};
-                    ////double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
-                    //if (abshöhe2 < 0)
-                    //{
-                    //    int c;
-                    //}
-                    int eephöhe = (int)Math.Round((abshöhe * 100) + 10000);
+                     int eephöhe = (int)Math.Round((abshöhe * 100) + 10000);
                     if (eephöhe < 0)
                         eephöhe = 0;
                     if (eephöhe == 0)
@@ -1090,7 +1023,6 @@ namespace HoehenGenerator
                     
                         punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
 
-                    //colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
                 }
 
             }
@@ -2781,8 +2713,18 @@ namespace HoehenGenerator
 
         private void BtnAutoAnpassung_Click(object sender, RoutedEventArgs e)
         {
-            höhenausgleich = -1 * minimaleHöhe;
+            if ((höhenausgleich == 0) && (ausgleichfaktor == 1))
+                {
+          höhenausgleich = -1 * minimaleHöhe;
             ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe)) * 100)) / 100.0;
+            }
+            else
+            {
+                höhenausgleich = -1 * (minimaleHöhe + 100);
+                ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe - 100)) * 100)) / 100.0;
+
+            }
+
             AnzeigeHöhenAufLetztemTab();
 
         }
