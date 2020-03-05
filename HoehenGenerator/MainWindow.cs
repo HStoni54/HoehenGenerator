@@ -512,6 +512,10 @@ namespace HoehenGenerator
             {
                 return;
             }
+            hGTConverter = null;
+            tbMaxhöhe.Text = "";
+            tbMinHöhe.Text = "";
+            btWeiter3.IsEnabled = false;
             SuchenNode(ge);
             if (coordinaten.Length > 0)
             {
@@ -960,6 +964,8 @@ namespace HoehenGenerator
             //double lat=0;
             //double lon=0;
             GeoPunkt temppunkt1;
+            hGTConverter.SetInterpolationMethod(HGTConverter.InterpolationMethod.Bilinear);
+            //hGTConverter.SetInterpolationMethod(HGTConverter.InterpolationMethod.Automatic);
             for (int i = 0; i < (int)GrößeH; i++)
             {
                 for (int j = 0; j < GrößeB; j++)
@@ -1019,10 +1025,11 @@ namespace HoehenGenerator
                     //colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
                 }
             }
-            maximaleHöhe = hGTConverter.maxhöhe;
+            maximaleHöhe = hGTConverter.maxhöhe + 1;
             minimaleHöhe = hGTConverter.minhöhe;
 
             höhendifferenz = maximaleHöhe - minimaleHöhe;
+            //hGTConverter.SetInterpolationMethod(HGTConverter.InterpolationMethod.Automatic);
 
             for (int i = 0; i < (int)GrößeH; i++)
             {
@@ -1064,7 +1071,8 @@ namespace HoehenGenerator
                     int r1 = eephöhe % 256;
                     int g1 = (eephöhe / 256) % 256;
                     int b1 = (eephöhe / 256 / 256) % 256;
-                    byte höhe1 = (byte)(((abshöhe - minimaleHöhe) * 100 + 1000) / (höhendifferenz + 10) / 100 * 256 - 1);
+                    double relhöhe = (((abshöhe - minimaleHöhe) * 100 + 1000) / (höhendifferenz + 10) / 100 * 256 - 1);
+                    byte höhe1 = (byte)relhöhe;
 
                     b1 = höhe1;
                     r1 = b1;
@@ -1079,6 +1087,7 @@ namespace HoehenGenerator
                     };
 
                     if ((i % 5 == 0) && (j % 5 == 0))
+                    
                         punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
 
                     //colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);

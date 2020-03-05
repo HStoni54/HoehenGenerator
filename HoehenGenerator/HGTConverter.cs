@@ -250,6 +250,9 @@ namespace HoehenGenerator
                     if (h == HGTReader.UNDEF)
                         return false;
                     eleArray[x][y] = h;
+                    maxhöhe = Math.Max(maxhöhe, h);
+                    minhöhe = Math.Min(minhöhe, h);
+
                 }
             }
 
