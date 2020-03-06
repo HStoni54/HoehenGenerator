@@ -44,7 +44,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.1.3.36</ApplicationVersion>
+    <ApplicationVersion>1.1.3.49</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -152,11 +152,8 @@
     </ApplicationDefinition>
     <Compile Include="AufgabeIndices.cs" />
     <Compile Include="ClGeneriereLeerHGTs1.cs" />
-    <Compile Include="ClZeichneMatrix.cs" />
-    <Compile Include="FileMitEckKoordinaten.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HGTConverter.cs" />
-    <Compile Include="HgtmitKoordinaten.cs" />
     <Compile Include="HGTReader.cs" />
     <Compile Include="LadeDateien.cs" />
     <Compile Include="OSM_Fileliste.cs" />
@@ -164,10 +161,8 @@
     <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
     <Compile Include="UnzippeDateien.cs" />
-    <Compile Include="VierEcken.cs" />
     <Compile Include="ZeichePunkteAufCanvas.cs" />
     <Compile Include="ZeichneBitMap.cs" />
-    <Compile Include="ZwischenspeicherHgt.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -176,9 +171,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Filemitauflösung.cs" />
     <Compile Include="GeoPunkt.cs" />
-    <Compile Include="HGTFile.cs" />
     <Compile Include="MainWindow.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

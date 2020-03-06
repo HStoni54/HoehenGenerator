@@ -20,9 +20,7 @@ namespace HoehenGenerator
 
         private OSM_Koordinaten osmrechtsoben;
         private OSM_Koordinaten osmlinksunten;
-        //private int anzahlhoch;
-        //private int anzahlbreit;
-
+ 
         public OSM_Fileliste(GeoPunkt georechtsoben, GeoPunkt geolinksunten, int auflösung)
         {
             this.georechtsoben = georechtsoben;
@@ -58,7 +56,6 @@ namespace HoehenGenerator
                 {
                     for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
                     {
-                        //TODO: hier die Ladeprozedur einschieben
                         HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
 
                     }
@@ -69,13 +66,11 @@ namespace HoehenGenerator
 
                     for (int j = osmlinksunten.Osmlänge; j < kachelanzahl; j++)
                     {
-                        //TODO: hier die Ladeprozedur einschieben
                         HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
 
                     }
                     for (int j = 0; j <= osmrechtsoben.Osmlänge; j++)
                     {
-                        //TODO: hier die Ladeprozedur einschieben
                         HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
 
                     }
@@ -87,8 +82,9 @@ namespace HoehenGenerator
         {
             string dateiname = osmtyp + "_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
             string dateinamekomplett = osmpfad + "\\" + dateiname;
-            string downloadname = "https://" + "a" + ".tile.openstreetmap.de/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
-            //string downloadname = "https://" + "a" + ".tile.openstreetmap.org/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
+            Random random = new Random( );
+            char ServerZufall = (char)random.Next(97,99);
+            string downloadname = "https://" + ServerZufall + ".tile.openstreetmap.de/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
             if (!File.Exists(dateinamekomplett))
             {
                 if (!LadeOSMDateien(downloadname, dateinamekomplett))
@@ -112,24 +108,7 @@ namespace HoehenGenerator
             //WandleBildInBmp(dateinamekomplett,osmauflösung);
         }
 
-        private static void WandleBildInBmp(string dateinamekomplett,int osmauflösung)
-        {
-            string dateinameneu = dateinamekomplett.Substring(0, dateinamekomplett.Length - 4) + ".bmp";
-            if (!File.Exists(dateinameneu))
-            {
-                Bitmap ausgangsbild = new Bitmap(dateinamekomplett);
-
-                int bildbreite = ausgangsbild.Width;
-                int bildhöhe = ausgangsbild.Height;
-                Rectangle rechteck = new Rectangle(0, 0, bildbreite, bildhöhe);
-                Bitmap bearbeitungsbild = ausgangsbild.Clone(rechteck, PixelFormat.Format24bppRgb);
-
-                bearbeitungsbild.Save(dateinameneu, ImageFormat.Bmp);
-                bearbeitungsbild.Dispose();
-                ausgangsbild.Dispose();
-            }
-
-        }
+ 
 
         public static bool LadeOSMDateien(string v, string zielname)
         {
