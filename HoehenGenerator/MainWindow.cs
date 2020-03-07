@@ -2030,8 +2030,9 @@ namespace HoehenGenerator
 
             else if (bitmapnamen.EndsWith("F.bmp", StringComparison.CurrentCulture))
             {
-                maptype = new string[1];
+                maptype = new string[2];
                 maptype[0] = "OSM";
+                maptype[1] = "ORM";
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
@@ -2060,8 +2061,12 @@ namespace HoehenGenerator
                             {
                                 if (!File.Exists(pngbildname))
                                 {
-                                    OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, maptype[0], pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
-                                    System.Threading.Thread.Sleep(1000);
+                                    foreach (var item in maptype)
+                                    {
+                                        OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, item, pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
+                                        System.Threading.Thread.Sleep(1000);
+
+                                    }
                                 }
                                 if (!File.Exists(bmpbildname))
                                     WandleBildUm();
@@ -2338,8 +2343,9 @@ namespace HoehenGenerator
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
-            maptype = new string[1];
+            maptype = new string[2];
             maptype[0] = "OSM";
+            maptype[1] = "ORM";
             OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
             foreach (string item in maptype)
             {
