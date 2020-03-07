@@ -79,6 +79,7 @@ namespace HoehenGenerator
         private string bmpbildname;
         HGTConverter hGTConverter;
        int auflösung;
+        public string maptype = "OSM";
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -2033,6 +2034,8 @@ namespace HoehenGenerator
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
                 auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat/180*Math.PI)/ 256, 2));
+                if (auflösung >= 17)
+                    auflösung = 16;
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
                 String bilddateiname = "";
@@ -2044,7 +2047,7 @@ namespace HoehenGenerator
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
                         OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(temppunkt1, auflösung);
                         oSM_Koordinaten.BerechneOSMKachel();
-                        string osmpfad = pfad + "\\OSM\\" + oSM_Koordinaten.Dateiname;
+                        string osmpfad = pfad + "\\OSM\\" + maptype + "_" + oSM_Koordinaten.Dateiname;
                         if (osmpfad != bilddateiname)
                         {
                             bitmap1.Dispose();
@@ -2055,7 +2058,7 @@ namespace HoehenGenerator
                             {
                                 if (!File.Exists(pngbildname))
                                 {
-                                    OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, "OSM", pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
+                                    OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, maptype, pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
                                     System.Threading.Thread.Sleep(1000);
                                 }
                                 if (!File.Exists(bmpbildname))
