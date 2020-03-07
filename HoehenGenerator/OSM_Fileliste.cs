@@ -33,12 +33,12 @@ namespace HoehenGenerator
         }
         public void OSM_LadeFiles(int osmauflösung, string osmtyp, string pfad) // TODO: Datumsgrenze
         {
-            if (!Directory.Exists(pfad + "\\" + osmtyp))
+            if (!Directory.Exists(pfad + "\\" + "OSM"))
 
                 try
                 {
 
-                    Directory.CreateDirectory(pfad + "\\" + osmtyp);
+                    Directory.CreateDirectory(pfad + "\\" + "OSM");
                 }
                 catch (Exception)
                 {
@@ -80,6 +80,8 @@ namespace HoehenGenerator
 
         public static void HoleOsmDaten(int osmauflösung, string osmtyp, string osmpfad, int osmbreite, int osmlänge)
         {
+  
+            
             string dateiname = osmtyp + "_" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
             string dateinamekomplett = osmpfad + "\\" + dateiname;
             Random random = new Random( );
@@ -104,6 +106,7 @@ namespace HoehenGenerator
                 }
 
 
+            
             }
             //WandleBildInBmp(dateinamekomplett,osmauflösung);
         }

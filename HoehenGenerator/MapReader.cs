@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -12,40 +14,58 @@ namespace HoehenGenerator
     class MapReader
     {
         private bool read = false;
-        private Bitmap buffer, tempbuffer;
+        private Bitmap buffer, tempbuffer, tempbuffer2;
         public string path, mappath;
         private int BildGröße;
         private string mapname;
         int auflösung;
         int lat, lon;
-        string maptype;
+        string[] maptype;
+        string dateiname;
 
-        public MapReader(double lat, double lon, string mapPath, string maptype, int auflösung, int BildGröße)
+        public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildGröße)
         {
             this.BildGröße = BildGröße;
             mappath = mapPath;
             this.auflösung = auflösung;
             this.maptype = maptype;
-            this.lat = (int)lat;
-            this.lon = (int)lon;
-            GeoPunkt geoPunkt = new GeoPunkt(lon, lat);
-            OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(geoPunkt,auflösung);
-            oSM_Koordinaten.BerechneOSMKachel();
-            mapname = maptype + "_" + oSM_Koordinaten.Dateiname;
+            this.lat = lat;
+            this.lon = lon;
+            //GeoPunkt geoPunkt = new GeoPunkt(lon, lat);
+            //OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(geoPunkt,auflösung);
+            //oSM_Koordinaten.BerechneOSMKachel();
+            //mapname = maptype + "_" + oSM_Koordinaten.Dateiname;
             // TODO: Bitmapdateien identifizieren und gegebenenfalls downloaden
         }
         public void PrepRead()
-        {
-            if (!File.Exists(mappath + "\\" + mapname + ".png"))
+        {     
+            buffer = new Bitmap(BildGröße, BildGröße, PixelFormat.Format32bppArgb);
+            var graphics = Graphics.FromImage(tempbuffer);
+            graphics.CompositingMode = CompositingMode.SourceOver;
+
+
+            foreach (string maptyp in maptype)
             {
-                OSM_Fileliste.HoleOsmDaten(auflösung,maptype,path,lat,lon);
-                System.Threading.Thread.Sleep(1000);
+  
+                mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
+
+                if (!File.Exists(mappath + "\\" + mapname + ".png"))
+                {
+                    OSM_Fileliste.HoleOsmDaten(auflösung, maptyp, path, lat, lon);
+                    System.Threading.Thread.Sleep(1000);
+                }
+                path = mappath + "\\" + mapname + ".png";
+                tempbuffer = new Bitmap(mappath + "\\" + mapname + ".png");
+                tempbuffer2 = new Bitmap(tempbuffer, BildGröße, BildGröße);
+                graphics.DrawImage(tempbuffer2, 0, 0);
+                tempbuffer.Dispose();
+                tempbuffer2.Dispose();
+
             }
-            path = mappath + "\\" + mapname + ".png";
-            tempbuffer = new Bitmap(mappath + "\\" + mapname + ".png");
-            buffer = new Bitmap(tempbuffer, BildGröße, BildGröße);
+            buffer.Save(mappath + "\\" + mapname + ".bmp",ImageFormat.Bmp);
+            //buffer = new Bitmap(tempbuffer); 
             read = true;
-            
+
             // TODO: Bitmap(s) einlesen
         }
         public Color farbe(int x, int y)
@@ -61,11 +81,11 @@ namespace HoehenGenerator
             {
 
 
-  
-                return buffer.GetPixel(x,y);
+
+                return buffer.GetPixel(x, y);
             }
-            else 
-           return color;
+            else
+                return color;
         }
         public bool FreeBuf()
         {

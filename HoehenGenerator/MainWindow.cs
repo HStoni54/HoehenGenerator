@@ -64,7 +64,7 @@ namespace HoehenGenerator
         private readonly ConcurrentQueue<UnzippeDateien> unzippeDateiens = new ConcurrentQueue<UnzippeDateien>();
         private readonly ConcurrentQueue<ZeichePunkteAufCanvas> punkteAufCanvas = new ConcurrentQueue<ZeichePunkteAufCanvas>();
         private readonly ConcurrentQueue<ClGeneriereLeerHGTs> ClGeneriereLeerHGTs = new ConcurrentQueue<ClGeneriereLeerHGTs>();
-         private double maximaleEEPHöhe;
+        private double maximaleEEPHöhe;
         private double minimaleEEPHöhe;
         private double höhenausgleich = 0.0;
         private double ausgleichfaktor = 1.0;
@@ -78,17 +78,17 @@ namespace HoehenGenerator
         private string pngbildname;
         private string bmpbildname;
         HGTConverter hGTConverter;
-       int auflösung;
-        public string maptype = "OSM";
+        int auflösung;
+        public string[] maptype;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
         public MainWindow()
         {
             InitializeComponent();
-  
+
             Title = "Höhengenerator für EEP " + VersionNr();
- 
+
 
             Thread thrHoleDateien = new Thread(HoleDateien)
             {
@@ -118,7 +118,7 @@ namespace HoehenGenerator
             };
             thrUnzpFiles.Start();
 
- 
+
             int prozessoranzahl = Environment.ProcessorCount;
             Thread[] thrZeichneCanvas = new Thread[prozessoranzahl];
             for (int i = 0; i < thrZeichneCanvas.Length; i++)
@@ -147,7 +147,7 @@ namespace HoehenGenerator
                 productName = asmProduct.Product.ToString(CultureInfo.CurrentCulture);
             }
 
-            string vers = string.Format(CultureInfo.CurrentCulture ," - Version: {0}.{1}.{2} Build: {3}",
+            string vers = string.Format(CultureInfo.CurrentCulture, " - Version: {0}.{1}.{2} Build: {3}",
                 //productName,
                 asmName.Version.Major.ToString(CultureInfo.CurrentCulture),
                 asmName.Version.Minor.ToString(CultureInfo.CurrentCulture),
@@ -206,7 +206,7 @@ namespace HoehenGenerator
             }
         }
 
- 
+
         private void ZeichneCanvas()
         {
 
@@ -487,10 +487,10 @@ namespace HoehenGenerator
             if (coordinaten.Length > 0)
             {
                 SepariereKoordinaten(coordinaten);
-                 punkte = orgpunkte;
+                punkte = orgpunkte;
                 Zeichenfläche = Zeichenfläche1;
 
-                 ZeichneAlles(punkte);
+                ZeichneAlles(punkte);
                 hgtlinksunten = linksunten;
                 hgtrechtsoben = rechtsoben;
                 if (lbHgtFiles.Items.Count <= 4)
@@ -618,10 +618,10 @@ namespace HoehenGenerator
             R5.SetColumn(2, new double[4] { -sinalpha, 0, cosalpha, 0 });
             R5.SetColumn(3, new double[4] { 0, 0, 0, 1 });
 
-           return R1 * R2 * R3 * R4 * R5;
+            return R1 * R2 * R3 * R4 * R5;
 
 
-         }
+        }
 
         private static Point DrehePunkt(Point point, Matrix drehung)
         {
@@ -637,7 +637,7 @@ namespace HoehenGenerator
             geoPunkt1.FügeGeopunktEin(point2[2], point2[0], point2[1]);
             Point point1 = new Point(geoPunkt1.Lon, geoPunkt1.Lat);
 
- 
+
             return point1;
         }
         private static GeoPunkt DrehePunkt(GeoPunkt geoPunkt, Matrix drehung)
@@ -748,7 +748,7 @@ namespace HoehenGenerator
                 BildeHGTString(maxlat, minlat, maxlon, minlon);
 
             }
-             string[] vs1 = new string[lbHgtFiles.Items.Count];
+            string[] vs1 = new string[lbHgtFiles.Items.Count];
             bool[] vs2 = new bool[lbHgtFiles.Items.Count];
             for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
@@ -821,7 +821,7 @@ namespace HoehenGenerator
                         hgt = hgt + "W" + (-j).ToString("D3", CultureInfo.CurrentCulture);
                     }
                     lbHgtFiles.Items.Add(hgt);
-  
+
                 }
             }
 
@@ -864,7 +864,7 @@ namespace HoehenGenerator
                 Canvas.SetLeft(elli, GrößeB / (maxLänge - minLänge) * (punkte[i].X - minLänge) - 2.5);
                 Canvas.SetBottom(elli, GrößeH / (maxBreite - minBreite) * (punkte[i].Y - minBreite) - 2.5);
             }
- 
+
         }
 
         private void FülleAnzeigeFläche()
@@ -883,14 +883,14 @@ namespace HoehenGenerator
                     tempPunkt = new GeoPunkt((double)j / (double)GrößeB * (maxLänge - minLänge) + minLänge, (double)i / (double)GrößeH * (maxBreite - minBreite) + minBreite);
                     temppunkt1 = DrehePunkt(tempPunkt, drehung);
                     double abshöhe = hGTConverter.GetHoehe(temppunkt1);
-    
+
                 }
             }
             maximaleHöhe = hGTConverter.maxhöhe + 1;
             minimaleHöhe = hGTConverter.minhöhe;
 
             höhendifferenz = maximaleHöhe - minimaleHöhe;
-  
+
             for (int i = 0; i < (int)GrößeH; i++)
             {
                 for (int j = 0; j < GrößeB; j++)
@@ -899,7 +899,7 @@ namespace HoehenGenerator
                     tempPunkt = new GeoPunkt((double)j / (double)GrößeB * (maxLänge - minLänge) + minLänge, (double)i / (double)GrößeH * (maxBreite - minBreite) + minBreite);
                     temppunkt1 = DrehePunkt(tempPunkt, drehung);
                     double abshöhe = hGTConverter.GetHoehe(temppunkt1);
-                     int eephöhe = (int)Math.Round((abshöhe * 100) + 10000);
+                    int eephöhe = (int)Math.Round((abshöhe * 100) + 10000);
                     if (eephöhe < 0)
                         eephöhe = 0;
                     if (eephöhe == 0)
@@ -929,7 +929,7 @@ namespace HoehenGenerator
                     };
 
                     if ((i % 5 == 0) && (j % 5 == 0))
-                    
+
                         punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
 
                 }
@@ -946,7 +946,7 @@ namespace HoehenGenerator
             AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
 
 
- 
+
             minimaleHöhe = punkte.Min(x => x.Höhe);
             if (minimaleHöhe == short.MinValue)
                 minimaleHöhe = 0;
@@ -1046,7 +1046,7 @@ namespace HoehenGenerator
 
         private void SepariereKoordinaten(string coordinaten)
         {
-  
+
             sepcoordinaten = coordinaten.Split(' ');
             geoPunkts = new GeoPunkt[sepcoordinaten.Length];
             orgpunkte.Clear();
@@ -1254,7 +1254,7 @@ namespace HoehenGenerator
             {
                 if (entry.Name.Length > 0)
                     entry.ExtractToFile(pfad + "\\" + entry.Name, overwrite: true);
- 
+
 
             }
             zipfile.Dispose();
@@ -1271,7 +1271,7 @@ namespace HoehenGenerator
             List<string> srtm3 = new List<string>();
             List<string> view1 = new List<string>();
             List<string> view3 = new List<string>();
- 
+
             for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
                 string file = lbHgtFiles.Items[i].ToString();
@@ -1459,7 +1459,7 @@ namespace HoehenGenerator
                     aufgabeIndices.Enqueue(new AufgabeIndices("view", 1, hgtPfad));
                 if (usesrtm)
                     aufgabeIndices.Enqueue(new AufgabeIndices("srtm", 1, hgtPfad));
- 
+
             }
 
             if (useview)
@@ -1467,7 +1467,7 @@ namespace HoehenGenerator
             if (usesrtm)
                 aufgabeIndices.Enqueue(new AufgabeIndices("srtm", 3, hgtPfad));
 
- 
+
 
             if (ÜberprüfeIndices())
                 LadeHGTFiles.IsEnabled = true;
@@ -1623,7 +1623,7 @@ namespace HoehenGenerator
                     }
                     xmlWriter.WriteEndElement();
                 }
-   
+
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
@@ -2001,7 +2001,7 @@ namespace HoehenGenerator
 
                         };
                         double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
-                       int eephöhe = (int)Math.Round((abshöhe2 * 100) + 10000);
+                        int eephöhe = (int)Math.Round((abshöhe2 * 100) + 10000);
                         if (eephöhe < 0)
                             eephöhe = 0;
                         if (eephöhe == 0)
@@ -2030,10 +2030,12 @@ namespace HoehenGenerator
 
             else if (bitmapnamen.EndsWith("F.bmp", StringComparison.CurrentCulture))
             {
+                maptype = new string[1];
+                maptype[0] = "OSM";
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
-                auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat/180*Math.PI)/ 256, 2));
+                auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
                 if (auflösung >= 17)
                     auflösung = 16;
 
@@ -2047,7 +2049,7 @@ namespace HoehenGenerator
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
                         OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(temppunkt1, auflösung);
                         oSM_Koordinaten.BerechneOSMKachel();
-                        string osmpfad = pfad + "\\OSM\\" + maptype + "_" + oSM_Koordinaten.Dateiname;
+                        string osmpfad = pfad + "\\OSM\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname;
                         if (osmpfad != bilddateiname)
                         {
                             bitmap1.Dispose();
@@ -2058,7 +2060,7 @@ namespace HoehenGenerator
                             {
                                 if (!File.Exists(pngbildname))
                                 {
-                                    OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, maptype, pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
+                                    OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, maptype[0], pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
                                     System.Threading.Thread.Sleep(1000);
                                 }
                                 if (!File.Exists(bmpbildname))
@@ -2074,7 +2076,7 @@ namespace HoehenGenerator
                         colors1[i, j] = bitmap1.GetPixel((int)(bitmap1.Width * oSM_Koordinaten.Kachell), (int)(bitmap1.Height * oSM_Koordinaten.Kachelb));
 
 
-   
+
                     }
                 bitmap1.Dispose();
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
@@ -2092,10 +2094,10 @@ namespace HoehenGenerator
         private void WandleBildUm()
         {
             System.Drawing.Bitmap ausgangsbild = new System.Drawing.Bitmap(pngbildname);
-            double osmpunkte = 256/(40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat/180*Math.PI));
-            int bildbreite = ausgangsbild.Width * zahltbRasterdichte /(int)osmpunkte;
-            int bildhöhe = ausgangsbild.Height  * zahltbRasterdichte/ (int)osmpunkte;
-            System.Drawing.Bitmap bearbeitungsbild = new System.Drawing.Bitmap(ausgangsbild,bildbreite,bildhöhe); 
+            double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
+            int bildbreite = ausgangsbild.Width * zahltbRasterdichte / (int)osmpunkte;
+            int bildhöhe = ausgangsbild.Height * zahltbRasterdichte / (int)osmpunkte;
+            System.Drawing.Bitmap bearbeitungsbild = new System.Drawing.Bitmap(ausgangsbild, bildbreite, bildhöhe);
 
 
             bearbeitungsbild.Save(bmpbildname, System.Drawing.Imaging.ImageFormat.Bmp);
@@ -2251,9 +2253,9 @@ namespace HoehenGenerator
         private void BtnAutoAnpassung_Click(object sender, RoutedEventArgs e)
         {
             if ((höhenausgleich == 0) && (ausgleichfaktor == 1))
-                {
-          höhenausgleich = -1 * minimaleHöhe;
-            ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe)) * 100)) / 100.0;
+            {
+                höhenausgleich = -1 * minimaleHöhe;
+                ausgleichfaktor = ((int)((1000 / (maximaleHöhe - minimaleHöhe)) * 100)) / 100.0;
             }
             else
             {
@@ -2336,8 +2338,14 @@ namespace HoehenGenerator
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
+            maptype = new string[1];
+            maptype[0] = "OSM";
             OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
-            oSM_Fileliste.OSM_LadeFiles(auflösung, "OSM", pfad);
+            foreach (string item in maptype)
+            {
+                oSM_Fileliste.OSM_LadeFiles(auflösung, item, pfad);
+            }
+
             //}
 
         }
