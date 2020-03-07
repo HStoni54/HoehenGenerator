@@ -50,13 +50,18 @@ namespace HoehenGenerator
                             res = CalcRes(fis.Length);
                             if (res >= 0)
                                 path = fName;
+                            
                         }
                         catch (Exception)
                         {
-
+                            
                             throw;
                         }
-                        fis.Dispose();
+                        finally
+                        {
+                            fis.Dispose();
+                        }
+                        
                     }
                 };
             }

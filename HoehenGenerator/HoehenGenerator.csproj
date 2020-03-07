@@ -44,7 +44,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.1.3.49</ApplicationVersion>
+    <ApplicationVersion>1.1.3.50</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -156,6 +156,7 @@
     <Compile Include="HGTConverter.cs" />
     <Compile Include="HGTReader.cs" />
     <Compile Include="LadeDateien.cs" />
+    <Compile Include="MapReader.cs" />
     <Compile Include="OSM_Fileliste.cs" />
     <Compile Include="OSM_Koordinaten.cs" />
     <Compile Include="SchreibeAnlagenFile.cs" />
