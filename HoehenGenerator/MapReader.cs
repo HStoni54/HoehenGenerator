@@ -16,16 +16,17 @@ namespace HoehenGenerator
         private bool read = false;
         private Bitmap buffer, tempbuffer, tempbuffer2;
         public string path, mappath;
-        private int BildGröße;
+        private int BildBreite, BildHöhe;
         private string mapname;
         int auflösung;
         int lat, lon;
         string[] maptype;
         string dateiname;
 
-        public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildGröße)
+        public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildBreite,int BildHöhe)
         {
-            this.BildGröße = BildGröße;
+            this.BildBreite = BildBreite;
+            this.BildHöhe = BildHöhe;
             mappath = mapPath;
             this.auflösung = auflösung;
             this.maptype = maptype;
@@ -39,8 +40,8 @@ namespace HoehenGenerator
         }
         public void PrepRead()
         {     
-            buffer = new Bitmap(BildGröße, BildGröße, PixelFormat.Format32bppArgb);
-            var graphics = Graphics.FromImage(tempbuffer);
+            buffer = new Bitmap(BildBreite, BildBreite, PixelFormat.Format32bppArgb);
+            var graphics = Graphics.FromImage(buffer);
             graphics.CompositingMode = CompositingMode.SourceOver;
 
 
@@ -51,12 +52,12 @@ namespace HoehenGenerator
 
                 if (!File.Exists(mappath + "\\" + mapname + ".png"))
                 {
-                    OSM_Fileliste.HoleOsmDaten(auflösung, maptyp, path, lat, lon);
+                    OSM_Fileliste.HoleOsmDaten(auflösung, maptyp, mappath, lat, lon);
                     System.Threading.Thread.Sleep(1000);
                 }
                 path = mappath + "\\" + mapname + ".png";
                 tempbuffer = new Bitmap(mappath + "\\" + mapname + ".png");
-                tempbuffer2 = new Bitmap(tempbuffer, BildGröße, BildGröße);
+                tempbuffer2 = new Bitmap(tempbuffer, BildBreite, BildHöhe);
                 graphics.DrawImage(tempbuffer2, 0, 0);
                 tempbuffer.Dispose();
                 tempbuffer2.Dispose();
@@ -77,7 +78,7 @@ namespace HoehenGenerator
             }
             if (buffer == null)
                 return color;
-            if (x >= 0 && x < BildGröße && y >= 0 && y < BildGröße)
+            if (x >= 0 && x < BildBreite && y >= 0 && y < BildBreite)
             {
 
 

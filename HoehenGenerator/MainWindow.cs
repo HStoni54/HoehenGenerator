@@ -2051,13 +2051,23 @@ namespace HoehenGenerator
                         OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(temppunkt1, auflösung);
                         oSM_Koordinaten.BerechneOSMKachel();
                         string osmpfad = pfad + "\\OSM\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname;
-                        if (osmpfad != bilddateiname)
+                        //
+                        double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
+                        int bildbreite = 256 * zahltbRasterdichte / (int)osmpunkte;
+                        int bildhöhe = 256 * zahltbRasterdichte / (int)osmpunkte;
+
+                        MapReader mapReader = new MapReader(oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge, pfad + "\\OSM\\", maptype, auflösung, bildbreite, bildhöhe);
+                        if (!File.Exists(pfad + "\\OSM\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname+ ".bmp"))
+                        mapReader.PrepRead();
+                        mapReader = null;
+                            //
+                         if (osmpfad != bilddateiname)
                         {
                             bitmap1.Dispose();
                             bilddateiname = osmpfad;
                             pngbildname = bilddateiname + ".png";
                             bmpbildname = bilddateiname + ".bmp";
-                            if (!File.Exists(bmpbildname))
+                           if (!File.Exists(bmpbildname))
                             {
                                 if (!File.Exists(pngbildname))
                                 {
