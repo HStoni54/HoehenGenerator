@@ -80,6 +80,7 @@ namespace HoehenGenerator
         HGTConverter hGTConverter;
         int auflösung;
         public string[] maptype;
+       
         MapConverter mapConverter;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
@@ -87,7 +88,9 @@ namespace HoehenGenerator
         public MainWindow()
         {
             InitializeComponent();
-
+            maptype = new string[1];
+            maptype[0] = "OSM";
+            //maptype[1] = "ORM";
             Title = "Höhengenerator für EEP " + VersionNr();
 
 
@@ -2046,9 +2049,9 @@ namespace HoehenGenerator
 
             else if (bitmapnamen.EndsWith("F.bmp", StringComparison.CurrentCulture))
             {
-                maptype = new string[2];
-                maptype[0] = "OSM";
-                maptype[1] = "ORM";
+                //maptype = new string[2];
+                //maptype[0] = "OSM";
+                //maptype[1] = "ORM";
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, -winkel);
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
@@ -2371,9 +2374,9 @@ namespace HoehenGenerator
                 auflösung = 16;
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
-            maptype = new string[2];
-            maptype[0] = "OSM";
-            maptype[1] = "ORM";
+            //maptype = new string[2];
+            //maptype[0] = "OSM";
+            //maptype[1] = "ORM";
             OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
 
             // TODO: nur Test
@@ -2382,6 +2385,8 @@ namespace HoehenGenerator
                 mapConverter = new MapConverter(pfad + "\\Maps\\", maptype, hgtlinksunten, hgtrechtsoben, auflösung);
             }
             mapConverter.PrepReaders();
+            mapConverter.FreeBuff();
+            //mapConverter = null;
             //
             foreach (string item in maptype)
             {

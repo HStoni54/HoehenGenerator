@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class MapReader
+    class MapReader : IDisposable
     {
         public bool read = false;
         private Bitmap buffer, tempbuffer, tempbuffer2;
@@ -32,6 +32,9 @@ namespace HoehenGenerator
             this.maptype = maptype;
             this.lat = lat;
             this.lon = lon;
+            buffer = null;
+            tempbuffer = null;
+            tempbuffer2 = null;
             //GeoPunkt geoPunkt = new GeoPunkt(lon, lat);
             //OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(geoPunkt,auflösung);
             //oSM_Koordinaten.BerechneOSMKachel();
@@ -92,9 +95,24 @@ namespace HoehenGenerator
         {
             if (buffer == null)
                 return false;
+            buffer.Dispose();
             buffer = null;
+            tempbuffer.Dispose();
+            tempbuffer = null;
+            tempbuffer2.Dispose();
+            tempbuffer2 = null;
             read = false;
             return true;
+        }
+
+        public void Dispose()
+        {
+            FreeBuf();
+            buffer.Dispose();
+           
+            tempbuffer.Dispose();
+            tempbuffer2.Dispose();
+            read = false;
         }
     }
 }

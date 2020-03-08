@@ -63,5 +63,16 @@ namespace HoehenGenerator
             //color = rdr.farbe(oSM_Koordinaten.)
             return color;
         }
+
+        public void FreeBuff()
+        {
+            for (int i = 0; i < dimLat; i++)
+            {
+                for (int j = 0; j < dimLon; j++)
+                {
+                    readers[i][j].FreeBuf();
+                }
+            }
+        }
     }
 }
