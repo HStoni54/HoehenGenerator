@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoehenGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="437" Width="800" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        Title="MainWindow" Height="450" Width="450" MinHeight="450" MinWidth="450" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
     <TabControl x:Name="tabControl" >
         <TabItem x:Name="ladenTab" Header="Datei Laden" GotFocus="LadenTab_GotFocus" >
             <Grid Background="#FFE5E5E5" ShowGridLines="True" Margin="0,0,0,0">
@@ -147,7 +147,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="115"/>
                     <ColumnDefinition Width="237*"/>
-                    <ColumnDefinition Width="434*"/>
+
                 </Grid.ColumnDefinitions>
                 <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,163,0,0" VerticalAlignment="Top" Width="80" Click="osmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
                 <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,185,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
@@ -157,6 +157,7 @@
                 <RadioButton x:Name="rbGMHG" Content="" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                 <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
                 <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top"/>
+                <Image x:Name="imHintergrund" Grid.Column="1" HorizontalAlignment="Left" Height="275" Margin="10,10,0,0" VerticalAlignment="Top"/>
 
             </Grid>
         </TabItem>
