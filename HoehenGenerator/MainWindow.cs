@@ -1931,6 +1931,25 @@ namespace HoehenGenerator
         }
         private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
+            if (cbORM.IsChecked == true)
+            {
+                maptype = new string[2];
+                maptype[1] = "ORM";
+            }
+            else
+            {
+                maptype = new string[1];
+            }
+            maptype[0] = "OSM";
+            if (rbKeinHG.IsChecked == true)
+            {
+                maptype[0] = "kein";
+            }
+            if (rbOSMHG.IsChecked == true)
+            {
+                maptype[0] = "OSM";
+            }
+
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
             int höhe = (int)(zahltbHöheDerAnlage * zahltbRasterdichte);
             int breite = (int)(zahlbreiteDerAnlage * zahltbRasterdichte);
@@ -1940,7 +1959,8 @@ namespace HoehenGenerator
                System.Drawing.Color.FromArgb(255, 16, 39, 0),
                System.Drawing.Color.FromArgb(255,0,0,1),
                System.Drawing.Color.FromArgb(255,1, 12, 75) };
-
+            if (rbKeinHG.IsChecked == true)
+                colors[4] = System.Drawing.Color.FromArgb(255, 0, 0, 100);
 
             System.Drawing.Imaging.PixelFormat pixelFormat = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
 
@@ -2370,6 +2390,26 @@ namespace HoehenGenerator
 
         private void osmDaten_Click(object sender, RoutedEventArgs e)
         {
+            if (cbORM.IsChecked == true)
+            {
+                maptype = new string[2];
+                maptype[1] = "ORM";
+            }
+            else
+            {
+                maptype = new string[1];
+            }
+            maptype[0] = "OSM";
+            if (rbKeinHG.IsChecked == true)
+            {
+                maptype[0] = "kein";
+            }
+
+            if (rbOSMHG.IsChecked == true)
+            {
+                maptype[0] = "OSM";
+            }
+
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             if (auflösung >= 17)
                 auflösung = 16;

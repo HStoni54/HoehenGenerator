@@ -98,6 +98,18 @@ namespace HoehenGenerator
                 downloadname = "https://" + ServerZufall + ".tiles.openrailwaymap.org/standard/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
 
             }
+            else if (osmtyp == "kein")
+            {
+                Color color = Color.FromArgb(255, 200, 200, 200);
+                Bitmap bitmap = new Bitmap(256, 256);
+                for (int i = 0; i < bitmap.Height; i++)
+                    for (int j = 0; j < bitmap.Width; j++)
+                    {
+                        bitmap.SetPixel(i, j, color);
+                    }
+                bitmap.Save(dateinamekomplett);
+                bitmap.Dispose();
+            }
             if (!File.Exists(dateinamekomplett))
             {
                 if (!LadeOSMDateien(downloadname, dateinamekomplett))

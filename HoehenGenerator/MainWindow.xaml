@@ -149,8 +149,14 @@
                     <ColumnDefinition Width="237*"/>
                     <ColumnDefinition Width="434*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="osmDaten" Content="OSM-Daten" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="osmDaten_Click"/>
-                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
+                <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,163,0,0" VerticalAlignment="Top" Width="80" Click="osmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,185,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
+                <Label x:Name="label21" Content="Hintergrund" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80"/>
+                <RadioButton x:Name="rbKeinHG" Content="Kein" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                <RadioButton x:Name="rbOSMHG" Content="OSM" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top"/>
+                <RadioButton x:Name="rbGMHG" Content="" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+                <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top"/>
 
             </Grid>
         </TabItem>
