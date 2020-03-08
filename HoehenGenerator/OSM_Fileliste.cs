@@ -33,22 +33,22 @@ namespace HoehenGenerator
         }
         public void OSM_LadeFiles(int osmauflösung, string osmtyp, string pfad) // TODO: Datumsgrenze
         {
-            if (!Directory.Exists(pfad + "\\" + "OSM"))
+            if (!Directory.Exists(pfad + "\\" + "Maps"))
 
                 try
                 {
 
-                    Directory.CreateDirectory(pfad + "\\" + "OSM");
+                    Directory.CreateDirectory(pfad + "\\" + "Maps");
                 }
                 catch (Exception)
                 {
 
-                    MessageBox.Show("Kann Directory für OSM-Dateien nicht erstellen!\n"
+                    MessageBox.Show("Kann Directory für Kartendaten nicht erstellen!\n"
                         + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
                         + "\"" + pfad + "\"");
 
                 }
-            string osmpfad = pfad + "\\" + "OSM" + "\\";
+            string osmpfad = pfad + "\\" + "Maps" + "\\";
 
             for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
             {

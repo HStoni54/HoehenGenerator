@@ -376,6 +376,21 @@ namespace HoehenGenerator
 
                     }
 
+                if (!Directory.Exists(pfad + "\\Maps"))
+
+                    try
+                    {
+
+                        Directory.CreateDirectory(pfad + "\\Maps");
+                    }
+                    catch (Exception)
+                    {
+
+                        MessageBox.Show("Kann Directory für Kartendaten nicht erstellen!\n"
+                            + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
+                            + "\"" + pfad + "\"");
+
+                    }
                 if (!Directory.Exists(pfad + "\\HGT"))
 
                     try
@@ -2050,14 +2065,14 @@ namespace HoehenGenerator
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
                         OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(temppunkt1, auflösung);
                         oSM_Koordinaten.BerechneOSMKachel();
-                        string osmpfad = pfad + "\\OSM\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname;
+                        string osmpfad = pfad + "\\Maps\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname;
                         //
                         double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
                         int bildbreite = 256 * zahltbRasterdichte / (int)osmpunkte;
                         int bildhöhe = 256 * zahltbRasterdichte / (int)osmpunkte;
 
-                        MapReader mapReader = new MapReader(oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge, pfad + "\\OSM\\", maptype, auflösung, bildbreite, bildhöhe);
-                        if (!File.Exists(pfad + "\\OSM\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname+ ".bmp"))
+                        MapReader mapReader = new MapReader(oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge, pfad + "\\Maps\\", maptype, auflösung, bildbreite, bildhöhe);
+                        if (!File.Exists(pfad + "\\Maps\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname+ ".bmp"))
                         mapReader.PrepRead();
                         mapReader = null;
                             //
@@ -2073,7 +2088,7 @@ namespace HoehenGenerator
                                 {
                                     foreach (var item in maptype)
                                     {
-                                        OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, item, pfad + "\\OSM", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
+                                        OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, item, pfad + "\\Maps", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
                                         System.Threading.Thread.Sleep(1000);
 
                                     }
