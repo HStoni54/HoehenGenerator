@@ -2398,6 +2398,12 @@ namespace HoehenGenerator
 
         }
 
+        private void Weiter4_Click(object sender, RoutedEventArgs e)
+        {
+            tabGenerieren.IsSelected = true;
+            tabGenerieren.IsEnabled = true;
+        }
+
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierungEEPHöhe.Text, out double test))

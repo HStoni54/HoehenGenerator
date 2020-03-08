@@ -81,23 +81,23 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="115"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="227*"/>
+                    <ColumnDefinition Width="444*"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="btnAnlagenDirectory" Content="Verzeichnis" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="80" Click="BtnAnlagenDirectory_Click" Height="20"/>
                 <Label x:Name="label2" Content="Anlagenname" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" FontSize="11" Height="25"/>
                 <TextBox x:Name="tbAnlagenname" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" Text="Neue Anlage" VerticalAlignment="Top" Width="80" FontSize="10" TextChanged="TbAnlagenname_TextChanged"/>
-                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
-                <Label x:Name="label3" Content="Knotenzahl:" Grid.Column="1" HorizontalAlignment="Left" Margin="237,16,0,0" VerticalAlignment="Top" Height="26"/>
-                <Label x:Name="label5" Content="Rasterdichte" Grid.Column="1" HorizontalAlignment="Left" Margin="237,124,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
-                <Label x:Name="label6" Content="Anlagengröße" Grid.Column="1" HorizontalAlignment="Left" Margin="237,43,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
-                <Label x:Name="label7" Content="Breite" Grid.Column="1" HorizontalAlignment="Left" Margin="237,69,0,0" VerticalAlignment="Top" Height="26" Width="41"/>
-                <Label x:Name="label8" Content="Länge" Grid.Column="1" HorizontalAlignment="Left" Margin="237,96,0,0" VerticalAlignment="Top" Height="26" />
-                <Label x:Name="label9" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,69,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.654,-1.192"/>
-                <Label x:Name="label9_Copy" Content="km" Grid.Column="1" HorizontalAlignment="Left" Margin="336,96,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.846,-1.154"/>
-                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="TbBreiteDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
-                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="283,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="TbHöheDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
-                <TextBox x:Name="tbRasterDichte" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="313,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" TextChanged="TbRasterDichte_TextChanged" HorizontalContentAlignment="Right"/>
-                <Label x:Name="lbKnotenAktuell" Content="Knotenzahl aktuell" Grid.Column="1" HorizontalAlignment="Left" Margin="311,17,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.5,-1.731" Height="26"/>
+                <Label x:Name="label3" Content="Knotenzahl:" Grid.Column="2" HorizontalAlignment="Left" Margin="10,16,0,0" VerticalAlignment="Top" Height="26"/>
+                <Label x:Name="label5" Content="Rasterdichte" Grid.Column="2" HorizontalAlignment="Left" Margin="10,124,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
+                <Label x:Name="label6" Content="Anlagengröße" Grid.Column="2" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
+                <Label x:Name="label7" Content="Breite" Grid.Column="2" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Height="26" Width="41"/>
+                <Label x:Name="label8" Content="Länge" Grid.Column="2" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" Height="26" />
+                <Label x:Name="label9" Content="km" Grid.Column="2" HorizontalAlignment="Left" Margin="109,69,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.654,-1.192"/>
+                <Label x:Name="label9_Copy" Content="km" Grid.Column="2" HorizontalAlignment="Left" Margin="109,96,0,0" VerticalAlignment="Top" Height="26" Width="26" RenderTransformOrigin="0.846,-1.154"/>
+                <TextBox x:Name="tbBreiteDerAnlage" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="56,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="TbBreiteDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
+                <TextBox x:Name="tbHöheDerAnlage" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="56,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" TextChanged="TbHöheDerAnlage_TextChanged" HorizontalContentAlignment="Right"/>
+                <TextBox x:Name="tbRasterDichte" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="86,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" TextChanged="TbRasterDichte_TextChanged" HorizontalContentAlignment="Right"/>
+                <Label x:Name="lbKnotenAktuell" Content="Knotenzahl aktuell" Grid.Column="2" HorizontalAlignment="Left" Margin="84,17,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.5,-1.731" Height="26"/>
                 <Label x:Name="label4" Content="Gelände" Grid.Column="1" HorizontalAlignment="Left" Margin="11,10,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label10" Content="Maximale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,36,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label11" Content="Minimale Höhe:" Grid.Column="1" HorizontalAlignment="Left" Margin="11,62,0,0" VerticalAlignment="Top"/>
@@ -116,38 +116,42 @@
                 <Label x:Name="label13_Copy2" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="163,202,0,0" VerticalAlignment="Top"/>
                 <Button x:Name="btnAutoAnpassung" Content="Automatische Anpassung" Grid.Column="1" HorizontalAlignment="Left" Margin="11,245,0,0" VerticalAlignment="Top" Width="151" Click="BtnAutoAnpassung_Click" IsEnabled="False"/>
                 <Button x:Name="btnSkalierungZurücksetzen" Content="Skalierung zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="11,270,0,0" VerticalAlignment="Top" Width="151" Click="BtnSkalierungZurücksetzen_Click" IsEnabled="False"/>
-                <Label x:Name="label13" Content="Skalierung" Grid.Column="1" HorizontalAlignment="Left" Margin="380,43,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbScalierungEEPBreite" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="388,67,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbScalierungEEPBreite_TextChanged"/>
-                <Label x:Name="label13_Copy" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="445,62,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbScalierungEEPHöhe" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="388,95,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbScalierungEEPHöhe_TextChanged"/>
-                <Label x:Name="label13_Copy3" Content="%" Grid.Column="1" HorizontalAlignment="Left" Margin="445,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.25,-0.269"/>
-                <Button x:Name="btEEPHBScalieren" Content="Skalierung von Höhen übernehmen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,161,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBScalieren_Click" IsEnabled="False"/>
-                <Button x:Name="btEEPHBzurücksetzen" Content="Skalierung H/B zurücksetzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,186,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBzurücksetzen_Click" IsEnabled="False"/>
-                <Label x:Name="label16" Content="Rasterdichte setzen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,212,0,0" VerticalAlignment="Top" Width="195"/>
-                <Button x:Name="btnRasterdichte8" Content="800.000" Grid.Column="1" HorizontalAlignment="Left" Margin="262,243,0,0" VerticalAlignment="Top" Width="60" Click="BtnRasterdichte8_Click"/>
-                <Button x:Name="btnRasterdichte10" Content="1.000.000" Grid.Column="1" HorizontalAlignment="Left" Margin="327,243,0,0" VerticalAlignment="Top" Width="60" Click="BtnRasterdichte10_Click"/>
-                <Button x:Name="btnRasterdichte50" Content="5.000.000" Grid.Column="1" HorizontalAlignment="Left" Margin="392,243,0,0" VerticalAlignment="Top" Width="60" Click="BtnRasterdichte50_Click"/>
-                <RadioButton x:Name="rbBaum" Content="Bäume" Grid.Column="1" HorizontalAlignment="Left" Margin="262,296,0,0" VerticalAlignment="Top" IsChecked="True"/>
-                <RadioButton x:Name="rbPfosten" Content="Pfosten" Grid.Column="1" HorizontalAlignment="Left" Margin="262,311,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label17" Content="Markierungen" Grid.Column="1" HorizontalAlignment="Left" Margin="262,270,0,0" VerticalAlignment="Top"/>
-                <Slider x:Name="slZoom" Grid.Column="1" HorizontalAlignment="Left" Margin="350,296,0,0" VerticalAlignment="Top" Width="102" Minimum="1" Maximum="50" AutoToolTipPlacement="BottomRight" Value="20"/>
-                <Label x:Name="label18" Content="Vergrößerung" Grid.Column="1" HorizontalAlignment="Left" Margin="351,272,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label13" Content="Skalierung" Grid.Column="2" HorizontalAlignment="Left" Margin="153,43,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbScalierungEEPBreite" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="161,67,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbScalierungEEPBreite_TextChanged"/>
+                <Label x:Name="label13_Copy" Content="%" Grid.Column="2" HorizontalAlignment="Left" Margin="218,62,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbScalierungEEPHöhe" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="161,95,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="57" IsEnabled="False" HorizontalContentAlignment="Right" TextChanged="TbScalierungEEPHöhe_TextChanged"/>
+                <Label x:Name="label13_Copy3" Content="%" Grid.Column="2" HorizontalAlignment="Left" Margin="218,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.25,-0.269"/>
+                <Button x:Name="btEEPHBScalieren" Content="Skalierung von Höhen übernehmen" Grid.Column="2" HorizontalAlignment="Left" Margin="35,161,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBScalieren_Click" IsEnabled="False"/>
+                <Button x:Name="btEEPHBzurücksetzen" Content="Skalierung H/B zurücksetzen" Grid.Column="2" HorizontalAlignment="Left" Margin="35,186,0,0" VerticalAlignment="Top" Width="195" Click="BtEEPHBzurücksetzen_Click" IsEnabled="False"/>
+                <Label x:Name="label16" Content="Rasterdichte setzen" Grid.Column="2" HorizontalAlignment="Left" Margin="35,212,0,0" VerticalAlignment="Top" Width="195"/>
+                <Button x:Name="btnRasterdichte8" Content="800.000" Grid.Column="2" HorizontalAlignment="Left" Margin="35,243,0,0" VerticalAlignment="Top" Width="60" Click="BtnRasterdichte8_Click"/>
+                <Button x:Name="btnRasterdichte10" Content="1.000.000" Grid.Column="2" HorizontalAlignment="Left" Margin="100,243,0,0" VerticalAlignment="Top" Width="60" Click="BtnRasterdichte10_Click"/>
+                <Button x:Name="btnRasterdichte50" Content="5.000.000" Grid.Column="2" HorizontalAlignment="Left" Margin="165,243,0,0" VerticalAlignment="Top" Width="60" Click="BtnRasterdichte50_Click"/>
+                <RadioButton x:Name="rbBaum" Content="Bäume" Grid.Column="2" HorizontalAlignment="Left" Margin="35,296,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                <RadioButton x:Name="rbPfosten" Content="Pfosten" Grid.Column="2" HorizontalAlignment="Left" Margin="35,311,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label17" Content="Markierungen" Grid.Column="2" HorizontalAlignment="Left" Margin="35,270,0,0" VerticalAlignment="Top"/>
+                <Slider x:Name="slZoom" Grid.Column="2" HorizontalAlignment="Left" Margin="123,296,0,0" VerticalAlignment="Top" Width="102" Minimum="1" Maximum="50" AutoToolTipPlacement="BottomRight" Value="20"/>
+                <Label x:Name="label18" Content="Vergrößerung" Grid.Column="2" HorizontalAlignment="Left" Margin="124,272,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label19" Content="Drehung der Anlage" Grid.Column="1" HorizontalAlignment="Left" Margin="11,298,0,0" VerticalAlignment="Top" />
                 <Label x:Name="lbDrehung" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="133,298,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label20" Content="im Uhrzeigersinn" Grid.Column="1" HorizontalAlignment="Left" Margin="11,324,0,0" VerticalAlignment="Top"/>
-                <Button x:Name="osmDaten" Content="OSM-Daten" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="osmDaten_Click"/>
+                <Button x:Name="Weiter4" Content="Weiter" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="0.133,0.5" Click="Weiter4_Click"/>
             </Grid>
         </TabItem>
 
-        <TabItem   IsEnabled="False">
+        <TabItem x:Name="tabGenerieren"   IsEnabled="False" Header="Generieren">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="115"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="237*"/>
+                    <ColumnDefinition Width="434*"/>
                 </Grid.ColumnDefinitions>
+                <Button x:Name="osmDaten" Content="OSM-Daten" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Width="80" Click="osmDaten_Click"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
+
             </Grid>
         </TabItem>
     </TabControl>
