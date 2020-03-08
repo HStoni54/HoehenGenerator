@@ -13,8 +13,9 @@ namespace HoehenGenerator
         private int lastRow = -1;
         private int auflösung;
         private int minLat, maxLat, minLon, maxLon, dimLat, dimLon;
+        private int BildBreite, BildHöhe;
         
-        public MapConverter(string mappath, string[] maptypen, GeoPunkt gplinksunten, GeoPunkt gprechtsoben, int gpauflösung)
+        public MapConverter(string mappath, string[] maptypen, GeoPunkt gplinksunten, GeoPunkt gprechtsoben, int gpauflösung, GeoPunkt mittelpunkt, int rasterdichte)
         {
             auflösung = gpauflösung;
             OSM_Koordinaten rechtsoben = new OSM_Koordinaten(gprechtsoben, auflösung);
@@ -29,12 +30,16 @@ namespace HoehenGenerator
              dimLon = maxLon - minLon + 1;
             readers = null;
             readers = new MapReader[dimLat][];
+            double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
+            int bildbreite = 256 * rasterdichte / (int)osmpunkte;
+            int bildhöhe = 256 * rasterdichte / (int)osmpunkte;
+
             for (int i = 0; i < readers.Length; i++)
             {
                 readers[i] = new MapReader[dimLon];
                 for (int j = 0; j < readers[i].Length; j++)
                 {
-                    readers[i][j] = new MapReader(minLat + i, minLon + j,mappath, maptypen, auflösung, 256, 256);
+                    readers[i][j] = new MapReader(minLat + i, minLon + j,mappath, maptypen, auflösung, bildhöhe, bildbreite);
                     //readers[i][j].PrepRead();
                 }
             }

@@ -95,12 +95,13 @@ namespace HoehenGenerator
         {
             if (buffer == null)
                 return false;
-            buffer.Dispose();
-            buffer = null;
-            tempbuffer.Dispose();
-            tempbuffer = null;
-            tempbuffer2.Dispose();
-            tempbuffer2 = null;
+            if (buffer != null)
+                buffer.Dispose();
+            if (tempbuffer != null)
+                tempbuffer.Dispose();
+            if (tempbuffer2 != null)
+                tempbuffer2.Dispose();
+           
             read = false;
             return true;
         }
@@ -108,9 +109,11 @@ namespace HoehenGenerator
         public void Dispose()
         {
             FreeBuf();
+            if (buffer != null)
             buffer.Dispose();
-           
+           if (tempbuffer != null)
             tempbuffer.Dispose();
+           if (tempbuffer2 != null)
             tempbuffer2.Dispose();
             read = false;
         }

@@ -2078,6 +2078,7 @@ namespace HoehenGenerator
                         MapReader mapReader = new MapReader(oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge, pfad + "\\Maps\\", maptype, auflösung, bildbreite, bildhöhe);
                         if (!File.Exists(pfad + "\\Maps\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname + ".bmp"))
                             mapReader.PrepRead();
+                        mapReader.Dispose();
                         mapReader = null;
                         //
                         if (osmpfad != bilddateiname)
@@ -2382,16 +2383,16 @@ namespace HoehenGenerator
             // TODO: nur Test
             if (mapConverter == null)
             {
-                mapConverter = new MapConverter(pfad + "\\Maps\\", maptype, hgtlinksunten, hgtrechtsoben, auflösung);
+                mapConverter = new MapConverter(pfad + "\\Maps\\", maptype, hgtlinksunten, hgtrechtsoben, auflösung,mittelpunkt,zahltbRasterdichte);
             }
             mapConverter.PrepReaders();
             mapConverter.FreeBuff();
             //mapConverter = null;
             //
-            foreach (string item in maptype)
-            {
-                oSM_Fileliste.OSM_LadeFiles(auflösung, item, pfad);
-            }
+            //foreach (string item in maptype)
+            //{
+            //    oSM_Fileliste.OSM_LadeFiles(auflösung, item, pfad);
+            //}
 
             //}
 
