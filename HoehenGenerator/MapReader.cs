@@ -13,7 +13,7 @@ namespace HoehenGenerator
 {
     class MapReader
     {
-        private bool read = false;
+        public bool read = false;
         private Bitmap buffer, tempbuffer, tempbuffer2;
         public string path, mappath;
         private int BildBreite, BildHöhe;
@@ -23,7 +23,7 @@ namespace HoehenGenerator
         string[] maptype;
         string dateiname;
 
-        public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildBreite,int BildHöhe)
+        public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildBreite, int BildHöhe)
         {
             this.BildBreite = BildBreite;
             this.BildHöhe = BildHöhe;
@@ -39,15 +39,15 @@ namespace HoehenGenerator
             // TODO: Bitmapdateien identifizieren und gegebenenfalls downloaden
         }
         public void PrepRead()
-        {     
-            buffer = new Bitmap(BildBreite, BildBreite, PixelFormat.Format32bppArgb);
+        {
+            buffer = new Bitmap(BildHöhe, BildBreite, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(buffer);
             graphics.CompositingMode = CompositingMode.SourceOver;
 
 
             foreach (string maptyp in maptype)
             {
-  
+
                 mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
 
                 if (!File.Exists(mappath + "\\" + mapname + ".png"))
@@ -57,13 +57,13 @@ namespace HoehenGenerator
                 }
                 path = mappath + "\\" + mapname + ".png";
                 tempbuffer = new Bitmap(mappath + "\\" + mapname + ".png");
-                tempbuffer2 = new Bitmap(tempbuffer, BildBreite, BildHöhe);
+                tempbuffer2 = new Bitmap(tempbuffer, BildHöhe, BildBreite);
                 graphics.DrawImage(tempbuffer2, 0, 0);
                 tempbuffer.Dispose();
                 tempbuffer2.Dispose();
 
             }
-            buffer.Save(mappath + "\\" + maptype[0] + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture) + ".bmp",ImageFormat.Bmp);
+            buffer.Save(mappath + "\\" + maptype[0] + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture) + ".bmp", ImageFormat.Bmp);
             //buffer = new Bitmap(tempbuffer); 
             read = true;
 
@@ -78,7 +78,7 @@ namespace HoehenGenerator
             }
             if (buffer == null)
                 return color;
-            if (x >= 0 && x < BildBreite && y >= 0 && y < BildBreite)
+            if (x >= 0 && x < BildHöhe && y >= 0 && y < BildBreite)
             {
 
 

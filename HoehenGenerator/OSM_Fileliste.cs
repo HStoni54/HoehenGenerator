@@ -83,7 +83,7 @@ namespace HoehenGenerator
             string downloadname = ""; ;
 
             string dateiname = osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
-            string dateinamekomplett = osmpfad + "\\" + osmtyp + "_" +  dateiname;
+            string dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname;
             if (osmtyp == "OSM")
             {
                 Random random = new Random();

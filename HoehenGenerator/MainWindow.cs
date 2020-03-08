@@ -80,6 +80,7 @@ namespace HoehenGenerator
         HGTConverter hGTConverter;
         int auflösung;
         public string[] maptype;
+        MapConverter mapConverter;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
 
@@ -139,7 +140,7 @@ namespace HoehenGenerator
             AssemblyName asmName = asm.GetName();
             string Fullname = asm.FullName;
             object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
-            string productName = String.Empty;
+            string productName = string.Empty;
 
             if (attribs.Length > 0)
             {
@@ -2056,7 +2057,7 @@ namespace HoehenGenerator
                     auflösung = 16;
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                String bilddateiname = "";
+                string bilddateiname = "";
                 System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(2, 2);
                 for (int i = 0; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
@@ -2072,17 +2073,17 @@ namespace HoehenGenerator
                         int bildhöhe = 256 * zahltbRasterdichte / (int)osmpunkte;
 
                         MapReader mapReader = new MapReader(oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge, pfad + "\\Maps\\", maptype, auflösung, bildbreite, bildhöhe);
-                        if (!File.Exists(pfad + "\\Maps\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname+ ".bmp"))
-                        mapReader.PrepRead();
+                        if (!File.Exists(pfad + "\\Maps\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname + ".bmp"))
+                            mapReader.PrepRead();
                         mapReader = null;
-                            //
-                         if (osmpfad != bilddateiname)
+                        //
+                        if (osmpfad != bilddateiname)
                         {
                             bitmap1.Dispose();
                             bilddateiname = osmpfad;
                             pngbildname = bilddateiname + ".png";
                             bmpbildname = bilddateiname + ".bmp";
-                           if (!File.Exists(bmpbildname))
+                            if (!File.Exists(bmpbildname))
                             {
                                 if (!File.Exists(pngbildname))
                                 {
@@ -2366,12 +2367,22 @@ namespace HoehenGenerator
         private void osmDaten_Click(object sender, RoutedEventArgs e)
         {
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
+            if (auflösung >= 17)
+                auflösung = 16;
             //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
             //{
             maptype = new string[2];
             maptype[0] = "OSM";
             maptype[1] = "ORM";
             OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
+
+            // TODO: nur Test
+            if (mapConverter == null)
+            {
+                mapConverter = new MapConverter(pfad + "\\Maps\\", maptype, hgtlinksunten, hgtrechtsoben, auflösung);
+            }
+            mapConverter.PrepReaders();
+            //
             foreach (string item in maptype)
             {
                 oSM_Fileliste.OSM_LadeFiles(auflösung, item, pfad);

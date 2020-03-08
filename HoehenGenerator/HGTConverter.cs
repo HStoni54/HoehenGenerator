@@ -17,8 +17,8 @@ namespace HoehenGenerator
         protected static double FACTOR = 45.0d / (1 << 29);
         private short outsidePolygonHeight = HGTReader.UNDEF;
         double h = HGTReader.UNDEF;
-        public int maxhöhe = Int32.MinValue;
-        public int minhöhe = Int32.MaxValue;
+        public int maxhöhe = int.MinValue;
+        public int minhöhe = int.MaxValue;
         private InterpolationMethod interpolationMethod = InterpolationMethod.Bicubic;
 
         public enum InterpolationMethod
@@ -117,7 +117,7 @@ namespace HoehenGenerator
            * @return height in m or Short.MIN_VALUE if value is invalid 
            */
 
- 
+
         public double GetHoehe(GeoPunkt geoPunkt)
         {
             return GetElevation(ToMapUnit(geoPunkt.Lat) * 256, ToMapUnit(geoPunkt.Lon) * 256);
