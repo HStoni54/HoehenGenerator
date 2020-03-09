@@ -75,7 +75,7 @@ namespace HoehenGenerator
         private bool pfahl = false;
         private int zoom = 20;
         private string pfad;
-         HGTConverter hGTConverter;
+        HGTConverter hGTConverter;
         int auflösung;
         private string[] maptype;
 
@@ -142,7 +142,7 @@ namespace HoehenGenerator
             AssemblyName asmName = asm.GetName();
             string Fullname = asm.FullName;
             object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
- 
+
             if (attribs.Length > 0)
             {
                 AssemblyProductAttribute asmProduct = attribs[0] as AssemblyProductAttribute;
@@ -2081,10 +2081,10 @@ namespace HoehenGenerator
                 auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
                 if (auflösung >= 17)
                     auflösung = 16;
-               
-                
-                    mapConverter = new MapConverter(pfad + "\\Maps\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
-                
+
+
+                mapConverter = new MapConverter(pfad + "\\Maps\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
+
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
                 System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(2, 2);
@@ -2093,19 +2093,25 @@ namespace HoehenGenerator
                     {
                         tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
-  
+
                         colors1[i, j] = mapConverter.GibFarbe(temppunkt1);
-                        //byte r = colors1[i, j].R;
-                        //byte g = colors1[i, j].G;
-                        //byte b = colors1[i, j].B;
-                        //SolidColorBrush mySolidColorBrush = new SolidColorBrush
+
+                        //if ((i % 5 == 0) && (j % 5 == 0))
                         //{
-                        //    Color = Color.FromRgb(r, g, b)
-                        //};
+                        //    int i2 = (int)(Zeichenfläche5.ActualHeight / höhe * i);
+                        //    int j2 = (int)(Zeichenfläche5.ActualWidth / breite * j);
+                        //    byte r = colors1[i, j].R;
+                        //    byte g = colors1[i, j].G;
+                        //    byte b = colors1[i, j].B;
+                        //    SolidColorBrush mySolidColorBrush = new SolidColorBrush
+                        //    {
+                        //        Color = Color.FromRgb(r, g, b)
+                        //    };
 
 
-                        //punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
 
+                        //    punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j2, i2));
+                        //}
 
 
                     }
@@ -2122,7 +2128,7 @@ namespace HoehenGenerator
             bitmap.Dispose();
         }
 
- 
+
         private void SpeicherEEPBitMap(string bitmapnamen, ZeichneBitMap zeichneBitMap)
         {
             SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
@@ -2380,7 +2386,7 @@ namespace HoehenGenerator
             //maptype = new string[2];
             //maptype[0] = "OSM";
             //maptype[1] = "ORM";
-         
+
             // TODO: nur Test
             if (mapConverter == null)
             {
