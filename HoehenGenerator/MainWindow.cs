@@ -2095,8 +2095,17 @@ namespace HoehenGenerator
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
   
                         colors1[i, j] = mapConverter.GibFarbe(temppunkt1);
+                        //byte r = colors1[i, j].R;
+                        //byte g = colors1[i, j].G;
+                        //byte b = colors1[i, j].B;
+                        //SolidColorBrush mySolidColorBrush = new SolidColorBrush
+                        //{
+                        //    Color = Color.FromRgb(r, g, b)
+                        //};
 
-   
+
+                        //punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
+
 
 
                     }
@@ -2394,6 +2403,11 @@ namespace HoehenGenerator
         {
             tabGenerieren.IsSelected = true;
             tabGenerieren.IsEnabled = true;
+        }
+
+        private void tabGenerieren_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Zeichenfläche = Zeichenfläche5;
         }
 
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)

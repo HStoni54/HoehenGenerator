@@ -139,7 +139,7 @@
             </Grid>
         </TabItem>
 
-        <TabItem x:Name="tabGenerieren"   IsEnabled="False" Header="Generieren">
+        <TabItem x:Name="tabGenerieren"   IsEnabled="False" Header="Generieren" GotFocus="tabGenerieren_GotFocus">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
@@ -157,6 +157,7 @@
                 <RadioButton x:Name="rbGMHG" Content="" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                 <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
                 <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top"/>
+                <Canvas x:Name="Zeichenfläche5" Grid.Column="1" HorizontalAlignment="Left" Margin="242,96,0,0" VerticalAlignment="Top"/>
 
             </Grid>
         </TabItem>
