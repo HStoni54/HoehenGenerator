@@ -51,21 +51,34 @@ namespace HoehenGenerator
 
             foreach (string maptyp in maptype)
             {
+                    if (maptyp != "kein")
+                    {
+                        mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
 
-                mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
-
-                if (!File.Exists(mappath + "\\" + mapname + ".png"))
-                {
-                    OSM_Fileliste.HoleOsmDaten(auflösung, maptyp, mappath, lat, lon);
-                    System.Threading.Thread.Sleep(1000);
-                }
-                path = mappath + "\\" + mapname + ".png";
-                tempbuffer = new Bitmap(mappath + "\\" + mapname + ".png");
-                tempbuffer2 = new Bitmap(tempbuffer, BildHöhe, BildBreite);
-                graphics.DrawImage(tempbuffer2, 0, 0);
-                tempbuffer.Dispose();
-              tempbuffer2.Dispose();
-
+                        if (!File.Exists(mappath + "\\" + mapname + ".png"))
+                        {
+                            OSM_Fileliste.HoleOsmDaten(auflösung, maptyp, mappath, lat, lon);
+                            System.Threading.Thread.Sleep(1000);
+                        }
+                        path = mappath + "\\" + mapname + ".png";
+                        tempbuffer = new Bitmap(mappath + "\\" + mapname + ".png");
+                        tempbuffer2 = new Bitmap(tempbuffer, BildHöhe, BildBreite);
+                        graphics.DrawImage(tempbuffer2, 0, 0);
+                        tempbuffer.Dispose();
+                        tempbuffer2.Dispose();
+                    } else
+                    {
+                        tempbuffer2 = new Bitmap(BildHöhe, BildBreite, PixelFormat.Format32bppArgb);
+                        for (int i = 0; i < BildHöhe; i++)
+                        {
+                            for (int j = 0; j < BildBreite; j++)
+                            {
+                                tempbuffer2.SetPixel(i, j, Color.LightGray);
+                            }
+                        }
+                        graphics.DrawImage(tempbuffer2, 0, 0);
+                        tempbuffer2.Dispose();
+                    }
             }
             //buffer.Save(mappath + "\\" + maptype[0] + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture) + ".bmp");
             // buffer = new Bitmap(tempbuffer2); 

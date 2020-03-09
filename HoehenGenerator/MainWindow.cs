@@ -1960,13 +1960,19 @@ namespace HoehenGenerator
                 GeneriereEEPBitMap(bitmapnamen[i], höhe, breite, colors[i], pixelFormat); // TODO: Thread erstellen
 
             }
+
+            using(TemporaryFile temporaryFile = new TemporaryFile())
+            {
+
+                File.Copy(anlagenpfad + "\\" + bitmapnamen[1], temporaryFile.Name,true);
+
             ImageSource imageSrc;
 
-            imageSrc = BitmapFromUri(new Uri(anlagenpfad + "\\" + bitmapnamen[1], UriKind.Absolute));
+            imageSrc = BitmapFromUri(new Uri(temporaryFile.Name, UriKind.Absolute));
 
             imageHintergrund.Source = imageSrc;
             imageHintergrund.Stretch = Stretch.Uniform;
-
+            }
 
             GeneriereBäume(zahltbHöheDerAnlage, zahlbreiteDerAnlage);
             if (rbBaum.IsChecked == true)
@@ -1981,7 +1987,7 @@ namespace HoehenGenerator
             SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl,baum, zoom);
 
         }
-
+        
         public static ImageSource BitmapFromUri(Uri source)
         {
             var bitmap = new System.Windows.Media.Imaging.BitmapImage();
@@ -2374,27 +2380,13 @@ namespace HoehenGenerator
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             if (auflösung >= 17)
                 auflösung = 16;
-            //for (int i = 14; i <= 19; i++) //TODO: Testschleife für OSM entfernen
-            //{
-            //maptype = new string[2];
-            //maptype[0] = "OSM";
-            //maptype[1] = "ORM";
-
-            // TODO: nur Test
+     
             if (mapConverter == null)
             {
                 mapConverter = new MapConverter(pfad + "\\OSM\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
             }
             mapConverter.PrepReaders();
-            mapConverter.FreeBuff();
-            //mapConverter = null;
-            //
-            //foreach (string item in maptype)
-            //{
-            //    oSM_Fileliste.OSM_LadeFiles(auflösung, item, pfad);
-            //}
-
-            //}
+       
 
         }
 

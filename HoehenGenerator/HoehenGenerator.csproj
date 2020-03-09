@@ -44,7 +44,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.1.3.196</ApplicationVersion>
+    <ApplicationVersion>1.1.3.201</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -162,6 +162,7 @@
     <Compile Include="OSM_Koordinaten.cs" />
     <Compile Include="SchreibeAnlagenFile.cs" />
     <Compile Include="SpeicherBild.cs" />
+    <Compile Include="TemporaryFile.cs" />
     <Compile Include="UnzippeDateien.cs" />
     <Compile Include="ZeichePunkteAufCanvas.cs" />
     <Compile Include="ZeichneBitMap.cs" />
