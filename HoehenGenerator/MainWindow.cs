@@ -1931,8 +1931,7 @@ namespace HoehenGenerator
         }
         private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
- 
-
+  
             if (cbORM.IsChecked == true)
             {
                 maptype = new string[2];
@@ -1981,18 +1980,7 @@ namespace HoehenGenerator
                 pfahl = true;
             zoom = (int)slZoom.Value;
 
-            //imHintergrund.CacheMode = CacheMode.Clone();
-            System.Windows.Media.Imaging.BitmapImage src = new System.Windows.Media.Imaging.BitmapImage();
-            src.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
-            src.BeginInit();
-            src.UriSource = new Uri(anlagenpfad + "\\" + bitmapnamen[1], UriKind.Absolute);
-            //FileStream fis = new FileStream(anlagenpfad + "\\" + bitmapnamen[1], FileMode.Open, FileAccess.Read, FileShare.Read);
-            //src.StreamSource = fis;
-             src.EndInit();
-         
-            imHintergrund.Source = src ;
-            imHintergrund.Stretch = Stretch.Uniform;
-             //fis.Close();
+  
            
 
             SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl, zoom);
