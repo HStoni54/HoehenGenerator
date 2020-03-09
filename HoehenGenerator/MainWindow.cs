@@ -2096,22 +2096,7 @@ namespace HoehenGenerator
 
                         colors1[i, j] = mapConverter.GibFarbe(temppunkt1);
 
-                        //if ((i % 5 == 0) && (j % 5 == 0))
-                        //{
-                        //    int i2 = (int)(Zeichenfläche5.ActualHeight / höhe * i);
-                        //    int j2 = (int)(Zeichenfläche5.ActualWidth / breite * j);
-                        //    byte r = colors1[i, j].R;
-                        //    byte g = colors1[i, j].G;
-                        //    byte b = colors1[i, j].B;
-                        //    SolidColorBrush mySolidColorBrush = new SolidColorBrush
-                        //    {
-                        //        Color = Color.FromRgb(r, g, b)
-                        //    };
-
-
-
-                        //    punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j2, i2));
-                        //}
+                 
 
 
                     }
@@ -2411,11 +2396,7 @@ namespace HoehenGenerator
             tabGenerieren.IsEnabled = true;
         }
 
-        private void tabGenerieren_GotFocus(object sender, RoutedEventArgs e)
-        {
-            Zeichenfläche = Zeichenfläche5;
-        }
-
+  
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierungEEPHöhe.Text, out double test))
