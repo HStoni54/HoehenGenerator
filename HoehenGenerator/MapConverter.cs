@@ -14,7 +14,7 @@ namespace HoehenGenerator
         private int auflösung;
         private int minLat, maxLat, minLon, maxLon, dimLat, dimLon;
         private int BildBreite, BildHöhe;
-        
+
         public MapConverter(string mappath, string[] maptypen, GeoPunkt gplinksunten, GeoPunkt gprechtsoben, int gpauflösung, GeoPunkt mittelpunkt, int rasterdichte)
         {
             auflösung = gpauflösung;
@@ -26,8 +26,8 @@ namespace HoehenGenerator
             maxLat = linksunten.Osmbreite;
             minLon = linksunten.Osmlänge;
             maxLon = rechtsoben.Osmlänge;
-             dimLat = maxLat - minLat + 1;
-             dimLon = maxLon - minLon + 1;
+            dimLat = maxLat - minLat + 1;
+            dimLon = maxLon - minLon + 1;
             readers = null;
             readers = new MapReader[dimLat][];
             double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
@@ -39,7 +39,7 @@ namespace HoehenGenerator
                 readers[i] = new MapReader[dimLon];
                 for (int j = 0; j < readers[i].Length; j++)
                 {
-                    readers[i][j] = new MapReader(minLat + i, minLon + j,mappath, maptypen, auflösung, bildhöhe, bildbreite);
+                    readers[i][j] = new MapReader(minLat + i, minLon + j, mappath, maptypen, auflösung, bildhöhe, bildbreite);
                     //readers[i][j].PrepRead();
                 }
             }
@@ -60,12 +60,14 @@ namespace HoehenGenerator
         {
             Color color = Color.White;
             OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(geoPunkt, auflösung);
-            MapReader rdr = readers[oSM_Koordinaten.Osmbreite][oSM_Koordinaten.Osmlänge];
+            oSM_Koordinaten.BerechneOSMKachel();
+            MapReader rdr = readers[oSM_Koordinaten.Osmbreite - minLat][oSM_Koordinaten.Osmlänge - minLon];
             if (rdr.read == false)
             {
                 rdr.PrepRead();
             }
-            //color = rdr.farbe(oSM_Koordinaten.)
+
+            color = rdr.farbe((int)(rdr.BildHöhe * oSM_Koordinaten.Kachell), (int)(rdr.BildBreite * oSM_Koordinaten.Kachelb));
             return color;
         }
 

@@ -16,7 +16,7 @@ namespace HoehenGenerator
         public bool read = false;
         private Bitmap buffer, tempbuffer, tempbuffer2;
         public string path, mappath;
-        private int BildBreite, BildHöhe;
+        public int BildBreite, BildHöhe;
         private string mapname;
         int auflösung;
         int lat, lon;
@@ -43,6 +43,8 @@ namespace HoehenGenerator
         }
         public void PrepRead()
         {
+            if (read == false)
+            { 
             buffer = new Bitmap(BildHöhe, BildBreite, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(buffer);
             graphics.CompositingMode = CompositingMode.SourceOver;
@@ -63,12 +65,14 @@ namespace HoehenGenerator
                 tempbuffer2 = new Bitmap(tempbuffer, BildHöhe, BildBreite);
                 graphics.DrawImage(tempbuffer2, 0, 0);
                 tempbuffer.Dispose();
-                tempbuffer2.Dispose();
+              tempbuffer2.Dispose();
 
             }
-            buffer.Save(mappath + "\\" + maptype[0] + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture) + ".bmp", ImageFormat.Bmp);
-            //buffer = new Bitmap(tempbuffer); 
+            buffer.Save(mappath + "\\" + maptype[0] + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture) + ".bmp");
+            // buffer = new Bitmap(tempbuffer2); 
+            
             read = true;
+            }
 
             // TODO: Bitmap(s) einlesen
         }
@@ -101,7 +105,7 @@ namespace HoehenGenerator
                 tempbuffer.Dispose();
             if (tempbuffer2 != null)
                 tempbuffer2.Dispose();
-           
+
             read = false;
             return true;
         }
@@ -110,11 +114,11 @@ namespace HoehenGenerator
         {
             FreeBuf();
             if (buffer != null)
-            buffer.Dispose();
-           if (tempbuffer != null)
-            tempbuffer.Dispose();
-           if (tempbuffer2 != null)
-            tempbuffer2.Dispose();
+                buffer.Dispose();
+            if (tempbuffer != null)
+                tempbuffer.Dispose();
+            if (tempbuffer2 != null)
+                tempbuffer2.Dispose();
             read = false;
         }
     }
