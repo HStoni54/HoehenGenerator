@@ -377,21 +377,7 @@ namespace HoehenGenerator
 
                     }
 
-                if (!Directory.Exists(pfad + "\\Maps"))
-
-                    try
-                    {
-
-                        Directory.CreateDirectory(pfad + "\\Maps");
-                    }
-                    catch (Exception)
-                    {
-
-                        MessageBox.Show("Kann Directory für Kartendaten nicht erstellen!\n"
-                            + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
-                            + "\"" + pfad + "\"");
-
-                    }
+  
                 if (!Directory.Exists(pfad + "\\HGT"))
 
                     try
@@ -1970,6 +1956,10 @@ namespace HoehenGenerator
                 GeneriereEEPBitMap(bitmapnamen[i], höhe, breite, colors[i], pixelFormat); // TODO: Thread erstellen
 
             }
+            // TODO: hier Image im Hintergrund setzen
+            File.Copy(anlagenpfad + "\\" + bitmapnamen[1], pfad + "\\OSM\\" + bitmapnamen[1],true );
+
+
             GeneriereBäume(zahltbHöheDerAnlage, zahlbreiteDerAnlage);
             if (rbBaum.IsChecked == true)
                 pfahl = false;
@@ -2083,7 +2073,7 @@ namespace HoehenGenerator
                     auflösung = 16;
 
 
-                mapConverter = new MapConverter(pfad + "\\Maps\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
+                mapConverter = new MapConverter(pfad + "\\OSM\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
 
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
@@ -2375,7 +2365,7 @@ namespace HoehenGenerator
             // TODO: nur Test
             if (mapConverter == null)
             {
-                mapConverter = new MapConverter(pfad + "\\Maps\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
+                mapConverter = new MapConverter(pfad + "\\OSM\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
             }
             mapConverter.PrepReaders();
             mapConverter.FreeBuff();

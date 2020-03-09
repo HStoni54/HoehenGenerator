@@ -67,7 +67,7 @@ namespace HoehenGenerator
               tempbuffer2.Dispose();
 
             }
-            buffer.Save(mappath + "\\" + maptype[0] + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture) + ".bmp");
+            //buffer.Save(mappath + "\\" + maptype[0] + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture) + ".bmp");
             // buffer = new Bitmap(tempbuffer2); 
             
             read = true;

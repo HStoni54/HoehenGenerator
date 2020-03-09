@@ -33,12 +33,12 @@ namespace HoehenGenerator
         }
         public void OSM_LadeFiles(int osmauflösung, string osmtyp, string pfad) // TODO: Datumsgrenze
         {
-            if (!Directory.Exists(pfad + "\\" + "Maps"))
+            if (!Directory.Exists(pfad + "\\OSM"))
 
                 try
                 {
 
-                    Directory.CreateDirectory(pfad + "\\" + "Maps");
+                    Directory.CreateDirectory(pfad + "\\OSM");
                 }
                 catch (Exception)
                 {
@@ -48,7 +48,7 @@ namespace HoehenGenerator
                         + "\"" + pfad + "\"");
 
                 }
-            string osmpfad = pfad + "\\" + "Maps" + "\\";
+            string osmpfad = pfad + "\\OSM\\";
 
             for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
             {
