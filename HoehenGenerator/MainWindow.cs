@@ -75,21 +75,20 @@ namespace HoehenGenerator
         private bool pfahl = false;
         private int zoom = 20;
         private string pfad;
-        private string pngbildname;
-        private string bmpbildname;
-        HGTConverter hGTConverter;
+         HGTConverter hGTConverter;
         int auflösung;
-        public string[] maptype;
+        private string[] maptype;
 
         MapConverter mapConverter;
 
         public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
+        public string[] Maptype { get => maptype; set => maptype = value; }
 
         public MainWindow()
         {
             InitializeComponent();
-            maptype = new string[1];
-            maptype[0] = "OSM";
+            Maptype = new string[1];
+            Maptype[0] = "OSM";
             //maptype[1] = "ORM";
             Title = "Höhengenerator für EEP " + VersionNr();
 
@@ -143,12 +142,10 @@ namespace HoehenGenerator
             AssemblyName asmName = asm.GetName();
             string Fullname = asm.FullName;
             object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
-            string productName = string.Empty;
-
+ 
             if (attribs.Length > 0)
             {
                 AssemblyProductAttribute asmProduct = attribs[0] as AssemblyProductAttribute;
-                productName = asmProduct.Product.ToString(CultureInfo.CurrentCulture);
             }
 
             string vers = string.Format(CultureInfo.CurrentCulture, " - Version: {0}.{1}.{2} Build: {3}",
@@ -1934,21 +1931,21 @@ namespace HoehenGenerator
 
             if (cbORM.IsChecked == true)
             {
-                maptype = new string[2];
-                maptype[1] = "ORM";
+                Maptype = new string[2];
+                Maptype[1] = "ORM";
             }
             else
             {
-                maptype = new string[1];
+                Maptype = new string[1];
             }
-            maptype[0] = "OSM";
+            Maptype[0] = "OSM";
             if (rbKeinHG.IsChecked == true)
             {
-                maptype[0] = "kein";
+                Maptype[0] = "kein";
             }
             if (rbOSMHG.IsChecked == true)
             {
-                maptype[0] = "OSM";
+                Maptype[0] = "OSM";
             }
 
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
@@ -2086,60 +2083,20 @@ namespace HoehenGenerator
                     auflösung = 16;
                
                 
-                    mapConverter = new MapConverter(pfad + "\\Maps\\", maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
+                    mapConverter = new MapConverter(pfad + "\\Maps\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
                 
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
-                string bilddateiname = "";
                 System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(2, 2);
                 for (int i = 0; i < höhe; i++)
                     for (int j = 0; j < breite; j++)
                     {
                         tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
-                        //OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(temppunkt1, auflösung);
-                        //oSM_Koordinaten.BerechneOSMKachel();
-                        //string osmpfad = pfad + "\\Maps\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname;
-                        ////
-                        //double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
-                        //int bildbreite = 256 * zahltbRasterdichte / (int)osmpunkte;
-                        //int bildhöhe = 256 * zahltbRasterdichte / (int)osmpunkte;
-
-                        //MapReader mapReader = new MapReader(oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge, pfad + "\\Maps\\", maptype, auflösung, bildbreite, bildhöhe);
-                        //if (!File.Exists(pfad + "\\Maps\\" + maptype[0] + "_" + oSM_Koordinaten.Dateiname + ".bmp"))
-                        //    mapReader.PrepRead();
-                        //mapReader.Dispose();
-                        //mapReader = null;
-                        //
-                        //if (osmpfad != bilddateiname)
-                        //{
-                        //    bitmap1.Dispose();
-                        //    bilddateiname = osmpfad;
-                        //    pngbildname = bilddateiname + ".png";
-                        //    bmpbildname = bilddateiname + ".bmp";
-                        //    if (!File.Exists(bmpbildname))
-                        //    {
-                        //        if (!File.Exists(pngbildname))
-                        //        {
-                        //            foreach (var item in maptype)
-                        //            {
-                        //                OSM_Fileliste.HoleOsmDaten(oSM_Koordinaten.Osmauflösung, item, pfad + "\\Maps", oSM_Koordinaten.Osmbreite, oSM_Koordinaten.Osmlänge);
-                        //                System.Threading.Thread.Sleep(1000);
-
-                        //            }
-                        //        }
-                        //        if (!File.Exists(bmpbildname))
-                        //            WandleBildUm();
-                        //        System.Threading.Thread.Sleep(1000);
-
-                        //    }
-                        //    bitmap1 = new System.Drawing.Bitmap(bmpbildname);
-
-                        //}
+  
                         colors1[i, j] = mapConverter.GibFarbe(temppunkt1);
 
-                        //colors1[i, j] = bitmap1.GetPixel((int)(bitmap1.Width * oSM_Koordinaten.Kachell), (int)(bitmap1.Height * oSM_Koordinaten.Kachelb));
-
+   
 
 
                     }
@@ -2156,21 +2113,7 @@ namespace HoehenGenerator
             bitmap.Dispose();
         }
 
-        private void WandleBildUm()
-        {
-            System.Drawing.Bitmap ausgangsbild = new System.Drawing.Bitmap(pngbildname);
-            double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
-            int bildbreite = ausgangsbild.Width * zahltbRasterdichte / (int)osmpunkte;
-            int bildhöhe = ausgangsbild.Height * zahltbRasterdichte / (int)osmpunkte;
-            System.Drawing.Bitmap bearbeitungsbild = new System.Drawing.Bitmap(ausgangsbild, bildbreite, bildhöhe);
-
-
-            bearbeitungsbild.Save(bmpbildname, System.Drawing.Imaging.ImageFormat.Bmp);
-            bearbeitungsbild.Dispose();
-            ausgangsbild.Dispose();
-
-        }
-
+ 
         private void SpeicherEEPBitMap(string bitmapnamen, ZeichneBitMap zeichneBitMap)
         {
             SpeicherBild speicherBild = new SpeicherBild(zeichneBitMap.Bitmap, anlagenpfad + "\\" + bitmapnamen);
@@ -2398,26 +2341,26 @@ namespace HoehenGenerator
             //AnlagewerteAufTabAnzeigen();
         }
 
-        private void osmDaten_Click(object sender, RoutedEventArgs e)
+        private void OsmDaten_Click(object sender, RoutedEventArgs e)
         {
             if (cbORM.IsChecked == true)
             {
-                maptype = new string[2];
-                maptype[1] = "ORM";
+                Maptype = new string[2];
+                Maptype[1] = "ORM";
             }
             else
             {
-                maptype = new string[1];
+                Maptype = new string[1];
             }
-            maptype[0] = "OSM";
+            Maptype[0] = "OSM";
             if (rbKeinHG.IsChecked == true)
             {
-                maptype[0] = "kein";
+                Maptype[0] = "kein";
             }
 
             if (rbOSMHG.IsChecked == true)
             {
-                maptype[0] = "OSM";
+                Maptype[0] = "OSM";
             }
 
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
@@ -2428,12 +2371,11 @@ namespace HoehenGenerator
             //maptype = new string[2];
             //maptype[0] = "OSM";
             //maptype[1] = "ORM";
-            OSM_Fileliste oSM_Fileliste = new OSM_Fileliste(hgtrechtsoben, hgtlinksunten, auflösung);
-
+         
             // TODO: nur Test
             if (mapConverter == null)
             {
-                mapConverter = new MapConverter(pfad + "\\Maps\\", maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
+                mapConverter = new MapConverter(pfad + "\\Maps\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
             }
             mapConverter.PrepReaders();
             mapConverter.FreeBuff();

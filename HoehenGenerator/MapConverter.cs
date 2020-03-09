@@ -10,10 +10,9 @@ namespace HoehenGenerator
     class MapConverter
     {
         private MapReader[][] readers;
-        private int lastRow = -1;
-        private int auflösung;
+       private int auflösung;
         private int minLat, maxLat, minLon, maxLon, dimLat, dimLon;
-        private int BildBreite, BildHöhe;
+        private int bildbreite, bildhöhe;
 
         public MapConverter(string mappath, string[] maptypen, GeoPunkt gplinksunten, GeoPunkt gprechtsoben, int gpauflösung, GeoPunkt mittelpunkt, int rasterdichte)
         {
@@ -31,8 +30,8 @@ namespace HoehenGenerator
             readers = null;
             readers = new MapReader[dimLat][];
             double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
-            int bildbreite = 256 * rasterdichte / (int)osmpunkte;
-            int bildhöhe = 256 * rasterdichte / (int)osmpunkte;
+            bildbreite = 256 * rasterdichte / (int)osmpunkte;
+             bildhöhe = 256 * rasterdichte / (int)osmpunkte;
 
             for (int i = 0; i < readers.Length; i++)
             {
@@ -61,13 +60,18 @@ namespace HoehenGenerator
             Color color = Color.White;
             OSM_Koordinaten oSM_Koordinaten = new OSM_Koordinaten(geoPunkt, auflösung);
             oSM_Koordinaten.BerechneOSMKachel();
+            if (oSM_Koordinaten.Osmbreite >= minLat && oSM_Koordinaten.Osmbreite <= maxLat && oSM_Koordinaten.Osmlänge >= minLon && oSM_Koordinaten.Osmlänge <= maxLon)
+            {
+
+           
             MapReader rdr = readers[oSM_Koordinaten.Osmbreite - minLat][oSM_Koordinaten.Osmlänge - minLon];
             if (rdr.read == false)
             {
                 rdr.PrepRead();
             }
 
-            color = rdr.farbe((int)(rdr.BildHöhe * oSM_Koordinaten.Kachell), (int)(rdr.BildBreite * oSM_Koordinaten.Kachelb));
+            color = rdr.Farbe((int)(rdr.BildHöhe * oSM_Koordinaten.Kachell), (int)(rdr.BildBreite * oSM_Koordinaten.Kachelb));
+            }
             return color;
         }
 

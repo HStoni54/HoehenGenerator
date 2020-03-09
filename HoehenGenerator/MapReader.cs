@@ -21,7 +21,6 @@ namespace HoehenGenerator
         int auflösung;
         int lat, lon;
         string[] maptype;
-        string dateiname;
 
         public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildBreite, int BildHöhe)
         {
@@ -76,7 +75,7 @@ namespace HoehenGenerator
 
             // TODO: Bitmap(s) einlesen
         }
-        public Color farbe(int x, int y)
+        public Color Farbe(int x, int y)
         {
             Color color = Color.FromArgb(255, 200, 200, 200);
             if (!read && path != null)

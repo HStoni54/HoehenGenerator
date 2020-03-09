@@ -50,7 +50,7 @@ namespace HoehenGenerator
             bitmap.SetPixel(höhe, breite, color);
         }
 
-        private Color[,] colors(int höhe, int breite)
+        private Color[,] Colors(int höhe, int breite)
         {
             Color[,] color = new Color[höhe, breite];
             return color;
