@@ -13,10 +13,10 @@ namespace HoehenGenerator
         private double drasterdichte;
         //private readonly bool Ok;
         private readonly int[,] baeume;
-        private readonly bool pfahl;
+        private readonly bool pfahl, baum;
         private readonly int zoom;
 
-        public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte, int[,] baeume, bool pfahl, int zoom = 20)
+        public SchreibeAnlagenFile(string path, string anlagenname, int höhe, int breite, int rasterdichte, int[,] baeume, bool pfahl, bool baum, int zoom = 20)
         {
             this.path = path;
             this.anlagenname = anlagenname;
@@ -26,6 +26,7 @@ namespace HoehenGenerator
             this.rasterdichte = rasterdichte;
             //Ok = SchreibeFile();
             this.pfahl = pfahl;
+            this.baum = baum;
             this.zoom = zoom;
         }
 
@@ -43,47 +44,50 @@ namespace HoehenGenerator
             xmlWriter.WriteStartElement("Gebaeudesammlung");
             if (pfahl)
                 xmlWriter.WriteAttributeString("GebaudesammlungID", "4");
-            else
+            else if (baum)
                 xmlWriter.WriteAttributeString("GebaudesammlungID", "5");
-            for (int i = 0; i < baeume.Length / 3; i++)
+            if (pfahl || baum)
             {
-                xmlWriter.WriteStartElement("Immobile");
-                if (pfahl)
-                    xmlWriter.WriteAttributeString("gsbname", @"\Immobilien\Verkehr\Verkehrszeichen\Leitpfosten_Einzel_RG.3dm");
-                else
-                    xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Kopfweide_10m_AM1.3dm");
-                xmlWriter.WriteAttributeString("ImmoIdx", (i + 1).ToString(CultureInfo.CurrentCulture)); // hier hochzählen
-                xmlWriter.WriteAttributeString("TreeShake", "2");
-                xmlWriter.WriteStartElement("Dreibein");
-                xmlWriter.WriteStartElement("Vektor");
-                xmlWriter.WriteAttributeString("x", baeume[i, 0].ToString(CultureInfo.CurrentCulture));  // hier Koordinaten und Höhe
-                xmlWriter.WriteAttributeString("y", baeume[i, 1].ToString(CultureInfo.CurrentCulture));
-                xmlWriter.WriteAttributeString("z", baeume[i, 2].ToString(CultureInfo.CurrentCulture));
-                xmlWriter.WriteString("Pos");
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteStartElement("Vektor");
-                xmlWriter.WriteAttributeString("x", zoom.ToString(CultureInfo.CurrentCulture));  // hier Koordinaten und Höhe
-                xmlWriter.WriteAttributeString("y", "0");
-                xmlWriter.WriteAttributeString("z", "0");
-                xmlWriter.WriteString("Dir");
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteStartElement("Vektor");
-                xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
-                xmlWriter.WriteAttributeString("y", zoom.ToString(CultureInfo.CurrentCulture));
-                xmlWriter.WriteAttributeString("z", "0");
-                xmlWriter.WriteString("Nor");
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteStartElement("Vektor");
-                xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
-                xmlWriter.WriteAttributeString("y", "0");
-                xmlWriter.WriteAttributeString("z", zoom.ToString(CultureInfo.CurrentCulture));
-                xmlWriter.WriteString("Bin");
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteStartElement("Modell");
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
+                for (int i = 0; i < baeume.Length / 3; i++)
+                {
+                    xmlWriter.WriteStartElement("Immobile");
+                    if (pfahl)
+                        xmlWriter.WriteAttributeString("gsbname", @"\Immobilien\Verkehr\Verkehrszeichen\Leitpfosten_Einzel_RG.3dm");
+                    else
+                        xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Kopfweide_10m_AM1.3dm");
+                    xmlWriter.WriteAttributeString("ImmoIdx", (i + 1).ToString(CultureInfo.CurrentCulture)); // hier hochzählen
+                    xmlWriter.WriteAttributeString("TreeShake", "2");
+                    xmlWriter.WriteStartElement("Dreibein");
+                    xmlWriter.WriteStartElement("Vektor");
+                    xmlWriter.WriteAttributeString("x", baeume[i, 0].ToString(CultureInfo.CurrentCulture));  // hier Koordinaten und Höhe
+                    xmlWriter.WriteAttributeString("y", baeume[i, 1].ToString(CultureInfo.CurrentCulture));
+                    xmlWriter.WriteAttributeString("z", baeume[i, 2].ToString(CultureInfo.CurrentCulture));
+                    xmlWriter.WriteString("Pos");
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteStartElement("Vektor");
+                    xmlWriter.WriteAttributeString("x", zoom.ToString(CultureInfo.CurrentCulture));  // hier Koordinaten und Höhe
+                    xmlWriter.WriteAttributeString("y", "0");
+                    xmlWriter.WriteAttributeString("z", "0");
+                    xmlWriter.WriteString("Dir");
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteStartElement("Vektor");
+                    xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
+                    xmlWriter.WriteAttributeString("y", zoom.ToString(CultureInfo.CurrentCulture));
+                    xmlWriter.WriteAttributeString("z", "0");
+                    xmlWriter.WriteString("Nor");
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteStartElement("Vektor");
+                    xmlWriter.WriteAttributeString("x", "0");  // hier Koordinaten und Höhe
+                    xmlWriter.WriteAttributeString("y", "0");
+                    xmlWriter.WriteAttributeString("z", zoom.ToString(CultureInfo.CurrentCulture));
+                    xmlWriter.WriteString("Bin");
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteStartElement("Modell");
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
 
+                }
             }
 
             xmlWriter.WriteEndElement();

@@ -73,6 +73,7 @@ namespace HoehenGenerator
         private int[,] baeume;
         private int downloadcount = 0;
         private bool pfahl = false;
+        private bool baum = false;
         private int zoom = 20;
         private string pfad;
         HGTConverter hGTConverter;
@@ -376,8 +377,11 @@ namespace HoehenGenerator
                             + "\"" + pfad + "\"");
 
                     }
+                foreach (var item in Directory.GetFiles(pfad + "\\OSM", "*.bmp"))
+                {
+                    File.Delete(item);
+                }
 
-  
                 if (!Directory.Exists(pfad + "\\HGT"))
 
                     try
@@ -1956,13 +1960,17 @@ namespace HoehenGenerator
                 GeneriereEEPBitMap(bitmapnamen[i], höhe, breite, colors[i], pixelFormat); // TODO: Thread erstellen
 
             }
-            // TODO: hier Image im Hintergrund setzen
-            File.Copy(anlagenpfad + "\\" + bitmapnamen[1], pfad + "\\OSM\\" + bitmapnamen[1],true );
+            ImageSource imageSrc;
+
+            imageSrc = BitmapFromUri(new Uri(anlagenpfad + "\\" + bitmapnamen[1], UriKind.Absolute));
+
+            imageHintergrund.Source = imageSrc;
+            imageHintergrund.Stretch = Stretch.Uniform;
 
 
             GeneriereBäume(zahltbHöheDerAnlage, zahlbreiteDerAnlage);
             if (rbBaum.IsChecked == true)
-                pfahl = false;
+                baum = true;
             if (rbPfosten.IsChecked == true)
                 pfahl = true;
             zoom = (int)slZoom.Value;
@@ -1970,8 +1978,18 @@ namespace HoehenGenerator
 
 
 
-            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl, zoom);
+            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl,baum, zoom);
 
+        }
+
+        public static ImageSource BitmapFromUri(Uri source)
+        {
+            var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = source;
+            bitmap.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            return bitmap;
         }
 
         private void GeneriereBäume(double zahltbHöheDerAnlage, double zahlbreiteDerAnlage)
@@ -2001,9 +2019,9 @@ namespace HoehenGenerator
 
         }
 
-        private void SchreibeEEPAnlagenDatei(int höhe, int breite, int rasterdichte, int[,] baeume, bool pfahl = false, int zoom = 20)
+        private void SchreibeEEPAnlagenDatei(int höhe, int breite, int rasterdichte, int[,] baeume, bool pfahl = false, bool baum = false, int zoom = 20)
         {
-            SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, rasterdichte, baeume, pfahl, zoom);
+            SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, rasterdichte, baeume, pfahl, baum, zoom);
             if (af.SchreibeFile())
                 MessageBox.Show("Anlagendatei geschrieben");
             else
@@ -2086,7 +2104,7 @@ namespace HoehenGenerator
 
                         colors1[i, j] = mapConverter.GibFarbe(temppunkt1);
 
-                 
+
 
 
                     }
@@ -2386,7 +2404,7 @@ namespace HoehenGenerator
             tabGenerieren.IsEnabled = true;
         }
 
-  
+
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierungEEPHöhe.Text, out double test))
