@@ -1,82 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace HoehenGenerator
 {
-    class OSM_Fileliste
+    internal static class OSM_Fileliste
     {
-        private GeoPunkt georechtsoben;
-        private GeoPunkt geolinksunten;
-        private int auflösung;
 
-        private OSM_Koordinaten osmrechtsoben;
-        private OSM_Koordinaten osmlinksunten;
 
-        public OSM_Fileliste(GeoPunkt georechtsoben, GeoPunkt geolinksunten, int auflösung)
-        {
-            this.georechtsoben = georechtsoben;
-            this.geolinksunten = geolinksunten;
-            this.auflösung = auflösung;
-            osmrechtsoben = new OSM_Koordinaten(this.georechtsoben, this.auflösung);
-            osmrechtsoben.BerechneOSMKachel();
-            osmlinksunten = new OSM_Koordinaten(this.geolinksunten, this.auflösung);
-            osmlinksunten.BerechneOSMKachel();
-        }
-        public void OSM_LadeFiles(int osmauflösung, string osmtyp, string pfad) // TODO: Datumsgrenze
-        {
-            if (!Directory.Exists(pfad + "\\OSM"))
 
-                try
-                {
-
-                    Directory.CreateDirectory(pfad + "\\OSM");
-                }
-                catch (Exception)
-                {
-
-                    MessageBox.Show("Kann Directory für Kartendaten nicht erstellen!\n"
-                        + "Überprüfen Sie die Schreibberechtigung im Verzeichnis:\n"
-                        + "\"" + pfad + "\"");
-
-                }
-            string osmpfad = pfad + "\\OSM\\";
-
-            for (int i = osmlinksunten.Osmbreite; i >= osmrechtsoben.Osmbreite; i--)
-            {
-                if (osmlinksunten.Osmlänge <= osmrechtsoben.Osmlänge)
-                {
-                    for (int j = osmlinksunten.Osmlänge; j <= osmrechtsoben.Osmlänge; j++)
-                    {
-                        HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
-
-                    }
-                }
-                else
-                {
-                    int kachelanzahl = (int)Math.Pow(2, osmauflösung);
-
-                    for (int j = osmlinksunten.Osmlänge; j < kachelanzahl; j++)
-                    {
-                        HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
-
-                    }
-                    for (int j = 0; j <= osmrechtsoben.Osmlänge; j++)
-                    {
-                        HoleOsmDaten(osmauflösung, osmtyp, osmpfad, i, j);
-
-                    }
-                }
-            }
-        }
 
         public static void HoleOsmDaten(int osmauflösung, string osmtyp, string osmpfad, int osmbreite, int osmlänge)
         {
@@ -98,15 +33,18 @@ namespace HoehenGenerator
                 downloadname = "https://" + ServerZufall + ".tiles.openrailwaymap.org/standard/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
 
             }
-            else if (osmtyp == "kein")
+            else
             {
                 Color color = Color.FromArgb(255, 200, 200, 200);
                 Bitmap bitmap = new Bitmap(256, 256);
                 for (int i = 0; i < bitmap.Height; i++)
+                {
                     for (int j = 0; j < bitmap.Width; j++)
                     {
                         bitmap.SetPixel(i, j, color);
                     }
+                }
+
                 bitmap.Save(dateinamekomplett);
                 bitmap.Dispose();
             }
@@ -117,10 +55,13 @@ namespace HoehenGenerator
                     Color color = Color.FromArgb(255, 16, 39, 0);
                     Bitmap dummy = new Bitmap(256, 256);
                     for (int i = 0; i < dummy.Height; i++)
+                    {
                         for (int j = 0; j < dummy.Width; j++)
                         {
                             dummy.SetPixel(i, j, color);
                         }
+                    }
+
                     {
 
                     }

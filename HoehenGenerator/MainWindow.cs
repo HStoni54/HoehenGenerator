@@ -56,7 +56,6 @@ namespace HoehenGenerator
         private double breite2 = 1.0;
         private int zahltbRasterdichte = 150;
         private double minLänge, maxLänge, minBreite, maxBreite;
-        private bool datumgrenze = false;
         private int winkel = 0;
         private readonly string[] directorys = { "VIEW1", "SRTM1", "VIEW3", "SRTM3", "noHGT" };
         private readonly ConcurrentQueue<AufgabeIndices> aufgabeIndices = new ConcurrentQueue<AufgabeIndices>();
@@ -76,20 +75,35 @@ namespace HoehenGenerator
         private bool baum = false;
         private int zoom = 20;
         private string pfad;
-        HGTConverter hGTConverter;
-        int auflösung;
+        private HGTConverter hGTConverter;
+        private int auflösung;
+        private MapConverter mapConverter;
+        private readonly bool gmaktiv = false;
+        public bool Datumgrenze { get; set; } = false;
+
         private string[] maptype;
 
-        MapConverter mapConverter;
+        public string[] GetMaptype()
+        {
+            return maptype;
+        }
 
-        public bool Datumgrenze { get => datumgrenze; set => datumgrenze = value; }
-        public string[] Maptype { get => maptype; set => maptype = value; }
+        public void SetMaptype(string[] value)
+        {
+            maptype = value;
+        }
 
         public MainWindow()
         {
             InitializeComponent();
-            Maptype = new string[1];
-            Maptype[0] = "OSM";
+            if (!gmaktiv)
+            {
+                rbGMHG.Visibility = Visibility.Hidden;
+                lbGMVersion.Visibility = Visibility.Hidden;
+                tbGMVersion.Visibility = Visibility.Hidden;
+            }
+            SetMaptype(new string[1]);
+            GetMaptype()[0] = "OSM";
             //maptype[1] = "ORM";
             Title = "Höhengenerator für EEP " + VersionNr();
 
@@ -190,8 +204,8 @@ namespace HoehenGenerator
                                 {
                                     //for (int k = 0; k < 2; k++)
                                     //{
-                                    stream.WriteByte((byte)128);
-                                    stream.WriteByte((byte)0);
+                                    stream.WriteByte(128);
+                                    stream.WriteByte(0);
 
 
                                     //}
@@ -245,8 +259,9 @@ namespace HoehenGenerator
                         Dispatcher.BeginInvoke(new Action(() => ZeichneAlles(punkte)));
                         //ZeichneAlles(punkte);
                         if (downloadcount == 0)
-
+                        {
                             Dispatcher.BeginInvoke(new Action(() => Weiter2.IsEnabled = true));
+                        }
                     }
                 }
                 Thread.Sleep(100);
@@ -295,10 +310,13 @@ namespace HoehenGenerator
                     if (aufgabeIndices.Count == 0)
                     {
                         if (ÜberprüfeIndices())
-
+                        {
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = true));
+                        }
                         else
+                        {
                             Dispatcher.BeginInvoke(new Action(() => LadeHGTFiles.IsEnabled = false));
+                        }
                     }
                 }
                 Thread.Sleep(100);
@@ -313,15 +331,26 @@ namespace HoehenGenerator
             for (int i = 0; i < lbHgtFiles.Items.Count; i++)
             {
                 if (File.Exists(directory + "\\" + lbHgtFiles.Items[i].ToString() + ".hgt"))
-
+                {
                     if (directory.EndsWith("1", StringComparison.CurrentCulture))
+                    {
                         solidColor = Brushes.LightBlue;
+                    }
                     else
                         if (directory.EndsWith("3", StringComparison.CurrentCulture))
+                    {
                         solidColor = Brushes.LightGreen;
-                    else solidColor = Brushes.Yellow;
+                    }
+                    else
+                    {
+                        solidColor = Brushes.Yellow;
+                    }
+                }
                 else
+                {
                     solidColor = Brushes.Red;
+                }
+
                 switch (i)
                 {
                     case 0:
@@ -363,7 +392,7 @@ namespace HoehenGenerator
                 string vName = ofd.FileName;
                 pfad = System.IO.Path.GetDirectoryName(vName);
                 if (!Directory.Exists(pfad + "\\OSM"))
-
+                {
                     try
                     {
 
@@ -377,13 +406,15 @@ namespace HoehenGenerator
                             + "\"" + pfad + "\"");
 
                     }
-                foreach (var item in Directory.GetFiles(pfad + "\\OSM", "*.bmp"))
+                }
+
+                foreach (string item in Directory.GetFiles(pfad + "\\OSM", "*.bmp"))
                 {
                     File.Delete(item);
                 }
 
                 if (!Directory.Exists(pfad + "\\HGT"))
-
+                {
                     try
                     {
 
@@ -397,6 +428,7 @@ namespace HoehenGenerator
                             + "\"" + pfad + "\"");
 
                     }
+                }
 
                 hgtPfad = pfad + "\\HGT";
                 try
@@ -416,7 +448,7 @@ namespace HoehenGenerator
                 if (Directory.Exists(hgtPfad + @"\noHGT"))
                 {
                     string[] file = Directory.GetFiles(hgtPfad + @"\noHGT");
-                    foreach (var item in file)
+                    foreach (string item in file)
                     {
 
                         File.Delete(item);
@@ -426,7 +458,7 @@ namespace HoehenGenerator
 
 
                 if (!Directory.Exists(pfad + "\\Anlagen"))
-
+                {
                     try
                     {
 
@@ -440,6 +472,7 @@ namespace HoehenGenerator
                             + "\"" + pfad + "\"");
 
                     }
+                }
 
                 anlagenpfad = pfad + "\\Anlagen";
                 try
@@ -457,7 +490,9 @@ namespace HoehenGenerator
                 }
                 File.Delete(anlagenpfad + "\\test.txt");
                 if (!Directory.Exists(hgtPfad + @"\noHGT"))
+                {
                     Directory.CreateDirectory(hgtPfad + @"\noHGT");
+                }
 
                 btnAnlagenDirectory.IsEnabled = false;
                 btnGeneriereAnlage.IsEnabled = true;
@@ -565,7 +600,10 @@ namespace HoehenGenerator
                 Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, v);
                 point = DrehePunkt(orgpunkte[i], drehung);
                 if (Datumgrenze && point.X < 0)
+                {
                     point.X += 360;
+                }
+
                 points.Add(point);
             }
             double minLänge = points.Min(x => x.X);
@@ -769,9 +807,10 @@ namespace HoehenGenerator
                 if (hgtPfad != null)
                 {
                     bool DateiVorhanden = false;
-                    foreach (var directory in directorys)
+                    foreach (string directory in directorys)
                     {
                         if (directory.Length > 0)
+                        {
                             if (!DateiVorhanden)
                             {
                                 if (File.Exists(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt"))
@@ -782,8 +821,12 @@ namespace HoehenGenerator
                                 }
 
                             }
+                        }
+
                         if (!DateiVorhanden)
+                        {
                             FärbeHgtLabel(hgtPfad + "\\" + directory + "\\" + vs1[i] + ".hgt");
+                        }
                     }
                 }
 
@@ -792,7 +835,9 @@ namespace HoehenGenerator
             for (int i = 0; i < vs2.Length; i++)
             {
                 if (vs2[i] == false)
+                {
                     janein = false;
+                }
             }
             if (janein)
             {
@@ -886,7 +931,7 @@ namespace HoehenGenerator
                 for (int j = 0; j < GrößeB; j++)
                 {
 
-                    tempPunkt = new GeoPunkt((double)j / (double)GrößeB * (maxLänge - minLänge) + minLänge, (double)i / (double)GrößeH * (maxBreite - minBreite) + minBreite);
+                    tempPunkt = new GeoPunkt(j / GrößeB * (maxLänge - minLänge) + minLänge, i / GrößeH * (maxBreite - minBreite) + minBreite);
                     temppunkt1 = DrehePunkt(tempPunkt, drehung);
                     double abshöhe = hGTConverter.GetHoehe(temppunkt1);
 
@@ -902,12 +947,15 @@ namespace HoehenGenerator
                 for (int j = 0; j < GrößeB; j++)
                 {
 
-                    tempPunkt = new GeoPunkt((double)j / (double)GrößeB * (maxLänge - minLänge) + minLänge, (double)i / (double)GrößeH * (maxBreite - minBreite) + minBreite);
+                    tempPunkt = new GeoPunkt(j / GrößeB * (maxLänge - minLänge) + minLänge, i / GrößeH * (maxBreite - minBreite) + minBreite);
                     temppunkt1 = DrehePunkt(tempPunkt, drehung);
                     double abshöhe = hGTConverter.GetHoehe(temppunkt1);
                     int eephöhe = (int)Math.Round((abshöhe * 100) + 10000);
                     if (eephöhe < 0)
+                    {
                         eephöhe = 0;
+                    }
+
                     if (eephöhe == 0)
                     {
 
@@ -935,70 +983,15 @@ namespace HoehenGenerator
                     };
 
                     if ((i % 5 == 0) && (j % 5 == 0))
-
+                    {
                         punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, 7, j, i));
-
+                    }
                 }
 
             }
             tbMaxhöhe.Text = maximaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             tbMinHöhe.Text = minimaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             btWeiter3.IsEnabled = true;
-
-        }
-        private void ZeichnePunkte(List<GeoPunkt> punkte)
-        {
-
-            AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
-
-
-
-            minimaleHöhe = punkte.Min(x => x.Höhe);
-            if (minimaleHöhe == short.MinValue)
-                minimaleHöhe = 0;
-            maximaleHöhe = punkte.Max(x => x.Höhe);
-            if (maximaleHöhe == short.MinValue)
-                maximaleHöhe = 0;
-            double höhendifferenz = maximaleHöhe - minimaleHöhe;
-            double punktgröße = Math.Round(Math.Sqrt(GrößeH * GrößeB / punkte.Count) + 1) * 1.5;
-            for (int i = 0; i < punkte.Count; i += 1)
-            {
-                int Lon;
-                if (punkte[i].Lon - minLänge >= 0)
-                    Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge));
-                else Lon = (int)(GrößeB / (maxLänge - minLänge) * (punkte[i].Lon - minLänge + 360));
-                int Lat = (int)(GrößeH / (maxBreite - minBreite) * (punkte[i].Lat - minBreite));
-
-
-                if (Lat > 0 && Lat < GrößeH && Lon > 0 && Lon < GrößeB)
-                {
-
-                    int höhe = punkte[i].Höhe * 100 + 1000;
-
-                    int r1 = höhe % 256;
-                    int g1 = (höhe / 256) % 256;
-                    int b1 = (höhe / 256 / 256) % 256;
-                    byte höhe1 = (byte)(((punkte[i].Höhe - minimaleHöhe) * 100 + 1000) / (höhendifferenz + 10) / 100 * 256 - 1);
-
-                    b1 = höhe1;
-                    r1 = b1;
-                    g1 = b1;
-                    //b1 = 0;
-                    byte r = (byte)r1;
-                    byte g = (byte)g1;
-                    byte b = (byte)b1;
-                    SolidColorBrush mySolidColorBrush = new SolidColorBrush
-                    {
-                        Color = Color.FromRgb(r, g, b)
-                    };
-
-
-                    punkteAufCanvas.Enqueue(new ZeichePunkteAufCanvas(mySolidColorBrush, punktgröße, Lon, Lat));
-                }
-            }
-
-
-
 
         }
 
@@ -1063,7 +1056,9 @@ namespace HoehenGenerator
                 orgpunkte.Add(new Point(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture)));
                 geoPunkts[i] = new GeoPunkt(double.Parse(einekoordinate[0], CultureInfo.InvariantCulture), double.Parse(einekoordinate[1], CultureInfo.InvariantCulture));
                 if (geoPunkts[i].Lon > 180 || geoPunkts[i].Lon < -180)
+                {
                     Datumgrenze = true;
+                }
 
                 if (i > 0)
                 {
@@ -1132,19 +1127,31 @@ namespace HoehenGenerator
             ladeHGTFiles.IsSelected = true;
             Zeichenfläche = Zeichenfläche2;
             if (usesrtm == true)
+            {
                 SRTM.IsChecked = true;
+            }
             else
+            {
                 SRTM.IsChecked = false;
+            }
+
             if (useview == true)
+            {
                 VIEW.IsChecked = true;
+            }
             else
+            {
                 VIEW.IsChecked = false;
+            }
+
             if (use1zoll == true)
+            {
                 einZoll.IsChecked = true;
+            }
             else
+            {
                 einZoll.IsChecked = false;
-
-
+            }
 
             ZeichneAlles(punkte);
         }
@@ -1167,36 +1174,63 @@ namespace HoehenGenerator
             btnIndex.IsEnabled = true;
             ZeichneAlles(punkte);
             if (ÜberprüfeIndices())
+            {
                 LadeHGTFiles.IsEnabled = true;
+            }
             else
+            {
                 LadeHGTFiles.IsEnabled = false;
+            }
+
             Zeichenfläche = Zeichenfläche2;
 
             Hauptfenster.ResizeMode = ResizeMode.CanResize;
             int anzahl = lbHgtFiles.Items.Count;
             if (anzahl > 0)
+            {
                 lbFile1.Content = lbHgtFiles.Items[0].ToString();
+            }
             else
+            {
                 lbFile1.Content = "";
+            }
+
             if (anzahl > 1)
+            {
                 lbFile2.Content = lbHgtFiles.Items[1].ToString();
+            }
             else
+            {
                 lbFile2.Content = "";
+            }
+
             if (anzahl > 2)
+            {
                 lbFile3.Content = lbHgtFiles.Items[2].ToString();
+            }
             else
+            {
                 lbFile3.Content = "";
+            }
+
             if (anzahl > 3)
+            {
                 lbFile4.Content = lbHgtFiles.Items[3].ToString();
+            }
             else
+            {
                 lbFile4.Content = "";
+            }
+
             lb3Zoll.Content = "3\"";
             if (use1zoll)
+            {
                 lb1Zoll.Content = "1\"";
+            }
             else
+            {
                 lb1Zoll.Content = "";
-
-
+            }
         }
 
 
@@ -1207,39 +1241,63 @@ namespace HoehenGenerator
             if (use1zoll)
             {
                 if (useview)
+                {
                     if (!ÜberprüfeViewIndex(1, hgtPfad))
+                    {
                         vorhanden = false;
-                if (usesrtm)
-                    if (!ÜberprüfeSRTMIndex(1, hgtPfad))
-                        vorhanden = false;
+                    }
+                }
 
+                if (usesrtm)
+                {
+                    if (!ÜberprüfeSRTMIndex(1, hgtPfad))
+                    {
+                        vorhanden = false;
+                    }
+                }
             }
 
             if (useview)
+            {
                 if (!ÜberprüfeViewIndex(3, hgtPfad))
+                {
                     vorhanden = false;
+                }
+            }
+
             if (usesrtm)
+            {
                 if (!ÜberprüfeSRTMIndex(3, hgtPfad))
+                {
                     vorhanden = false;
+                }
+            }
+
             return vorhanden;
         }
 
         private static bool ÜberprüfeSRTMIndex(int v, string hgtPfad)
         {
             if (File.Exists(hgtPfad + @"\srtmindex" + v + ".xml"))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         private static bool ÜberprüfeViewIndex(int v, string hgtPfad)
         {
             if (File.Exists(hgtPfad + @"\viewindex" + v + ".xml"))
+            {
                 return true;
+            }
             else
+            {
                 return false;
-
-
+            }
         }
 
         private void LadeHGTFiles_Click(object sender, RoutedEventArgs e)
@@ -1259,9 +1317,9 @@ namespace HoehenGenerator
             foreach (ZipArchiveEntry entry in zipfile.Entries)
             {
                 if (entry.Name.Length > 0)
+                {
                     entry.ExtractToFile(pfad + "\\" + entry.Name, overwrite: true);
-
-
+                }
             }
             zipfile.Dispose();
             File.Delete(zieldatei);
@@ -1291,17 +1349,36 @@ namespace HoehenGenerator
                         for (int j = 0; j < url.Length; j++)
                         {
                             if (url[j].Contains("SRTM1") && !File.Exists(hgtPfad + "\\SRTM1\\" + file + ".hgt"))
+                            {
                                 if (!srtm1.Contains(url[j]))
+                                {
                                     srtm1.Add(url[j]);
+                                }
+                            }
+
                             if (url[j].Contains("SRTM3") && !File.Exists(hgtPfad + "\\SRTM3\\" + file + ".hgt"))
+                            {
                                 if (!srtm3.Contains(url[j]))
+                                {
                                     srtm3.Add(url[j]);
+                                }
+                            }
+
                             if (url[j].Contains("dem1") && !File.Exists(hgtPfad + "\\VIEW1\\" + file + ".hgt"))
+                            {
                                 if (!view1.Contains(url[j]))
+                                {
                                     view1.Add(url[j]);
+                                }
+                            }
+
                             if (url[j].Contains("dem3") && !File.Exists(hgtPfad + "\\VIEW3\\" + file + ".hgt"))
+                            {
                                 if (!view3.Contains(url[j]))
+                                {
                                     view3.Add(url[j]);
+                                }
+                            }
                         }
 
                     }
@@ -1315,28 +1392,36 @@ namespace HoehenGenerator
                 string dateiname = System.IO.Path.GetFileName(srtm1[i]);
                 string Zielname = hgtPfad + "\\SRTM1\\" + dateiname;
                 if (!File.Exists(Zielname))
+                {
                     ladeDateiens.Enqueue(new LadeDateien(srtm1[i], Zielname));
+                }
             }
             for (int i = 0; i < srtm3.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(srtm3[i]);
                 string Zielname = hgtPfad + "\\SRTM3\\" + dateiname;
                 if (!File.Exists(Zielname))
+                {
                     ladeDateiens.Enqueue(new LadeDateien(srtm3[i], Zielname));
+                }
             }
             for (int i = 0; i < view1.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(view1[i]);
                 string Zielname = hgtPfad + "\\VIEW1\\" + dateiname;
                 if (!File.Exists(Zielname))
+                {
                     ladeDateiens.Enqueue(new LadeDateien(view1[i], Zielname));
+                }
             }
             for (int i = 0; i < view3.Count; i++)
             {
                 string dateiname = System.IO.Path.GetFileName(view3[i]);
                 string Zielname = hgtPfad + "\\VIEW3\\" + dateiname;
                 if (!File.Exists(Zielname))
+                {
                     ladeDateiens.Enqueue(new LadeDateien(view3[i], Zielname));
+                }
             }
 
 
@@ -1388,7 +1473,9 @@ namespace HoehenGenerator
             for (int i = 0; i < vs.Count; i++)
             {
                 if (!vs1.Contains<string>(vs[i]))
+                {
                     vs1.Add(vs[i]);
+                }
             }
             string[] vs2 = new string[vs1.Count];
             for (int i = 0; i < vs1.Count; i++)
@@ -1417,9 +1504,14 @@ namespace HoehenGenerator
                             {
 
                                 if (xmlReader.Name == "Abschnitt")
+                                {
                                     knoten = xmlReader.Name;
+                                }
+
                                 if (xmlReader.Name == "ZipDatei")
+                                {
                                     knoten = xmlReader.Name;
+                                }
 
                                 if (xmlReader.HasAttributes)
                                 {
@@ -1428,11 +1520,14 @@ namespace HoehenGenerator
                                     {
 
                                         if (knoten == "Abschnitt" && xmlReader.Name == "Url")
+                                        {
                                             ersterTeil = xmlReader.Value;
+                                        }
+
                                         if (knoten == "ZipDatei" && (xmlReader.Name == "Dateiname" || xmlReader.Name == "Url"))
+                                        {
                                             zweiterTeil = xmlReader.Value;
-
-
+                                        }
                                     }
                                 }
                             }
@@ -1443,7 +1538,9 @@ namespace HoehenGenerator
 
                         case XmlNodeType.Text:
                             if (xmlReader.Value == item)
+                            {
                                 ergebnis = ersterTeil + zweiterTeil;
+                            }
 
                             break;
                         default:
@@ -1462,35 +1559,55 @@ namespace HoehenGenerator
             if (use1zoll)
             {
                 if (useview)
+                {
                     aufgabeIndices.Enqueue(new AufgabeIndices("view", 1, hgtPfad));
-                if (usesrtm)
-                    aufgabeIndices.Enqueue(new AufgabeIndices("srtm", 1, hgtPfad));
+                }
 
+                if (usesrtm)
+                {
+                    aufgabeIndices.Enqueue(new AufgabeIndices("srtm", 1, hgtPfad));
+                }
             }
 
             if (useview)
+            {
                 aufgabeIndices.Enqueue(new AufgabeIndices("view", 3, hgtPfad));
+            }
+
             if (usesrtm)
+            {
                 aufgabeIndices.Enqueue(new AufgabeIndices("srtm", 3, hgtPfad));
-
-
+            }
 
             if (ÜberprüfeIndices())
+            {
                 LadeHGTFiles.IsEnabled = true;
+            }
             else
+            {
                 LadeHGTFiles.IsEnabled = false;
+            }
         }
 
         private static bool GeneriereIndices(string s, int i, string hgtPfad)
         {
             bool ergebnis = false;
             if (s.ToLower(CultureInfo.CurrentCulture) == "srtm")
+            {
                 if (GeneriereSRTMIndex(i, hgtPfad))
+                {
                     ergebnis = true;
+                }
+            }
 
             if (s.ToLower(CultureInfo.CurrentCulture) == "view")
+            {
                 if (GeneriereViewIndex(i, hgtPfad))
+                {
                     ergebnis = true;
+                }
+            }
+
             return ergebnis;
         }
 
@@ -1518,7 +1635,9 @@ namespace HoehenGenerator
 
                 string[] vs = SammleUrls(url);
                 if (vs.Length > 0)
+                {
                     ergebnis = true;
+                }
 
                 for (int j = 0; j < vs.Length; j++)
                 {
@@ -1552,14 +1671,25 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
                 if (!ergebnis)
+                {
                     File.Delete(hgtPfad + @"\srtmindex" + i + ".xml");
+                }
             }
             else
+            {
                 ergebnis = true;
+            }
+
             if (!Directory.Exists(hgtPfad + @"\SRTM" + i))
+            {
                 Directory.CreateDirectory(hgtPfad + @"\SRTM" + i);
+            }
+
             if (!Directory.Exists(hgtPfad + @"\noHGT"))
+            {
                 Directory.CreateDirectory(hgtPfad + @"\noHGT" + i);
+            }
+
             return ergebnis;
         }
 
@@ -1613,7 +1743,10 @@ namespace HoehenGenerator
 
                 string[] vs = SammleAreas(url);
                 if (vs.Length > 0)
+                {
                     ergebnis = true;
+                }
+
                 for (int j = 0; j < vs.Length; j++)
                 {
                     MatchCollection m1 = Regex.Matches(vs[j], "coords=\"([^\"]*)\"");
@@ -1634,16 +1767,25 @@ namespace HoehenGenerator
                 xmlWriter.WriteEndDocument();
                 xmlWriter.Close();
                 if (!ergebnis)
+                {
                     File.Delete(hgtPfad + @"\viewindex" + i + ".xml");
-
-
+                }
             }
             else
+            {
                 ergebnis = true;
+            }
+
             if (!Directory.Exists(hgtPfad + @"\VIEW" + i))
+            {
                 Directory.CreateDirectory(hgtPfad + @"\VIEW" + i);
+            }
+
             if (!Directory.Exists(hgtPfad + @"\noHGT"))
+            {
                 Directory.CreateDirectory(hgtPfad + @"\noHGT" + i);
+            }
+
             return ergebnis;
         }
 
@@ -1726,15 +1868,14 @@ namespace HoehenGenerator
             return vs;
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
 
-        }
 
         private void SRTM_Checked(object sender, RoutedEventArgs e)
         {
             if (SRTM.IsChecked == true)
+            {
                 usesrtm = true;
+            }
             else
             {
                 usesrtm = false;
@@ -1748,9 +1889,14 @@ namespace HoehenGenerator
 
             }
             if (ÜberprüfeIndices())
+            {
                 LadeHGTFiles.IsEnabled = true;
+            }
             else
+            {
                 LadeHGTFiles.IsEnabled = false;
+            }
+
             GeneriereDirString();
             ZeichneAlles(punkte);
         }
@@ -1758,7 +1904,9 @@ namespace HoehenGenerator
         private void VIEW_Checked(object sender, RoutedEventArgs e)
         {
             if (VIEW.IsChecked == true)
+            {
                 useview = true;
+            }
             else
             {
                 useview = false;
@@ -1772,9 +1920,14 @@ namespace HoehenGenerator
 
             }
             if (ÜberprüfeIndices())
+            {
                 LadeHGTFiles.IsEnabled = true;
+            }
             else
+            {
                 LadeHGTFiles.IsEnabled = false;
+            }
+
             GeneriereDirString();
             ZeichneAlles(punkte);
         }
@@ -1814,10 +1967,14 @@ namespace HoehenGenerator
             else
             {
                 if (useview)
+                {
                     directorys[0] = "VIEW1";
-                if (usesrtm)
-                    directorys[1] = "SRTM1";
+                }
 
+                if (usesrtm)
+                {
+                    directorys[1] = "SRTM1";
+                }
             }
 
         }
@@ -1840,9 +1997,14 @@ namespace HoehenGenerator
 
             }
             if (ÜberprüfeIndices())
+            {
                 LadeHGTFiles.IsEnabled = true;
+            }
             else
+            {
                 LadeHGTFiles.IsEnabled = false;
+            }
+
             GeneriereDirString();
             ZeichneAlles(punkte);
         }
@@ -1912,30 +2074,34 @@ namespace HoehenGenerator
         {
             anlagenname = tbAnlagenname.Text;
             if (anlagenname.Length == 0)
+            {
                 btnAnlagenDirectory.IsEnabled = false;
+            }
             else
+            {
                 btnAnlagenDirectory.IsEnabled = true;
+            }
         }
         private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
 
             if (cbORM.IsChecked == true)
             {
-                Maptype = new string[2];
-                Maptype[1] = "ORM";
+                SetMaptype(new string[2]);
+                GetMaptype()[1] = "ORM";
             }
             else
             {
-                Maptype = new string[1];
+                SetMaptype(new string[1]);
             }
-            Maptype[0] = "OSM";
+            GetMaptype()[0] = "OSM";
             if (rbKeinHG.IsChecked == true)
             {
-                Maptype[0] = "kein";
+                GetMaptype()[0] = "kein";
             }
             if (rbOSMHG.IsChecked == true)
             {
-                Maptype[0] = "OSM";
+                GetMaptype()[0] = "OSM";
             }
 
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
@@ -1948,7 +2114,9 @@ namespace HoehenGenerator
                System.Drawing.Color.FromArgb(255,0,0,1),
                System.Drawing.Color.FromArgb(255,1, 12, 75) };
             if (rbKeinHG.IsChecked == true)
+            {
                 colors[4] = System.Drawing.Color.FromArgb(255, 0, 0, 100);
+            }
 
             System.Drawing.Imaging.PixelFormat pixelFormat = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
 
@@ -1961,36 +2129,42 @@ namespace HoehenGenerator
 
             }
 
-            using(TemporaryFile temporaryFile = new TemporaryFile())
+            using (TemporaryFile temporaryFile = new TemporaryFile())
             {
 
-                File.Copy(anlagenpfad + "\\" + bitmapnamen[1], temporaryFile.Name,true);
+                File.Copy(anlagenpfad + "\\" + bitmapnamen[1], temporaryFile.Name, true);
 
-            ImageSource imageSrc;
+                ImageSource imageSrc;
 
-            imageSrc = BitmapFromUri(new Uri(temporaryFile.Name, UriKind.Absolute));
+                imageSrc = BitmapFromUri(new Uri(temporaryFile.Name, UriKind.Absolute));
 
-            imageHintergrund.Source = imageSrc;
-            imageHintergrund.Stretch = Stretch.Uniform;
+                imageHintergrund.Source = imageSrc;
+                imageHintergrund.Stretch = Stretch.Uniform;
             }
 
             GeneriereBäume(zahltbHöheDerAnlage, zahlbreiteDerAnlage);
             if (rbBaum.IsChecked == true)
+            {
                 baum = true;
+            }
+
             if (rbPfosten.IsChecked == true)
+            {
                 pfahl = true;
+            }
+
             zoom = (int)slZoom.Value;
 
 
 
 
-            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl,baum, zoom);
+            SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl, baum, zoom);
 
         }
-        
+
         public static ImageSource BitmapFromUri(Uri source)
         {
-            var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+            System.Windows.Media.Imaging.BitmapImage bitmap = new System.Windows.Media.Imaging.BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = source;
             bitmap.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
@@ -2012,7 +2186,7 @@ namespace HoehenGenerator
 
                 //double abshöhe = ZwspeicherHgt.HöheVonPunkt(temppunkt1);
 
-                double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
+                double abshöhe2 = ((abshöhe + höhenausgleich) * ausgleichfaktor);
                 //if (abshöhe2 < 0)
                 //{
                 //    int c;
@@ -2029,9 +2203,13 @@ namespace HoehenGenerator
         {
             SchreibeAnlagenFile af = new SchreibeAnlagenFile(anlagenpfad, anlagenname, höhe, breite, rasterdichte, baeume, pfahl, baum, zoom);
             if (af.SchreibeFile())
+            {
                 MessageBox.Show("Anlagendatei geschrieben");
+            }
             else
+            {
                 MessageBox.Show("Fehler beim Anlagenscheiben");
+            }
         }
 
         private void GeneriereEEPBitMap(string bitmapnamen, int höhe, int breite, System.Drawing.Color colors, System.Drawing.Imaging.PixelFormat pixelFormat)
@@ -2045,19 +2223,23 @@ namespace HoehenGenerator
                 GeoPunkt tempPunkt;
                 GeoPunkt temppunkt1;
                 for (int i = 0; i < höhe; i++)
+                {
                     for (int j = 0; j < breite; j++)
                     {
-                        tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
+                        tempPunkt = new GeoPunkt(j / (double)breite * (maxLänge - minLänge) + minLänge, i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
                         double abshöhe = hGTConverter.GetHoehe(temppunkt1);
                         if (abshöhe == 0)
                         {
 
                         };
-                        double abshöhe2 = ((abshöhe + höhenausgleich) * (double)ausgleichfaktor);
+                        double abshöhe2 = ((abshöhe + höhenausgleich) * ausgleichfaktor);
                         int eephöhe = (int)Math.Round((abshöhe2 * 100) + 10000);
                         if (eephöhe < 0)
+                        {
                             eephöhe = 0;
+                        }
+
                         if (eephöhe == 0)
                         {
 
@@ -2074,6 +2256,7 @@ namespace HoehenGenerator
 
                         colors1[i, j] = System.Drawing.Color.FromArgb(255, r1, g1, b1);
                     }
+                }
 
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
 
@@ -2094,18 +2277,20 @@ namespace HoehenGenerator
                 GeoPunkt temppunkt1;
                 auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
                 if (auflösung >= 17)
+                {
                     auflösung = 16;
+                }
 
-
-                mapConverter = new MapConverter(pfad + "\\OSM\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
+                mapConverter = new MapConverter(pfad + "\\OSM\\", GetMaptype(), hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
 
 
                 System.Drawing.Color[,] colors1 = new System.Drawing.Color[höhe, breite];
                 System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(2, 2);
                 for (int i = 0; i < höhe; i++)
+                {
                     for (int j = 0; j < breite; j++)
                     {
-                        tempPunkt = new GeoPunkt((double)j / (double)breite * (maxLänge - minLänge) + minLänge, (double)i / (double)höhe * (maxBreite - minBreite) + minBreite);
+                        tempPunkt = new GeoPunkt(j / (double)breite * (maxLänge - minLänge) + minLänge, i / (double)höhe * (maxBreite - minBreite) + minBreite);
                         temppunkt1 = DrehePunkt(tempPunkt, drehung);
 
                         colors1[i, j] = mapConverter.GibFarbe(temppunkt1);
@@ -2114,12 +2299,15 @@ namespace HoehenGenerator
 
 
                     }
+                }
+
                 bitmap1.Dispose();
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors1);
             }
             else
-
+            {
                 zeichneBitMap = new ZeichneBitMap(bitmap, colors);
+            }
 
             zeichneBitMap.FülleBitmap();
 
@@ -2143,9 +2331,14 @@ namespace HoehenGenerator
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
             tbRasterDichte.Text = zahltbRasterdichte.ToString("N0", CultureInfo.CurrentCulture);
             if (maximaleHöhe > -10000)
+            {
                 tbMaxGeländeHöhe.Text = maximaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
+            }
+
             if (minimaleHöhe < 10000)
+            {
                 tbMinGeländeHöhe.Text = minimaleHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
+            }
 
             AnzeigeHöhenAufLetztemTab();
         }
@@ -2153,17 +2346,33 @@ namespace HoehenGenerator
         private void AnzeigeHöhenAufLetztemTab()
         {
             if (minimaleHöhe < 10000)
+            {
                 minimaleEEPHöhe = minimaleHöhe + höhenausgleich;
+            }
+
             if (minimaleEEPHöhe < -100 || minimaleEEPHöhe > 1000)
+            {
                 tbMinEEPHöhe.Background = Brushes.Red;
+            }
             else
+            {
                 tbMinEEPHöhe.Background = Brushes.LightGreen;
+            }
+
             if (maximaleHöhe > -10000)
+            {
                 maximaleEEPHöhe = (maximaleHöhe + höhenausgleich) * ausgleichfaktor;
+            }
+
             if (maximaleEEPHöhe < -100 || maximaleEEPHöhe > 1000)
+            {
                 tbMaxEEPHöhe.Background = Brushes.Red;
+            }
             else
+            {
                 tbMaxEEPHöhe.Background = Brushes.LightGreen;
+            }
+
             tbMaxEEPHöhe.Text = maximaleEEPHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             tbMinEEPHöhe.Text = minimaleEEPHöhe.ToString("N0", CultureInfo.CurrentCulture) + " m";
             tbHöhenausgleich.Text = höhenausgleich.ToString("N0", CultureInfo.CurrentCulture);
@@ -2210,7 +2419,9 @@ namespace HoehenGenerator
                 lbKnotenAktuell.Background = Brushes.Yellow;
             }
             else
+            {
                 lbKnotenAktuell.Background = Brushes.Red;
+            }
         }
 
         private void TbHöheDerAnlage_TextChanged(object sender, TextChangedEventArgs e)
@@ -2359,35 +2570,37 @@ namespace HoehenGenerator
         {
             if (cbORM.IsChecked == true)
             {
-                Maptype = new string[2];
-                Maptype[1] = "ORM";
+                SetMaptype(new string[2]);
+                GetMaptype()[1] = "ORM";
             }
             else
             {
-                Maptype = new string[1];
+                SetMaptype(new string[1]);
             }
-            Maptype[0] = "OSM";
+            GetMaptype()[0] = "OSM";
             if (rbKeinHG.IsChecked == true)
             {
-                Maptype[0] = "kein";
+                GetMaptype()[0] = "kein";
             }
 
             if (rbOSMHG.IsChecked == true)
             {
-                Maptype[0] = "OSM";
+                GetMaptype()[0] = "OSM";
             }
 
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             if (auflösung >= 17)
+            {
                 auflösung = 16;
-     
+            }
+
             if (mapConverter == null)
             {
-                mapConverter = new MapConverter(pfad + "\\OSM\\", Maptype, hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
+                mapConverter = new MapConverter(pfad + "\\OSM\\", GetMaptype(), hgtlinksunten, hgtrechtsoben, auflösung, mittelpunkt, zahltbRasterdichte);
             }
             mapConverter.PrepReaders();
-       
 
+            osmDaten.Background = Brushes.LightGreen;
         }
 
         private void Weiter4_Click(object sender, RoutedEventArgs e)
@@ -2396,6 +2609,34 @@ namespace HoehenGenerator
             tabGenerieren.IsEnabled = true;
         }
 
+        private void rbGMHG_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+        }
+
+        private void rbOSMHG_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+
+        }
+
+        private void rbKeinHG_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+
+        }
+
+        private void cbORM_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+
+        }
+
+        private void cbORM_Unchecked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+
+        }
 
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {

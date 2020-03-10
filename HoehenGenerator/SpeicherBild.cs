@@ -7,9 +7,6 @@ namespace HoehenGenerator
 {
     internal class SpeicherBild
     {
-        private Bitmap bitmap;
-        private string dateiname;
-
         public SpeicherBild(Bitmap bitmap, string dateiname)
         {
 
@@ -32,8 +29,8 @@ namespace HoehenGenerator
         }
 
 
-        public Bitmap Bitmap { get => bitmap; set => bitmap = value; }
-        public string Dateiname { get => dateiname; set => dateiname = value; }
+        public Bitmap Bitmap { get; set; }
+        public string Dateiname { get; set; }
     }
 
 

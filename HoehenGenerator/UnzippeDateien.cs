@@ -2,13 +2,11 @@
 {
     internal class UnzippeDateien
     {
-        private string zieldatei;
-
         public UnzippeDateien(string zieldatei)
         {
-            this.zieldatei = zieldatei;
+            Zieldatei = zieldatei;
         }
 
-        public string Zieldatei { get => zieldatei; set => zieldatei = value; }
+        public string Zieldatei { get; set; }
     }
 }

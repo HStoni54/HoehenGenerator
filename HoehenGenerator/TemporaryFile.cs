@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class TemporaryFile : IDisposable
+    internal class TemporaryFile : IDisposable
     {
         public string Name
-        {get;
+        {
+            get;
             private set;
 
         }
         public TemporaryFile()
         {
-            this.Name = Path.GetTempFileName();
+            Name = Path.GetTempFileName();
         }
-        public void Dispose() => File.Delete(this.Name);
+        public void Dispose()
+        {
+            File.Delete(Name);
+        }
     }
 }

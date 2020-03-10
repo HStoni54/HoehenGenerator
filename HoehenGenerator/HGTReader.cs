@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class HGTReader
+    internal class HGTReader
     {
-        private int res;
+        private readonly int res;
         public static short UNDEF = short.MinValue;
         private bool read = false;
         public string path;
@@ -32,8 +28,13 @@ namespace HoehenGenerator
             for (int i = 0; i < dirs.Length; i++)
             {
                 if (dirs[i].Length > 0 && dirs[i] != "noHGT")
+                {
                     dirs1[i] = hgtPath + "\\" + dirs[i];
-                else dirs1[i] = "";
+                }
+                else
+                {
+                    dirs1[i] = "";
+                }
             }
             fileName = baseName + ".hgt";
             string fName;
@@ -49,8 +50,9 @@ namespace HoehenGenerator
                         {
                             res = CalcRes(fis.Length);
                             if (res >= 0)
+                            {
                                 path = fName;
-
+                            }
                         }
                         catch (Exception)
                         {
@@ -86,7 +88,10 @@ namespace HoehenGenerator
                 PrepRead();
             }
             if (buffer == null)
+            {
                 return 0;
+            }
+
             if (x >= 0 && x <= res && y >= 0 && y <= res)
             {
 
@@ -94,7 +99,10 @@ namespace HoehenGenerator
                 count++;
                 return buffer[(((res - y) * (res + 1) + x))];
             }
-            else return 0;
+            else
+            {
+                return 0;
+            }
         }
 
         public void PrepRead()
@@ -139,7 +147,9 @@ namespace HoehenGenerator
         {
             long numVals = (long)Math.Sqrt(size / 2);
             if (2 * numVals * numVals == size)
+            {
                 return (int)(numVals - 1);
+            }
             //log.error("file", fname, "has unexpected size", size, "and is ignored");
             return -1;
         }
@@ -152,7 +162,10 @@ namespace HoehenGenerator
         public bool FreeBuf()
         {
             if (buffer == null)
+            {
                 return false;
+            }
+
             buffer = null;
             read = false;
             return true;

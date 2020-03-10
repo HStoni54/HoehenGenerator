@@ -43,18 +43,28 @@ namespace HoehenGenerator
             xmlWriter.WriteStartElement("sutrackp");
             xmlWriter.WriteStartElement("Gebaeudesammlung");
             if (pfahl)
+            {
                 xmlWriter.WriteAttributeString("GebaudesammlungID", "4");
+            }
             else if (baum)
+            {
                 xmlWriter.WriteAttributeString("GebaudesammlungID", "5");
+            }
+
             if (pfahl || baum)
             {
                 for (int i = 0; i < baeume.Length / 3; i++)
                 {
                     xmlWriter.WriteStartElement("Immobile");
                     if (pfahl)
+                    {
                         xmlWriter.WriteAttributeString("gsbname", @"\Immobilien\Verkehr\Verkehrszeichen\Leitpfosten_Einzel_RG.3dm");
+                    }
                     else
+                    {
                         xmlWriter.WriteAttributeString("gsbname", @"\Lselemente\Flora\Vegetation\Kopfweide_10m_AM1.3dm");
+                    }
+
                     xmlWriter.WriteAttributeString("ImmoIdx", (i + 1).ToString(CultureInfo.CurrentCulture)); // hier hochzählen
                     xmlWriter.WriteAttributeString("TreeShake", "2");
                     xmlWriter.WriteStartElement("Dreibein");

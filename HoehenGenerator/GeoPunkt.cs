@@ -4,24 +4,15 @@ namespace HoehenGenerator
 {
     internal struct GeoPunkt
     {
-        private double lon;
-        public double Lon
-        { get { return lon; } set { lon = value; } }
-
-        private double lat;
-        public double Lat
-        { get { return lat; } set { lat = value; } }
-
-        private double entfernung;
-        private short höhe;
-        public short Höhe
-        { get { return höhe; } set { höhe = value; } }
+        public double Lon { get; set; }
+        public double Lat { get; set; }
+        public short Höhe { get; set; }
         public GeoPunkt(double lon = 0, double lat = 0, double entfernung = 0, short höhe = 0)
         {
-            this.lat = lat;
-            this.lon = lon;
-            this.entfernung = entfernung;
-            this.höhe = höhe;
+            Lat = lat;
+            Lon = lon;
+            Entfernung = entfernung;
+            Höhe = höhe;
 
 
         }
@@ -38,17 +29,17 @@ namespace HoehenGenerator
             return BogenInGrad * 180.0 / Math.PI;
         }
         public double Xgeo // nach Greenwich
-        { get { return radius * Math.Cos(Bogen(Lat)) * Math.Cos(Bogen(Lon)); } }
+=> radius * Math.Cos(Bogen(Lat)) * Math.Cos(Bogen(Lon));
 
         public double Ygeo  // zur Seite
-        { get { return radius * Math.Cos(Bogen(Lat)) * Math.Sin(Bogen(Lon)); } }
+=> radius * Math.Cos(Bogen(Lat)) * Math.Sin(Bogen(Lon));
 
         public double Zgeo // zum Nordpol
-        { get { return radius * Math.Sin(Bogen(Lat)); } }
+=> radius * Math.Sin(Bogen(Lat));
 
-        public double Entfernung { get => entfernung; set => entfernung = value; }
+        public double Entfernung { get; set; }
 
-        static public double BestimmeAbstand(GeoPunkt p1, GeoPunkt p2)
+        public static double BestimmeAbstand(GeoPunkt p1, GeoPunkt p2)
         {
             double skalarprodukt = p1.Xgeo * p2.Xgeo + p1.Ygeo * p2.Ygeo + p1.Zgeo * p2.Zgeo;
             return radius * Math.Acos(skalarprodukt / (radius * radius));
@@ -57,22 +48,22 @@ namespace HoehenGenerator
         {
             if (Math.Abs(Z) <= radius)
             {
-                lat = Grad(Math.Asin(Z / radius));
+                Lat = Grad(Math.Asin(Z / radius));
 
             }
             else if (Z > 0)
-            { lat = 90; }
+            { Lat = 90; }
             else
             {
-                lat = -90;
+                Lat = -90;
             }
 
-            if (Math.Abs(lat) != 90)
+            if (Math.Abs(Lat) != 90)
             {
-                lon = Grad(Math.Acos(X / radius / Math.Cos(Bogen(lat))));
-                if (Math.Asin(Y / radius / Math.Cos(Bogen(lat))) < 0)
+                Lon = Grad(Math.Acos(X / radius / Math.Cos(Bogen(Lat))));
+                if (Math.Asin(Y / radius / Math.Cos(Bogen(Lat))) < 0)
                 {
-                    lon = -lon;
+                    Lon = -Lon;
                 }
 
 
@@ -80,7 +71,7 @@ namespace HoehenGenerator
             }
             else
             {
-                lon = 0;
+                Lon = 0;
             }
         }
     }

@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class MapConverter
+    internal class MapConverter
     {
-        private MapReader[][] readers;
-       private int auflösung;
-        private int minLat, maxLat, minLon, maxLon, dimLat, dimLon;
-        private int bildbreite, bildhöhe;
+        private readonly MapReader[][] readers;
+        private readonly int auflösung;
+        private readonly int minLat, maxLat, minLon, maxLon, dimLat, dimLon;
+        private readonly int bildbreite, bildhöhe;
 
         public MapConverter(string mappath, string[] maptypen, GeoPunkt gplinksunten, GeoPunkt gprechtsoben, int gpauflösung, GeoPunkt mittelpunkt, int rasterdichte)
         {
@@ -31,7 +27,7 @@ namespace HoehenGenerator
             readers = new MapReader[dimLat][];
             double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
             bildbreite = 256 * rasterdichte / (int)osmpunkte;
-             bildhöhe = 256 * rasterdichte / (int)osmpunkte;
+            bildhöhe = 256 * rasterdichte / (int)osmpunkte;
 
             for (int i = 0; i < readers.Length; i++)
             {
@@ -63,14 +59,14 @@ namespace HoehenGenerator
             if (oSM_Koordinaten.Osmbreite >= minLat && oSM_Koordinaten.Osmbreite <= maxLat && oSM_Koordinaten.Osmlänge >= minLon && oSM_Koordinaten.Osmlänge <= maxLon)
             {
 
-           
-            MapReader rdr = readers[oSM_Koordinaten.Osmbreite - minLat][oSM_Koordinaten.Osmlänge - minLon];
-            if (rdr.read == false)
-            {
-                rdr.PrepRead();
-            }
 
-            color = rdr.Farbe((int)(rdr.BildHöhe * oSM_Koordinaten.Kachell), (int)(rdr.BildBreite * oSM_Koordinaten.Kachelb));
+                MapReader rdr = readers[oSM_Koordinaten.Osmbreite - minLat][oSM_Koordinaten.Osmlänge - minLon];
+                if (rdr.read == false)
+                {
+                    rdr.PrepRead();
+                }
+
+                color = rdr.Farbe((int)(rdr.BildHöhe * oSM_Koordinaten.Kachell), (int)(rdr.BildBreite * oSM_Koordinaten.Kachelb));
             }
             return color;
         }

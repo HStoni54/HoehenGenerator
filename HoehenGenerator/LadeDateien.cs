@@ -2,16 +2,13 @@
 {
     internal class LadeDateien
     {
-        private string url;
-        private string zieldatei;
-
         public LadeDateien(string url, string zieldatei)
         {
-            this.url = url;
-            this.zieldatei = zieldatei;
+            Url = url;
+            Zieldatei = zieldatei;
         }
 
-        public string Url { get => url; set => url = value; }
-        public string Zieldatei { get => zieldatei; set => zieldatei = value; }
+        public string Url { get; set; }
+        public string Zieldatei { get; set; }
     }
 }

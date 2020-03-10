@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HoehenGenerator
 {
-    class HGTConverter
+    internal class HGTConverter
     {
-        private double[][] eleArray;
-        private HGTReader[][] readers;
+        private readonly double[][] eleArray;
+        private readonly HGTReader[][] readers;
         private int lastRow = -1;
-        private int minLat32;
-        private int minLon32;
-        private int res;
+        private readonly int minLat32;
+        private readonly int minLon32;
+        private readonly int res;
         protected static double FACTOR = 45.0d / (1 << 29);
-        private short outsidePolygonHeight = HGTReader.UNDEF;
-        double h = HGTReader.UNDEF;
+        private readonly short outsidePolygonHeight = HGTReader.UNDEF;
+        private double h = HGTReader.UNDEF;
         public int maxhöhe = int.MinValue;
         public int minhöhe = int.MaxValue;
         private InterpolationMethod interpolationMethod = InterpolationMethod.Bicubic;
@@ -37,9 +33,13 @@ namespace HoehenGenerator
         {
             double DELTA = 360.0D / (1 << 24) / 2; //Correct rounding
             if (l > 0)
+            {
                 return (int)((l + DELTA) * (1 << 24) / 360);
+            }
             else
+            {
                 return (int)((l - DELTA) * (1 << 24) / 360);
+            }
         }
 
         /**
@@ -63,10 +63,25 @@ namespace HoehenGenerator
                 eleArray[i] = new double[4];
             }
 
-            if (minLat < -90) minLat = -90;
-            if (maxLat > 90) maxLat = 90;
-            if (minLon < -180) minLon = -180;
-            if (maxLon > 180) maxLon = 180;
+            if (minLat < -90)
+            {
+                minLat = -90;
+            }
+
+            if (maxLat > 90)
+            {
+                maxLat = 90;
+            }
+
+            if (minLon < -180)
+            {
+                minLon = -180;
+            }
+
+            if (maxLon > 180)
+            {
+                maxLon = 180;
+            }
 
             minLat32 = ToMapUnit(minLat) * 256;
             minLon32 = ToMapUnit(minLon) * 256;
@@ -136,7 +151,10 @@ namespace HoehenGenerator
             int res = rdr.GetRes();
             rdr.PrepRead();
             if (res <= 0)
+            {
                 return 0; // assumed to be an area in the ocean
+            }
+
             lastRow = row;
 
             double scale = res * FACTOR;
@@ -214,28 +232,40 @@ namespace HoehenGenerator
             if (xLeft == 0)
             {
                 if (col <= 0)
+                {
                     return false;
+                }
+
                 minX = 1;
                 inside = false;
             }
             else if (xLeft == res - 1)
             {
                 if (col + 1 >= readers[0].Length)
+                {
                     return false;
+                }
+
                 maxX = 2;
                 inside = false;
             }
             if (yBottom == 0)
             {
                 if (row <= 0)
+                {
                     return false;
+                }
+
                 minY = 1;
                 inside = false;
             }
             else if (yBottom == res - 1)
             {
                 if (row + 1 >= readers.Length)
+                {
                     return false;
+                }
+
                 maxY = 2;
                 inside = false;
             }
@@ -248,7 +278,10 @@ namespace HoehenGenerator
                 {
                     h = rdr.Ele(xLeft + x - 1, yBottom + y - 1);
                     if (h == HGTReader.UNDEF)
+                    {
                         return false;
+                    }
+
                     eleArray[x][y] = h;
                     maxhöhe = Math.Max(maxhöhe, h);
                     minhöhe = Math.Min(minhöhe, h);
@@ -257,7 +290,9 @@ namespace HoehenGenerator
             }
 
             if (inside) // no need to check borders again
+            {
                 return true;
+            }
 
             // fill data from adjacent readers, down and up
             if (xLeft > 0 && xLeft < res - 1)
@@ -266,12 +301,18 @@ namespace HoehenGenerator
                 { // bottom edge
                     HGTReader rdrBB = PrepReader(res, row - 1, col);
                     if (rdrBB == null)
+                    {
                         return false;
+                    }
+
                     for (int x = 0; x <= 3; x++)
                     {
                         h = rdrBB.Ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[x][0] = h;
                     }
                 }
@@ -279,12 +320,18 @@ namespace HoehenGenerator
                 { // top edge
                     HGTReader rdrTT = PrepReader(res, row + 1, col);
                     if (rdrTT == null)
+                    {
                         return false;
+                    }
+
                     for (int x = 0; x <= 3; x++)
                     {
                         h = rdrTT.Ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[x][3] = h;
                     }
                 }
@@ -297,12 +344,18 @@ namespace HoehenGenerator
                 { // left edgge
                     HGTReader rdrLL = PrepReader(res, row, col - 1);
                     if (rdrLL == null)
+                    {
                         return false;
+                    }
+
                     for (int y = 0; y <= 3; y++)
                     {
                         h = rdrLL.Ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[0][y] = h;
                     }
                 }
@@ -310,12 +363,18 @@ namespace HoehenGenerator
                 { // right edge
                     HGTReader rdrRR = PrepReader(res, row, col + 1);
                     if (rdrRR == null)
+                    {
                         return false;
+                    }
+
                     for (int y = 0; y <= 3; y++)
                     {
                         h = rdrRR.Ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[3][y] = h;
                     }
                 }
@@ -328,64 +387,100 @@ namespace HoehenGenerator
                 { // left bottom corner
                     HGTReader rdrLL = PrepReader(res, row, col - 1);
                     if (rdrLL == null)
+                    {
                         return false;
+                    }
+
                     for (int y = 1; y <= 3; y++)
                     {
                         h = rdrLL.Ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[0][y] = h;
                     }
 
                     HGTReader rdrBB = PrepReader(res, row - 1, col);
                     if (rdrBB == null)
+                    {
                         return false;
+                    }
+
                     for (int x = 1; x <= 3; x++)
                     {
                         h = rdrBB.Ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[x][0] = h;
                     }
 
                     HGTReader rdrLB = PrepReader(res, row - 1, col - 1);
                     if (rdrLB == null)
+                    {
                         return false;
+                    }
+
                     h = rdrLB.Ele(res - 1, res - 1);
                     if (h == HGTReader.UNDEF)
+                    {
                         return false;
+                    }
+
                     eleArray[0][0] = h;
                 }
                 else if (yBottom == res - 1)
                 { // left top corner
                     HGTReader rdrLL = PrepReader(res, row, col - 1);
                     if (rdrLL == null)
+                    {
                         return false;
+                    }
+
                     for (int y = 0; y <= 2; y++)
                     {
                         h = rdrLL.Ele(res - 1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[0][y] = h;
                     }
 
                     HGTReader rdrTT = PrepReader(res, row + 1, col);
                     if (rdrTT == null)
+                    {
                         return false;
+                    }
+
                     for (int x = 1; x <= 3; x++)
                     {
                         h = rdrTT.Ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[x][3] = h;
                     }
 
                     HGTReader rdrLT = PrepReader(res, row + 1, col - 1);
                     if (rdrLT == null)
+                    {
                         return false;
+                    }
+
                     h = rdrLT.Ele(res - 1, 1);
                     if (h == HGTReader.UNDEF)
+                    {
                         return false;
+                    }
+
                     eleArray[0][3] = h;
                 }
             }
@@ -395,64 +490,100 @@ namespace HoehenGenerator
                 { // right bottom corner
                     HGTReader rdrRR = PrepReader(res, row, col + 1);
                     if (rdrRR == null)
+                    {
                         return false;
+                    }
+
                     for (int y = 1; y <= 3; y++)
                     {
                         h = rdrRR.Ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[3][y] = h;
                     }
 
                     HGTReader rdrBB = PrepReader(res, row - 1, col);
                     if (rdrBB == null)
+                    {
                         return false;
+                    }
+
                     for (int x = 0; x <= 2; x++)
                     {
                         h = rdrBB.Ele(xLeft + x - 1, res - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[x][0] = h;
                     }
 
                     HGTReader rdrRB = PrepReader(res, row - 1, col + 1);
                     if (rdrRB == null)
+                    {
                         return false;
+                    }
+
                     h = rdrRB.Ele(1, res - 1);
                     if (h == HGTReader.UNDEF)
+                    {
                         return false;
+                    }
+
                     eleArray[3][0] = h;
                 }
                 else if (yBottom == res - 1)
                 { // right top corner
                     HGTReader rdrRR = PrepReader(res, row, col + 1);
                     if (rdrRR == null)
+                    {
                         return false;
+                    }
+
                     for (int y = 0; y <= 2; y++)
                     {
                         h = rdrRR.Ele(1, yBottom + y - 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[3][y] = h;
                     }
 
                     HGTReader rdrTT = PrepReader(res, row + 1, col);
                     if (rdrTT == null)
+                    {
                         return false;
+                    }
+
                     for (int x = 0; x <= 2; x++)
                     {
                         h = rdrTT.Ele(xLeft + x - 1, 1);
                         if (h == HGTReader.UNDEF)
+                        {
                             return false;
+                        }
+
                         eleArray[x][3] = h;
                     }
 
                     HGTReader rdrRT = PrepReader(res, row + 1, col + 1);
                     if (rdrRT == null)
+                    {
                         return false;
+                    }
+
                     h = rdrRT.Ele(1, 1);
                     if (h == HGTReader.UNDEF)
+                    {
                         return false;
+                    }
+
                     eleArray[3][3] = h;
                 }
             }
@@ -494,7 +625,9 @@ namespace HoehenGenerator
 
             rdr.PrepRead();
             if (row > lastRow)
+            {
                 lastRow = row;
+            }
 
             return rdr;
         }
@@ -521,15 +654,23 @@ namespace HoehenGenerator
                 if (hrb == HGTReader.UNDEF || hlt == HGTReader.UNDEF || hrt == HGTReader.UNDEF)
                 {
                     if (hrt != HGTReader.UNDEF && hlt != HGTReader.UNDEF && qy > 0.5D)  //top edge
+                    {
                         return (short)Math.Round((1.0D - qx) * hlt + qx * hrt);
+                    }
+
                     if (hrt != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qx > 0.5D)  //right edge
+                    {
                         return (short)Math.Round((1.0D - qy) * hrb + qy * hrt);
+                    }
                     //if (hlt != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qx + qy > 0.5D && gx + qy < 1.5D)	//diagonal
                     // nearest value
                     return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
                 }
                 if (qx + qy < 0.4D) // point is near missing value
+                {
                     return HGTReader.UNDEF;
+                }
+
                 hlb = hlt + hrb - hrt;
             }
             else if (hrt == HGTReader.UNDEF)
@@ -537,15 +678,23 @@ namespace HoehenGenerator
                 if (hlb == HGTReader.UNDEF || hrb == HGTReader.UNDEF || hlt == HGTReader.UNDEF)
                 {
                     if (hlb != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qy < 0.5D)  //lower edge
+                    {
                         return (short)Math.Round((1.0D - qx) * hlb + qx * hrb);
+                    }
+
                     if (hlb != HGTReader.UNDEF && hlt != HGTReader.UNDEF && qx < 0.5D)  //left edge
+                    {
                         return (short)Math.Round((1.0D - qy) * hlb + qy * hlt);
+                    }
                     //if (hlt != HGTReader.UNDEF && hrb != HGTReader.UNDEF && qx + qy > 0.5D && gx + qy < 1.5D)	//diagonal
                     // nearest value
                     return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
                 }
                 if (qx + qy > 1.6D) // point is near missing value
+                {
                     return HGTReader.UNDEF;
+                }
+
                 hrt = hlt + hrb - hlb;
             }
             else if (hrb == HGTReader.UNDEF)
@@ -553,15 +702,23 @@ namespace HoehenGenerator
                 if (hlb == HGTReader.UNDEF || hlt == HGTReader.UNDEF || hrt == HGTReader.UNDEF)
                 {
                     if (hlt != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qy > 0.5D)  //top edge
+                    {
                         return (short)Math.Round((1.0D - qx) * hlt + qx * hrt);
+                    }
+
                     if (hlt != HGTReader.UNDEF && hlb != HGTReader.UNDEF && qx < 0.5D)  //left edge
+                    {
                         return (short)Math.Round((1.0D - qy) * hlb + qy * hlt);
+                    }
                     //if (hlb != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qy > qx - 0.5D && qy < qx + 0.5D)	//diagonal
                     // nearest value
                     return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
                 }
                 if (qy < qx - 0.4D) // point is near missing value 
+                {
                     return HGTReader.UNDEF;
+                }
+
                 hrb = hlb + hrt - hlt;
             }
             else if (hlt == HGTReader.UNDEF)
@@ -569,15 +726,23 @@ namespace HoehenGenerator
                 if (hlb == HGTReader.UNDEF || hrb == HGTReader.UNDEF || hrt == HGTReader.UNDEF)
                 {
                     if (hrb != HGTReader.UNDEF && hlb != HGTReader.UNDEF && qy < 0.5D)  //lower edge
+                    {
                         return (short)Math.Round((1.0D - qx) * hlb + qx * hrb);
+                    }
+
                     if (hrb != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qx > 0.5D)  //right edge
+                    {
                         return (short)Math.Round((1.0D - qy) * hrb + qy * hrt);
+                    }
                     //if (hlb != HGTReader.UNDEF && hrt != HGTReader.UNDEF && qy > qx - 0.5D && qy < qx + 0.5D)	//diagonal
                     // nearest value
                     return (short)((qx < 0.5D) ? ((qy < 0.5D) ? hlb : hlt) : ((qy < 0.5D) ? hrb : hrt));
                 }
                 if (qy > qx + 0.6D) // point is near missing value
+                {
                     return HGTReader.UNDEF;
+                }
+
                 hlt = hlb + hrt - hrb;
                 // bilinera interpolation
             }

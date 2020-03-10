@@ -5,26 +5,21 @@ namespace HoehenGenerator
     internal class ZeichePunkteAufCanvas
 
     {
-        private SolidColorBrush mySolidColorBrush;
-        private double punktgröße;
-        private int Lon;
-        private int Lat;
-
         public ZeichePunkteAufCanvas(SolidColorBrush mySolidColorBrush, double punktgröße, int lon, int lat)
         {
 
-            this.mySolidColorBrush = mySolidColorBrush;
-            this.punktgröße = punktgröße;
+            MySolidColorBrush = mySolidColorBrush;
+            Punktgröße = punktgröße;
 
-            Lon = lon;
-            Lat = lat;
+            Lon1 = lon;
+            Lat1 = lat;
         }
 
-        public SolidColorBrush MySolidColorBrush { get => mySolidColorBrush; set => mySolidColorBrush = value; }
-        public double Punktgröße { get => punktgröße; set => punktgröße = value; }
+        public SolidColorBrush MySolidColorBrush { get; set; }
+        public double Punktgröße { get; set; }
 
-        public int Lon1 { get => Lon; set => Lon = value; }
-        public int Lat1 { get => Lat; set => Lat = value; }
+        public int Lon1 { get; set; }
+        public int Lat1 { get; set; }
 
     }
 

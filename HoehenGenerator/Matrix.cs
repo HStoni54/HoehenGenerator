@@ -5,16 +5,10 @@ namespace HoehenGenerator
     public class Matrix
     {
         private readonly double[,] mInnerMatrix;
-        private readonly int mRowCount = 0;
-        public int RowCount
-        {
-            get { return mRowCount; }
-        }
-        private readonly int mColumnCount = 0;
-        public int ColumnCount
-        {
-            get { return mColumnCount; }
-        }
+
+        public int RowCount { get; } = 0;
+
+        public int ColumnCount { get; } = 0;
 
         public Matrix()
         {
@@ -22,27 +16,21 @@ namespace HoehenGenerator
         }
         public Matrix(int rowCount, int columnCount)
         {
-            mRowCount = rowCount;
-            mColumnCount = columnCount;
+            RowCount = rowCount;
+            ColumnCount = columnCount;
             mInnerMatrix = new double[rowCount, columnCount];
         }
 
         public double this[int rowNumber, int columnNumber]
         {
-            get
-            {
-                return mInnerMatrix[rowNumber, columnNumber];
-            }
-            set
-            {
-                mInnerMatrix[rowNumber, columnNumber] = value;
-            }
+            get => mInnerMatrix[rowNumber, columnNumber];
+            set => mInnerMatrix[rowNumber, columnNumber] = value;
         }
 
         public double[] GetRow(int rowIndex)
         {
-            double[] rowValues = new double[mColumnCount];
-            for (int i = 0; i < mColumnCount; i++)
+            double[] rowValues = new double[ColumnCount];
+            for (int i = 0; i < ColumnCount; i++)
             {
                 rowValues[i] = mInnerMatrix[rowIndex, i];
             }
@@ -50,7 +38,7 @@ namespace HoehenGenerator
         }
         public void SetRow(int rowIndex, double[] value)
         {
-            if (value.Length != mColumnCount)
+            if (value.Length != ColumnCount)
             {
                 throw new Exception("Größeninkongruenz");
             }
@@ -61,8 +49,8 @@ namespace HoehenGenerator
         }
         public double[] GetColumn(int columnIndex)
         {
-            double[] columnValues = new double[mRowCount];
-            for (int i = 0; i < mRowCount; i++)
+            double[] columnValues = new double[RowCount];
+            for (int i = 0; i < RowCount; i++)
             {
                 columnValues[i] = mInnerMatrix[i, columnIndex];
             }
@@ -70,7 +58,7 @@ namespace HoehenGenerator
         }
         public void SetColumn(int columnIndex, double[] value)
         {
-            if (value.Length != mRowCount)
+            if (value.Length != RowCount)
             {
                 throw new Exception("Größeninkongruenz");
             }
@@ -193,9 +181,9 @@ namespace HoehenGenerator
         public Matrix Transpose()
         {
             Matrix mReturnMartix = new Matrix(ColumnCount, RowCount);
-            for (int i = 0; i < mRowCount; i++)
+            for (int i = 0; i < RowCount; i++)
             {
-                for (int j = 0; j < mColumnCount; j++)
+                for (int j = 0; j < ColumnCount; j++)
                 {
                     mReturnMartix[j, i] = mInnerMatrix[i, j];
                 }
@@ -213,9 +201,9 @@ namespace HoehenGenerator
 
         public bool IsZeroMatrix()
         {
-            for (int i = 0; i < this.RowCount; i++)
+            for (int i = 0; i < RowCount; i++)
             {
-                for (int j = 0; j < this.ColumnCount; j++)
+                for (int j = 0; j < ColumnCount; j++)
                 {
                     if (mInnerMatrix[i, j] != 0)
                     {
@@ -227,17 +215,17 @@ namespace HoehenGenerator
         }
         public bool IsSquareMatrix()
         {
-            return (this.RowCount == this.ColumnCount);
+            return (RowCount == ColumnCount);
         }
         public bool IsLowerTriangle()
         {
-            if (!this.IsSquareMatrix())
+            if (!IsSquareMatrix())
             {
                 return false;
             }
-            for (int i = 0; i < this.RowCount; i++)
+            for (int i = 0; i < RowCount; i++)
             {
-                for (int j = i + 1; j < this.ColumnCount; j++)
+                for (int j = i + 1; j < ColumnCount; j++)
                 {
                     if (mInnerMatrix[i, j] != 0)
                     {
@@ -249,11 +237,11 @@ namespace HoehenGenerator
         }
         public bool IsUpperTriangle()
         {
-            if (!this.IsSquareMatrix())
+            if (!IsSquareMatrix())
             {
                 return false;
             }
-            for (int i = 0; i < this.RowCount; i++)
+            for (int i = 0; i < RowCount; i++)
             {
                 for (int j = 0; j < i; j++)
                 {
@@ -267,13 +255,13 @@ namespace HoehenGenerator
         }
         public bool IsDiagonalMatrix()
         {
-            if (!this.IsSquareMatrix())
+            if (!IsSquareMatrix())
             {
                 return false;
             }
-            for (int i = 0; i < this.RowCount; i++)
+            for (int i = 0; i < RowCount; i++)
             {
-                for (int j = 0; j < this.ColumnCount; j++)
+                for (int j = 0; j < ColumnCount; j++)
                 {
                     if (i != j && mInnerMatrix[i, j] != 0)
                     {
@@ -285,13 +273,13 @@ namespace HoehenGenerator
         }
         public bool IsIdentityMatrix()
         {
-            if (!this.IsSquareMatrix())
+            if (!IsSquareMatrix())
             {
                 return false;
             }
-            for (int i = 0; i < this.RowCount; i++)
+            for (int i = 0; i < RowCount; i++)
             {
-                for (int j = 0; j < this.ColumnCount; j++)
+                for (int j = 0; j < ColumnCount; j++)
                 {
                     double checkValue = 0;
                     if (i == j)
@@ -308,11 +296,11 @@ namespace HoehenGenerator
         }
         public bool IsSymetricMatrix()
         {
-            if (!this.IsSquareMatrix())
+            if (!IsSquareMatrix())
             {
                 return false;
             }
-            Matrix transposeMatrix = this.Transpose();
+            Matrix transposeMatrix = Transpose();
             if (this == transposeMatrix)
             {
                 return true;
