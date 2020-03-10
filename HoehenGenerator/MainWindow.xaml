@@ -133,7 +133,7 @@
                 <Slider x:Name="slZoom" Grid.Column="2" HorizontalAlignment="Left" Margin="128,296,0,0" VerticalAlignment="Top" Width="102" Minimum="1" Maximum="50" AutoToolTipPlacement="BottomRight" Value="20" Height="18"/>
                 <Label x:Name="label18" Content="Vergrößerung" Grid.Column="2" HorizontalAlignment="Left" Margin="129,272,0,0" VerticalAlignment="Top" Height="26" Width="83"/>
                 <Label x:Name="label19" Content="Drehung der Anlage" Grid.Column="1" Margin="11,298,0,67" HorizontalAlignment="Left" Width="117" />
-                <Label x:Name="lbDrehung" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="133,298,0,0" VerticalAlignment="Top" Height="26" Width="10"/>
+                <Label x:Name="lbDrehung" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="128,298,0,0" VerticalAlignment="Top" Height="26" Width="59"/>
                 <Label x:Name="label20" Content="im Uhrzeigersinn" Grid.Column="1" Margin="11,324,0,41" HorizontalAlignment="Left" Width="99"/>
                 <Button x:Name="Weiter4" Content="Weiter" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="0.133,0.5" Click="Weiter4_Click" Height="20"/>
                 <RadioButton x:Name="radioButton" Content="Keine" Grid.Column="2" HorizontalAlignment="Left" Margin="40,326,0,0" VerticalAlignment="Top" Width="95"/>
