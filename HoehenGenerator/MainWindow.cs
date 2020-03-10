@@ -78,7 +78,7 @@ namespace HoehenGenerator
         private HGTConverter hGTConverter;
         private int auflösung;
         private MapConverter mapConverter;
-        private readonly bool gmaktiv = false;
+        private readonly bool gmaktiv = true;
         public bool Datumgrenze { get; set; } = false;
 
         private string[] maptype;
@@ -96,16 +96,25 @@ namespace HoehenGenerator
         public MainWindow()
         {
             InitializeComponent();
-            if (!gmaktiv)
+ 
+                SetMaptype(new string[1]);
+            GetMaptype()[0] = "OSM";
+            //maptype[1] = "ORM";
+            Title = "Höhengenerator für EEP " + VersionNr();
+
+           if (gmaktiv)
+            {
+                rbGMHG.Visibility = Visibility.Visible;
+                lbGMVersion.Visibility = Visibility.Visible;
+                tbGMVersion.Visibility = Visibility.Visible;    
+                rbGMHG.IsEnabled = true;
+    
+            } else
             {
                 rbGMHG.Visibility = Visibility.Hidden;
                 lbGMVersion.Visibility = Visibility.Hidden;
                 tbGMVersion.Visibility = Visibility.Hidden;
-            }
-            SetMaptype(new string[1]);
-            GetMaptype()[0] = "OSM";
-            //maptype[1] = "ORM";
-            Title = "Höhengenerator für EEP " + VersionNr();
+           } 
 
 
             Thread thrHoleDateien = new Thread(HoleDateien)
@@ -2613,17 +2622,20 @@ namespace HoehenGenerator
         private void rbGMHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
+            //tbGMVersion.IsEnabled = true;
         }
 
         private void rbOSMHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
+            //tbGMVersion.IsEnabled = false;
 
         }
 
         private void rbKeinHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
+            //tbGMVersion.IsEnabled = false;
 
         }
 

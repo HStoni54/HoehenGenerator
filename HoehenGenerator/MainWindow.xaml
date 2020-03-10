@@ -155,12 +155,12 @@
                 <Label x:Name="label21" Content="Hintergrund" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80"/>
                 <RadioButton x:Name="rbKeinHG" Content="Kein" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" IsChecked="True" Checked="rbKeinHG_Checked"/>
                 <RadioButton x:Name="rbOSMHG" Content="OSM" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Checked="rbOSMHG_Checked"/>
-                <RadioButton x:Name="rbGMHG" Content="" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" IsEnabled="False" Checked="rbGMHG_Checked"/>
+                <RadioButton x:Name="rbGMHG" Content="GM" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Checked="rbGMHG_Checked" IsEnabled="False"/>
                 <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.54,1.308"/>
                 <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="11,186,0,0" VerticalAlignment="Top" Checked="cbORM_Checked" Unchecked="cbORM_Unchecked"/>
                 <Image x:Name="imageHintergrund" Grid.Column="1" />
-                <Label x:Name="lbGMVersion" Content="GM-Version" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.132,0.538" IsEnabled="False"/>
-                <TextBox x:Name="tbGMVersion" HorizontalAlignment="Left" Height="23" Margin="10,127,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="80" IsEnabled="False"/>
+                <Label x:Name="lbGMVersion" Content="GM-Version" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.132,0.538"/>
+                <TextBox x:Name="tbGMVersion" HorizontalAlignment="Left" Height="23" Margin="10,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80"/>
 
             </Grid>
         </TabItem>
