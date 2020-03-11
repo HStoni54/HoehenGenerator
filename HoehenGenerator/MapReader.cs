@@ -47,7 +47,7 @@ namespace HoehenGenerator
 
                 foreach (string maptyp in maptype)
                 {
-                    if (maptyp == "OSM")
+                    if (maptyp == "OSM" || maptyp == "ORM")
                     {
                         mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
 

@@ -1684,7 +1684,7 @@ namespace HoehenGenerator
 
             if (!Directory.Exists(hgtPfad + @"\noHGT"))
             {
-                Directory.CreateDirectory(hgtPfad + @"\noHGT" + i);
+                Directory.CreateDirectory(hgtPfad + @"\noHGT");
             }
 
             return ergebnis;
@@ -1780,7 +1780,7 @@ namespace HoehenGenerator
 
             if (!Directory.Exists(hgtPfad + @"\noHGT"))
             {
-                Directory.CreateDirectory(hgtPfad + @"\noHGT" + i);
+                Directory.CreateDirectory(hgtPfad + @"\noHGT");
             }
 
             return ergebnis;

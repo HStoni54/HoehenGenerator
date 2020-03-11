@@ -15,12 +15,13 @@ namespace HoehenGenerator
 
         public static void HoleOsmDaten(int osmauflösung, string osmtyp, string osmpfad, int osmbreite, int osmlänge)
         {
-            string downloadname = ""; ;
-
-            string dateiname = osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture) + ".png"; // TODO IFormatprovider einsetzen
-            string dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname;
+            string downloadname = "";
+             bool osm = true;
+            string dateinamekomplett;
+            string dateiname = osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture); 
             if (osmtyp == "OSM")
             {
+                 dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".png";
                 Random random = new Random();
                 char ServerZufall = (char)random.Next(97, 99);
                 downloadname = "https://" + ServerZufall + ".tile.openstreetmap.de/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
@@ -28,6 +29,7 @@ namespace HoehenGenerator
             }
             else if (osmtyp == "ORM")
             {
+                dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".png";
                 Random random = new Random();
                 char ServerZufall = (char)random.Next(97, 99);
                 downloadname = "https://" + ServerZufall + ".tiles.openrailwaymap.org/standard/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
@@ -36,14 +38,17 @@ namespace HoehenGenerator
 
             else if (osmtyp == "GoM")
             {
-
+                dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".jpg";
+                osm = false;
                 Random random = new Random();
-                char ServerZufall = (char)random.Next(0, 3); //TODO: als Stream downloaden
+                int ServerZufall = random.Next(0, 3); //TODO: als Stream downloaden
+                downloadname = "https://" + "mt" + ServerZufall + ".google.com/vt/lyrs=s&x=" + osmlänge.ToString(CultureInfo.CurrentCulture) + "&y=" + osmbreite.ToString(CultureInfo.CurrentCulture) + "&z=" + osmauflösung.ToString(CultureInfo.CurrentCulture);
                 //downloadname = "https://" + ServerZufall + ".tiles.openrailwaymap.org/standard/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
 
             }
             else
             {
+                dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".png";
                 Color color = Color.FromArgb(255, 200, 200, 200);
                 Bitmap bitmap = new Bitmap(256, 256);
                 for (int i = 0; i < bitmap.Height; i++)
@@ -59,7 +64,7 @@ namespace HoehenGenerator
             }
             if (!File.Exists(dateinamekomplett))
             {
-                if (!LadeOSMDateien(downloadname, dateinamekomplett))
+                if (!LadeOSMDateien(downloadname, dateinamekomplett,osm))
                 {
                     Color color = Color.FromArgb(255, 16, 39, 0);
                     Bitmap dummy = new Bitmap(256, 256);
@@ -108,6 +113,32 @@ namespace HoehenGenerator
 
                     //MessageBox.Show("Fehler! Kann Datei: " + v +
                     //   " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
+                    ergebnis = false;
+                }
+            } else
+            {
+                try
+                {
+                   Stream dat = webClient.OpenRead(v);
+                    FileStream file;
+                    try
+                    {
+                        file = File.Create(zielname);
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    dat.CopyTo(file);
+                    dat.Close();
+                    file.Close();
+                  
+                    ergebnis = true;
+                }
+                catch (Exception)
+                {
+
                     ergebnis = false;
                 }
             }
