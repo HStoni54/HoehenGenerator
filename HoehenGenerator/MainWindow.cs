@@ -2096,9 +2096,14 @@ namespace HoehenGenerator
             {
                 GetMaptype()[0] = "kein";
             }
+
             if (rbOSMHG.IsChecked == true)
             {
                 GetMaptype()[0] = "OSM";
+            }
+            if (rbGMHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "GoM";
             }
 
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
