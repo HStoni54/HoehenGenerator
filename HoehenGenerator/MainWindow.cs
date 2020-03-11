@@ -2646,6 +2646,49 @@ namespace HoehenGenerator
 
         }
 
+        private void tabGenerieren_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Bildleeren();
+        }
+
+        private void Bildleeren()
+        {
+            if (mapConverter != null)
+            {
+                mapConverter.FreeBuff();
+
+            }
+            mapConverter = null;
+            using (TemporaryFile temporaryfile = new TemporaryFile())
+            {
+                System.Drawing.Color color = System.Drawing.Color.FromArgb(255, 200, 200, 200);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(256, 256);
+                for (int i = 0; i < bitmap.Height; i++)
+                {
+                    for (int j = 0; j < bitmap.Width; j++)
+                    {
+                        bitmap.SetPixel(i, j, color);
+                    }
+                }
+                bitmap.Save(temporaryfile.Name);
+
+                bitmap.Dispose();
+                ImageSource imageSrc;
+
+                imageSrc = BitmapFromUri(new Uri(temporaryfile.Name, UriKind.Absolute));
+
+                imageHintergrund.Source = imageSrc;
+                imageHintergrund.Stretch = Stretch.Uniform;
+
+            }
+        }
+
+        private void tabGenerieren_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Bildleeren();
+
+        }
+
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(tbScalierungEEPHöhe.Text, out double test))

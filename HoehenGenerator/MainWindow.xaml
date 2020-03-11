@@ -140,7 +140,7 @@
             </Grid>
         </TabItem>
 
-        <TabItem x:Name="tabGenerieren"   IsEnabled="False" Header="Generieren">
+        <TabItem x:Name="tabGenerieren"   IsEnabled="False" Header="Generieren" LostFocus="tabGenerieren_LostFocus" GotFocus="tabGenerieren_GotFocus">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
