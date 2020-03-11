@@ -78,7 +78,7 @@ namespace HoehenGenerator
         private HGTConverter hGTConverter;
         private int auflösung;
         private MapConverter mapConverter;
-        private readonly bool gmaktiv = true;
+
         public bool Datumgrenze { get; set; } = false;
 
         private string[] maptype;
@@ -102,19 +102,7 @@ namespace HoehenGenerator
             //maptype[1] = "ORM";
             Title = "Höhengenerator für EEP " + VersionNr();
 
-           if (gmaktiv)
-            {
-                rbGMHG.Visibility = Visibility.Visible;
-                lbGMVersion.Visibility = Visibility.Visible;
-                tbGMVersion.Visibility = Visibility.Visible;    
-                rbGMHG.IsEnabled = true;
-    
-            } else
-            {
-                rbGMHG.Visibility = Visibility.Hidden;
-                lbGMVersion.Visibility = Visibility.Hidden;
-                tbGMVersion.Visibility = Visibility.Hidden;
-           } 
+  
 
 
             Thread thrHoleDateien = new Thread(HoleDateien)
@@ -2597,6 +2585,11 @@ namespace HoehenGenerator
             {
                 GetMaptype()[0] = "OSM";
             }
+            if (rbGMHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "GoM";
+            }
+
 
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             if (auflösung >= 17)
@@ -2622,20 +2615,17 @@ namespace HoehenGenerator
         private void rbGMHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
-            //tbGMVersion.IsEnabled = true;
         }
 
         private void rbOSMHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
-            //tbGMVersion.IsEnabled = false;
 
         }
 
         private void rbKeinHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
-            //tbGMVersion.IsEnabled = false;
 
         }
 

@@ -47,7 +47,7 @@ namespace HoehenGenerator
 
                 foreach (string maptyp in maptype)
                 {
-                    if (maptyp != "kein")
+                    if (maptyp == "OSM")
                     {
                         mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
 
@@ -62,6 +62,22 @@ namespace HoehenGenerator
                         graphics.DrawImage(tempbuffer2, 0, 0);
                         tempbuffer.Dispose();
                         tempbuffer2.Dispose();
+                    } else if (maptyp == "GoM")
+                    {
+                        mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
+
+                        if (!File.Exists(mappath + "\\" + mapname + ".jpg"))
+                        {
+                            OSM_Fileliste.HoleOsmDaten(auflösung, maptyp, mappath, lat, lon);
+                            System.Threading.Thread.Sleep(1000);
+                        }
+                        path = mappath + "\\" + mapname + ".jpg";
+                        tempbuffer = new Bitmap(mappath + "\\" + mapname + ".jpg");
+                        tempbuffer2 = new Bitmap(tempbuffer, BildHöhe, BildBreite);
+                        graphics.DrawImage(tempbuffer2, 0, 0);
+                        tempbuffer.Dispose();
+                        tempbuffer2.Dispose();
+
                     }
                     else
                     {
