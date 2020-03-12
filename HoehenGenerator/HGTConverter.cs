@@ -75,12 +75,16 @@ namespace HoehenGenerator
 
             if (minLon < -180)
             {
-                minLon = -180;
+                minLon = minLon +360;
             }
 
             if (maxLon > 180)
             {
-                maxLon = 180;
+                maxLon = maxLon - 360;
+            }
+            if (minLon > maxLon)
+            {
+                maxLon = maxLon + 360;
             }
 
             minLat32 = ToMapUnit(minLat) * 256;

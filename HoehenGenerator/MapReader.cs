@@ -20,8 +20,8 @@ namespace HoehenGenerator
 
         public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildBreite, int BildHöhe)
         {
-            this.BildBreite = BildBreite;
-            this.BildHöhe = BildHöhe;
+            this.BildBreite = Math.Max(BildBreite,BildHöhe);
+            this.BildHöhe = Math.Max(BildBreite, BildHöhe);
             mappath = mapPath;
             this.auflösung = auflösung;
             this.maptype = maptype;
