@@ -152,13 +152,7 @@ namespace HoehenGenerator
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             AssemblyName asmName = asm.GetName();
-            string Fullname = asm.FullName;
-            object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
 
-            if (attribs.Length > 0)
-            {
-                AssemblyProductAttribute asmProduct = attribs[0] as AssemblyProductAttribute;
-            }
 
             string vers = string.Format(CultureInfo.CurrentCulture, " - Version: {0}.{1}.{2} Build: {3}",
                 //productName,
@@ -699,7 +693,7 @@ namespace HoehenGenerator
         private void ZeichneRechteck(PointCollection punkte)
         {
             Polyline rechteckpunkte = new Polyline();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite);
             double flaeche2 = hoehe2 * breite2;
             fläche.Text = Math.Round(flaeche2, 2).ToString(CultureInfo.CurrentCulture) + " km²";
             höhe.Text = Math.Round(hoehe2, 2).ToString(CultureInfo.CurrentCulture) + " km";
@@ -723,13 +717,9 @@ namespace HoehenGenerator
         }
 
         private void AnzeigeFlächeBerechnen(PointCollection punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge,
-            out double minBreite, out double maxLänge, out double maxBreite, out double Größe)
+            out double minBreite, out double maxLänge, out double maxBreite)
         {
-            Größe = Zeichenfläche.ActualHeight;
-            if (Zeichenfläche.ActualWidth < Zeichenfläche.ActualHeight)
-            {
-                Größe = Zeichenfläche.ActualWidth;
-            }
+ 
             GrößeH = Zeichenfläche.ActualHeight;
             GrößeB = Zeichenfläche.ActualWidth;
             minLänge = punkte.Min(x => x.X);
@@ -882,7 +872,7 @@ namespace HoehenGenerator
 
 
             Polyline polypunkte = new Polyline();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite);
             PointCollection canvaspunkte = new PointCollection();
             for (int i = 0; i < punkte.Count; i++)
             {
@@ -898,7 +888,7 @@ namespace HoehenGenerator
         private void ZeichnePunkte(PointCollection punkte)
         {
 
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite);
             for (int i = 0; i < punkte.Count; i++)
             {
                 Ellipse elli = new Ellipse
@@ -918,7 +908,7 @@ namespace HoehenGenerator
         private void FülleAnzeigeFläche()
         {
             double höhendifferenz;
-            AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite);
             Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (-winkel));
             GeoPunkt tempPunkt;
             GeoPunkt temppunkt1;
@@ -1011,13 +1001,9 @@ namespace HoehenGenerator
 
         }
 
-        private void AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe)
+        private void AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite)
         {
-            Größe = Zeichenfläche.ActualHeight;
-            if (Zeichenfläche.ActualWidth < Zeichenfläche.ActualHeight)
-            {
-                Größe = Zeichenfläche.ActualWidth;
-            }
+ 
             GrößeH = Zeichenfläche.ActualHeight;
             GrößeB = Zeichenfläche.ActualWidth;
             minLänge = Math.Min(linksoben.Lon, linksunten.Lon);
@@ -2328,7 +2314,7 @@ namespace HoehenGenerator
         private void GeneriereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
-            winkel = winkel % 360;
+            winkel %= 360;
             lbDrehung.Content = winkel.ToString("N0", CultureInfo.CurrentCulture) + " Grad";
             tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
@@ -2617,36 +2603,36 @@ namespace HoehenGenerator
             tabGenerieren.IsEnabled = true;
         }
 
-        private void rbGMHG_Checked(object sender, RoutedEventArgs e)
+        private void RbGMHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
         }
 
-        private void rbOSMHG_Checked(object sender, RoutedEventArgs e)
-        {
-            osmDaten.Background = Brushes.Transparent;
-
-        }
-
-        private void rbKeinHG_Checked(object sender, RoutedEventArgs e)
+        private void RbOSMHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
 
         }
 
-        private void cbORM_Checked(object sender, RoutedEventArgs e)
+        private void RbKeinHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
 
         }
 
-        private void cbORM_Unchecked(object sender, RoutedEventArgs e)
+        private void CbORM_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
 
         }
 
-        private void tabGenerieren_LostFocus(object sender, RoutedEventArgs e)
+        private void CbORM_Unchecked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+
+        }
+
+        private void TabGenerieren_LostFocus(object sender, RoutedEventArgs e)
         {
             Bildleeren();
         }
@@ -2683,7 +2669,7 @@ namespace HoehenGenerator
             }
         }
 
-        private void tabGenerieren_GotFocus(object sender, RoutedEventArgs e)
+        private void TabGenerieren_GotFocus(object sender, RoutedEventArgs e)
         {
             Bildleeren();
 

@@ -24,7 +24,7 @@ namespace HoehenGenerator
             dimLat = maxLat - minLat + 1;
             dimLon = maxLon - minLon + 1;
             if (dimLon < 1)
-                dimLon = dimLon + rechtsoben.kachelanzahl;
+                dimLon += rechtsoben.kachelanzahl;
             readers = null;
             readers = new MapReader[dimLat][];
             double osmpunkte = 256 / (40030 / Math.Pow(2, auflösung) * Math.Cos(mittelpunkt.Lat / 180 * Math.PI));
@@ -38,7 +38,7 @@ namespace HoehenGenerator
                 {
                     int templon = minLon + j;
                     if (templon >= rechtsoben.kachelanzahl)
-                        templon = templon - rechtsoben.kachelanzahl;
+                        templon -= rechtsoben.kachelanzahl;
                     readers[i][j] = new MapReader(minLat + i, templon, mappath, maptypen, auflösung, bildhöhe, bildbreite);
                     //readers[i][j].PrepRead();
                 }
@@ -63,7 +63,7 @@ namespace HoehenGenerator
             oSM_Koordinaten.BerechneOSMKachel();
             int maxLontemp = maxLon;
             if (maxLon < maxLat)
-                maxLontemp = maxLontemp + oSM_Koordinaten.kachelanzahl;
+                maxLontemp += oSM_Koordinaten.kachelanzahl;
             if (oSM_Koordinaten.Osmbreite >= minLat && oSM_Koordinaten.Osmbreite <= maxLat && oSM_Koordinaten.Osmlänge >= minLon && oSM_Koordinaten.Osmlänge <= maxLontemp)
             {
 
