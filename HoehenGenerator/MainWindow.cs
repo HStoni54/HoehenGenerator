@@ -96,13 +96,13 @@ namespace HoehenGenerator
         public MainWindow()
         {
             InitializeComponent();
- 
-                SetMaptype(new string[1]);
+
+            SetMaptype(new string[1]);
             GetMaptype()[0] = "OSM";
             //maptype[1] = "ORM";
             Title = "Höhengenerator für EEP " + VersionNr();
 
-  
+
 
 
             Thread thrHoleDateien = new Thread(HoleDateien)

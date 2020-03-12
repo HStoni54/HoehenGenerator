@@ -16,12 +16,12 @@ namespace HoehenGenerator
         public static void HoleOsmDaten(int osmauflösung, string osmtyp, string osmpfad, int osmbreite, int osmlänge)
         {
             string downloadname = "";
-             bool osm = true;
+            bool osm = true;
             string dateinamekomplett;
-            string dateiname = osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture); 
+            string dateiname = osmauflösung.ToString(CultureInfo.CurrentCulture) + "_" + osmbreite.ToString(CultureInfo.CurrentCulture) + "_" + osmlänge.ToString(CultureInfo.CurrentCulture);
             if (osmtyp == "OSM")
             {
-                 dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".png";
+                dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".png";
                 Random random = new Random();
                 char ServerZufall = (char)random.Next(97, 99);
                 downloadname = "https://" + ServerZufall + ".tile.openstreetmap.de/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
@@ -64,7 +64,7 @@ namespace HoehenGenerator
             }
             if (!File.Exists(dateinamekomplett))
             {
-                if (!LadeOSMDateien(downloadname, dateinamekomplett,osm))
+                if (!LadeOSMDateien(downloadname, dateinamekomplett, osm))
                 {
                     Color color = Color.FromArgb(255, 16, 39, 0);
                     Bitmap dummy = new Bitmap(256, 256);
@@ -115,11 +115,12 @@ namespace HoehenGenerator
                     //   " nicht downloaden!\nBitte überprüfen Sie Ihre Internetverbindung");
                     ergebnis = false;
                 }
-            } else
+            }
+            else
             {
                 try
                 {
-                   Stream dat = webClient.OpenRead(v);
+                    Stream dat = webClient.OpenRead(v);
                     FileStream file;
                     try
                     {
@@ -133,7 +134,7 @@ namespace HoehenGenerator
                     dat.CopyTo(file);
                     dat.Close();
                     file.Close();
-                  
+
                     ergebnis = true;
                 }
                 catch (Exception)

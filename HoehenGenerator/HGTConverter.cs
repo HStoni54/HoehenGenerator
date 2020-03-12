@@ -75,7 +75,7 @@ namespace HoehenGenerator
 
             if (minLon < -180)
             {
-                minLon = minLon +360;
+                minLon = minLon + 360;
             }
 
             if (maxLon > 180)

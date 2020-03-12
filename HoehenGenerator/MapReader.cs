@@ -20,7 +20,7 @@ namespace HoehenGenerator
 
         public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildBreite, int BildHöhe)
         {
-            this.BildBreite = Math.Max(BildBreite,BildHöhe);
+            this.BildBreite = Math.Max(BildBreite, BildHöhe);
             this.BildHöhe = Math.Max(BildBreite, BildHöhe);
             mappath = mapPath;
             this.auflösung = auflösung;
@@ -62,7 +62,8 @@ namespace HoehenGenerator
                         graphics.DrawImage(tempbuffer2, 0, 0);
                         tempbuffer.Dispose();
                         tempbuffer2.Dispose();
-                    } else if (maptyp == "GoM")
+                    }
+                    else if (maptyp == "GoM")
                     {
                         mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
 
