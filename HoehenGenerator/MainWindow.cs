@@ -2134,17 +2134,19 @@ namespace HoehenGenerator
                 SetMaptype(new string[3]);
                 GetMaptype()[1] = "GMH";
                 GetMaptype()[2] = "ORM";
-            } else if (cbORM.IsChecked == true && RbGMHHG.IsChecked == false)
+            }
+            else if (cbORM.IsChecked == true && RbGMHHG.IsChecked == false)
             {
                 SetMaptype(new string[2]);
                 GetMaptype()[1] = "ORM";
-            } else if (cbORM.IsChecked == false && RbGMHHG.IsChecked == true)
+            }
+            else if (cbORM.IsChecked == false && RbGMHHG.IsChecked == true)
             {
                 SetMaptype(new string[2]);
                 GetMaptype()[1] = "GMH";
 
             }
-            else 
+            else
             {
                 SetMaptype(new string[1]);
             }
@@ -2167,7 +2169,7 @@ namespace HoehenGenerator
                 GetMaptype()[0] = "GMM";
 
             }
-           
+
         }
 
         public static ImageSource BitmapFromUri(Uri source)
