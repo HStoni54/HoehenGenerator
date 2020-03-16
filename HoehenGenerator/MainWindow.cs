@@ -719,7 +719,7 @@ namespace HoehenGenerator
         private void AnzeigeFlächeBerechnen(PointCollection punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge,
             out double minBreite, out double maxLänge, out double maxBreite)
         {
- 
+
             GrößeH = Zeichenfläche.ActualHeight;
             GrößeB = Zeichenfläche.ActualWidth;
             minLänge = punkte.Min(x => x.X);
@@ -1003,7 +1003,7 @@ namespace HoehenGenerator
 
         private void AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite)
         {
- 
+
             GrößeH = Zeichenfläche.ActualHeight;
             GrößeB = Zeichenfläche.ActualWidth;
             minLänge = Math.Min(linksoben.Lon, linksunten.Lon);
@@ -2067,30 +2067,7 @@ namespace HoehenGenerator
         }
         private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
-
-            if (cbORM.IsChecked == true)
-            {
-                SetMaptype(new string[2]);
-                GetMaptype()[1] = "ORM";
-            }
-            else
-            {
-                SetMaptype(new string[1]);
-            }
-            GetMaptype()[0] = "OSM";
-            if (rbKeinHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "kein";
-            }
-
-            if (rbOSMHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "OSM";
-            }
-            if (rbGMHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "GoM";
-            }
+            KartenFestlegen();
 
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
             int höhe = (int)(zahltbHöheDerAnlage * zahltbRasterdichte);
@@ -2148,6 +2125,49 @@ namespace HoehenGenerator
 
             SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl, baum, zoom);
 
+        }
+
+        private void KartenFestlegen()
+        {
+            if (cbORM.IsChecked == true && RbGMHHG.IsChecked == true)
+            {
+                SetMaptype(new string[3]);
+                GetMaptype()[1] = "GMH";
+                GetMaptype()[2] = "ORM";
+            } else if (cbORM.IsChecked == true && RbGMHHG.IsChecked == false)
+            {
+                SetMaptype(new string[2]);
+                GetMaptype()[1] = "ORM";
+            } else if (cbORM.IsChecked == false && RbGMHHG.IsChecked == true)
+            {
+                SetMaptype(new string[2]);
+                GetMaptype()[1] = "GMH";
+
+            }
+            else 
+            {
+                SetMaptype(new string[1]);
+            }
+            GetMaptype()[0] = "OSM";
+            if (rbKeinHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "kein";
+            }
+
+            if (rbOSMHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "OSM";
+            }
+            if (rbGMSHG.IsChecked == true || RbGMHHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "GMS";
+            }
+            if (RbGMMHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "GMM";
+
+            }
+           
         }
 
         public static ImageSource BitmapFromUri(Uri source)
@@ -2557,29 +2577,7 @@ namespace HoehenGenerator
 
         private void OsmDaten_Click(object sender, RoutedEventArgs e)
         {
-            if (cbORM.IsChecked == true)
-            {
-                SetMaptype(new string[2]);
-                GetMaptype()[1] = "ORM";
-            }
-            else
-            {
-                SetMaptype(new string[1]);
-            }
-            GetMaptype()[0] = "OSM";
-            if (rbKeinHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "kein";
-            }
-
-            if (rbOSMHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "OSM";
-            }
-            if (rbGMHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "GoM";
-            }
+            KartenFestlegen();
 
 
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
@@ -2603,7 +2601,7 @@ namespace HoehenGenerator
             tabGenerieren.IsEnabled = true;
         }
 
-        private void RbGMHG_Checked(object sender, RoutedEventArgs e)
+        private void RbGMSHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
         }
@@ -2674,6 +2672,18 @@ namespace HoehenGenerator
             Bildleeren();
 
         }
+
+        private void RbGMMHG_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+        }
+
+        private void RbGMHHG_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+        }
+
+
 
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {

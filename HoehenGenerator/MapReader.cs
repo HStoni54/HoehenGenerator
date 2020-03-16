@@ -63,7 +63,7 @@ namespace HoehenGenerator
                         tempbuffer.Dispose();
                         tempbuffer2.Dispose();
                     }
-                    else if (maptyp == "GoM")
+                    else if (maptyp == "GMS" || maptyp == "GMM" || maptyp == "GMH")
                     {
                         mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
 

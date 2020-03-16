@@ -36,13 +36,34 @@ namespace HoehenGenerator
 
             }
 
-            else if (osmtyp == "GoM")
+            else if (osmtyp == "GMS")
             {
                 dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".jpg";
                 osm = false;
                 Random random = new Random();
                 int ServerZufall = random.Next(0, 3); //TODO: als Stream downloaden
                 downloadname = "https://" + "mt" + ServerZufall + ".google.com/vt/lyrs=s&x=" + osmlänge.ToString(CultureInfo.CurrentCulture) + "&y=" + osmbreite.ToString(CultureInfo.CurrentCulture) + "&z=" + osmauflösung.ToString(CultureInfo.CurrentCulture);
+                //downloadname = "https://" + ServerZufall + ".tiles.openrailwaymap.org/standard/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
+
+            }
+            else if (osmtyp == "GMM")
+            {
+                dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".jpg";
+                osm = false;
+                Random random = new Random();
+                int ServerZufall = random.Next(0, 3); //TODO: als Stream downloaden
+                downloadname = "https://" + "mt" + ServerZufall + ".google.com/vt/lyrs=m&x=" + osmlänge.ToString(CultureInfo.CurrentCulture) + "&y=" + osmbreite.ToString(CultureInfo.CurrentCulture) + "&z=" + osmauflösung.ToString(CultureInfo.CurrentCulture);
+                //downloadname = "https://" + ServerZufall + ".tiles.openrailwaymap.org/standard/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
+
+            }
+
+            else if (osmtyp == "GMH")
+            {
+                dateinamekomplett = osmpfad + "\\" + osmtyp + "_" + dateiname + ".jpg";
+                osm = false;
+                Random random = new Random();
+                int ServerZufall = random.Next(0, 3); //TODO: als Stream downloaden
+                downloadname = "https://" + "mt" + ServerZufall + ".google.com/vt/lyrs=h&x=" + osmlänge.ToString(CultureInfo.CurrentCulture) + "&y=" + osmbreite.ToString(CultureInfo.CurrentCulture) + "&z=" + osmauflösung.ToString(CultureInfo.CurrentCulture);
                 //downloadname = "https://" + ServerZufall + ".tiles.openrailwaymap.org/standard/" + osmauflösung.ToString(CultureInfo.CurrentCulture) + "/" + osmlänge.ToString(CultureInfo.CurrentCulture) + "/" + osmbreite.ToString(CultureInfo.CurrentCulture) + ".png";
 
             }

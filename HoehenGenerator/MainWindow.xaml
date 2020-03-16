@@ -150,15 +150,20 @@
                     <ColumnDefinition Width="237*"/>
 
                 </Grid.ColumnDefinitions>
-                <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" Width="80" Click="OsmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
-                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
+                <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top" Width="80" Click="OsmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
                 <Label x:Name="label21" Content="Hintergrund" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80"/>
                 <RadioButton x:Name="rbKeinHG" Content="Kein" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" IsChecked="True" Checked="RbKeinHG_Checked"/>
                 <RadioButton x:Name="rbOSMHG" Content="OSM" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Checked="RbOSMHG_Checked"/>
-                <RadioButton x:Name="rbGMHG" Content="GM" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Checked="RbGMHG_Checked"/>
-                <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.54,1.308"/>
-                <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Checked="CbORM_Checked" Unchecked="CbORM_Unchecked"/>
+                <RadioButton x:Name="rbGMSHG" Content="Satellit" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top" Checked="RbGMSHG_Checked" >
+                    
+                </RadioButton>
+                <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.54,1.308"/>
+                <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="10,198,0,0" VerticalAlignment="Top" Checked="CbORM_Checked" Unchecked="CbORM_Unchecked"/>
                 <Image x:Name="imageHintergrund" Grid.Column="1" />
+                <Label x:Name="label23" Content="Google Maps" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top"/>
+                <RadioButton x:Name="RbGMMHG" Content="Karte" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Checked="RbGMMHG_Checked"/>
+                <RadioButton x:Name="RbGMHHG" Content="Hybrid" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" Checked="RbGMHHG_Checked"/>
 
             </Grid>
         </TabItem>
