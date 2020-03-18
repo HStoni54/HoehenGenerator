@@ -2648,12 +2648,12 @@ namespace HoehenGenerator
             using (TemporaryFile temporaryfile = new TemporaryFile())
             {
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(255, 200, 200, 200);
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(256, 256);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((int)(256 *breite2), (int)(256 * hoehe2));
                 for (int i = 0; i < bitmap.Height; i++)
                 {
                     for (int j = 0; j < bitmap.Width; j++)
                     {
-                        bitmap.SetPixel(i, j, color);
+                        bitmap.SetPixel(j, i, color);
                     }
                 }
                 bitmap.Save(temporaryfile.Name);
