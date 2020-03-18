@@ -20,8 +20,8 @@ namespace HoehenGenerator
 
         public MapReader(int lat, int lon, string mapPath, string[] maptype, int auflösung, int BildBreite, int BildHöhe)
         {
-            this.BildBreite = BildBreite;
-            this.BildHöhe = BildHöhe;
+            this.BildBreite = Math.Max(BildBreite, BildHöhe);
+            this.BildHöhe = Math.Max(BildBreite, BildHöhe);
             mappath = mapPath;
             this.auflösung = auflösung;
             this.maptype = maptype;
@@ -47,7 +47,7 @@ namespace HoehenGenerator
 
                 foreach (string maptyp in maptype)
                 {
-                    if (maptyp != "kein")
+                    if (maptyp == "OSM" || maptyp == "ORM")
                     {
                         mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
 
@@ -62,6 +62,23 @@ namespace HoehenGenerator
                         graphics.DrawImage(tempbuffer2, 0, 0);
                         tempbuffer.Dispose();
                         tempbuffer2.Dispose();
+                    }
+                    else if (maptyp == "GMS" || maptyp == "GMM" || maptyp == "GMH")
+                    {
+                        mapname = maptyp + "_" + auflösung.ToString(CultureInfo.CurrentCulture) + "_" + lat.ToString(CultureInfo.CurrentCulture) + "_" + lon.ToString(CultureInfo.CurrentCulture);
+
+                        if (!File.Exists(mappath + "\\" + mapname + ".jpg"))
+                        {
+                            OSM_Fileliste.HoleOsmDaten(auflösung, maptyp, mappath, lat, lon);
+                            System.Threading.Thread.Sleep(1000);
+                        }
+                        path = mappath + "\\" + mapname + ".jpg";
+                        tempbuffer = new Bitmap(mappath + "\\" + mapname + ".jpg");
+                        tempbuffer2 = new Bitmap(tempbuffer, BildHöhe, BildBreite);
+                        graphics.DrawImage(tempbuffer2, 0, 0);
+                        tempbuffer.Dispose();
+                        tempbuffer2.Dispose();
+
                     }
                     else
                     {

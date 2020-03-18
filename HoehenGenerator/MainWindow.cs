@@ -78,7 +78,7 @@ namespace HoehenGenerator
         private HGTConverter hGTConverter;
         private int auflösung;
         private MapConverter mapConverter;
-        private readonly bool gmaktiv = false;
+
         public bool Datumgrenze { get; set; } = false;
 
         private string[] maptype;
@@ -96,16 +96,13 @@ namespace HoehenGenerator
         public MainWindow()
         {
             InitializeComponent();
-            if (!gmaktiv)
-            {
-                rbGMHG.Visibility = Visibility.Hidden;
-                lbGMVersion.Visibility = Visibility.Hidden;
-                tbGMVersion.Visibility = Visibility.Hidden;
-            }
+
             SetMaptype(new string[1]);
             GetMaptype()[0] = "OSM";
             //maptype[1] = "ORM";
             Title = "Höhengenerator für EEP " + VersionNr();
+
+
 
 
             Thread thrHoleDateien = new Thread(HoleDateien)
@@ -155,13 +152,7 @@ namespace HoehenGenerator
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             AssemblyName asmName = asm.GetName();
-            string Fullname = asm.FullName;
-            object[] attribs = asm.GetCustomAttributes(typeof(AssemblyProductAttribute), true);
 
-            if (attribs.Length > 0)
-            {
-                AssemblyProductAttribute asmProduct = attribs[0] as AssemblyProductAttribute;
-            }
 
             string vers = string.Format(CultureInfo.CurrentCulture, " - Version: {0}.{1}.{2} Build: {3}",
                 //productName,
@@ -702,7 +693,7 @@ namespace HoehenGenerator
         private void ZeichneRechteck(PointCollection punkte)
         {
             Polyline rechteckpunkte = new Polyline();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out maxLänge, out minBreite, out maxBreite);
             double flaeche2 = hoehe2 * breite2;
             fläche.Text = Math.Round(flaeche2, 2).ToString(CultureInfo.CurrentCulture) + " km²";
             höhe.Text = Math.Round(hoehe2, 2).ToString(CultureInfo.CurrentCulture) + " km";
@@ -726,13 +717,9 @@ namespace HoehenGenerator
         }
 
         private void AnzeigeFlächeBerechnen(PointCollection punkte, out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge,
-            out double minBreite, out double maxLänge, out double maxBreite, out double Größe)
+            out double minBreite, out double maxLänge, out double maxBreite)
         {
-            Größe = Zeichenfläche.ActualHeight;
-            if (Zeichenfläche.ActualWidth < Zeichenfläche.ActualHeight)
-            {
-                Größe = Zeichenfläche.ActualWidth;
-            }
+
             GrößeH = Zeichenfläche.ActualHeight;
             GrößeB = Zeichenfläche.ActualWidth;
             minLänge = punkte.Min(x => x.X);
@@ -885,7 +872,7 @@ namespace HoehenGenerator
 
 
             Polyline polypunkte = new Polyline();
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out minLänge, out minBreite, out maxLänge, out maxBreite);
             PointCollection canvaspunkte = new PointCollection();
             for (int i = 0; i < punkte.Count; i++)
             {
@@ -901,7 +888,7 @@ namespace HoehenGenerator
         private void ZeichnePunkte(PointCollection punkte)
         {
 
-            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(punkte, out double GrößeH, out double GrößeB, out hoehe2, out breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite);
             for (int i = 0; i < punkte.Count; i++)
             {
                 Ellipse elli = new Ellipse
@@ -921,7 +908,7 @@ namespace HoehenGenerator
         private void FülleAnzeigeFläche()
         {
             double höhendifferenz;
-            AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite, out double Größe);
+            AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out minLänge, out minBreite, out maxLänge, out maxBreite);
             Matrix drehung = BildeDrehungsMatrix(mittelpunkt.Lon, mittelpunkt.Lat, (-winkel));
             GeoPunkt tempPunkt;
             GeoPunkt temppunkt1;
@@ -1014,13 +1001,9 @@ namespace HoehenGenerator
 
         }
 
-        private void AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite, out double Größe)
+        private void AnzeigeFlächeBerechnen(out double GrößeH, out double GrößeB, out double hoehe2, out double breite2, out double minLänge, out double minBreite, out double maxLänge, out double maxBreite)
         {
-            Größe = Zeichenfläche.ActualHeight;
-            if (Zeichenfläche.ActualWidth < Zeichenfläche.ActualHeight)
-            {
-                Größe = Zeichenfläche.ActualWidth;
-            }
+
             GrößeH = Zeichenfläche.ActualHeight;
             GrößeB = Zeichenfläche.ActualWidth;
             minLänge = Math.Min(linksoben.Lon, linksunten.Lon);
@@ -1687,7 +1670,7 @@ namespace HoehenGenerator
 
             if (!Directory.Exists(hgtPfad + @"\noHGT"))
             {
-                Directory.CreateDirectory(hgtPfad + @"\noHGT" + i);
+                Directory.CreateDirectory(hgtPfad + @"\noHGT");
             }
 
             return ergebnis;
@@ -1783,7 +1766,7 @@ namespace HoehenGenerator
 
             if (!Directory.Exists(hgtPfad + @"\noHGT"))
             {
-                Directory.CreateDirectory(hgtPfad + @"\noHGT" + i);
+                Directory.CreateDirectory(hgtPfad + @"\noHGT");
             }
 
             return ergebnis;
@@ -2084,25 +2067,7 @@ namespace HoehenGenerator
         }
         private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
-
-            if (cbORM.IsChecked == true)
-            {
-                SetMaptype(new string[2]);
-                GetMaptype()[1] = "ORM";
-            }
-            else
-            {
-                SetMaptype(new string[1]);
-            }
-            GetMaptype()[0] = "OSM";
-            if (rbKeinHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "kein";
-            }
-            if (rbOSMHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "OSM";
-            }
+            KartenFestlegen();
 
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
             int höhe = (int)(zahltbHöheDerAnlage * zahltbRasterdichte);
@@ -2159,6 +2124,51 @@ namespace HoehenGenerator
 
 
             SchreibeEEPAnlagenDatei(höhe, breite, rasterdichte, baeume, pfahl, baum, zoom);
+
+        }
+
+        private void KartenFestlegen()
+        {
+            if (cbORM.IsChecked == true && RbGMHHG.IsChecked == true)
+            {
+                SetMaptype(new string[3]);
+                GetMaptype()[1] = "GMH";
+                GetMaptype()[2] = "ORM";
+            }
+            else if (cbORM.IsChecked == true && RbGMHHG.IsChecked == false)
+            {
+                SetMaptype(new string[2]);
+                GetMaptype()[1] = "ORM";
+            }
+            else if (cbORM.IsChecked == false && RbGMHHG.IsChecked == true)
+            {
+                SetMaptype(new string[2]);
+                GetMaptype()[1] = "GMH";
+
+            }
+            else
+            {
+                SetMaptype(new string[1]);
+            }
+            GetMaptype()[0] = "OSM";
+            if (rbKeinHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "kein";
+            }
+
+            if (rbOSMHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "OSM";
+            }
+            if (rbGMSHG.IsChecked == true || RbGMHHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "GMS";
+            }
+            if (RbGMMHG.IsChecked == true)
+            {
+                GetMaptype()[0] = "GMM";
+
+            }
 
         }
 
@@ -2326,7 +2336,7 @@ namespace HoehenGenerator
         private void GeneriereAnlage_GotFocus(object sender, RoutedEventArgs e)
         {
             tbAnlagenname.Text = anlagenname;
-            winkel = winkel % 360;
+            winkel %= 360;
             lbDrehung.Content = winkel.ToString("N0", CultureInfo.CurrentCulture) + " Grad";
             tbBreiteDerAnlage.Text = zahlbreiteDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
             tbHöheDerAnlage.Text = zahltbHöheDerAnlage.ToString("N2", CultureInfo.CurrentCulture);
@@ -2569,25 +2579,8 @@ namespace HoehenGenerator
 
         private void OsmDaten_Click(object sender, RoutedEventArgs e)
         {
-            if (cbORM.IsChecked == true)
-            {
-                SetMaptype(new string[2]);
-                GetMaptype()[1] = "ORM";
-            }
-            else
-            {
-                SetMaptype(new string[1]);
-            }
-            GetMaptype()[0] = "OSM";
-            if (rbKeinHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "kein";
-            }
+            KartenFestlegen();
 
-            if (rbOSMHG.IsChecked == true)
-            {
-                GetMaptype()[0] = "OSM";
-            }
 
             auflösung = (int)Math.Ceiling(Math.Log(40030 * zahltbRasterdichte * Math.Cos(mittelpunkt.Lat / 180 * Math.PI) / 256, 2));
             if (auflösung >= 17)
@@ -2610,34 +2603,89 @@ namespace HoehenGenerator
             tabGenerieren.IsEnabled = true;
         }
 
-        private void rbGMHG_Checked(object sender, RoutedEventArgs e)
+        private void RbGMSHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
         }
 
-        private void rbOSMHG_Checked(object sender, RoutedEventArgs e)
-        {
-            osmDaten.Background = Brushes.Transparent;
-
-        }
-
-        private void rbKeinHG_Checked(object sender, RoutedEventArgs e)
+        private void RbOSMHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
 
         }
 
-        private void cbORM_Checked(object sender, RoutedEventArgs e)
+        private void RbKeinHG_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
 
         }
 
-        private void cbORM_Unchecked(object sender, RoutedEventArgs e)
+        private void CbORM_Checked(object sender, RoutedEventArgs e)
         {
             osmDaten.Background = Brushes.Transparent;
 
         }
+
+        private void CbORM_Unchecked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+
+        }
+
+        private void TabGenerieren_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Bildleeren();
+        }
+
+        private void Bildleeren()
+        {
+            if (mapConverter != null)
+            {
+                mapConverter.FreeBuff();
+
+            }
+            mapConverter = null;
+            using (TemporaryFile temporaryfile = new TemporaryFile())
+            {
+                System.Drawing.Color color = System.Drawing.Color.FromArgb(255, 200, 200, 200);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((int)(256 *breite2), (int)(256 * hoehe2));
+                for (int i = 0; i < bitmap.Height; i++)
+                {
+                    for (int j = 0; j < bitmap.Width; j++)
+                    {
+                        bitmap.SetPixel(j, i, color);
+                    }
+                }
+                bitmap.Save(temporaryfile.Name);
+
+                bitmap.Dispose();
+                ImageSource imageSrc;
+
+                imageSrc = BitmapFromUri(new Uri(temporaryfile.Name, UriKind.Absolute));
+
+                imageHintergrund.Source = imageSrc;
+                imageHintergrund.Stretch = Stretch.Uniform;
+
+            }
+        }
+
+        private void TabGenerieren_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Bildleeren();
+
+        }
+
+        private void RbGMMHG_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+        }
+
+        private void RbGMHHG_Checked(object sender, RoutedEventArgs e)
+        {
+            osmDaten.Background = Brushes.Transparent;
+        }
+
+
 
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {

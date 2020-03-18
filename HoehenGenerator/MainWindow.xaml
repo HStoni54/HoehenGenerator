@@ -140,7 +140,7 @@
             </Grid>
         </TabItem>
 
-        <TabItem x:Name="tabGenerieren"   IsEnabled="False" Header="Generieren">
+        <TabItem x:Name="tabGenerieren"   IsEnabled="False" Header="Generieren" LostFocus="TabGenerieren_LostFocus" GotFocus="TabGenerieren_GotFocus">
             <Grid Background="#FFE5E5E5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="391"/>
@@ -150,17 +150,20 @@
                     <ColumnDefinition Width="237*"/>
 
                 </Grid.ColumnDefinitions>
-                <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,206,0,0" VerticalAlignment="Top" Width="80" Click="OsmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
-                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,228,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
+                <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top" Width="80" Click="OsmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
                 <Label x:Name="label21" Content="Hintergrund" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80"/>
-                <RadioButton x:Name="rbKeinHG" Content="Kein" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" IsChecked="True" Checked="rbKeinHG_Checked"/>
-                <RadioButton x:Name="rbOSMHG" Content="OSM" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Checked="rbOSMHG_Checked"/>
-                <RadioButton x:Name="rbGMHG" Content="" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" IsEnabled="False" Checked="rbGMHG_Checked"/>
-                <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.54,1.308"/>
-                <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="11,186,0,0" VerticalAlignment="Top" Checked="cbORM_Checked" Unchecked="cbORM_Unchecked"/>
+                <RadioButton x:Name="rbKeinHG" Content="Kein" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" IsChecked="True" Checked="RbKeinHG_Checked"/>
+                <RadioButton x:Name="rbOSMHG" Content="OSM" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Checked="RbOSMHG_Checked"/>
+                <RadioButton x:Name="rbGMSHG" Content="Satellit" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top" Checked="RbGMSHG_Checked" >
+                    
+                </RadioButton>
+                <Label x:Name="label22" Content="Overlay" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.54,1.308"/>
+                <CheckBox x:Name="cbORM" Content="Openrailmaps" HorizontalAlignment="Left" Margin="10,198,0,0" VerticalAlignment="Top" Checked="CbORM_Checked" Unchecked="CbORM_Unchecked"/>
                 <Image x:Name="imageHintergrund" Grid.Column="1" />
-                <Label x:Name="lbGMVersion" Content="GM-Version" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.132,0.538" IsEnabled="False"/>
-                <TextBox x:Name="tbGMVersion" HorizontalAlignment="Left" Height="23" Margin="10,127,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="80" IsEnabled="False"/>
+                <Label x:Name="label23" Content="Google Maps" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top"/>
+                <RadioButton x:Name="RbGMMHG" Content="Karte" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Checked="RbGMMHG_Checked"/>
+                <RadioButton x:Name="RbGMHHG" Content="Hybrid" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" Checked="RbGMHHG_Checked"/>
 
             </Grid>
         </TabItem>

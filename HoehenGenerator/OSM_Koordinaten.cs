@@ -6,7 +6,7 @@ namespace HoehenGenerator
     internal class OSM_Koordinaten
     {
         private GeoPunkt geoPunkt;
-        private int kachelanzahl;
+        public int kachelanzahl;
 
         public OSM_Koordinaten(GeoPunkt geoPunkt)
         {

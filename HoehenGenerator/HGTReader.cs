@@ -16,6 +16,11 @@ namespace HoehenGenerator
 
         public HGTReader(int lat, int lon, string hgtPath, string[] hgtDirectorys)
         {
+            if (lon >= 180)
+            {
+                lon = lon - 360;
+            }
+
             string nordsued = lat < 0 ? "S" : "N";
             string ostwest = lon < 0 ? "W" : "E";
             int lat1 = lat < 0 ? -lat : lat;
