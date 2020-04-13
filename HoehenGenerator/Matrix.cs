@@ -170,18 +170,16 @@ namespace HoehenGenerator
                 throw new Exception("Größeninkongruenz");
             }
             Matrix returnMatrix = new Matrix(pMatrix1.RowCount, pMatrix2.ColumnCount);
-            for (int i = 0; i < pMatrix1.RowCount; i++)
+            for (int row = 0; row < returnMatrix.RowCount; row++)
             {
-                double[] rowValues = pMatrix1.GetRow(i);
-                for (int j = 0; j < pMatrix2.ColumnCount; j++)
+                for (int column = 0; column < returnMatrix.ColumnCount; column++)
                 {
-                    double[] columnValues = pMatrix2.GetColumn(j);
-                    double value = 0;
-                    for (int a = 0; a < rowValues.Length; a++)
+                    double sum = 0;
+                    for (int k = 0; k < pMatrix1.ColumnCount; k++)
                     {
-                        value += rowValues[a] * columnValues[a];
+                        sum += pMatrix1[row, k] * pMatrix2[k, column];
                     }
-                    returnMatrix[i, j] = value;
+                    returnMatrix[row, column] = sum;
                 }
             }
             return returnMatrix;
