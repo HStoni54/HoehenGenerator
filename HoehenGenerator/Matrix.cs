@@ -300,21 +300,7 @@ namespace HoehenGenerator
         }
         public bool IsSymetricMatrix()
         {
-            if (!IsSquareMatrix())
-            {
-                return false;
-            }
-            Matrix transposeMatrix = Transpose();
-            if (this == transposeMatrix)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return IsSquareMatrix() && this == Transpose();
         }
-
-
     }
 }
