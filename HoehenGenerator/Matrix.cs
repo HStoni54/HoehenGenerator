@@ -287,12 +287,10 @@ namespace HoehenGenerator
             {
                 for (int j = 0; j < ColumnCount; j++)
                 {
-                    double checkValue = 0;
-                    if (i == j)
+                    if (i == j && mInnerMatrix[i, j] != 1)
                     {
-                        checkValue = 1;
-                    }
-                    if (mInnerMatrix[i, j] != checkValue)
+                        return false;
+                    } else if (i != j && mInnerMatrix[i, j] != 0)
                     {
                         return false;
                     }
