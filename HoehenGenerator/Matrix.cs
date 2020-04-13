@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace HoehenGenerator
 {
@@ -103,7 +103,15 @@ namespace HoehenGenerator
             {
                 throw new Exception("Größeninkongruenz");
             }
-            return pMatrix1 + (-1 * pMatrix2);
+            Matrix returnMartix = new Matrix(pMatrix1.RowCount, pMatrix2.RowCount);
+            for (int i = 0; i < pMatrix1.RowCount; i++)
+            {
+                for (int j = 0; j < pMatrix1.ColumnCount; j++)
+                {
+                    returnMartix[i, j] = pMatrix1[i, j] + -1 * pMatrix2[i, j];
+                }
+            }
+            return returnMartix;
         }
         public static bool operator ==(Matrix pMatrix1, Matrix pMatrix2)
         {
