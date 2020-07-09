@@ -150,8 +150,8 @@
                     <ColumnDefinition Width="237*"/>
 
                 </Grid.ColumnDefinitions>
-                <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top" Width="80" Click="OsmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
-                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
+                <Button x:Name="osmDaten" Content="Mapdaten holen" HorizontalAlignment="Left" Margin="10,298,0,0" VerticalAlignment="Top" Width="80" Click="OsmDaten_Click" FontSize="10" RenderTransformOrigin="0.525,1"/>
+                <Button x:Name="btnGeneriereAnlage" Content="Generiere" HorizontalAlignment="Left" Margin="10,320,0,0" VerticalAlignment="Top" Width="80" Click="BtnGeneriereAnlage_Click" IsEnabled="False" Height="20" RenderTransformOrigin="0.525,1.6"/>
                 <Label x:Name="label21" Content="Hintergrund" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80"/>
                 <RadioButton GroupName ="hintergrund" x:Name="rbKeinHG" Content="Kein" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" IsChecked="True" Checked="RbKeinHG_Checked"/>
                 <RadioButton GroupName ="hintergrund" x:Name="rbOSMHG" Content="OSM" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Checked="RbOSMHG_Checked"/>
@@ -162,6 +162,9 @@
                 <Label x:Name="label23" Content="Google Maps" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top"/>
                 <RadioButton GroupName ="hintergrund" x:Name="RbGMMHG" Content="Karte" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Checked="RbGMMHG_Checked"/>
                 <RadioButton GroupName ="hintergrund" x:Name="RbGMHHG" Content="Hybrid" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" Checked="RbGMHHG_Checked"/>
+                <Label x:Name="label24" Content="Interpolation" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top"/>
+                <RadioButton GroupName ="interpolation" x:Name="rbBicubic" Content="Bicubic" HorizontalAlignment="Left" Margin="10,249,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                <RadioButton GroupName ="interpolation" x:Name="rbBilinear" Content="Bilinear" HorizontalAlignment="Left" Margin="10,269,0,0" VerticalAlignment="Top"/>
 
             </Grid>
         </TabItem>

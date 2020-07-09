@@ -2067,6 +2067,11 @@ namespace HoehenGenerator
         }
         private void BtnGeneriereAnlage_Click(object sender, RoutedEventArgs e)
         {
+            if (rbBicubic.IsChecked == true)
+                hGTConverter.SetInterpolationMethod(HGTConverter.InterpolationMethod.Bicubic);
+            else
+                hGTConverter.SetInterpolationMethod(HGTConverter.InterpolationMethod.Bilinear);
+
             KartenFestlegen();
 
             string[] bitmapnamen = { anlagenname + "B.bmp", anlagenname + "F.bmp", anlagenname + "H.bmp", anlagenname + "S.bmp", anlagenname + "T.bmp" };
@@ -2685,7 +2690,7 @@ namespace HoehenGenerator
             osmDaten.Background = Brushes.Transparent;
         }
 
-
+    
 
         private void TbScalierungEEPHöhe_TextChanged(object sender, TextChangedEventArgs e)
         {
