@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace HoehenGenerator
 {
@@ -103,7 +103,15 @@ namespace HoehenGenerator
             {
                 throw new Exception("Größeninkongruenz");
             }
-            return pMatrix1 + (-1 * pMatrix2);
+            Matrix returnMartix = new Matrix(pMatrix1.RowCount, pMatrix2.RowCount);
+            for (int i = 0; i < pMatrix1.RowCount; i++)
+            {
+                for (int j = 0; j < pMatrix1.ColumnCount; j++)
+                {
+                    returnMartix[i, j] = pMatrix1[i, j] + -1 * pMatrix2[i, j];
+                }
+            }
+            return returnMartix;
         }
         public static bool operator ==(Matrix pMatrix1, Matrix pMatrix2)
         {
@@ -162,18 +170,16 @@ namespace HoehenGenerator
                 throw new Exception("Größeninkongruenz");
             }
             Matrix returnMatrix = new Matrix(pMatrix1.RowCount, pMatrix2.ColumnCount);
-            for (int i = 0; i < pMatrix1.RowCount; i++)
+            for (int row = 0; row < returnMatrix.RowCount; row++)
             {
-                double[] rowValues = pMatrix1.GetRow(i);
-                for (int j = 0; j < pMatrix2.ColumnCount; j++)
+                for (int column = 0; column < returnMatrix.ColumnCount; column++)
                 {
-                    double[] columnValues = pMatrix2.GetColumn(j);
-                    double value = 0;
-                    for (int a = 0; a < rowValues.Length; a++)
+                    double sum = 0;
+                    for (int k = 0; k < pMatrix1.ColumnCount; k++)
                     {
-                        value += rowValues[a] * columnValues[a];
+                        sum += pMatrix1[row, k] * pMatrix2[k, column];
                     }
-                    returnMatrix[i, j] = value;
+                    returnMatrix[row, column] = sum;
                 }
             }
             return returnMatrix;
@@ -281,12 +287,10 @@ namespace HoehenGenerator
             {
                 for (int j = 0; j < ColumnCount; j++)
                 {
-                    double checkValue = 0;
-                    if (i == j)
+                    if (i == j && mInnerMatrix[i, j] != 1)
                     {
-                        checkValue = 1;
-                    }
-                    if (mInnerMatrix[i, j] != checkValue)
+                        return false;
+                    } else if (i != j && mInnerMatrix[i, j] != 0)
                     {
                         return false;
                     }
@@ -296,21 +300,7 @@ namespace HoehenGenerator
         }
         public bool IsSymetricMatrix()
         {
-            if (!IsSquareMatrix())
-            {
-                return false;
-            }
-            Matrix transposeMatrix = Transpose();
-            if (this == transposeMatrix)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return IsSquareMatrix() && this == Transpose();
         }
-
-
     }
 }
