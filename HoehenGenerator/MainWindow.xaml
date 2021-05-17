@@ -43,8 +43,8 @@
                 <Canvas x:Name="Zeichenfläche2" Grid.Column="1" Margin="10" SizeChanged="Zeichenfläche_SizeChanged" ToolTip="Lage des ausgewählten Polygons in der rechteckigen Anlage"/>
                 <Label x:Name="hgtFiles2" Content="Hgt-Dateien:" HorizontalAlignment="Left" Margin="11,10,0,0" VerticalAlignment="Top" Width="87" />
                 <Button x:Name="LadeHGTFiles" Content="Laden" HorizontalAlignment="Left" Margin="11,247,0,0" VerticalAlignment="Top" Width="87" IsEnabled="False" Click="LadeHGTFiles_Click" RenderTransformOrigin="0.425,1.95"/>
-                <CheckBox x:Name="SRTM" Content="SRTM" HorizontalAlignment="Left" Margin="11,162,0,0" VerticalAlignment="Top" Click="SRTM_Checked"/>
-                <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="11,182,0,0" VerticalAlignment="Top" Click="VIEW_Checked"/>
+                <CheckBox x:Name="SRTM" Content="SRTM" HorizontalAlignment="Left" Margin="11,162,0,0" VerticalAlignment="Top" Click="SRTM_Checked" Visibility="Hidden" IsEnabled="False"/>
+                <CheckBox x:Name="VIEW" Content="VIEW" HorizontalAlignment="Left" Margin="11,182,0,0" VerticalAlignment="Top" Click="VIEW_Checked" Visibility="Hidden" IsChecked="True"/>
                 <CheckBox x:Name="einZoll" Content="1&quot;" HorizontalAlignment="Left" Margin="11,202,0,0" VerticalAlignment="Top" Click="EinZoll_Checked"/>
                 <Button x:Name="Weiter2" Content="Weiter" HorizontalAlignment="Left" Margin="11,272,0,0" VerticalAlignment="Top" Width="86" IsEnabled="False" Click="Weiter2_Click"/>
                 <Button x:Name="btnIndex" Content="Index erstellen" HorizontalAlignment="Left" Margin="11,222,0,0" VerticalAlignment="Top" Width="86" Click="BtnIndex_Click" IsEnabled="False"/>
